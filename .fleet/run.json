@@ -1,0 +1,33 @@
+{
+    "configurations": [
+        
+        {
+            "name": "Desktop",
+            "type": "gradle",
+            "workingDir": "/home/ubuntu/IdeaProjects/cms",
+            "tasks": ["desktopRun"],
+            "args": ["-DmainClass=MainKt", "--quiet", "-p", "/home/ubuntu/IdeaProjects/cms/composeApp"],
+            "initScripts": {
+                "flmapper": "ext.mapPath = { path -> null }"
+            }
+        },
+        {
+            "name": "Android",
+            "type": "android-app",
+            "workingDir": "/home/ubuntu/IdeaProjects/cms",
+            "allowParallelRun": true,
+            "module": "cms.composeApp.main",
+            "destination": "Pixel_3a_API_34_extension_level_7_x86_64"
+        },
+        {
+            "name": "Browser",
+            "type": "gradle",
+            "workingDir": "/home/ubuntu/IdeaProjects/cms",
+            "tasks": ["composeApp:wasmJsBrowserDevelopmentRun"],
+            "args": [""],
+            "initScripts": {
+                "flmapper": "ext.mapPath = { path -> null }"
+            }
+        }
+    ]
+}
