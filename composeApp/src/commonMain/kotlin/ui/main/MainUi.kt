@@ -220,7 +220,7 @@ internal fun MainUi(component: MainComponent) {
     
 }
 
-fun getActiveNavigationItemIntex(navigationItems:List<NavigationItem>,activeConfig:MainComponent.Config)=navigationItems.indexOfFirst { it.route==activeConfig }
+private fun getActiveNavigationItemIntex(navigationItems:List<NavigationItem>,activeConfig:MainComponent.Config)=navigationItems.indexOfFirst { it.route==activeConfig }
 
 
 @Composable
