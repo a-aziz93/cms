@@ -6,6 +6,7 @@ import com.arkivanov.decompose.router.stack.*
 import com.arkivanov.decompose.router.stack.webhistory.WebHistoryController
 import com.arkivanov.decompose.value.Value
 import com.arkivanov.mvikotlin.core.store.StoreFactory
+import ui.dashboard.DefaultDashboardComponent
 import ui.home.DefaultHomeComponent
 import ui.model.DeepLink
 import ui.main.MainComponent.Config
@@ -17,6 +18,7 @@ import ui.main.MainComponent.Child.Reset
 import ui.main.MainComponent.Child.Profile
 import ui.main.MainComponent.Child.Home
 import ui.main.MainComponent.Child.Map
+import ui.main.MainComponent.Child.Dashboard
 import ui.main.MainComponent.Child.Settings
 import ui.map.DefaultMapComponent
 import ui.profile.DefaultProfileComponent
@@ -55,6 +57,7 @@ class DefaultMainComponent(
             is Config.Profile -> Profile(DefaultProfileComponent(componentContext,storeFactory))
             is Config.Home -> Home(DefaultHomeComponent(componentContext,storeFactory))
             is Config.Map -> Map(DefaultMapComponent(componentContext,storeFactory))
+            is Config.Dashboard -> Dashboard(DefaultDashboardComponent(componentContext,storeFactory))
             is Config.Settings -> Settings(DefaultSettingsComponent(componentContext,storeFactory))
         }
 
@@ -73,6 +76,7 @@ class DefaultMainComponent(
         Output.NavigateToProfile ->navigation.bringToFront(Config.Profile)
         Output.NavigateToHome ->navigation.bringToFront(Config.Home)
         Output.NavigateToMap ->navigation.bringToFront(Config.Map)
+        Output.NavigateToDashboard ->navigation.bringToFront(Config.Dashboard)
         Output.NavigateToSettings ->navigation.bringToFront(Config.Settings)
     }
     

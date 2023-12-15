@@ -16,9 +16,8 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import org.jetbrains.compose.resources.ExperimentalResourceApi=
 import core.util.toHslColor
-=
+
 @Composable
 fun UserHead(
     avatar:@Composable ()->Unit={},

@@ -15,6 +15,8 @@ import core.di.initKoin
 import org.jetbrains.compose.components.resources.BuildConfig
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.stopKoin
+import ui.dashboard.DashboardUi
+import ui.dashboard.PreviewDashboardComponent
 import ui.root.DefaultRootComponent
 import ui.dynamicfeatures.dynamicfeature.DefaultFeatureInstaller
 import ui.home.HomeUi
@@ -125,6 +127,14 @@ fun HomeUiPreview() {
 fun MapUiPreview() {
     AppTheme {
         MapUi(PreviewMapComponent())
+    }
+}
+
+@Preview(showSystemUi = true)
+@Composable
+fun DashboardUiPreview() {
+    AppTheme {
+        DashboardUi(PreviewDashboardComponent())
     }
 }
 

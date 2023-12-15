@@ -15,7 +15,6 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.lyricist.ProvideStrings
 import cafe.adriel.lyricist.rememberStrings
 import co.touchlab.kermit.Logger
-import com.arkivanov.decompose.FaultyDecomposeApi
 import com.arkivanov.decompose.extensions.compose.stack.Children
 import compose.icons.EvaIcons
 import compose.icons.evaicons.Outline
@@ -38,6 +37,7 @@ import ui.main.MainComponent.Child.Reset
 import ui.main.MainComponent.Child.Profile
 import ui.main.MainComponent.Child.Home
 import ui.main.MainComponent.Child.Map
+import ui.main.MainComponent.Child.Dashboard
 import ui.main.MainComponent.Child.Settings
 import ui.map.MapUi
 import ui.reset.ResetUi
@@ -48,12 +48,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Icon
 import androidx.compose.material.Surface
 import androidx.compose.runtime.getValue
-import com.arkivanov.decompose.extensions.compose.stack.animation.Direction
-import com.arkivanov.decompose.extensions.compose.stack.animation.StackAnimation
-import com.arkivanov.decompose.extensions.compose.stack.animation.StackAnimator
-import com.arkivanov.decompose.extensions.compose.stack.animation.isEnter
-import com.arkivanov.decompose.extensions.compose.stack.animation.slide
-import com.arkivanov.decompose.extensions.compose.stack.animation.stackAnimation
 import com.arkivanov.decompose.router.stack.active
 import com.arkivanov.decompose.router.stack.backStack
 import ui.i18n.Locales
@@ -63,6 +57,8 @@ import ui.main.component.UserHead
 import ui.model.NavigationItem
 import ui.profile.ProfileUi
 import cafe.adriel.lyricist.strings
+import core.util.tabAnimation
+import ui.dashboard.DashboardUi
 
 @OptIn(ExperimentalResourceApi::class,ExperimentalMaterial3Api::class,ExperimentalMaterial3WindowSizeClassApi::class)
 @Composable
@@ -235,7 +231,18 @@ private fun Children(component: MainComponent, modifier: Modifier = Modifier) {
 
         // Workaround for https://issuetracker.google.com/issues/270656235
 //        animation = stackAnimation(fade()),
-                    animation = tabAnimation(),
+                    animation = tabAnimation {
+                        when (it) {
+                            is SignUp -> 0
+                            is SignIn -> 1
+                            is Reset -> 2
+                            is Profile -> 3
+                            is Home -> 4
+                            is Map -> 5
+                            is Dashboard -> 6
+                            is Settings -> 7
+                        }
+                                             },
         ) {
          when(val child = it.instance) {
                                     is SignUp -> SignUpUi(child.component)
@@ -244,48 +251,12 @@ private fun Children(component: MainComponent, modifier: Modifier = Modifier) {
                                     is Profile -> ProfileUi(child.component)
                                     is Home -> HomeUi(child.component)
                                     is Map -> MapUi(child.component)
+                                    is Dashboard -> DashboardUi(child.component)
                                     is Settings -> SettingsUi(child.component)
                                 }
     }
 }
 
-@OptIn(FaultyDecomposeApi::class)
-@Composable
-private fun tabAnimation(): StackAnimation<Any, Child> =
-    stackAnimation { child, otherChild, direction ->
-        val index = child.instance.index
-        val otherIndex = otherChild.instance.index
-        val anim = slide()
-        if ((index > otherIndex) == direction.isEnter) anim else anim.flipSide()
-    }
 
-private val Child.index: Int
-    get() =
-    when (this) {
-        is SignUp -> 0
-        is SignIn -> 1
-        is Reset -> 2
-        is Profile -> 3
-        is Home -> 4
-        is Map -> 5
-        is Settings -> 6
-    }
 
-private fun StackAnimator.flipSide(): StackAnimator =
-    StackAnimator { direction, isInitial, onFinished, content ->
-        invoke(
-            direction = direction.flipSide(),
-            isInitial = isInitial,
-            onFinished = onFinished,
-            content = content,
-            )
-    }
-
-private fun Direction.flipSide(): Direction =
-    when (this) {
-        Direction.ENTER_FRONT -> Direction.ENTER_BACK
-        Direction.EXIT_FRONT -> Direction.EXIT_BACK
-        Direction.ENTER_BACK -> Direction.ENTER_FRONT
-        Direction.EXIT_BACK -> Direction.EXIT_FRONT
-    }
 

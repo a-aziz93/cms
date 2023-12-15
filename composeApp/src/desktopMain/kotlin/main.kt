@@ -18,6 +18,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.window.rememberWindowState
 import com.arkivanov.decompose.extensions.compose.lifecycle.LifecycleController
 import ui.component.SaveStateDialog
+import ui.dashboard.DashboardUi
+import ui.dashboard.PreviewDashboardComponent
 import ui.dynamicfeatures.dynamicfeature.DefaultFeatureInstaller
 import ui.home.HomeUi
 import ui.home.PreviewHomeComponent
@@ -148,6 +150,14 @@ fun HomeUiPreview() {
 fun MapUiPreview() {
     AppTheme {
         MapUi(PreviewMapComponent())
+    }
+}
+
+@Preview
+@Composable
+fun DashboardUiPreview() {
+    AppTheme {
+        DashboardUi(PreviewDashboardComponent())
     }
 }
 

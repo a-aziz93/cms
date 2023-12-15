@@ -5,14 +5,8 @@ import cafe.adriel.lyricist.strings
 import compose.icons.EvaIcons
 import compose.icons.evaicons.Fill
 import compose.icons.evaicons.Outline
-import compose.icons.evaicons.fill.Home
-import compose.icons.evaicons.fill.LogIn
-import compose.icons.evaicons.fill.Map
-import compose.icons.evaicons.fill.Settings2
-import compose.icons.evaicons.outline.Home
-import compose.icons.evaicons.outline.LogIn
-import compose.icons.evaicons.outline.Map
-import compose.icons.evaicons.outline.Settings2
+import compose.icons.evaicons.fill.*
+import compose.icons.evaicons.outline.*
 import ui.model.NavigationItem
 
 @Composable
@@ -31,6 +25,11 @@ fun NavigationItems()=listOf(
                    selectedIcon = EvaIcons.Fill.Map,
                    unselectedIcon = EvaIcons.Outline.Map,
                    route= MainComponent.Config.Map,
+        ),
+    NavigationItem(title= strings.dashboard,
+                   selectedIcon = EvaIcons.Fill.Monitor,
+                   unselectedIcon = EvaIcons.Outline.Monitor,
+                   route = MainComponent.Config.Dashboard,
         ),
     NavigationItem(title= strings.settings,
                    selectedIcon = EvaIcons.Fill.Settings2,

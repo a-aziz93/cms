@@ -8,5 +8,6 @@ internal val RuStrings = Strings(
    profile="Профиль",
     main="Главная",
      map="Карта",
+   dashboard="Показатели",
      settings="Настройки",
 )

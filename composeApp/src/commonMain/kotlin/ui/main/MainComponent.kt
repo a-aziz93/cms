@@ -3,6 +3,7 @@ package ui.main
 import com.arkivanov.decompose.router.stack.ChildStack
 import com.arkivanov.decompose.value.Value
 import kotlinx.serialization.Serializable
+import ui.dashboard.DashboardComponent
 import ui.home.HomeComponent
 import ui.map.MapComponent
 import ui.profile.ProfileComponent
@@ -24,6 +25,7 @@ interface MainComponent{
         class Profile(val component: ProfileComponent) : Child()
         class Home(val component: HomeComponent) : Child()
         class Map(val component: MapComponent) : Child()
+        class Dashboard(val component: DashboardComponent) : Child()
         class Settings(val component: SettingsComponent) : Child()
     }
 
@@ -42,6 +44,8 @@ interface MainComponent{
         @Serializable
         data object Map : Config()
         @Serializable
+        data object Dashboard : Config()
+        @Serializable
         data object Settings : Config()
     }
     
@@ -51,6 +55,7 @@ interface MainComponent{
         data object NavigateToProfile : Output()
         data object NavigateToHome : Output()
         data object NavigateToMap : Output()
+        data object NavigateToDashboard : Output()
         data object NavigateToSettings : Output()
     }
 }

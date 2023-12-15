@@ -9,5 +9,6 @@ internal val EnStrings = Strings(
     profile="Profile",
     main="Main",
     map="Map",
+    dashboard="Dashboard",
     settings="Settings",
     )

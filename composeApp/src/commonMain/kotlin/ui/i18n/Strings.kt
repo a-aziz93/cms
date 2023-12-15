@@ -5,5 +5,6 @@ internal data class Strings(
     val profile:String,
     val main: String,
     val map: String,
+    val dashboard:String,
     val settings: String,
 )
