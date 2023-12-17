@@ -10,7 +10,7 @@ import ui.signin.SignInComponent.Output
 class DefaultSignInComponent(
     componentContext: ComponentContext,
     storeFactory: StoreFactory,
-    override val output: (Output) -> Unit
+    override val onOutput: (Output) -> Unit
 ) : ComponentContext by componentContext, SignInComponent {
 
     override val login = MutableStateFlow("")

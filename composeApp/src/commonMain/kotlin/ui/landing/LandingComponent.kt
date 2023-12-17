@@ -5,5 +5,7 @@ interface LandingComponent {
     
     sealed class Output {
         data object NavigateToMain : Output()
+//        data object NavigateToSignIn : Output()
+//        data object NavigateToSignUp : Output()
     }
 }

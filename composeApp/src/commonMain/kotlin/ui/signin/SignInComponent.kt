@@ -3,7 +3,7 @@ package ui.signin
 import kotlinx.coroutines.flow.StateFlow
 
 interface SignInComponent {
-    val output: (Output) -> Unit
+    val onOutput: (Output) -> Unit
     
     val login: StateFlow<String>
 

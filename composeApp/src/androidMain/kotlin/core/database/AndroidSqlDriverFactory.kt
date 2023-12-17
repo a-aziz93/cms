@@ -8,5 +8,5 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.core.scope.Scope
 
 actual suspend fun Scope.sqlDriverFactory(schema:  SqlSchema<QueryResult.AsyncValue<Unit>>,databaseName:String): SqlDriver {
-    return AndroidSqliteDriver(sqlSchema.schema.synchronous(), androidContext(), "${databaseName}.db")
+    return AndroidSqliteDriver(schema.synchronous(), androidContext(), "${databaseName}.db")
 }

@@ -40,6 +40,7 @@ import ui.signup.PreviewSignUpComponent
 import ui.signup.SignUpUi
 import ui.theme.AppTheme
 
+
 @OptIn(ExperimentalDecomposeApi::class)
 fun main() {
     initKoin(enableNetworkLogs = false)

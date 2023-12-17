@@ -6,7 +6,7 @@ import ui.PreviewComponentContext
 
 class PreviewSignInComponent : SignInComponent, ComponentContext by PreviewComponentContext {
 
-    override val output: (SignInComponent.Output) -> Unit={}
+    override val onOutput: (SignInComponent.Output) -> Unit={}
     override val login = MutableStateFlow("login")
     override val password = MutableStateFlow("password")
     override val inProgress = MutableStateFlow(false)

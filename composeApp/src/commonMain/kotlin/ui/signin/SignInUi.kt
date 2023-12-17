@@ -1,80 +1,164 @@
 package ui.signin
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.Button
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.rememberCoroutineScope
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.painterResource
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardCapitalization
-import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.unit.dp
-import coroutineDispatchers
-import kotlinx.coroutines.launch
+import androidx.compose.ui.text.input.VisualTransformation
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.unit.*
+import compose.icons.EvaIcons
+import compose.icons.evaicons.Outline
+import compose.icons.evaicons.outline.Eye
+import compose.icons.evaicons.outline.EyeOff2
+
+
+@OptIn(ExperimentalResourceApi::class)
 @Composable
-fun SignInUi(component: SignInComponent) {
+internal fun SignInUi(component: SignInComponent) {
 
-    val login = component.login.collectAsState(coroutineDispatchers.main)
-    val password = component.password.collectAsState(coroutineDispatchers.main)
-    val inProgress = component.inProgress.collectAsState()
+    val image = painterResource("compose-multiplatform.xml")
 
-    val scope = rememberCoroutineScope()
+    val emailValue = remember { mutableStateOf("") }
+    val passwordValue = remember { mutableStateOf("") }
+
+    val passwordVisibility = remember { mutableStateOf(false) }
+    val focusRequester = remember { FocusRequester() }
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
-        modifier = Modifier.fillMaxSize().padding(horizontal = 24.dp)
-    ){
-        TextField(
-            label = {
-                Text("Enter your Email")
-                    },
-            value = login.value,
-            onValueChange = component::onLoginChanged,
-            keyboardOptions = KeyboardOptions(
-                capitalization = KeyboardCapitalization.None,
-                autoCorrect = false,
-                keyboardType = KeyboardType.Email,
-                imeAction = ImeAction.Next
-            ),
-            singleLine = true,
-            modifier = Modifier.fillMaxWidth()
-        )
-        Spacer(modifier = Modifier.height(16.dp))
-        TextField(
-            label = {
-                Text("Enter your Password")
-                    },
-            value = password.value,
-            onValueChange = component::onPasswordChanged,
-            // Enable user input from the keyboard
-            keyboardOptions = KeyboardOptions(
-                capitalization = KeyboardCapitalization.None,
-                autoCorrect = false,
-                keyboardType = KeyboardType.Password,
-                imeAction = ImeAction.Next
-            ),
-            // Enable password input type by showing dots for password security
-            visualTransformation = PasswordVisualTransformation(),
-            singleLine = true,
-            modifier = Modifier.fillMaxWidth()
-        )
-        Spacer(modifier = Modifier.height(16.dp))
-        Button(onClick = {
-            scope.launch {
+        modifier = Modifier
+            .fillMaxSize()
+            .clip(RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp))
+            .padding(10.dp)
+    ) {
+        Box(
+            modifier = Modifier
+                .width(400.dp)
+                .height(540.dp)
+        ) {
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(100.dp),
+                    contentAlignment = Alignment.TopCenter
+                ) {
+                    Image(image, contentDescription = null)
+                }
+                Text(
+                    text = "Sign In",
+                    style = TextStyle(
+                        fontWeight = FontWeight.Bold,
+                        letterSpacing = 2.sp
+                    ),
+                    fontSize = 30.sp
+                )
+                Spacer(modifier = Modifier.padding(20.dp))
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    OutlinedTextField(
+                        value = emailValue.value,
+                        onValueChange = {
+
+                        },
+                        label = { Text("Email Address") },
+                        placeholder = { Text("Email Address") },
+                        singleLine = true,
+                        modifier = Modifier.fillMaxWidth(0.8f),
+                    )
+
+                    OutlinedTextField(
+                        value = passwordValue.value,
+                        onValueChange = {
+                            passwordValue.value = it
+                        },
+                        trailingIcon = {
+                            IconButton(onClick = {
+                                passwordVisibility.value = !passwordVisibility.value
+                            }) {
+                                Icon(
+                                    imageVector = if (passwordVisibility.value) EvaIcons.Outline.EyeOff2 else EvaIcons.Outline.Eye,
+                                    contentDescription = null
+                                )
+                            }
+                        },
+                        label = { Text("Password") },
+                        placeholder = { Text("Password") },
+                        singleLine = true,
+                        visualTransformation = if (passwordVisibility.value) VisualTransformation.None
+                        else PasswordVisualTransformation(),
+                        modifier = Modifier
+                            .fillMaxWidth(0.8f)
+                            .focusRequester(focusRequester = focusRequester),
+
+                        )
+
+                    Spacer(modifier = Modifier.padding(10.dp))
+                    Row(
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(text ="Remember me ")
+                        var switchState by remember { mutableStateOf(false) }
+                        Switch (
+                            checked = switchState,
+                            onCheckedChange = { switchState = it }
+                        )
+                    }
+                    Spacer(modifier = Modifier.padding(10.dp))
+                    Button(
+                        onClick = {},
+                        modifier = Modifier
+                            .fillMaxWidth(0.8f)
+                            .height(50.dp)
+                    ) {
+                        Text(text = "Sign In", fontSize = 20.sp)
+                    }
+
+                    Spacer(modifier = Modifier.padding(20.dp))
+                    Text(
+                        text = "Create An Account",
+                        modifier = Modifier.clickable(onClick = {
+                            component.onOutput(SignInComponent.Output.NavigateSignUp)
+                        })
+                    )
+                    Text(
+                        text = "Forget password?",
+                        modifier = Modifier.clickable(onClick = {
+                            component.onOutput(SignInComponent.Output.NavigateToReset)
+                        })
+                    )
+                    Spacer(modifier = Modifier.padding(20.dp))
+                }
 
             }
-        }){
-            Text("Login")
         }
     }
+
 }
 
