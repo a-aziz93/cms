@@ -4,9 +4,7 @@ import App
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.arkivanov.decompose.ExperimentalDecomposeApi
 import com.arkivanov.decompose.defaultComponentContext
@@ -34,8 +32,8 @@ import ui.settings.PreviewSettingsComponent
 import ui.settings.SettingsUi
 import ui.signin.PreviewSignInComponent
 import ui.signin.SignInUi
-import ui.signup.PreviewSignUpComponent
-import ui.signup.SignUpUi
+import ui.selfsignup.PreviewSelfSignUpComponent
+import ui.selfsignup.SignUpUi
 import ui.theme.AppTheme
 
 @OptIn(ExperimentalDecomposeApi::class)
@@ -94,7 +92,7 @@ fun LandingUiPreview() {
 @Composable
 fun SignUpUiPreview() {
     AppTheme {
-        SignUpUi(PreviewSignUpComponent())
+        SignUpUi(PreviewSelfSignUpComponent())
     }
 }
 

@@ -1,8 +1,8 @@
-package ui.signup
+package ui.selfsignup
 
 import kotlinx.coroutines.flow.StateFlow
 
-interface SignUpComponent {
+interface SelfSignUpComponent {
 
     val login: StateFlow<String>
 
@@ -14,5 +14,5 @@ interface SignUpComponent {
 
     fun onPasswordChanged(password: String)
 
-    fun onSignInClick()
+    fun onSignUpClick()
 }

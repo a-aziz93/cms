@@ -1,10 +1,10 @@
-package ui.signup
+package ui.selfsignup
 
 import kotlinx.coroutines.flow.MutableStateFlow
 import com.arkivanov.decompose.ComponentContext
 import ui.PreviewComponentContext
 
-class PreviewSignUpComponent : SignUpComponent, ComponentContext by PreviewComponentContext {
+class PreviewSelfSignUpComponent : SelfSignUpComponent, ComponentContext by PreviewComponentContext {
 
     override val login = MutableStateFlow("login")
     override val password = MutableStateFlow("password")
@@ -12,5 +12,5 @@ class PreviewSignUpComponent : SignUpComponent, ComponentContext by PreviewCompo
 
     override fun onLoginChanged(login: String) = Unit
     override fun onPasswordChanged(password: String) = Unit
-    override fun onSignInClick() = Unit
+    override fun onSignUpClick() = Unit
 }

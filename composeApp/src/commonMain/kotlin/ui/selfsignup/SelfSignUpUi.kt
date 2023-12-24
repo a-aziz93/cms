@@ -1,10 +1,8 @@
-package ui.signup
+package ui.selfsignup
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -21,7 +19,6 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
@@ -32,16 +29,13 @@ import compose.icons.evaicons.outline.Eye
 import compose.icons.evaicons.outline.EyeOff2
 import coroutineDispatchers
 import org.jetbrains.compose.resources.painterResource
-import ui.signin.SignInComponent
 
 
-import androidx.compose.material3.*
-import androidx.compose.ui.unit.*
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
-fun SignUpUi(component: SignUpComponent) {
+fun SignUpUi(component: SelfSignUpComponent) {
 
     val login =component.login.collectAsState(coroutineDispatchers.main)
     val password = component.password.collectAsState(coroutineDispatchers.main)
@@ -65,7 +59,7 @@ fun SignUpUi(component: SignUpComponent) {
     ) {
         Box(
             modifier = Modifier
-                .width(400.dp)
+                .width(600.dp)
                 .height(600.dp)
         ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {

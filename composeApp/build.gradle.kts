@@ -6,10 +6,11 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsCompose)
-    kotlin("plugin.serialization") version "1.9.21"
-    id("com.google.devtools.ksp")
-    id("com.apollographql.apollo3")
-    id("app.cash.sqldelight")
+    alias(libs.plugins.kotlinSerialization)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.apollo3)
+    alias(libs.plugins.sqlDelight)
+    alias(libs.plugins.dokka)
 }
 
 kotlin {
@@ -34,18 +35,18 @@ kotlin {
     
     jvm("desktop")
     
-    listOf(
-        iosX64(),
-        iosArm64(),
-        iosSimulatorArm64()
-    ).forEach { iosTarget ->
-        iosTarget.binaries.framework {
-            baseName = "ComposeApp"
-            isStatic = true
-            export(libs.decompose)
-            export(libs.lifecycle)
-        }
-    }
+//    listOf(
+//        iosX64(),
+//        iosArm64(),
+//        iosSimulatorArm64()
+//    ).forEach { iosTarget ->
+//        iosTarget.binaries.framework {
+//            baseName = "ComposeApp"
+//            isStatic = true
+//            export(libs.decompose)
+//            export(libs.lifecycle)
+//        }
+//    }
     
     sourceSets {
         val desktopMain by getting
@@ -78,16 +79,15 @@ kotlin {
 //            implementation(libs.material3.window.size)
             implementation(libs.material3.window.size.multiplatform)
             implementation(libs.bundles.compose.icons)
-            implementation(libs.kotlin.reflect)
             implementation(libs.kotlinx.serialization.json)
             implementation(libs.bundles.multiplatform.settings)
-            implementation(libs.bundles.koin)
-            implementation(libs.bundles.ktor)
+            implementation(libs.koin.compose)
+            implementation(libs.bundles.ktor.client)
             implementation(libs.bundles.sql.delight)
             implementation(libs.bundles.mvi.kotlin)
             implementation(libs.bundles.decompose)
             implementation(libs.lifecycle)
-            implementation(libs.coroutines.core)
+            implementation(libs.kamel.image)
         }
         
         desktopMain.dependencies {
@@ -97,10 +97,10 @@ kotlin {
             implementation(libs.coroutines.swing)
         }
         
-            iosMain.dependencies {
-                implementation(libs.ktor.client.darwin)
-                implementation(libs.sql.delight.native.driver)
-            }
+//            iosMain.dependencies {
+//                implementation(libs.ktor.client.darwin)
+//                implementation(libs.sql.delight.native.driver)
+//            }
     
 //            jsMain.dependencies{
 //                implementation(libs.ktor.client.js)
@@ -114,7 +114,7 @@ kotlin {
 
 android {
     namespace = "digital.sadad.project"
-    compileSdk = libs.versions.android.compileSdk.get().toInt()
+    compileSdk = libs.versions.android.compile.sdk.get().toInt()
 
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
     sourceSets["main"].res.srcDirs("src/androidMain/res")
@@ -122,8 +122,8 @@ android {
 
     defaultConfig {
         applicationId = "digital.sadad.project"
-        minSdk = libs.versions.android.minSdk.get().toInt()
-        targetSdk = libs.versions.android.targetSdk.get().toInt()
+        minSdk = libs.versions.android.min.sdk.get().toInt()
+        targetSdk = libs.versions.android.target.sdk.get().toInt()
         versionCode = 1
         versionName = "1.0"
     }

@@ -26,7 +26,7 @@ import ui.reset.DefaultResetComponent
 import ui.settings.DefaultSettingsComponent
 import ui.signin.DefaultSignInComponent
 import ui.signin.SignInComponent
-import ui.signup.DefaultSignUpComponent
+import ui.selfsignup.DefaultSelfSignUpComponent
 
 @OptIn(ExperimentalDecomposeApi::class)
 class DefaultMainComponent(
@@ -51,7 +51,7 @@ class DefaultMainComponent(
     
     private fun child(config: Config, componentContext: ComponentContext): Child =
         when (config) {
-            is Config.SignUp -> SignUp(DefaultSignUpComponent(componentContext,storeFactory))
+            is Config.SignUp -> SignUp(DefaultSelfSignUpComponent(componentContext,storeFactory))
             is Config.SignIn -> SignIn(DefaultSignInComponent(componentContext,storeFactory,::onSignInOutput))
             is Config.Reset -> Reset(DefaultResetComponent(componentContext,storeFactory))
             is Config.Profile -> Profile(DefaultProfileComponent(componentContext,storeFactory))

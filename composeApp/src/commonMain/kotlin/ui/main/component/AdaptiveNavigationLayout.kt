@@ -19,8 +19,8 @@ fun AdaptiveNavigationLayout(
     content: @Composable () -> Unit,
     ){
     when(layoutType){
-        WindowWidthSizeClass.Compact-> CompactNavigationLayout(modifier,drawerState,userHead,userHeadProvided,items,selectedItemIndex,onNavigate, content)
-        WindowWidthSizeClass.Medium-> MediumNavigationLayout(modifier,drawerState,userHead,userHeadProvided,items,selectedItemIndex,onNavigate, content)
-        WindowWidthSizeClass.Expanded-> ExpandedNavigationLayout(modifier,drawerState,userHead,userHeadProvided,items,selectedItemIndex,onNavigate, content)
+        WindowWidthSizeClass.Compact-> ModalDrawerLayout(modifier,drawerState,userHead,userHeadProvided,items,selectedItemIndex,onNavigate, content)
+        WindowWidthSizeClass.Medium-> RailDrawerLayout(modifier,drawerState,userHead,userHeadProvided,items,selectedItemIndex,onNavigate, content)
+        WindowWidthSizeClass.Expanded-> DismissableDrawerLayout(modifier,drawerState,userHead,userHeadProvided,items,selectedItemIndex,onNavigate, content)
     }
 }

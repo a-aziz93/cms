@@ -6,11 +6,11 @@ import kotlinx.serialization.Serializable
 import ui.dashboard.DashboardComponent
 import ui.home.HomeComponent
 import ui.map.MapComponent
-import ui.profile.ProfileComponent
+import ui.profile.DefaultProfileComponent
 import ui.reset.ResetComponent
 import ui.settings.SettingsComponent
 import ui.signin.SignInComponent
-import ui.signup.SignUpComponent
+import ui.selfsignup.SelfSignUpComponent
 
 interface MainComponent{
     
@@ -19,10 +19,10 @@ interface MainComponent{
     fun onOutput(output:Output)
 
     sealed class Child {
-        class SignUp(val component: SignUpComponent) : Child()
+        class SignUp(val component: SelfSignUpComponent) : Child()
         class SignIn(val component: SignInComponent) : Child()
         class Reset(val component: ResetComponent) : Child()
-        class Profile(val component: ProfileComponent) : Child()
+        class Profile(val component: DefaultProfileComponent) : Child()
         class Home(val component: HomeComponent) : Child()
         class Map(val component: MapComponent) : Child()
         class Dashboard(val component: DashboardComponent) : Child()

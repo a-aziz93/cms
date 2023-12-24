@@ -19,19 +19,18 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import core.util.Country
+import core.util.countryAlpha2CodeFlagPathMap
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
-import ui.i18n.CountryCode
-import ui.i18n.getCountryFlag
-import ui.i18n.listOfCountries
-import ui.i18n.searchCountryList
+import core.util.countries as countriesList
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
 fun LocalePickerDialog(
-    countries:List<CountryCode> = listOfCountries,
-    defaultSelectedCountry: CountryCode = listOfCountries.first(),
-    pickedCountry: (CountryCode) -> Unit,
+    countries:List<Country> = countriesList,
+    defaultSelectedCountry: Country = countriesList.first(),
+    pickedCountry: (Country) -> Unit,
     dialogSearch: Boolean = true,
     dialogRounded: Int = 12,
     onDismissRequest: () -> Unit,
@@ -60,9 +59,9 @@ fun LocalePickerDialog(
                                     (if (searchValue.isEmpty()) {
                                         countries
                                     } else {
-                                        countries.searchCountryList(searchValue)
+                                        countries.filter { it.name== searchValue}
                                     })
-                                ) { countryItem ->
+                                ) { c ->
                                     Row(
                                         Modifier
                                             .padding(
@@ -70,15 +69,15 @@ fun LocalePickerDialog(
                                                 vertical = 18.dp
                                             )
                                             .clickable {
-                                                pickedCountry(countryItem)
-                                                isPickCountry = countryItem
+                                                pickedCountry(c)
+                                                isPickCountry = c
                                                 onDismissRequest()
                                             }) {
                                         Image(
-                                            painter = painterResource(getCountryFlag(countryItem.countryCode)), contentDescription = null
+                                            painter = painterResource(countryAlpha2CodeFlagPathMap[c.alpha2Code]!!), contentDescription = null
                                         )
                                         Text(
-                                            countryItem.countryName,
+                                            c.name,
                                             Modifier.padding(horizontal = 18.dp)
                                         )
                                     }

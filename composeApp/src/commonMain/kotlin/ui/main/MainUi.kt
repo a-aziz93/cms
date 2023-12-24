@@ -19,18 +19,13 @@ import com.arkivanov.decompose.extensions.compose.stack.Children
 import compose.icons.EvaIcons
 import compose.icons.evaicons.Outline
 import compose.icons.evaicons.outline.*
-import core.storage.KeyValueStorageImpl
 import core.storage.StorageKeys
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import ui.home.HomeUi
-import ui.i18n.getCountryFlag
-import ui.i18n.lngToCountryMap
 import ui.main.component.AdaptiveNavigationLayout
 import ui.theme.AppTheme
-import kotlin.reflect.full.memberProperties
-import ui.main.MainComponent.Child
 import ui.main.MainComponent.Child.SignUp
 import ui.main.MainComponent.Child.SignIn
 import ui.main.MainComponent.Child.Reset
@@ -43,41 +38,47 @@ import ui.map.MapUi
 import ui.reset.ResetUi
 import ui.settings.SettingsUi
 import ui.signin.SignInUi
-import ui.signup.SignUpUi
+import ui.selfsignup.SignUpUi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Icon
 import androidx.compose.material.Surface
 import androidx.compose.runtime.getValue
 import com.arkivanov.decompose.router.stack.active
 import com.arkivanov.decompose.router.stack.backStack
-import ui.i18n.Locales
-import ui.i18n.listOfCountries
+import core.storage.KeyValueStorage
 import ui.main.component.LocalePickerDialog
 import ui.main.component.UserHead
 import ui.model.NavigationItem
 import ui.profile.ProfileUi
-import cafe.adriel.lyricist.strings
+import core.util.countries
+import core.util.countryAlpha2CodeFlagPathMap
 import core.util.tabAnimation
+import org.koin.compose.koinInject
 import ui.dashboard.DashboardUi
+import ui.i18n.*
 
-@OptIn(ExperimentalResourceApi::class,ExperimentalMaterial3Api::class,ExperimentalMaterial3WindowSizeClassApi::class)
+@OptIn(ExperimentalResourceApi::class, ExperimentalMaterial3Api::class, ExperimentalMaterial3WindowSizeClassApi::class)
 @Composable
 internal fun MainUi(component: MainComponent) {
-    
-    // Set current Koin instance to Compose context
-    //    KoinContext {
-    val keyValueStorage=KeyValueStorageImpl()
 
-    val isDarkTheme=keyValueStorage.get(StorageKeys.IS_DARK_THEME.key,Boolean::class, isSystemInDarkTheme())
+    val keyValueStorage = koinInject<KeyValueStorage>()
+
+    val isDarkTheme = keyValueStorage.get(StorageKeys.IS_DARK_THEME.key, Boolean::class, isSystemInDarkTheme())
 
     var darkTheme by remember { mutableStateOf(isDarkTheme) }
 
-    AppTheme(darkTheme=darkTheme) {
+    AppTheme(darkTheme = darkTheme) {
 
-        val lyricist = rememberStrings(currentLanguageTag=keyValueStorage.get(StorageKeys.LANGUAGE.key,String::class, Locale.current.toLanguageTag()))
+        val lyricist = rememberStrings(
+            currentLanguageTag = keyValueStorage.get(
+                StorageKeys.LANGUAGE.key,
+                String::class,
+                Locale.current.toLanguageTag()
+            )
+        )
 
         ProvideStrings(lyricist) {
-            val currentLngCountryCode = lngToCountryMap[lyricist.languageTag.split("-")[0]]!!
+            val currentLngCountryAlpha2Code = lyricist.languageTag.split("-")[0].toCountryAlpha2Code()
 
             val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
             val topAppBarElementColor = if (scrollBehavior.state.collapsedFraction > 0.5) {
@@ -91,58 +92,65 @@ internal fun MainUi(component: MainComponent) {
                 color = MaterialTheme.colorScheme.background
             ) {
 
-                val  windowSizeClass= calculateWindowSizeClass()
+                val windowSizeClass = calculateWindowSizeClass()
 
-                val navDrawerState = rememberDrawerState(initialValue =if(windowSizeClass.widthSizeClass == WindowWidthSizeClass.Compact) DrawerValue.Closed else DrawerValue.Open)
+                val navDrawerState =
+                    rememberDrawerState(initialValue = if (windowSizeClass.widthSizeClass == WindowWidthSizeClass.Compact) DrawerValue.Closed else DrawerValue.Open)
                 val scope = rememberCoroutineScope()
 
                 var openLocaleDialog by remember { mutableStateOf(false) }
-                
-                val navigationItems= NavigationItems()
-                    val selectedNavigationItemIndex = remember { mutableIntStateOf(getActiveNavigationItemIntex(navigationItems,component.childStack.active.configuration as MainComponent.Config)) }
-                
-                val profileTitle=strings.profile
-               
+
+                val namedNavigationItems = NamedNavigationItems()
+                val indexedNavigationItems = IndexedNavigationItems()
+
+                val selectedNavigationItemIndex = remember {
+                    mutableIntStateOf(
+                        getActiveNavigationItemIndex(
+                            indexedNavigationItems,
+                            component.childStack.active.configuration as MainComponent.Config
+                        )
+                    )
+                }
+
                 var title by remember { mutableStateOf("") }
-                
+
                 AdaptiveNavigationLayout(
                     layoutType = windowSizeClass.widthSizeClass,
-                    drawerState=navDrawerState,
+                    drawerState = navDrawerState,
                     userHead = {
-                               UserHead(
-                                   id="SomeId",
-                                   firstName="Aziz",
-                                   lastName="Atoev",
-                                   role="User",
-                                   onClick={
-                                       component.onOutput(MainComponent.Output.NavigateToProfile)
-                                       title= profileTitle
-                                       selectedNavigationItemIndex.intValue=-1
-                                   }
-                               )
-                               },
+                        UserHead(
+                            id = "SomeId",
+                            firstName = "Aziz",
+                            lastName = "Atoev",
+                            role = "User",
+                            onClick = {
+                                component.onOutput(MainComponent.Output.NavigateToProfile)
+                                title = namedNavigationItems["profile"]!!.title
+                                selectedNavigationItemIndex.intValue = -1
+                            }
+                        )
+                    },
                     userHeadProvided = true,
-                    items=navigationItems,
-                    selectedItemIndex=selectedNavigationItemIndex.intValue,
-                    onNavigate = {index->
-                        selectedNavigationItemIndex.intValue=index
-                        component.onOutput(navConfigOutputMapper[navigationItems[selectedNavigationItemIndex.intValue].route!!]!!)
+                    items = indexedNavigationItems,
+                    selectedItemIndex = selectedNavigationItemIndex.intValue,
+                    onNavigate = { index ->
+                        selectedNavigationItemIndex.intValue = index
+                        component.onOutput(navConfigOutputMapper[indexedNavigationItems[selectedNavigationItemIndex.intValue].route!!]!!)
                     }
-                ){
-                    
+                ) {
                     Scaffold(
                         topBar = {
                             TopAppBar(
-                                title={
-                                    Text(text=if(selectedNavigationItemIndex.intValue>-1)navigationItems[selectedNavigationItemIndex.intValue].title else title )
-                                      },
+                                title = {
+                                    Text(text = if (selectedNavigationItemIndex.intValue > -1) indexedNavigationItems[selectedNavigationItemIndex.intValue].title else title)
+                                },
                                 navigationIcon = {
-                                    Row { 
+                                    Row {
                                         IconButton(onClick = {
                                             scope.launch {
-                                                if(navDrawerState.isClosed){
+                                                if (navDrawerState.isClosed) {
                                                     navDrawerState.open()
-                                                }else{
+                                                } else {
                                                     navDrawerState.close()
                                                 }
                                             }
@@ -153,12 +161,15 @@ internal fun MainUi(component: MainComponent) {
                                             )
                                         }
                                     }
-                                                 },
+                                },
                                 actions = {
-                                    if(component.childStack.backStack.isNotEmpty()){
+                                    if (component.childStack.backStack.isNotEmpty()) {
                                         IconButton(onClick = {
                                             component.onOutput(MainComponent.Output.NavigateBack)
-                                            selectedNavigationItemIndex.intValue = getActiveNavigationItemIntex(navigationItems,component.childStack.active.configuration as MainComponent.Config)
+                                            selectedNavigationItemIndex.intValue = getActiveNavigationItemIndex(
+                                                indexedNavigationItems,
+                                                component.childStack.active.configuration as MainComponent.Config
+                                            )
                                         }) {
                                             Icon(
                                                 imageVector = EvaIcons.Outline.ArrowheadLeft,
@@ -168,59 +179,104 @@ internal fun MainUi(component: MainComponent) {
                                     }
                                     IconButton(
                                         onClick = {
-                                            openLocaleDialog=true
+                                            openLocaleDialog = true
                                         }) {
-                                        Image(modifier=Modifier.size(30.dp), painter = painterResource(getCountryFlag(currentLngCountryCode)), contentDescription = null,)
+                                        Image(
+                                            modifier = Modifier.size(30.dp),
+                                            painter = painterResource(countryAlpha2CodeFlagPathMap[currentLngCountryAlpha2Code]!!),
+                                            contentDescription = null,
+                                        )
                                     }
                                     IconButton(onClick = {
-                                        darkTheme=!darkTheme
-                                        keyValueStorage.set(StorageKeys.IS_DARK_THEME.key,darkTheme)
-                                        Logger.v("Picked ${if(darkTheme) "dark" else "light"} theme")
+                                        darkTheme = !darkTheme
+                                        keyValueStorage.set(StorageKeys.IS_DARK_THEME.key, darkTheme)
+                                        Logger.v("Picked ${if (darkTheme) "dark" else "light"} theme")
                                     }) {
-                                        Icon(if(darkTheme)EvaIcons.Outline.Sun else EvaIcons.Outline.Moon, null)
+                                        Icon(if (darkTheme) EvaIcons.Outline.Sun else EvaIcons.Outline.Moon, null)
                                     }
                                     IconButton(onClick = {
                                         Logger.v("Clicked SignOut")
                                     }) {
-                                        Icon(EvaIcons.Outline.LogOut,null)
+                                        Icon(EvaIcons.Outline.LogOut, null)
                                     }
-                                          },
+                                },
                                 colors = TopAppBarDefaults.topAppBarColors(
                                     containerColor = MaterialTheme.colorScheme.primary,
                                     scrolledContainerColor = MaterialTheme.colorScheme.surface,
                                     navigationIconContentColor = topAppBarElementColor,
                                     titleContentColor = topAppBarElementColor,
-                                    actionIconContentColor= topAppBarElementColor,
-                                    ),
-                                )
-                                 },
-                        ) {innerPadding->
-                        if(openLocaleDialog){
-                            LocalePickerDialog(
-                                countries=Locales::class.memberProperties.map{lg-> listOfCountries.find { it.countryCode==lngToCountryMap[lg.call()] }!!},
-                                defaultSelectedCountry = listOfCountries.find{it.countryCode==currentLngCountryCode}!!,
-                                pickedCountry={c->
-                                    lyricist.languageTag= lngToCountryMap.entries.find{ it.value==c.countryCode}!!.key
-                                    openLocaleDialog=false
-                                              },
-                                onDismissRequest={
-                                    openLocaleDialog=false
-                                                 },
-                                )
+                                    actionIconContentColor = topAppBarElementColor,
+                                ),
+                            )
+                        },
+                        bottomBar = {
+                            NavigationBar {
+                                indexedNavigationItems.forEachIndexed { index, item ->
+                                    NavigationBarItem(
+                                        selected = selectedNavigationItemIndex.intValue == index,
+                                        onClick = {
+                                            selectedNavigationItemIndex.intValue = index
+                                            // navController.navigate(item.title)
+                                        },
+                                        label = {
+                                            Text(text = item.title)
+                                        },
+                                        alwaysShowLabel = false,
+                                        icon = {
+                                            BadgedBox(
+                                                badge = {
+                                                    if (item.badgeCount != null) {
+                                                        Badge {
+                                                            Text(text = item.badgeCount.toString())
+                                                        }
+                                                    } else if (item.hasNews) {
+                                                        Badge()
+                                                    }
+                                                }
+                                            ) {
+                                                (if (index == selectedNavigationItemIndex.intValue) {
+                                                    item.icon?.selectedIcon
+                                                } else item.icon?.unselectedIcon)?.let {
+                                                    Icon(
+                                                        imageVector = it,
+                                                        contentDescription = item.title
+                                                    )
+                                                }
+                                            }
+                                        }
+                                    )
+                                }
+                            }
                         }
-                        Box(modifier=Modifier.fillMaxSize().padding(innerPadding)){
-                            Children(component=component)
+                    ) { innerPadding ->
+                        if (openLocaleDialog) {
+                            LocalePickerDialog(
+                                countries = supportedLocaleCodes.map { lng ->
+                                    val lngCountryAlpha2Code = lng.toCountryAlpha2Code()
+                                    countries.find { it.alpha2Code == lngCountryAlpha2Code }!!
+                                },
+                                defaultSelectedCountry = countries.find { it.alpha2Code == currentLngCountryAlpha2Code }!!,
+                                pickedCountry = { c ->
+                                    lyricist.languageTag = c.alpha2Code.toLanguageAlpha2Code()
+                                    openLocaleDialog = false
+                                },
+                                onDismissRequest = {
+                                    openLocaleDialog = false
+                                },
+                            )
+                        }
+                        Box(modifier = Modifier.fillMaxSize().padding(innerPadding)) {
+                            Children(component = component)
                         }
                     }
                 }
             }
         }
     }
-//    }
-    
 }
 
-private fun getActiveNavigationItemIntex(navigationItems:List<NavigationItem>,activeConfig:MainComponent.Config)=navigationItems.indexOfFirst { it.route==activeConfig }
+private fun getActiveNavigationItemIndex(navigationItems: List<NavigationItem>, activeConfig: MainComponent.Config) =
+    navigationItems.indexOfFirst { it.route == activeConfig }
 
 
 @Composable
@@ -231,29 +287,29 @@ private fun Children(component: MainComponent, modifier: Modifier = Modifier) {
 
         // Workaround for https://issuetracker.google.com/issues/270656235
 //        animation = stackAnimation(fade()),
-                    animation = tabAnimation {
-                        when (it) {
-                            is SignUp -> 0
-                            is SignIn -> 1
-                            is Reset -> 2
-                            is Profile -> 3
-                            is Home -> 4
-                            is Map -> 5
-                            is Dashboard -> 6
-                            is Settings -> 7
-                        }
-                                             },
-        ) {
-         when(val child = it.instance) {
-                                    is SignUp -> SignUpUi(child.component)
-                                    is SignIn -> SignInUi(child.component)
-                                    is Reset -> ResetUi(child.component)
-                                    is Profile -> ProfileUi(child.component)
-                                    is Home -> HomeUi(child.component)
-                                    is Map -> MapUi(child.component)
-                                    is Dashboard -> DashboardUi(child.component)
-                                    is Settings -> SettingsUi(child.component)
-                                }
+        animation = tabAnimation {
+            when (it) {
+                is SignUp -> 0
+                is SignIn -> 1
+                is Reset -> 2
+                is Profile -> 3
+                is Home -> 4
+                is Map -> 5
+                is Dashboard -> 6
+                is Settings -> 7
+            }
+        },
+    ) {
+        when (val child = it.instance) {
+            is SignUp -> SignUpUi(child.component)
+            is SignIn -> SignInUi(child.component)
+            is Reset -> ResetUi(child.component)
+            is Profile -> ProfileUi(child.component)
+            is Home -> HomeUi(child.component)
+            is Map -> MapUi(child.component)
+            is Dashboard -> DashboardUi(child.component)
+            is Settings -> SettingsUi(child.component)
+        }
     }
 }
 

@@ -36,8 +36,8 @@ import ui.settings.PreviewSettingsComponent
 import ui.settings.SettingsUi
 import ui.signin.PreviewSignInComponent
 import ui.signin.SignInUi
-import ui.signup.PreviewSignUpComponent
-import ui.signup.SignUpUi
+import ui.selfsignup.PreviewSelfSignUpComponent
+import ui.selfsignup.SignUpUi
 import ui.theme.AppTheme
 
 
@@ -118,7 +118,7 @@ fun LandingUiPreview() {
 @Composable
 fun SignUpUiPreview() {
     AppTheme {
-        SignUpUi(PreviewSignUpComponent())
+        SignUpUi(PreviewSelfSignUpComponent())
     }
 }
 

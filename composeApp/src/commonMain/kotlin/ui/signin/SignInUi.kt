@@ -59,7 +59,7 @@ internal fun SignInUi(component: SignInComponent) {
     ) {
         Box(
             modifier = Modifier
-                .width(400.dp)
+                .width(600.dp)
                 .height(540.dp)
         ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {

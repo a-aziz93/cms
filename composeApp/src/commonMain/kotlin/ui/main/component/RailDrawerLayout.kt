@@ -9,7 +9,7 @@ import androidx.compose.ui.unit.dp
 import ui.model.NavigationItem
 
 @Composable
-fun MediumNavigationLayout(
+fun RailDrawerLayout(
     modifier:Modifier=Modifier,
     drawerState: DrawerState = rememberDrawerState(DrawerValue.Open),
     userHead:@Composable ()->Unit={},
@@ -78,9 +78,11 @@ fun NavigationIcon(
             }
         }
     ) {
-        Icon(
-            imageVector = if (selected) item.selectedIcon else item.unselectedIcon,
-            contentDescription = item.title
-        )
+        (if (selected) item.icon?.selectedIcon else item.icon?.unselectedIcon)?.let {
+            Icon(
+                imageVector = it,
+                contentDescription = item.title
+            )
+        }
     }
 }

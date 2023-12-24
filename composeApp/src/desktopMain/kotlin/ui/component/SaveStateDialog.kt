@@ -43,7 +43,7 @@ fun SaveStateDialog(
                     }
             }
                   },
-        title = { Text(text = "Decompose Sample") },
+        title = { Text(text = "CMS") },
         text = { Text(text = "Do you want to save the application's state?") },
         modifier = Modifier.width(400.dp),
         )
