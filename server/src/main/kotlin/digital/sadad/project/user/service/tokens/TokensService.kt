@@ -1,11 +1,11 @@
-package joseluisgs.es.services.tokens
+package digital.sadad.project.user.service.tokens
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.JWTVerifier
 import com.auth0.jwt.algorithms.Algorithm
-import joseluisgs.dev.config.AppConfig
+import digital.sadad.project.config.AppConfig
 import digital.sadad.project.user.model.User
-import mu.KotlinLogging
+import mu.two.KotlinLogging
 import org.koin.core.annotation.Single
 import java.util.*
 
@@ -22,23 +22,22 @@ sealed class TokenException(message: String) : RuntimeException(message) {
 
 @Single
 class TokensService(
-    private val myConfig: AppConfig
+    private val appConfig: AppConfig
 ) {
-
     val audience by lazy {
-        myConfig.applicationConfiguration.propertyOrNull("jwt.audience")?.getString() ?: "jwt-audience"
+        appConfig.applicationConfiguration.propertyOrNull("jwt.audience")?.getString() ?: "jwt-audience"
     }
     val realm by lazy {
-        myConfig.applicationConfiguration.propertyOrNull("jwt.realm")?.getString() ?: "jwt-realm"
+        appConfig.applicationConfiguration.propertyOrNull("jwt.realm")?.getString() ?: "jwt-realm"
     }
     private val issuer by lazy {
-        myConfig.applicationConfiguration.propertyOrNull("jwt.issuer")?.getString() ?: "jwt-issuer"
+        appConfig.applicationConfiguration.propertyOrNull("jwt.issuer")?.getString() ?: "jwt-issuer"
     }
     private val expiresIn by lazy {
-        myConfig.applicationConfiguration.propertyOrNull("jwt.tiempo")?.getString()?.toLong() ?: 3600
+        appConfig.applicationConfiguration.propertyOrNull("jwt.tiempo")?.getString()?.toLong() ?: 3600
     }
     private val secret by lazy {
-        myConfig.applicationConfiguration.propertyOrNull("jwt.secret")?.getString() ?: "jwt-secret"
+        appConfig.applicationConfiguration.propertyOrNull("jwt.secret")?.getString() ?: "jwt-secret"
     }
 
     init {
@@ -57,7 +56,7 @@ class TokensService(
             .withSubject("Authentication")
             // user claims and other data to store
             .withClaim("username", user.username)
-            .withClaim("usermail", user.email)
+            .withClaim("useremail", user.email)
             .withClaim("userId", user.id.toString())
             // expiration time from currentTimeMillis + (tiempo times in seconds) * 1000 (to millis)
             .withExpiresAt(Date(System.currentTimeMillis() + expiresIn * 1000L))

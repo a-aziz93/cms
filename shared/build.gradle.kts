@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalWasmDsl
-
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
@@ -37,6 +35,7 @@ kotlin {
             implementation(libs.kotlinx.io.core)
             implementation(libs.kotlinx.datetime)
             implementation(libs.bundles.koin)
+            implementation(libs.kotlin.result)
         }
     }
 }
@@ -50,8 +49,5 @@ android {
 }
 
 dependencies {
-    // Koin
-    implementation(libs.koin.logger.slf4j) // Koin Logger
-    implementation(libs.koin.annotations) // Koin Annotations for KSP
     ksp(libs.koin.ksp.compiler) // Koin KSP Compiler for KSP
 }

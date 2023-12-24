@@ -1,32 +1,32 @@
-package digital.sadad.project.storage
+package digital.sadad.project.storage.service
 
-
-import com.github.michaelbull.result.Err
-import com.github.michaelbull.result.Ok
-import joseluisgs.dev.config.AppConfig
+import digital.sadad.project.config.AppConfig
 import digital.sadad.project.storage.error.StorageError
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import mu.KotlinLogging
+import mu.two.KotlinLogging
 import org.koin.core.annotation.Singleton
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.Path
 import java.time.LocalDateTime
+import com.github.michaelbull.result.Err
+import com.github.michaelbull.result.Ok
+import com.github.michaelbull.result.Result
 
 private val logger = KotlinLogging.logger {}
 
 /**
  * Storage Service to manage our files
- * @property myConfig AppConfig Configuration of our service
+ * @property appConfig AppConfig Configuration of our service
  */
 @Singleton
 class StorageServiceImpl(
-    private val myConfig: AppConfig
+    private val appConfig: AppConfig
 ) : StorageService {
 
     private val uploadDir by lazy {
-        myConfig.applicationConfiguration.propertyOrNull("upload.dir")?.getString() ?: "uploads"
+        appConfig.applicationConfiguration.propertyOrNull("upload.dir")?.getString() ?: "uploads"
     }
 
     init {
@@ -43,7 +43,7 @@ class StorageServiceImpl(
         // Create upload directory if not exists (or ignore if exists)
         // and clean if dev
         Files.createDirectories(Path.of(uploadDir))
-        if (myConfig.applicationConfiguration.propertyOrNull("ktor.environment")?.getString() == "dev") {
+        if (appConfig.applicationConfiguration.propertyOrNull("ktor.environment")?.getString() == "dev") {
             logger.debug { "Cleaning storage directory in $uploadDir" }
             File(uploadDir).listFiles()?.forEach { it.delete() }
         }

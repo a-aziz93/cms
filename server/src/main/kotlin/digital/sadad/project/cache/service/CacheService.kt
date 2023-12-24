@@ -1,8 +1,9 @@
 package digital.sadad.project.cache.service
 
 import digital.sadad.project.config.AppConfig
-import io.github.reactivecircus.cache4k.Cache
 import digital.sadad.project.user.model.User
+import io.github.reactivecircus.cache4k.Cache
+import org.koin.core.annotation.Singleton
 
 /**
  * Cache Service

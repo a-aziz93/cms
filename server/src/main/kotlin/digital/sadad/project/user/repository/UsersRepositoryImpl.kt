@@ -1,16 +1,21 @@
 package digital.sadad.project.user.repository
 
+import de.nycode.bcrypt.hash
+import de.nycode.bcrypt.verify
 import digital.sadad.project.user.entity.UserTable
 import digital.sadad.project.user.mapper.toEntity
 import digital.sadad.project.user.mapper.toModel
 import digital.sadad.project.user.model.User
-import joseluisgs.dev.repositories.users.BCRYPT_SALT
-import joseluisgs.dev.repositories.users.logger
 import digital.sadad.project.database.service.DataBaseService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
+import mu.two.KotlinLogging
+import org.koin.core.annotation.Singleton
 import java.time.LocalDateTime
+
+private val logger = KotlinLogging.logger {}
+private const val BCRYPT_SALT = 12
 
 /**
  * Users Repository
@@ -29,8 +34,7 @@ class UsersRepositoryImpl(
     override suspend fun findAll(): Flow<User> = withContext(Dispatchers.IO) {
         logger.debug { "findAll" }
 
-        return@withContext (dataBaseService.client selectFrom UserTable).fetchAll()
-            .map { it.toModel() }
+        return@withContext (dataBaseService.client selectFrom UserTable).fetchAll().map { it.toModel() }
     }
 
     /**
@@ -50,7 +54,7 @@ class UsersRepositoryImpl(
         withContext(Dispatchers.IO) {
             val user = findByUsername(username)
             return@withContext user?.let {
-                if (Bcrypt.verify(password, user.password.encodeToByteArray())) {
+                if (verify(password, user.password.encodeToByteArray())) {
                     return@withContext user
                 }
                 return@withContext null
@@ -101,11 +105,11 @@ class UsersRepositoryImpl(
     /**
      * Create user
      * @param entity User to create
-     * @return User User created
+     * @return User created
      */
     suspend fun create(entity: User): User {
         val newEntity = entity.copy(
-            password = Bcrypt.hash(entity.password, 12).decodeToString(),
+            password = hash(entity.password, 12).decodeToString(),
             createdAt = LocalDateTime.now(),
             updatedAt = LocalDateTime.now()
         ).toEntity()

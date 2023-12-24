@@ -1,7 +1,10 @@
-package digital.sadad.project.storage
+package digital.sadad.project.storage.service
 
 import digital.sadad.project.storage.error.StorageError
 import java.io.File
+import com.github.michaelbull.result.Err
+import com.github.michaelbull.result.Ok
+import com.github.michaelbull.result.Result
 
 interface StorageService {
     suspend fun saveFile(

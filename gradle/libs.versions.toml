@@ -43,6 +43,13 @@ dokka = "1.9.10"
 kotlinx-datetime = "0.5.0"
 kotlinx-io-core = "0.3.0"
 cache4k = "0.12.0"
+kotlin-logging-jvm = "4.0.0-beta-2"
+kotysa-r2dbc = "3.2.1"
+r2dbc-pool = "1.0.1.RELEASE"
+r2dbc-h2 = "1.0.0.RELEASE"
+oracle-r2dbc = "1.2.0"
+kotlin-result = "1.1.18"
+bcrypt = "2.2.0"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -169,6 +176,17 @@ kotlinx-io-core = { module = "org.jetbrains.kotlinx:kotlinx-io-core", version.re
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
 # Cache
 cache4k = { module = "io.github.reactivecircus.cache4k:cache4k", version.ref = "cache4k" }
+# Server logger
+kotlin-logging-jvm = { module = "io.github.microutils:kotlin-logging-jvm", version.ref = "kotlin-logging-jvm" }
+# Database
+kotysa-r2dbc = { module = "org.ufoss.kotysa:kotysa-r2dbc", version.ref = "kotysa-r2dbc" }
+r2dbc-pool = { module = "io.r2dbc:r2dbc-pool", version.ref = "r2dbc-pool" }
+r2dbc-h2 = { module = "io.r2dbc:r2dbc-h2", version.ref = "r2dbc-h2" }
+oracle-r2dbc = { module = "com.oracle.database.r2dbc:oracle-r2dbc", version.ref = "oracle-r2dbc" }
+# Result for error handling Railway Oriented Programming
+kotlin-result = { module = "com.michael-bull.kotlin-result:kotlin-result", version.ref = "kotlin-result" }
+# BCrypt
+bcrypt = { module = "de.nycode:bcrypt", version.ref = "bcrypt" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
@@ -204,7 +222,7 @@ multiplatform-settings = [
     "multiplatform-settings-serialization",
     "multiplatform-settings-coroutines"
 ]
-koin=[
+koin = [
     "koin-core",
     "koin-logger-slf4j",
     "koin-annotations",

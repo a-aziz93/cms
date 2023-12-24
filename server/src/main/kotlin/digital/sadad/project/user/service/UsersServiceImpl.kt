@@ -1,11 +1,16 @@
 package digital.sadad.project.user.service
 
+
+import com.github.michaelbull.result.*
+import digital.sadad.project.cache.service.CacheService
 import digital.sadad.project.user.error.UserError
 import digital.sadad.project.user.model.User
 import digital.sadad.project.user.repository.UsersRepository
-import digital.sadad.project.cache.service.CacheService
-import digital.sadad.project.user.service.users.logger
 import kotlinx.coroutines.flow.Flow
+import mu.two.KotlinLogging
+import org.koin.core.annotation.Singleton
+
+private val logger = KotlinLogging.logger {}
 
 /**
  * Users Service to our User

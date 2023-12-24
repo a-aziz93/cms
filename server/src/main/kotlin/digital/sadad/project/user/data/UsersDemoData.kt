@@ -1,16 +1,16 @@
 package digital.sadad.project.user.data
 
-import com.toxicbakery.bcrypt.Bcrypt
+import de.nycode.bcrypt.hash
 import digital.sadad.project.user.model.User
 
 
 fun userDemoData(): MutableMap<Long, User> = mutableMapOf(
     1L to User(
         id = 1L,
-        name = "Pepe Perez",
-        username = "pepe",
-        email = "pepe@perez.com",
-        password = Bcrypt.hash("pepe1234", 12).decodeToString(),
+        name = "Admin",
+        username = "Admin",
+        email = "admin@gmail.com",
+        password = hash("admin", 12).decodeToString(),
         avatar = User.DEFAULT_IMAGE,
         role = User.Role.ADMIN
     ),
@@ -19,7 +19,7 @@ fun userDemoData(): MutableMap<Long, User> = mutableMapOf(
         name = "Ana Lopez",
         username = "ana",
         email = "ana@lopez.com",
-        password = Bcrypt.hash("ana1234", 12).decodeToString(),
+        password = hash("ana1234", 12).decodeToString(),
         avatar = User.DEFAULT_IMAGE,
         role = User.Role.USER
     )

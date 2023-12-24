@@ -3,8 +3,8 @@ package digital.sadad.project.plugins
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.auth.jwt.*
-import joseluisgs.es.services.tokens.TokenException
-import joseluisgs.es.services.tokens.TokensService
+import digital.sadad.project.user.service.tokens.TokenException
+import digital.sadad.project.user.service.tokens.TokensService
 import org.koin.ktor.ext.inject
 
 // Seguridad en base a JWT

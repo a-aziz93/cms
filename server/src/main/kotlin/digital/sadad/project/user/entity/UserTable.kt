@@ -2,22 +2,23 @@ package digital.sadad.project.user.entity
 
 import digital.sadad.project.user.model.User
 import org.ufoss.kotysa.h2.H2Table
+import org.ufoss.kotysa.oracle.OracleTable
 import java.time.LocalDateTime
 
 /**
  * User Table
  */
-object UserTable : H2Table<UserEntity>("users") {
+object UserTable : OracleTable<UserEntity>("users") {
     // Autoincrement and primary key
     val id = autoIncrementBigInt(UserEntity::id).primaryKey()
 
     // Other fields
-    val name = varchar(UserEntity::name)
-    val email = varchar(UserEntity::email)
-    val username = varchar(UserEntity::username)
-    val password = varchar(UserEntity::password)
-    val avatar = varchar(UserEntity::avatar)
-    val role = varchar(UserEntity::role)
+    val name = varchar2(UserEntity::name)
+    val email = varchar2(UserEntity::email)
+    val username = varchar2(UserEntity::username)
+    val password = varchar2(UserEntity::password)
+    val avatar = varchar2(UserEntity::avatar)
+    val role = varchar2(UserEntity::role)
 
     // metadata
     val createdAt = timestamp(UserEntity::createdAt, "created_at")

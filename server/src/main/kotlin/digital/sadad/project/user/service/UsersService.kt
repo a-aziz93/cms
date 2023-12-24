@@ -1,5 +1,6 @@
 package digital.sadad.project.user.service
 
+import com.github.michaelbull.result.Result
 import digital.sadad.project.user.error.UserError
 import digital.sadad.project.user.model.User
 import kotlinx.coroutines.flow.Flow
