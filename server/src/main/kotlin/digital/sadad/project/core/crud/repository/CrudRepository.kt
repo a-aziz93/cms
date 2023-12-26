@@ -1,8 +1,6 @@
 package digital.sadad.project.core.crud.repository
 
-import digital.sadad.project.core.database.service.DatabaseService
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collectIndexed
 import kotlinx.coroutines.withContext
 import org.ufoss.kotysa.CoroutinesSqlClientDeleteOrUpdate
 import org.ufoss.kotysa.CoroutinesSqlClientSelect
@@ -10,12 +8,6 @@ import org.ufoss.kotysa.R2dbcSqlClient
 import org.ufoss.kotysa.Table
 import java.time.LocalDateTime
 
-/**
- * Define the CRUD operations of our application
- * based on a generic type T and ID
- * @param T Type of our entity
- * @param ID Type of our ID
- */
 interface CrudRepository<T : Any, ID : Any> {
     val client: R2dbcSqlClient
     val table: Table<T>
@@ -41,7 +33,7 @@ interface CrudRepository<T : Any, ID : Any> {
         update: (T, CoroutinesSqlClientDeleteOrUpdate.Update<T>) -> CoroutinesSqlClientDeleteOrUpdate.Return,
         username: String?
     ): List<T> = withContext(Dispatchers.IO) {
-        val result = arrayOfNulls<Any?>(entities.size) as Array<T?>
+        val result = arrayOfNulls<Any?>(entities.size) as Array<T>
 
         val (insertEntitiesWithIndexes, updateEntitiesWithIndexes) = entities.withIndex()
             .partition { getId(it.value) != null }
@@ -59,12 +51,11 @@ interface CrudRepository<T : Any, ID : Any> {
             }
         }
 
-        client.insertAndReturn(*insertEntitiesWithIndexes.map {
+        client.insertAndReturn(*arrayOf(insertEntitiesWithIndexes.map {
             create(it.value, username, LocalDateTime.now())
-        }.toTypedArray(T::class))
-            .collectIndexed { index, value -> result[insertEntitiesWithIndexes[index].index] = value }
+        })).collect { it.forEachIndexed { index, value -> result[insertEntitiesWithIndexes[index].index] = value } }
 
-        return@withContext result.map { it!! }
+        return@withContext result.map { it }
     }
 
 
@@ -81,7 +72,9 @@ interface CrudRepository<T : Any, ID : Any> {
                 .execute()
         }
 
-    suspend fun delete(id: ID): Long = delete { checkModifyIdEquality(it, id) }
+    suspend fun delete(id: ID): Boolean = delete { checkModifyIdEquality(it, id) } == 0L
+
+    suspend fun delete(entity: T): Boolean = delete(getId(entity)!!)
 
     suspend fun count(predicate: (CoroutinesSqlClientSelect.FromTable<Long, T>) -> CoroutinesSqlClientSelect.Where<Long>): Long =
         withContext(Dispatchers.IO) {
