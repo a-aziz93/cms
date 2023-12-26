@@ -29,6 +29,7 @@ dependencies {
     implementation(libs.oracle.r2dbc)
     implementation(libs.kotlin.result)
     implementation(libs.bcrypt)
+    implementation(libs.reflections)
 }
 
 // To generate Docker Image with JRE 17

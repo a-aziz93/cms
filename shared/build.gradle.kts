@@ -36,6 +36,7 @@ kotlin {
             implementation(libs.kotlinx.datetime)
             implementation(libs.bundles.koin)
             implementation(libs.kotlin.result)
+            implementation(libs.kotlin.noarg)
         }
     }
 }
