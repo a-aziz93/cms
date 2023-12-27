@@ -4,7 +4,6 @@ import digital.sadad.project.core.config.AppConfig
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import mu.two.KotlinLogging
-import org.koin.core.annotation.Singleton
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.Path
@@ -12,11 +11,11 @@ import java.time.LocalDateTime
 import com.github.michaelbull.result.Err
 import com.github.michaelbull.result.Ok
 import com.github.michaelbull.result.Result
+import core.error.IOError
 import digital.sadad.project.core.config.model.StorageConfig
-import core.error.BadRequest
-import core.error.NotFound
+import digital.sadad.project.core.storage.error.NotFoundError
+import digital.sadad.project.core.storage.error.SaveError
 import org.koin.core.annotation.Single
-import java.io.IOError
 
 private val logger = KotlinLogging.logger {}
 
@@ -54,7 +53,7 @@ class StorageServiceImpl(
         fileName: String,
         fileUrl: String,
         fileBytes: ByteArray
-    ): Result<Map<String, String>, BadRequest> =
+    ): Result<Map<String, String>, SaveError> =
         withContext(Dispatchers.IO) {
             if (storageConfig?.uploadDir == null) {
                 throw NullPointerException("storageConfig.uploadDir")
@@ -72,7 +71,7 @@ class StorageServiceImpl(
                     )
                 )
             } catch (e: Exception) {
-                Err(BadRequest("Error saving file: $fileName"))
+                Err(SaveError("Error saving file: $fileName"))
             }
         }
 
@@ -81,14 +80,14 @@ class StorageServiceImpl(
      * @param fileName String Name of the file
      * @return Result<File, StorageError> File if Ok, StorageError if not
      */
-    override suspend fun getFile(fileName: String): Result<File, NotFound> = withContext(Dispatchers.IO) {
+    override suspend fun getFile(fileName: String): Result<File, NotFoundError> = withContext(Dispatchers.IO) {
         if (storageConfig?.uploadDir == null) {
             throw NullPointerException("storageConfig.uploadDir")
         }
 
         logger.debug { "Get file: $fileName" }
         return@withContext if (!File("${storageConfig.uploadDir}/$fileName").exists()) {
-            Err(NotFound("File Not Found in storage: $fileName"))
+            Err(NotFoundError("File Not Found in storage: $fileName"))
         } else {
             Ok(File("${storageConfig.uploadDir}/$fileName"))
         }
@@ -99,7 +98,7 @@ class StorageServiceImpl(
      * @param fileName String Name of the file
      * @return Result<String, StorageError> String if Ok, StorageError if not
      */
-    override suspend fun deleteFile(fileName: String): Result<String, IOError> = withContext(Dispatchers.IO) {
+    override suspend fun deleteFile(fileName: String): Result<String, Void> = withContext(Dispatchers.IO) {
         if (storageConfig?.uploadDir == null) {
             throw NullPointerException("storageConfig.uploadDir")
         }
