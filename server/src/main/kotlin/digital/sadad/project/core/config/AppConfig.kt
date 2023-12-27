@@ -16,16 +16,16 @@ class AppConfig {
     val environment = appConfig.propertyOrNull("ktor.environment") ?: ""
 
     val config = ConfigLoader().loadConfigOrThrow<Config>(
-        // Common configuration
-        "application.yml" +
+        // Environment profiles configuration
+        (appConfig.propertyOrNull("profiles")?.getList() ?: emptyList()).map {
+            "/application-$it-$environment.yml"
+        } +
                 // Common profiles configuration
                 (appConfig.propertyOrNull("profiles")?.getList() ?: emptyList()).map {
                     "/application-$it.yml"
                 } +
-                // Environment profiles configuration
-                (appConfig.propertyOrNull("profiles")?.getList() ?: emptyList()).map {
-                    "/application-$it-$environment.yml"
-                }
+                // Common configuration
+                "application.yml"
     )
 
     // We can set here all the configuration we want from application.conf or from other sources
