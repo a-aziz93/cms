@@ -37,6 +37,7 @@ kotlin {
             implementation(libs.bundles.koin)
             implementation(libs.kotlin.result)
             implementation(libs.kotlin.noarg)
+            implementation(libs.bundles.kmputils)
         }
     }
 }

@@ -10,6 +10,7 @@ plugins {
     alias(libs.plugins.apollo3)
     alias(libs.plugins.sqlDelight)
     alias(libs.plugins.dokka)
+    alias(libs.plugins.ktorfit)
 }
 
 kotlin {
@@ -59,6 +60,7 @@ kotlin {
             implementation(libs.sql.delight.android.driver)
             implementation(libs.android.play.core)
             implementation(libs.coroutines.android)
+            implementation(libs.konfigure.android)
         }
         val commonMain by getting {
             kotlin.srcDirs("build/generated/ksp/commonMain/kotlin")
@@ -92,6 +94,9 @@ kotlin {
                 implementation(libs.kamel.image)
                 implementation(libs.kotlin.result)
                 implementation(libs.kotlin.reflect)
+                implementation(libs.bundles.kmputils)
+                implementation(libs.bundles.ktorfit)
+                implementation (libs.bundles.konfigure)
             }
         }
 
@@ -171,6 +176,7 @@ dependencies {
     add("kspCommonMainMetadata", libs.lyricist.processor)
     // For import org.koin.ksp.generated.*
     add("kspCommonMainMetadata", libs.koin.ksp.compiler)
+    add("kspCommonMainMetadata", libs.ktorfit.ksp)
 }
 
 // workaround for KSP only in Common Main.
@@ -191,6 +197,4 @@ ksp {
     arg("lyricist.generateStringsProperty", "true")
     // Compile Safety - check your Koin config at compile time (since 1.3.0)
     arg("KOIN_CONFIG_CHECK", "true")
-
-
 }

@@ -32,6 +32,7 @@ dependencies {
     implementation(libs.bcrypt)
     implementation(libs.reflections)
     implementation (libs.hoplite.core)
+    implementation(libs.bundles.kmputils)
     // For import org.koin.ksp.generated.*
 //    add("kspServerMainMetadata", libs.koin.ksp.compiler)
 }

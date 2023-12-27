@@ -16,6 +16,7 @@ compose-plugin = "1.6.0-alpha01"
 junit = "4.13.2"
 kotlin = "1.9.21"
 ktor = "2.3.6"
+ktorfit-lib = "ktorfitVersion"
 logback = "1.4.14"
 kermit = "2.0.2"
 lyricist = "1.6.2"
@@ -53,6 +54,9 @@ bcrypt = "2.2.0"
 kotlin-noarg = "2.0.0-Beta2"
 reflections = "0.10.2"
 hoplite = "2.8.0.RC3"
+kmputils = "1.1.2"
+ktorfit = "1.11.1"
+konfigure = "1.3.1"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -200,6 +204,18 @@ reflections = { module = "org.reflections:reflections", version.ref = "reflectio
 # Configuration from file
 hoplite-core = { module = "com.sksamuel.hoplite:hoplite-core", version.ref = "hoplite" }
 hoplite-yaml = { module = "com.sksamuel.hoplite:hoplite-yaml", version.ref = "hoplite" }
+# Kotlin multiplatform utils
+kmputils-common = { module = "pro.respawn.kmmutils:common", version.ref = "kmputils" }
+kmputils-datetime = { module = "pro.respawn.kmmutils:datetime", version.ref = "kmputils" }
+kmputils-coroutines = { module = "pro.respawn.kmmutils:coroutines", version.ref = "kmputils" }
+kmputils-inputforms = { module = "pro.respawn.kmmutils:inputforms", version.ref = "kmputils" }
+# Http Client generator
+ktorfit-lib = { module = "de.jensklingenberg.ktorfit:ktorfit-lib", version.ref = "ktorfit" }
+ktorfit-ksp = { module = "de.jensklingenberg.ktorfit:ktorfit-ksp", version.ref = "ktorfit" }
+# AppConfig
+konfigure = { module = "nz.co.trademe.konfigure:konfigure", version.ref = "konfigure" }
+konfigure-android = { module = "nz.co.trademe.konfigure:konfigure-android", version.ref = "konfigure" }
+konfigure-firebase = { module = "nz.co.trademe.konfigure:konfigure-firebase", version.ref = "konfigure" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
@@ -216,6 +232,8 @@ apollo3 = { id = "com.apollographql.apollo3", version.ref = "apollo3" }
 sqlDelight = { id = "app.cash.sqldelight", version.ref = "sql-delight" }
 # Documentation
 dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
+# Http Client generator
+ktorfit = { id = "de.jensklingenberg.ktorfit", version.ref = "ktorfit" }
 
 [bundles]
 compose-icons = [
@@ -269,3 +287,17 @@ ktor-server = [
 sql-delight = ["sql-delight-coroutines-extension", "sql-delight-primitive-adapters"]
 mvi-kotlin = ["mvi-kotlin", "mvi-kotlin-main", "mvi-kotlin-extensions-coroutines"]
 decompose = ["decompose", "decompose-extensions-compose"]
+kmputils = [
+    "kmputils-common",
+    "kmputils-datetime",
+    "kmputils-coroutines",
+    "kmputils-inputforms"
+]
+ktorfit = [
+    "ktorfit-lib",
+    "ktorfit-ksp"
+]
+konfigure = [
+    "konfigure",
+    "konfigure-firebase"
+]
