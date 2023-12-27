@@ -1,15 +1,16 @@
 package digital.sadad.project
 
-import SERVER_PORT
 import digital.sadad.project.core.plugins.*
 import io.ktor.server.application.*
-import io.ktor.server.engine.*
-import io.ktor.server.netty.*
+import io.ktor.server.netty.EngineMain
 
-fun main() {
-    embeddedServer(Netty, port = SERVER_PORT, host = "0.0.0.0", module = Application::module)
-        .start(wait = true)
-}
+//fun main() {
+//    embeddedServer(Netty, port = SERVER_PORT, host = "0.0.0.0", module = Application::module)
+//        .start(wait = true)
+//}
+
+
+fun main(args: Array<String>): Unit = EngineMain.main(args)
 
 /**
  * Configure our application with the plugins
@@ -18,6 +19,7 @@ fun main() {
 fun Application.module() {
     configureKoin() // Configure the Koin plugin to inject dependencies
     configureSecurity() // Configure the security plugin with JWT
+    configureSession() // Configure session with cookies
     configureWebSockets() // Configure the websockets plugin
     configureSerialization() // Configure the serialization plugin
     configureRouting() // Configure the routing plugin

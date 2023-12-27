@@ -1,19 +1,13 @@
 package core.di
 
-import core.database.di.databaseModule
-import core.storage.di.storageModule
-import data.di.dataModule
-import core.network.di.networkModule
 import org.koin.core.context.startKoin
 import org.koin.dsl.KoinAppDeclaration
+import org.koin.logger.slf4jLogger
+import org.koin.ksp.generated.*
 
-fun initKoin(enableNetworkLogs: Boolean = false, appDeclaration: KoinAppDeclaration = {}) =
+fun initKoin(appDeclaration: KoinAppDeclaration = {}) =
     startKoin {
+        slf4jLogger()
         appDeclaration()
-        modules(
-            storageModule,
-            databaseModule,
-            networkModule(enableNetworkLogs),
-            dataModule
-        )
+        defaultModule()
     }

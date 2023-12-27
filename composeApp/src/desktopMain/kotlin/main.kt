@@ -17,6 +17,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.window.rememberWindowState
 import com.arkivanov.decompose.extensions.compose.lifecycle.LifecycleController
+import core.util.runOnUiThread
+import core.util.saveStateToFile
+import core.util.tryRestoreStateFromFile
 import ui.component.SaveStateDialog
 import ui.dashboard.DashboardUi
 import ui.dashboard.PreviewDashboardComponent
@@ -43,7 +46,7 @@ import ui.theme.AppTheme
 
 @OptIn(ExperimentalDecomposeApi::class)
 fun main() {
-    initKoin(enableNetworkLogs = false)
+    initKoin()
   
     val lifecycle = LifecycleRegistry()
     val stateKeeper = StateKeeperDispatcher(tryRestoreStateFromFile())

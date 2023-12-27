@@ -1,4 +1,3 @@
-
 import org.jetbrains.compose.ExperimentalComposeLibrary
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 
@@ -24,7 +23,7 @@ kotlin {
 //        }
 //        binaries.executable()
 //    }
-    
+
     androidTarget {
         compilations.all {
             kotlinOptions {
@@ -32,9 +31,9 @@ kotlin {
             }
         }
     }
-    
+
     jvm("desktop")
-    
+
 //    listOf(
 //        iosX64(),
 //        iosArm64(),
@@ -47,10 +46,10 @@ kotlin {
 //            export(libs.lifecycle)
 //        }
 //    }
-    
+
     sourceSets {
         val desktopMain by getting
-        
+
         androidMain.dependencies {
             implementation(libs.compose.ui.tooling.preview)
             implementation(libs.androidx.activity.compose)
@@ -61,49 +60,53 @@ kotlin {
             implementation(libs.android.play.core)
             implementation(libs.coroutines.android)
         }
-        commonMain.dependencies {
-            implementation(compose.runtime)
-            implementation(compose.foundation)
-            implementation(compose.material)
-            implementation(compose.ui)
-            @OptIn(ExperimentalComposeLibrary::class)
-            implementation(compose.components.resources)
-            implementation(projects.shared)
-            // Added
-            implementation(compose.material3)
-            implementation(compose.materialIconsExtended)
-            implementation(libs.kermit)
-            implementation(libs.lyricist)
+        val commonMain by getting {
+            kotlin.srcDirs("build/generated/ksp/commonMain/kotlin")
+            dependencies {
+                implementation(compose.runtime)
+                implementation(compose.foundation)
+                implementation(compose.material)
+                implementation(compose.ui)
+                @OptIn(ExperimentalComposeLibrary::class)
+                implementation(compose.components.resources)
+                implementation(projects.shared)
+                // Added
+                implementation(compose.material3)
+                implementation(compose.materialIconsExtended)
+                implementation(libs.kermit)
+                implementation(libs.lyricist)
 //            implementation(libs.material3.adaptive)
 //            implementation(libs.material3.adaptive.navigation.suite)
 //            implementation(libs.material3.window.size)
-            implementation(libs.material3.window.size.multiplatform)
-            implementation(libs.bundles.compose.icons)
-            implementation(libs.kotlinx.serialization.json)
-            implementation(libs.bundles.multiplatform.settings)
-            implementation(libs.koin.compose)
-            implementation(libs.bundles.ktor.client)
-            implementation(libs.bundles.sql.delight)
-            implementation(libs.bundles.mvi.kotlin)
-            implementation(libs.bundles.decompose)
-            implementation(libs.lifecycle)
-            implementation(libs.kamel.image)
-            implementation(libs.bundles.koin)
-            implementation(libs.kotlin.result)
+                implementation(libs.material3.window.size.multiplatform)
+                implementation(libs.bundles.compose.icons)
+                implementation(libs.kotlinx.serialization.json)
+                implementation(libs.bundles.multiplatform.settings)
+                implementation(libs.bundles.koin)
+                implementation(libs.koin.compose)
+                implementation(libs.bundles.ktor.client)
+                implementation(libs.bundles.sql.delight)
+                implementation(libs.bundles.mvi.kotlin)
+                implementation(libs.bundles.decompose)
+                implementation(libs.lifecycle)
+                implementation(libs.kamel.image)
+                implementation(libs.kotlin.result)
+                implementation(libs.kotlin.reflect)
+            }
         }
-        
+
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
             implementation(libs.ktor.client.java)
             implementation(libs.sql.delight.sqlite.driver)
             implementation(libs.coroutines.swing)
         }
-        
+
 //            iosMain.dependencies {
 //                implementation(libs.ktor.client.darwin)
 //                implementation(libs.sql.delight.native.driver)
 //            }
-    
+
 //            jsMain.dependencies{
 //                implementation(libs.ktor.client.js)
 //                implementation(libs.sql.delight.js.driver)
@@ -165,7 +168,9 @@ compose.experimental {
 }
 
 dependencies {
-    add("kspCommonMainMetadata",libs.lyricist.processor)
+    add("kspCommonMainMetadata", libs.lyricist.processor)
+    // For import org.koin.ksp.generated.*
+    add("kspCommonMainMetadata", libs.koin.ksp.compiler)
 }
 
 // workaround for KSP only in Common Main.
@@ -185,5 +190,7 @@ ksp {
     arg("lyricist.internalVisibility", "true")
     arg("lyricist.generateStringsProperty", "true")
     // Compile Safety - check your Koin config at compile time (since 1.3.0)
-    arg("KOIN_CONFIG_CHECK","true")
+    arg("KOIN_CONFIG_CHECK", "true")
+
+
 }

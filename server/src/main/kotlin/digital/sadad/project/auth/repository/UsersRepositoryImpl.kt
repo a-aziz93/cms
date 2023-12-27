@@ -9,14 +9,13 @@ import digital.sadad.project.auth.model.User
 import digital.sadad.project.core.database.service.DatabaseService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import mu.two.KotlinLogging
 import org.koin.core.annotation.Singleton
 import org.ufoss.kotysa.CoroutinesSqlClientDeleteOrUpdate
 import org.ufoss.kotysa.CoroutinesSqlClientSelect
 import org.ufoss.kotysa.R2dbcSqlClient
+import org.ufoss.kotysa.ValueProvider
 import java.time.LocalDateTime
 
-private val logger = KotlinLogging.logger {}
 private const val BCRYPT_SALT = 12
 
 @Singleton
@@ -29,7 +28,7 @@ class UsersRepositoryImpl(
     override fun getId(entity: User): Long? = entity.id
 
     override fun create(entity: User, username: String?, dateTime: LocalDateTime) = entity.copy(
-        password = hash(entity.password, 12).decodeToString(),
+        password = hash(entity.password, BCRYPT_SALT).decodeToString(),
         createdBy = username,
         createdAt = dateTime,
     )
@@ -62,19 +61,52 @@ class UsersRepositoryImpl(
             .where(UserTable.id).eq(entity.id!!)
     }, username)
 
-    override suspend fun find(username: String): User? =
-        find {
-            it where UserTable.username eq username
+    override suspend fun findWithRole(id: Long): Pair<User, Role>? =
+        find({
+            withRole(it)
+        }) {
+            it innerJoin RoleTable on UserTable.roleId eq RoleTable.id where UserTable.id eq id
         }.fetchFirstOrNull()
 
+    override suspend fun findWithRole(username: String): Pair<User, Role>? =
+        find({
+            withRole(it)
+        }) {
+            it innerJoin RoleTable on UserTable.roleId eq RoleTable.id where UserTable.username eq username
+        }.fetchFirstOrNull()
 
-    override suspend fun find(username: String, password: String): User? =
+    override suspend fun findWithRole(username: String, password: String): Pair<User, Role>? =
         withContext(Dispatchers.IO) {
-            return@withContext find(username)?.let {
-                if (verify(password, it.password.encodeToByteArray())) {
+            return@withContext findWithRole(username)?.let {
+                if (verify(password, it.first.password.encodeToByteArray())) {
                     return@withContext it
                 }
                 return@withContext null
             }
         }
+
+    private fun withRole(valueProvider: ValueProvider) = Pair(
+        User(
+            valueProvider[UserTable.id],
+            valueProvider[UserTable.name]!!,
+            valueProvider[UserTable.email]!!,
+            valueProvider[UserTable.username]!!,
+            valueProvider[UserTable.password]!!,
+            valueProvider[UserTable.roleId]!!,
+            valueProvider[UserTable.avatar],
+            valueProvider[UserTable.active]!!,
+            valueProvider[UserTable.createdBy],
+            valueProvider[UserTable.createdAt],
+            valueProvider[UserTable.updatedBy],
+            valueProvider[UserTable.updatedAt],
+        ), Role(
+            valueProvider[RoleTable.id],
+            valueProvider[RoleTable.label]!!,
+            valueProvider[RoleTable.description],
+            valueProvider[RoleTable.createdBy],
+            valueProvider[RoleTable.createdAt],
+            valueProvider[RoleTable.updatedBy],
+            valueProvider[RoleTable.updatedAt],
+        )
+    )
 }

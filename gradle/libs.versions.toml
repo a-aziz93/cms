@@ -52,6 +52,7 @@ kotlin-result = "1.1.18"
 bcrypt = "2.2.0"
 kotlin-noarg = "2.0.0-Beta2"
 reflections = "0.10.2"
+hoplite = "2.8.0.RC3"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -74,6 +75,8 @@ logback = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
 ktor-server-core-jvm = { module = "io.ktor:ktor-server-core-jvm", version.ref = "ktor" }
 ktor-server-netty-jvm = { module = "io.ktor:ktor-server-netty-jvm", version.ref = "ktor" }
 ktor-server-tests-jvm = { module = "io.ktor:ktor-server-tests-jvm", version.ref = "ktor" }
+# Ktor Yaml configuration file
+ktor-server-config-yaml-jvm = { module = "io.ktor:ktor-server-config-yaml-jvm", version.ref = "ktor" }
 # Ktor HTTP Server plugins
 # cors
 ktor-server-cors = { module = "io.ktor:ktor-server-cors", version.ref = "ktor" }
@@ -194,6 +197,9 @@ bcrypt = { module = "de.nycode:bcrypt", version.ref = "bcrypt" }
 kotlin-noarg = { module = "org.jetbrains.kotlin:kotlin-noarg", version.ref = "kotlin-noarg" }
 # Reflection utils
 reflections = { module = "org.reflections:reflections", version.ref = "reflections" }
+# Configuration from file
+hoplite-core = { module = "com.sksamuel.hoplite:hoplite-core", version.ref = "hoplite" }
+hoplite-yaml = { module = "com.sksamuel.hoplite:hoplite-yaml", version.ref = "hoplite" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
@@ -246,6 +252,7 @@ ktor-server = [
     "ktor-server-core-jvm",
     "ktor-server-netty-jvm",
     "ktor-server-tests-jvm",
+    "ktor-server-config-yaml-jvm",
     "ktor-server-cors",
     "ktor-server-auth-jvm",
     "ktor-server-auth-jwt-jvm",

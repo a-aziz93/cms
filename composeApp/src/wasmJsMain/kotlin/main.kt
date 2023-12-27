@@ -14,6 +14,9 @@ import kotlinx.browser.window
 
 @OptIn(ExperimentalComposeUiApi::class)
 fun main() {
+
+    initKoin()
+
     val lifecycle = LifecycleRegistry()
 
     val root =

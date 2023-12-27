@@ -12,6 +12,7 @@ import androidx.compose.ui.unit.dp
 import io.kamel.image.asyncPainterResource
 import ui.component.carousel.Carousel
 import ui.landing.component.Banner
+import java.io.File
 
 @Composable
 internal fun LandingUi(component: LandingComponent) {
@@ -22,16 +23,17 @@ internal fun LandingUi(component: LandingComponent) {
             items = listOf(
                 {
                     Banner(
-                        backgroundResource = asyncPainterResource(data = "drawable/banner/customs.jpg"),
-                    )
-                },{
-                    Banner(
-                        backgroundResource = asyncPainterResource(data = "drawable/banner/hand.jpg"),
+                        backgroundResource = asyncPainterResource(data = File("/drawable/banner/customs.jpg")),
                     )
                 },
                 {
                     Banner(
-                        backgroundResource = asyncPainterResource(data = "drawable/banner/watch.jpg"),
+                        backgroundResource = asyncPainterResource(data = File("/drawable/banner/hand.jpg")),
+                    )
+                },
+                {
+                    Banner(
+                        backgroundResource = asyncPainterResource(data = File("/drawable/banner/watch.jpg")),
                     )
                 },
             ),

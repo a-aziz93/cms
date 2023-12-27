@@ -1,0 +1,40 @@
+# Configure the application based on the environment variables
+ktor:
+  ## Development mode
+  # Enable development mode. Recommended to set it via -Dktor.deployment.environment=development
+  # development = true
+
+  deployment:
+    port: $PORT:8080
+    ## SSL, you need to enable it
+    sslPort: $SSL_PORT:8443
+    ## Watch for changes in this directory and automatically reload the application if any file changes in development mode.
+    watch:
+      - classes
+      - resources
+
+
+  # Configure the main module
+  application:
+    modules:
+      - digital.sadad.project.ApplicationKt.module
+
+  ## Environment
+  environment: $KTOR_ENV:dev
+
+  ## To enable SSL, you need to generate a certificate and configure it here
+  security:
+    ssl:
+      keyStore: cert/server_keystore.p12
+      keyAlias: "serverKeyPair"
+      keyStorePassword: "1234567"
+      privateKeyPassword: "1234567"
+
+profiles:
+  - security
+  - cache
+  - storage
+  - database
+
+
+

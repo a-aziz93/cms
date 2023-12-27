@@ -2,10 +2,7 @@ package digital.sadad.project.core.crud.repository
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import org.ufoss.kotysa.CoroutinesSqlClientDeleteOrUpdate
-import org.ufoss.kotysa.CoroutinesSqlClientSelect
-import org.ufoss.kotysa.R2dbcSqlClient
-import org.ufoss.kotysa.Table
+import org.ufoss.kotysa.*
 import java.time.LocalDateTime
 
 interface CrudRepository<T : Any, ID : Any> {
@@ -59,14 +56,24 @@ interface CrudRepository<T : Any, ID : Any> {
     }
 
 
-    suspend fun find(predicate: (CoroutinesSqlClientSelect.FromTable<T, T>) -> CoroutinesSqlClientSelect.Return<T>): CoroutinesSqlClientSelect.FromTable<T, T> =
+    suspend fun find(
+        predicate: (CoroutinesSqlClientSelect.FromTable<T, T>) -> CoroutinesSqlClientSelect.Return<T> = { it }
+    ): CoroutinesSqlClientSelect.Return<T> =
         withContext(Dispatchers.IO) {
-            return@withContext client selectFrom table
+            return@withContext predicate(client selectFrom table)
+        }
+
+    suspend fun <V : Any> find(
+        builder: (ValueProvider) -> V,
+        predicate: (CoroutinesSqlClientSelect.FromTable<V, T>) -> CoroutinesSqlClientSelect.Return<V> = { it },
+    ): CoroutinesSqlClientSelect.Return<V> =
+        withContext(Dispatchers.IO) {
+            return@withContext predicate(client.selectAndBuild { builder(it) } from table)
         }
 
     suspend fun find(id: ID): T? = find { checkSelectIdEquality(it, id) }.fetchFirstOrNull()
 
-    suspend fun delete(predicate: (CoroutinesSqlClientDeleteOrUpdate.FirstDeleteOrUpdate<T>) -> CoroutinesSqlClientDeleteOrUpdate.Return): Long =
+    suspend fun delete(predicate: (CoroutinesSqlClientDeleteOrUpdate.FirstDeleteOrUpdate<T>) -> CoroutinesSqlClientDeleteOrUpdate.Return = { it }): Long =
         withContext(Dispatchers.IO) {
             return@withContext (client deleteFrom table)
                 .execute()
@@ -76,8 +83,8 @@ interface CrudRepository<T : Any, ID : Any> {
 
     suspend fun delete(entity: T): Boolean = delete(getId(entity)!!)
 
-    suspend fun count(predicate: (CoroutinesSqlClientSelect.FromTable<Long, T>) -> CoroutinesSqlClientSelect.Where<Long>): Long =
+    suspend fun count(predicate: (CoroutinesSqlClientSelect.FromTable<Long, T>) -> CoroutinesSqlClientSelect.Return<Long> = { it }): Long =
         withContext(Dispatchers.IO) {
-            return@withContext (client selectCountFrom table).fetchOne()!!
+            return@withContext predicate(client selectCountFrom table).fetchOne()!!
         }
 }

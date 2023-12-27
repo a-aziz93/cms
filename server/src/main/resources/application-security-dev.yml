@@ -1,0 +1,15 @@
+auth:
+  oauth:
+    keycloak:
+      server-provider:
+        name: "keycloak"
+        authorize-url: ""
+        accessToken-url: ""
+        client-ud: "ktor"
+        client-secret: ""
+        access-token-requires-basic-auth: false
+        request-method: "POST"
+        default-scopes: [ ]
+      url-provider:
+        redirect-url: ""
+  jwt:

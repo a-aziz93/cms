@@ -5,6 +5,7 @@ import com.auth0.jwt.JWTVerifier
 import com.auth0.jwt.algorithms.Algorithm
 import digital.sadad.project.core.config.AppConfig
 import digital.sadad.project.auth.model.User
+import digital.sadad.project.core.config.model.JWTConfig
 import mu.two.KotlinLogging
 import org.koin.core.annotation.Single
 import java.util.*
@@ -22,26 +23,11 @@ sealed class TokenException(message: String) : RuntimeException(message) {
 
 @Single
 class TokensService(
-    private val appConfig: AppConfig
+    appConfig: AppConfig,
+    private val jwtConfig: JWTConfig? = appConfig.envConfig.auth?.jwt
 ) {
-    val audience by lazy {
-        appConfig.applicationConfiguration.propertyOrNull("jwt.audience")?.getString() ?: "jwt-audience"
-    }
-    val realm by lazy {
-        appConfig.applicationConfiguration.propertyOrNull("jwt.realm")?.getString() ?: "jwt-realm"
-    }
-    private val issuer by lazy {
-        appConfig.applicationConfiguration.propertyOrNull("jwt.issuer")?.getString() ?: "jwt-issuer"
-    }
-    private val expiresIn by lazy {
-        appConfig.applicationConfiguration.propertyOrNull("jwt.tiempo")?.getString()?.toLong() ?: 3600
-    }
-    private val secret by lazy {
-        appConfig.applicationConfiguration.propertyOrNull("jwt.secret")?.getString() ?: "jwt-secret"
-    }
-
     init {
-        logger.debug { "Init tokens service with audience: $audience" }
+        logger.debug { "Init tokens service with audience: ${jwtConfig?.audience}" }
     }
 
     /**
@@ -50,20 +36,26 @@ class TokensService(
      * @return String
      */
     fun generateJWT(user: User): String {
-        return JWT.create()
-            .withAudience(audience)
-            .withIssuer(issuer)
+        if (jwtConfig == null) {
+            throw NullPointerException("jwtConfig")
+        }
+
+        val jwt = JWT.create()
+            .withAudience(jwtConfig.audience)
+            .withIssuer(jwtConfig.issuer)
             .withSubject("Authentication")
             // user claims and other data to store
             .withClaim("username", user.username)
-            .withClaim("useremail", user.email)
+            .withClaim("userEmail", user.email)
             .withClaim("userId", user.id.toString())
+        if (jwtConfig.expiration != null) {
             // expiration time from currentTimeMillis + (tiempo times in seconds) * 1000 (to millis)
-            .withExpiresAt(Date(System.currentTimeMillis() + expiresIn * 1000L))
-            // sign with secret
-            .sign(
-                Algorithm.HMAC512(secret)
-            )
+            jwt.withExpiresAt(Date(System.currentTimeMillis() + jwtConfig.expiration.toLong() * 1000L))
+        }
+        // sign with secret
+        return jwt.sign(
+            Algorithm.HMAC512(jwtConfig.secret)
+        )
     }
 
     /**
@@ -73,10 +65,14 @@ class TokensService(
      */
     fun verifyJWT(): JWTVerifier {
 
+        if (jwtConfig == null) {
+            throw NullPointerException("jwtConfig")
+        }
+
         return try {
-            JWT.require(Algorithm.HMAC512(secret))
-                .withAudience(audience)
-                .withIssuer(issuer)
+            JWT.require(Algorithm.HMAC512(jwtConfig.secret))
+                .withAudience(jwtConfig.audience)
+                .withIssuer(jwtConfig.issuer)
                 .build()
         } catch (e: Exception) {
             throw TokenException.InvalidTokenException("Invalid token")

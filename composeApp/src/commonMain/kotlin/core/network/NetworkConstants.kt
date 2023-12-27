@@ -1,9 +1,7 @@
 package core.network
 
-import SERVER_PORT
-
 object NetworkConstants {
-    const val BASE_URL = "http://localhost:$SERVER_PORT/"
+    const val BASE_URL = "http://localhost:8080/"
 
     object CameraEndPoint {
         const val ROOT = BASE_URL + "camera"

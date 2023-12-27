@@ -9,8 +9,10 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.modules.SerializersModule
+import org.koin.core.annotation.Single
 import kotlin.reflect.KClass
 
+@Single
 class KeyValueStorageImpl : KeyValueStorage {
     private val settings: Settings by lazy { Settings() }
     private val observableSettings: ObservableSettings by lazy { settings as ObservableSettings }

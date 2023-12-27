@@ -13,35 +13,32 @@ import org.koin.core.annotation.Singleton
 
 private val logger = KotlinLogging.logger {}
 
-/**
- * Users Service to our User
- * Define the CRUD operations of our application with our Users using cache
- * @property usersRepository UsersRepository Repository of our Users
- * @property cacheService CacheService Cache Service to our Users
- */
 @Singleton
 class UsersServiceImpl(
     private val usersRepository: UsersRepository,
     private val cacheService: CacheService
 ) : UsersService {
 
-    /**
-     * Find all users
-     * @return Flow<User> Flow of users
-     * @see User
-     */
-    override suspend fun findAll(): Flow<User> {
-        logger.debug { "findAll: search all users" }
+    override suspend fun save(vararg users: User, username: String?): Result<List<User>, UserError> {
+        logger.debug { "save: save user" }
 
-        return usersRepository.findAll()
+        return findByUsername(user.username).onSuccess {
+            return Err(UserError.BadRequest("Another user existe with this username: ${user.username}"))
+        }.onFailure {
+            return Ok(usersRepository.save(*users, "").also {
+                cacheService.users.put(it.id, it)
+            })
+        }
+
     }
+
 
     /**
      * Find by id
      * @param id Long Id of user
      * @return Result<User, UserError> Result of user or error if not found
      */
-    override suspend fun findById(id: Long): Result<User, UserError> {
+    override suspend fun find(id: Long): Result<User, UserError> {
         logger.debug { "findById: search user by id" }
 
         // find in cache if not found in repository
@@ -79,7 +76,7 @@ class UsersServiceImpl(
      * @param password String Password of user
      * @return Result<User, UserError> Result of user or error if not found
      */
-    override suspend fun checkUserNameAndPassword(username: String, password: String): Result<User, UserError> {
+    override suspend fun findUserNameAndPassword(username: String, password: String): Result<User, UserError> {
         logger.debug { "checkUserNameAndPassword: check username and password" }
 
         return usersRepository.checkUserNameAndPassword(username, password)?.let {
@@ -87,61 +84,18 @@ class UsersServiceImpl(
         } ?: Err(UserError.BadCredentials("User password or username not valid"))
     }
 
-    /**
-     * Save user
-     * @param user User User to save
-     * @return Result<User, UserError> Result of user or error if not found
-     */
-    override suspend fun save(user: User): Result<User, UserError> {
-        logger.debug { "save: save user" }
-
-        return findByUsername(user.username).onSuccess {
-            return Err(UserError.BadRequest("Another user existe with this username: ${user.username}"))
-        }.onFailure {
-            return Ok(usersRepository.save(user).also {
-                cacheService.users.put(it.id, it)
-            })
-        }
-
-    }
-
-    /**
-     * Update user
-     * @param user User to update
-     * @param id Long Id of user
-     * @return Result<User, UserError> Result of user or error if not found
-     */
-    override suspend fun update(id: Long, user: User): Result<User, UserError> {
-        logger.debug { "update: update user" }
-
-        // search if exists user with same username
-        return findByUsername(user.username).onSuccess {
-            // if exists, check if is the same user or not
-            return if (user.id == id) {
-                Ok(usersRepository.save(user).also { cacheService.users.put(it.id, it) })
-            } else {
-                Err(UserError.BadRequest("Another user exists with username: ${user.username}"))
-            }
-        }.onFailure {
-            // if not exists, update user
-            return Ok(usersRepository.save(user).also { cacheService.users.put(it.id, it) })
-        }
-    }
-
-    /**
-     * Delete user
-     * @param id Long Id of user
-     * @return Result<User, UserError> Result of user or error if not found
-     */
-    override suspend fun delete(id: Long): Result<User, UserError> {
+    override suspend fun delete(id: Long): Result<Boolean, UserError> {
         logger.debug { "delete: delete" }
-
         // find, if exists delete in cache and repository and notify
-        return findById(id).andThen {
-            Ok(usersRepository.delete(it).also {
+        return Ok(usersRepository.delete(id).also {
+            if (it) {
                 cacheService.users.invalidate(id)
-            })
-        }
+            }
+        })
+    }
+
+    override suspend fun delete(): Result<Long, UserError> {
+        TODO("Not yet implemented")
     }
 
     /**

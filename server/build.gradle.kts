@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.kotlinJvm)
     alias(libs.plugins.ktor)
     application
+    alias(libs.plugins.ksp)
     alias(libs.plugins.kotlinSerialization)
     alias(libs.plugins.dokka)
 }
@@ -30,6 +31,14 @@ dependencies {
     implementation(libs.kotlin.result)
     implementation(libs.bcrypt)
     implementation(libs.reflections)
+    implementation (libs.hoplite.core)
+    // For import org.koin.ksp.generated.*
+//    add("kspServerMainMetadata", libs.koin.ksp.compiler)
+}
+
+ksp {
+    // Compile Safety - check your Koin config at compile time (since 1.3.0)
+    arg("KOIN_CONFIG_CHECK", "true")
 }
 
 // To generate Docker Image with JRE 17

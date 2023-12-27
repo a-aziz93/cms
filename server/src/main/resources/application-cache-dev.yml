@@ -1,0 +1,4 @@
+# Configure Cache
+cache:
+  maximumCacheSize: 1000
+  expireAfterAccess: 86400
