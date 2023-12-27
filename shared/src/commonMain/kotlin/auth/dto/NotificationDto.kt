@@ -1,4 +1,4 @@
-package digital.sadad.project.auth.dto
+package auth.dto
 
 import digital.sadad.project.core.serializers.LocalDateTimeSerializer
 import kotlinx.serialization.Serializable

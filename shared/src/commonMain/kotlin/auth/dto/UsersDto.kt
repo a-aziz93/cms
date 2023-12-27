@@ -1,8 +1,6 @@
-package digital.sadad.project.auth.dto
+package auth.dto
 
-import digital.sadad.project.auth.model.User
 import kotlinx.serialization.Serializable
-import java.util.UUID
 
 /**
  * User DTO for response
@@ -14,7 +12,7 @@ data class UserDto(
     val email: String,
     val username: String,
     val avatar: String,
-    val roleId: UUID,
+    val roleId: Long,
     val createdAt: String,
     val updatedAt: String,
     val isDeleted: Boolean = false
@@ -30,7 +28,7 @@ data class UserCreateDto(
     val username: String,
     val password: String,
     val avatar: String? = null,
-    val role: User.Role? = User.Role.USER,
+    val roleId: Long,
 )
 
 /**

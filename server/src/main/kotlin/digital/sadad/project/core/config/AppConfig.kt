@@ -13,12 +13,12 @@ import org.koin.core.annotation.Singleton
 class AppConfig {
     private val appConfig: ApplicationConfig = ApplicationConfig("application.yml")
 
-    val environment = appConfig.propertyOrNull("ktor.environment") ?: ""
+    val env = appConfig.propertyOrNull("ktor.environment") ?: ""
 
     val config = ConfigLoader().loadConfigOrThrow<Config>(
         // Environment profiles configuration
         (appConfig.propertyOrNull("profiles")?.getList() ?: emptyList()).map {
-            "/application-$it-$environment.yml"
+            "/application-$it-$env.yml"
         } +
                 // Common profiles configuration
                 (appConfig.propertyOrNull("profiles")?.getList() ?: emptyList()).map {

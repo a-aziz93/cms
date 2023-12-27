@@ -1,4 +1,4 @@
-package digital.sadad.project.auth.service.tokens
+package digital.sadad.project.auth.service.token
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.JWTVerifier
@@ -9,6 +9,7 @@ import digital.sadad.project.core.config.model.JWTConfig
 import mu.two.KotlinLogging
 import org.koin.core.annotation.Single
 import java.util.*
+import kotlin.time.DurationUnit
 
 private val logger = KotlinLogging.logger {}
 
@@ -24,7 +25,7 @@ sealed class TokenException(message: String) : RuntimeException(message) {
 @Single
 class TokensService(
     appConfig: AppConfig,
-    private val jwtConfig: JWTConfig? = appConfig.envConfig.auth?.jwt
+    private val jwtConfig: JWTConfig? = appConfig.config.auth?.jwt
 ) {
     init {
         logger.debug { "Init tokens service with audience: ${jwtConfig?.audience}" }
@@ -49,8 +50,8 @@ class TokensService(
             .withClaim("userEmail", user.email)
             .withClaim("userId", user.id.toString())
         if (jwtConfig.expiration != null) {
-            // expiration time from currentTimeMillis + (tiempo times in seconds) * 1000 (to millis)
-            jwt.withExpiresAt(Date(System.currentTimeMillis() + jwtConfig.expiration.toLong() * 1000L))
+            // expiration time from currentTimeMillis + (times in milliseconds)
+            jwt.withExpiresAt(Date(System.currentTimeMillis() + jwtConfig.expiration.toLong(DurationUnit.MILLISECONDS)))
         }
         // sign with secret
         return jwt.sign(

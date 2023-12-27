@@ -19,11 +19,11 @@ import java.time.LocalDateTime
 private const val BCRYPT_SALT = 12
 
 @Singleton
-class UsersRepositoryImpl(
+class UserRepositoryImpl(
     databaseService: DatabaseService,
     override val client: R2dbcSqlClient = databaseService.client,
     override val table: UserTable,
-) : UsersRepository {
+) : UserRepository {
 
     override fun getId(entity: User): Long? = entity.id
 

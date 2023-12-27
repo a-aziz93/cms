@@ -1,27 +1,43 @@
-package digital.sadad.project.auth.service
-
+package digital.sadad.project.auth.service.user
 
 import com.github.michaelbull.result.*
-import digital.sadad.project.core.cache.service.CacheService
 import digital.sadad.project.auth.error.UserError
 import digital.sadad.project.auth.model.User
-import digital.sadad.project.auth.repository.UsersRepository
-import digital.sadad.project.core.crud.repository.save
-import kotlinx.coroutines.flow.Flow
+import digital.sadad.project.auth.repository.UserRepository
+import digital.sadad.project.core.config.AppConfig
+import io.github.reactivecircus.cache4k.Cache
 import mu.two.KotlinLogging
 import org.koin.core.annotation.Singleton
 
 private val logger = KotlinLogging.logger {}
 
 @Singleton
-class UsersServiceImpl(
-    private val usersRepository: UsersRepository,
-    private val cacheService: CacheService
-) : UsersService {
+class UserServiceImpl(
+    private val appConfig: AppConfig,
+    private val usersRepository: UserRepository,
+) : UserService {
+
+    // Configure the Cache with the options of every entity in the cache
+    // by default
+    val users by lazy {
+        var cacheBuilder = Cache.Builder<Long, User>()
+        val userCacheConfig = appConfig.config.cache?.get("users")
+        if (userCacheConfig != null) {
+            if (userCacheConfig.maximumCacheSize != null) {
+                cacheBuilder = cacheBuilder.maximumCacheSize(userCacheConfig.maximumCacheSize)
+            }
+            if (userCacheConfig.expireAfterAccess != null) {
+                cacheBuilder = cacheBuilder.expireAfterAccess(userCacheConfig.expireAfterAccess)
+            }
+            if (userCacheConfig.expireAfterWrite != null) {
+                cacheBuilder = cacheBuilder.expireAfterWrite(userCacheConfig.expireAfterWrite)
+            }
+        }
+        cacheBuilder.build()
+    }
 
     override suspend fun save(vararg users: User, username: String?): Result<List<User>, UserError> {
         logger.debug { "save: save user" }
-
         return findByUsername(user.username).onSuccess {
             return Err(UserError.BadRequest("Another user existe with this username: ${user.username}"))
         }.onFailure {

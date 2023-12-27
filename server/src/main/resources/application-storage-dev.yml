@@ -1,4 +1,4 @@
 # Storage
 storage:
-  uploadDir: "uploads"
+  uploadDir: uploads
   endpoint: api/storage

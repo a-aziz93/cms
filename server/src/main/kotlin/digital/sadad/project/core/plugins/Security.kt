@@ -1,6 +1,6 @@
 package digital.sadad.project.core.plugins
 
-import digital.sadad.project.auth.service.tokens.TokensService
+import digital.sadad.project.auth.service.token.TokensService
 import digital.sadad.project.core.config.AppConfig
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -17,7 +17,7 @@ fun Application.configureSecurity() {
 
     // Inject the AppConfig
     val appConfig: AppConfig by inject()
-    val authConfig = appConfig.envConfig.auth
+    val authConfig = appConfig.config.auth
     val jwtConfig = authConfig?.jwt
 
     // Inject the token service

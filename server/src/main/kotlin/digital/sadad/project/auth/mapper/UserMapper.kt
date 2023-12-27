@@ -1,7 +1,7 @@
 package digital.sadad.project.auth.mapper
 
-import digital.sadad.project.auth.dto.UserCreateDto
-import digital.sadad.project.auth.dto.UserDto
+import auth.dto.UserCreateDto
+import auth.dto.UserDto
 import digital.sadad.project.auth.model.User
 
 fun User.toDto(): UserDto {

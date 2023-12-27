@@ -1,5 +1,6 @@
 package digital.sadad.project.auth.route
 
+import USER_ENDPOINT
 import com.github.michaelbull.result.andThen
 import com.github.michaelbull.result.mapBoth
 import com.github.michaelbull.result.onFailure
@@ -14,38 +15,35 @@ import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.util.pipeline.*
-import digital.sadad.project.auth.dto.UserCreateDto
-import digital.sadad.project.auth.dto.UserLoginDto
-import digital.sadad.project.auth.dto.UserUpdateDto
-import digital.sadad.project.auth.dto.UserWithTokenDto
-import digital.sadad.project.core.storage.error.StorageError
-import digital.sadad.project.auth.error.UserError
+import auth.dto.UserCreateDto
+import auth.dto.UserLoginDto
+import auth.dto.UserUpdateDto
+import auth.dto.UserWithTokenDto
+import core.error.*
 import digital.sadad.project.auth.mapper.toDto
 import digital.sadad.project.auth.mapper.toModel
 import digital.sadad.project.core.storage.service.StorageService
-import digital.sadad.project.auth.service.UsersService
-import digital.sadad.project.auth.service.tokens.TokensService
+import digital.sadad.project.auth.service.user.UserService
+import digital.sadad.project.auth.service.token.TokensService
 import kotlinx.coroutines.flow.toList
 import mu.two.KotlinLogging
 import org.koin.ktor.ext.inject
 
 private val logger = KotlinLogging.logger {}
 
-private const val ENDPOINT = "api/users" // Endpoint
-
-fun Application.usersRoutes() {
+fun Application.userRoutes() {
 
     // Dependency injection by Koin
-    val usersService: UsersService by inject()
+    val usersService: UserService by inject()
     val tokenService: TokensService by inject()
     val storageService: StorageService by inject()
 
     routing {
-        route("/$ENDPOINT") {
+        route("/$USER_ENDPOINT") {
 
             // Register a new user --> POST /api/users/register
             post("/register") {
-                logger.debug { "POST Register /$ENDPOINT/register" }
+                logger.debug { "POST Register /$USER_ENDPOINT/register" }
 
                 val dto = call.receive<UserCreateDto>().toModel()
                 usersService.save(dto)
@@ -57,7 +55,7 @@ fun Application.usersRoutes() {
 
             // Login a user --> POST /api/users/login
             post("/login") {
-                logger.debug { "POST Login /$ENDPOINT/login" }
+                logger.debug { "POST Login /$USER_ENDPOINT/login" }
 
                 val dto = call.receive<UserLoginDto>()
                 usersService.checkUserNameAndPassword(dto.username, dto.password)
@@ -74,7 +72,7 @@ fun Application.usersRoutes() {
             authenticate {
                 // Get the user info --> GET /api/users/me (with token)
                 get("/me") {
-                    logger.debug { "GET Me /$ENDPOINT/me" }
+                    logger.debug { "GET Me /$USER_ENDPOINT/me" }
 
                     // Token came with principal (authenticated) user in its claims
                     // Be careful, it comes with quotes!!!
@@ -91,7 +89,7 @@ fun Application.usersRoutes() {
 
                 // Update user info --> PUT /api/users/me (with token)
                 put("/me") {
-                    logger.debug { "PUT Me /$ENDPOINT/me" }
+                    logger.debug { "PUT Me /$USER_ENDPOINT/me" }
 
                     val userId = call.principal<JWTPrincipal>()
                         ?.payload?.getClaim("userId")
@@ -115,7 +113,7 @@ fun Application.usersRoutes() {
 
                 // Update user Image --> PATCH /api/users/me (with token)
                 patch("/me") {
-                    logger.debug { "PUT Me /$ENDPOINT/me" }
+                    logger.debug { "PUT Me /$USER_ENDPOINT/me" }
 
                     // Token came with principal (authenticated) user in its claims
                     val userId = call.principal<JWTPrincipal>()
@@ -123,7 +121,7 @@ fun Application.usersRoutes() {
                         .toString().replace("\"", "").toLong()
 
                     val baseUrl =
-                        call.request.origin.scheme + "://" + call.request.host() + ":" + call.request.port() + "/$ENDPOINT/image/"
+                        call.request.origin.scheme + "://" + call.request.host() + ":" + call.request.port() + "/$USER_ENDPOINT/image/"
                     val multipartData = call.receiveMultipart()
                     multipartData.forEachPart { part ->
                         if (part is PartData.FileItem) {
@@ -149,7 +147,7 @@ fun Application.usersRoutes() {
 
                 // Get racket image --> GET /api/rackets/image/{image}
                 get("image/{image}") {
-                    logger.debug { "GET IMAGE /$ENDPOINT/image/{image}" }
+                    logger.debug { "GET IMAGE /$USER_ENDPOINT/image/{image}" }
 
                     call.parameters["image"]?.let { image ->
                         storageService.getFile(image).mapBoth(
@@ -161,7 +159,7 @@ fun Application.usersRoutes() {
 
                 // Get all users --> GET /api/users/list (with token and only if you are admin)
                 get("/list") {
-                    logger.debug { "GET Users /$ENDPOINT/list" }
+                    logger.debug { "GET Users /$USER_ENDPOINT/list" }
 
                     val userId = call.principal<JWTPrincipal>()
                         ?.payload?.getClaim("userId")
@@ -179,7 +177,7 @@ fun Application.usersRoutes() {
 
                 // Delete user --> DELETE /api/users/delete/{id} (with token and only if you are admin)
                 delete("delete/{id}") {
-                    logger.debug { "DELETE User /$ENDPOINT/{id}" }
+                    logger.debug { "DELETE User /$USER_ENDPOINT/{id}" }
 
                     val userId = call.principal<JWTPrincipal>()
                         ?.payload?.getClaim("userId")
@@ -194,7 +192,7 @@ fun Application.usersRoutes() {
                             }
                         }.mapBoth(
                             success = { call.respond(HttpStatusCode.NoContent) },
-                            failure = { handleUserError(it) }
+                            failure = { hanleHttpError(it) }
                         )
                     }
                 }
@@ -203,20 +201,3 @@ fun Application.usersRoutes() {
     }
 }
 
-// Handle errors
-private suspend fun PipelineContext<Unit, ApplicationCall>.handleUserError(
-    error: Any
-) {
-    when (error) {
-        // Users
-        is UserError.BadRequest -> call.respond(HttpStatusCode.BadRequest, error.message)
-        is UserError.NotFound -> call.respond(HttpStatusCode.NotFound, error.message)
-        is UserError.Unauthorized -> call.respond(HttpStatusCode.Unauthorized, error.message)
-        is UserError.Forbidden -> call.respond(HttpStatusCode.Forbidden, error.message)
-        is UserError.BadCredentials -> call.respond(HttpStatusCode.BadRequest, error.message)
-        is UserError.BadRole -> call.respond(HttpStatusCode.Forbidden, error.message)
-        // Storage
-        is StorageError.BadRequest -> call.respond(HttpStatusCode.BadRequest, error.message)
-        is StorageError.NotFound -> call.respond(HttpStatusCode.NotFound, error.message)
-    }
-}

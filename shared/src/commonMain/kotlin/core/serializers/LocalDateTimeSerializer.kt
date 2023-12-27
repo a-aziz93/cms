@@ -1,4 +1,4 @@
-package digital.sadad.project.core.serializers
+package core.serializers
 
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.descriptors.PrimitiveKind

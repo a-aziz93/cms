@@ -1,4 +1,8 @@
 # Configure Cache
 cache:
-  maximumCacheSize: 1000
-  expireAfterAccess: 86400
+  role:
+    maximumCacheSize: 1000
+    expireAfterAccess: 86400
+  user:
+    maximumCacheSize: 1000
+    expireAfterAccess: 86400

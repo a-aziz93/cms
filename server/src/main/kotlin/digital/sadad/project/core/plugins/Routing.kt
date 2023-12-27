@@ -1,9 +1,13 @@
 package digital.sadad.project.core.plugins
 
+import core.error.HttpError
+import digital.sadad.project.auth.route.roleRoutes
+import digital.sadad.project.auth.route.userRoutes
+import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import digital.sadad.project.auth.route.usersRoutes
+import io.ktor.util.pipeline.*
 
 /**
  * Define the routing of our application based a DSL
@@ -18,5 +22,10 @@ fun Application.configureRouting() {
     }
 
     // Add our routes
-    usersRoutes() // Users routes
+    roleRoutes() // Role routes
+    userRoutes() // User routes
 }
+
+suspend fun PipelineContext<Unit, ApplicationCall>.handleHttpError(
+    error: HttpError
+)= call.respond(HttpStatusCode.fromValue(error.statusCode), error.message)
