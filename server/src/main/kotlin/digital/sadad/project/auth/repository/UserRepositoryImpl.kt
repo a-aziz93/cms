@@ -6,9 +6,10 @@ import digital.sadad.project.auth.entity.RoleTable
 import digital.sadad.project.auth.entity.UserTable
 import digital.sadad.project.auth.model.Role
 import digital.sadad.project.auth.model.User
-import digital.sadad.project.core.database.service.DatabaseService
+import digital.sadad.project.core.config.DatabaseConfig
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import org.koin.core.annotation.Single
 import org.koin.core.annotation.Singleton
 import org.ufoss.kotysa.CoroutinesSqlClientDeleteOrUpdate
 import org.ufoss.kotysa.CoroutinesSqlClientSelect
@@ -18,9 +19,9 @@ import java.time.LocalDateTime
 
 private const val BCRYPT_SALT = 12
 
-@Singleton
+@Single
 class UserRepositoryImpl(
-    databaseService: DatabaseService,
+    databaseService: DatabaseConfig,
     override val client: R2dbcSqlClient = databaseService.client,
     override val table: UserTable,
 ) : UserRepository {

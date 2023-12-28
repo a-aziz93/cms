@@ -7,11 +7,12 @@ import digital.sadad.project.auth.repository.UserRepository
 import digital.sadad.project.core.config.AppConfig
 import io.github.reactivecircus.cache4k.Cache
 import mu.two.KotlinLogging
+import org.koin.core.annotation.Single
 import org.koin.core.annotation.Singleton
 
 private val logger = KotlinLogging.logger {}
 
-@Singleton
+@Single
 class UserServiceImpl(
     private val appConfig: AppConfig,
     private val usersRepository: UserRepository,

@@ -5,11 +5,12 @@ import digital.sadad.project.auth.repository.RoleRepository
 import digital.sadad.project.core.config.AppConfig
 import io.github.reactivecircus.cache4k.Cache
 import mu.two.KotlinLogging
+import org.koin.core.annotation.Single
 import org.koin.core.annotation.Singleton
 
 private val logger = KotlinLogging.logger {}
 
-@Singleton
+@Single
 class RoleServiceImpl(
     private val appConfig: AppConfig,
     private val roleRepository: RoleRepository,

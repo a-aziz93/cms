@@ -62,42 +62,39 @@ kotlin {
             implementation(libs.coroutines.android)
             implementation(libs.konfigure.android)
         }
-        val commonMain by getting {
-            kotlin.srcDirs("build/generated/ksp/commonMain/kotlin")
-            dependencies {
-                implementation(compose.runtime)
-                implementation(compose.foundation)
-                implementation(compose.material)
-                implementation(compose.ui)
-                @OptIn(ExperimentalComposeLibrary::class)
-                implementation(compose.components.resources)
-                implementation(projects.shared)
-                // Added
-                implementation(compose.material3)
-                implementation(compose.materialIconsExtended)
-                implementation(libs.kermit)
-                implementation(libs.lyricist)
+        commonMain.dependencies {
+            implementation(compose.runtime)
+            implementation(compose.foundation)
+            implementation(compose.material)
+            implementation(compose.ui)
+            @OptIn(ExperimentalComposeLibrary::class)
+            implementation(compose.components.resources)
+            implementation(projects.shared)
+            // Added
+            implementation(compose.material3)
+            implementation(compose.materialIconsExtended)
+            implementation(libs.kermit)
+            implementation(libs.lyricist)
 //            implementation(libs.material3.adaptive)
 //            implementation(libs.material3.adaptive.navigation.suite)
 //            implementation(libs.material3.window.size)
-                implementation(libs.material3.window.size.multiplatform)
-                implementation(libs.bundles.compose.icons)
-                implementation(libs.kotlinx.serialization.json)
-                implementation(libs.bundles.multiplatform.settings)
-                implementation(libs.bundles.koin)
-                implementation(libs.koin.compose)
-                implementation(libs.bundles.ktor.client)
-                implementation(libs.bundles.sql.delight)
-                implementation(libs.bundles.mvi.kotlin)
-                implementation(libs.bundles.decompose)
-                implementation(libs.lifecycle)
-                implementation(libs.kamel.image)
-                implementation(libs.kotlin.result)
-                implementation(libs.kotlin.reflect)
-                implementation(libs.bundles.kmputils)
-                implementation(libs.bundles.ktorfit)
-                implementation (libs.bundles.konfigure)
-            }
+            implementation(libs.material3.window.size.multiplatform)
+            implementation(libs.bundles.compose.icons)
+            implementation(libs.kotlinx.serialization.json)
+            implementation(libs.bundles.multiplatform.settings)
+            implementation(libs.bundles.koin)
+            implementation(libs.koin.compose)
+            implementation(libs.bundles.ktor.client)
+            implementation(libs.bundles.sql.delight)
+            implementation(libs.bundles.mvi.kotlin)
+            implementation(libs.bundles.decompose)
+            implementation(libs.lifecycle)
+            implementation(libs.kamel.image)
+            implementation(libs.kotlin.result)
+            implementation(libs.kotlin.reflect)
+            implementation(libs.bundles.kmputils)
+            implementation(libs.bundles.ktorfit)
+            implementation(libs.bundles.konfigure)
         }
 
         desktopMain.dependencies {
@@ -197,4 +194,13 @@ ksp {
     arg("lyricist.generateStringsProperty", "true")
     // Compile Safety - check your Koin config at compile time (since 1.3.0)
     arg("KOIN_CONFIG_CHECK", "true")
+}
+
+sqldelight {
+    databases {
+        create("Database") {
+            packageName.set("digital.sadad.project")
+            generateAsync.set(true)
+        }
+    }
 }

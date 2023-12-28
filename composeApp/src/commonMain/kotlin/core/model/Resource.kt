@@ -1,4 +1,4 @@
-package core.network
+package core.model
 
 import core.network.errors.NetworkError
 

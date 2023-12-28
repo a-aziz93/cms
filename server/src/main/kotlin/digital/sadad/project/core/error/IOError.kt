@@ -1,4 +1,4 @@
-package core.error
+package digital.sadad.project.core.error
 
 /**
  * User Errors

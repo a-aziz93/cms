@@ -6,5 +6,6 @@ data class DatabaseConfig(
     val user: String,
     val password: String,
     val database: String,
-    val init: Boolean,
+    val tablesPackage: String,
+    val init: Boolean = false,
 )
