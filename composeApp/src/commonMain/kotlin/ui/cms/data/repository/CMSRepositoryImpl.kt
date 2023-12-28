@@ -1,4 +1,4 @@
-package ui.cms.repository
+package ui.cms.data.repository
 
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject

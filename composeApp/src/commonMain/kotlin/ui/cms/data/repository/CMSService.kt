@@ -1,4 +1,4 @@
-package ui.cms.repository
+package ui.cms.data.repository
 
 import ui.cms.network.client.CMSClient
 import org.koin.core.component.KoinComponent

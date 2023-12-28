@@ -1,4 +1,4 @@
-package ui.cms.repository
+package ui.cms.data.repository
 
 interface CMSRepository {
     
