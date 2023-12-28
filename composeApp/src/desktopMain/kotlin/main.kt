@@ -43,7 +43,6 @@ import ui.selfsignup.PreviewSelfSignUpComponent
 import ui.selfsignup.SignUpUi
 import ui.theme.AppTheme
 
-
 @OptIn(ExperimentalDecomposeApi::class)
 fun main() {
     initKoin()

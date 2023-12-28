@@ -1,0 +1,4 @@
+CREATE TABLE Test (
+  test_number INTEGER PRIMARY KEY NOT NULL,
+  test_name TEXT NOT NULL
+);
