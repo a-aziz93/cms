@@ -8,7 +8,7 @@ import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
 import core.model.cms.CMS
 import core.model.cms.CMSSearchFilter
-import ui.cms.crud.repository.CMSRepository
+import ui.cms.data.repository.CMSRepository
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent

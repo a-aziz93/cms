@@ -11,10 +11,8 @@ fun initKoin(enableNetworkLogs: Boolean = false, appDeclaration: KoinAppDeclarat
     startKoin {
         slf4jLogger()
         appDeclaration()
-        modules(
-            defaultModule(),
-            platformModule(),
-        )
+        defaultModule()
+        platformModule()
     }
 
 // Called by iOS etc
