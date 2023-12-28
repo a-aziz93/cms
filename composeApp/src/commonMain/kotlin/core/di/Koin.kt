@@ -4,6 +4,7 @@ import org.koin.core.context.startKoin
 import org.koin.dsl.KoinAppDeclaration
 import org.koin.logger.slf4jLogger
 import org.koin.ksp.generated.*
+import org.koin.core.module.Module
 
 expect fun platformModule(): Module
 
