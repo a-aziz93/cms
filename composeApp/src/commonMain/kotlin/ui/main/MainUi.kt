@@ -38,7 +38,6 @@ import ui.map.MapUi
 import ui.reset.ResetUi
 import ui.settings.SettingsUi
 import ui.signin.SignInUi
-import ui.selfsignup.SignUpUi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Icon
 import androidx.compose.material.Surface
@@ -56,6 +55,7 @@ import core.util.tabAnimation
 import org.koin.compose.koinInject
 import ui.dashboard.DashboardUi
 import ui.i18n.*
+import ui.selfsignup.SelfSignUpUi
 
 @OptIn(ExperimentalResourceApi::class, ExperimentalMaterial3Api::class, ExperimentalMaterial3WindowSizeClassApi::class)
 @Composable
@@ -137,137 +137,25 @@ internal fun MainUi(component: MainComponent) {
                         selectedNavigationItemIndex.intValue = index
                         component.onOutput(navConfigOutputMapper[indexedNavigationItems[selectedNavigationItemIndex.intValue].route!!]!!)
                     }
-                ) {
-                    Scaffold(
-                        topBar = {
-                            TopAppBar(
-                                title = {
-                                    Text(text = if (selectedNavigationItemIndex.intValue > -1) indexedNavigationItems[selectedNavigationItemIndex.intValue].title else title)
-                                },
-                                navigationIcon = {
-                                    Row {
-                                        IconButton(onClick = {
-                                            scope.launch {
-                                                if (navDrawerState.isClosed) {
-                                                    navDrawerState.open()
-                                                } else {
-                                                    navDrawerState.close()
-                                                }
-                                            }
-                                        }) {
-                                            Icon(
-                                                imageVector = EvaIcons.Outline.Menu2,
-                                                contentDescription = "Menu"
-                                            )
-                                        }
-                                    }
-                                },
-                                actions = {
-                                    if (component.childStack.backStack.isNotEmpty()) {
-                                        IconButton(onClick = {
-                                            component.onOutput(MainComponent.Output.NavigateBack)
-                                            selectedNavigationItemIndex.intValue = getActiveNavigationItemIndex(
-                                                indexedNavigationItems,
-                                                component.childStack.active.configuration as MainComponent.Config
-                                            )
-                                        }) {
-                                            Icon(
-                                                imageVector = EvaIcons.Outline.ArrowheadLeft,
-                                                contentDescription = "Back navigation"
-                                            )
-                                        }
-                                    }
-                                    IconButton(
-                                        onClick = {
-                                            openLocaleDialog = true
-                                        }) {
-                                        Image(
-                                            modifier = Modifier.size(30.dp),
-                                            painter = painterResource(countryAlpha2CodeFlagPathMap[currentLngCountryAlpha2Code]!!),
-                                            contentDescription = null,
-                                        )
-                                    }
-                                    IconButton(onClick = {
-                                        darkTheme = !darkTheme
-                                        keyValueStorage.set(StorageKeys.IS_DARK_THEME.key, darkTheme)
-                                        Logger.v("Picked ${if (darkTheme) "dark" else "light"} theme")
-                                    }) {
-                                        Icon(if (darkTheme) EvaIcons.Outline.Sun else EvaIcons.Outline.Moon, null)
-                                    }
-                                    IconButton(onClick = {
-                                        Logger.v("Clicked SignOut")
-                                    }) {
-                                        Icon(EvaIcons.Outline.LogOut, null)
-                                    }
-                                },
-                                colors = TopAppBarDefaults.topAppBarColors(
-                                    containerColor = MaterialTheme.colorScheme.primary,
-                                    scrolledContainerColor = MaterialTheme.colorScheme.surface,
-                                    navigationIconContentColor = topAppBarElementColor,
-                                    titleContentColor = topAppBarElementColor,
-                                    actionIconContentColor = topAppBarElementColor,
-                                ),
-                            )
-                        },
-                        bottomBar = {
-                            NavigationBar {
-                                indexedNavigationItems.forEachIndexed { index, item ->
-                                    NavigationBarItem(
-                                        selected = selectedNavigationItemIndex.intValue == index,
-                                        onClick = {
-                                            selectedNavigationItemIndex.intValue = index
-                                            // navController.navigate(item.title)
-                                        },
-                                        label = {
-                                            Text(text = item.title)
-                                        },
-                                        alwaysShowLabel = false,
-                                        icon = {
-                                            BadgedBox(
-                                                badge = {
-                                                    if (item.badgeCount != null) {
-                                                        Badge {
-                                                            Text(text = item.badgeCount.toString())
-                                                        }
-                                                    } else if (item.hasNews) {
-                                                        Badge()
-                                                    }
-                                                }
-                                            ) {
-                                                (if (index == selectedNavigationItemIndex.intValue) {
-                                                    item.icon?.selectedIcon
-                                                } else item.icon?.unselectedIcon)?.let {
-                                                    Icon(
-                                                        imageVector = it,
-                                                        contentDescription = item.title
-                                                    )
-                                                }
-                                            }
-                                        }
-                                    )
-                                }
-                            }
-                        }
-                    ) { innerPadding ->
-                        if (openLocaleDialog) {
-                            LocalePickerDialog(
-                                countries = supportedLocaleCodes.map { lng ->
-                                    val lngCountryAlpha2Code = lng.toCountryAlpha2Code()
-                                    countries.find { it.alpha2Code == lngCountryAlpha2Code }!!
-                                },
-                                defaultSelectedCountry = countries.find { it.alpha2Code == currentLngCountryAlpha2Code }!!,
-                                pickedCountry = { c ->
-                                    lyricist.languageTag = c.alpha2Code.toLanguageAlpha2Code()
-                                    openLocaleDialog = false
-                                },
-                                onDismissRequest = {
-                                    openLocaleDialog = false
-                                },
-                            )
-                        }
-                        Box(modifier = Modifier.fillMaxSize().padding(innerPadding)) {
-                            Children(component = component)
-                        }
+                ) {innerPadding->
+                    if (openLocaleDialog) {
+                        LocalePickerDialog(
+                            countries = supportedLocaleCodes.map { lng ->
+                                val lngCountryAlpha2Code = lng.toCountryAlpha2Code()
+                                countries.find { it.alpha2Code == lngCountryAlpha2Code }!!
+                            },
+                            defaultSelectedCountry = countries.find { it.alpha2Code == currentLngCountryAlpha2Code }!!,
+                            pickedCountry = { c ->
+                                lyricist.languageTag = c.alpha2Code.toLanguageAlpha2Code()
+                                openLocaleDialog = false
+                            },
+                            onDismissRequest = {
+                                openLocaleDialog = false
+                            },
+                        )
+                    }
+                    Box(modifier = Modifier.fillMaxSize().padding(innerPadding)) {
+                        Children(component = component)
                     }
                 }
             }
@@ -301,7 +189,7 @@ private fun Children(component: MainComponent, modifier: Modifier = Modifier) {
         },
     ) {
         when (val child = it.instance) {
-            is SignUp -> SignUpUi(child.component)
+            is SignUp -> SelfSignUpUi(child.component)
             is SignIn -> SignInUi(child.component)
             is Reset -> ResetUi(child.component)
             is Profile -> ProfileUi(child.component)
