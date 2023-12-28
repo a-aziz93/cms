@@ -1,9 +1,9 @@
-package ui.cms
+package ui.queue
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 
 @Composable
-internal fun CMSUi(component: CMSComponent) {
-   Text("PROFILE")
+internal fun QueueUi(component: QueueComponent) {
+   Text("QUEUE")
 }

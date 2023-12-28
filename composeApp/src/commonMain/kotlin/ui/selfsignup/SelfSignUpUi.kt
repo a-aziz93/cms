@@ -35,7 +35,7 @@ import org.jetbrains.compose.resources.ExperimentalResourceApi
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
-fun SignUpUi(component: SelfSignUpComponent) {
+fun SelfSignUpUi(component: SelfSignUpComponent) {
 
     val login =component.login.collectAsState(coroutineDispatchers.main)
     val password = component.password.collectAsState(coroutineDispatchers.main)

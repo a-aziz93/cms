@@ -13,6 +13,14 @@ import core.di.initKoin
 import org.jetbrains.compose.components.resources.BuildConfig
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.stopKoin
+import ui.adminsignup.AdminSignUpUi
+import ui.adminsignup.PreviewAdminSignUpComponent
+import ui.cdex.CDexUi
+import ui.cdex.PreviewCDexComponent
+import ui.cdox.CDoxUi
+import ui.cdox.PreviewCDoxComponent
+import ui.cms.CMSUi
+import ui.cms.PreviewCMSComponent
 import ui.dashboard.DashboardUi
 import ui.dashboard.PreviewDashboardComponent
 import ui.root.DefaultRootComponent
@@ -25,6 +33,10 @@ import ui.main.MainUi
 import ui.main.PreviewMainComponent
 import ui.map.MapUi
 import ui.map.PreviewMapComponent
+import ui.profile.PreviewProfileComponent
+import ui.profile.ProfileUi
+import ui.queue.PreviewQueueComponent
+import ui.queue.QueueUi
 import ui.reset.PreviewResetComponent
 import ui.reset.ResetUi
 import ui.root.PreviewRootComponent
@@ -33,31 +45,32 @@ import ui.settings.SettingsUi
 import ui.signin.PreviewSignInComponent
 import ui.signin.SignInUi
 import ui.selfsignup.PreviewSelfSignUpComponent
+import ui.selfsignup.SelfSignUpUi
 import ui.selfsignup.SignUpUi
 import ui.theme.AppTheme
 
 @OptIn(ExperimentalDecomposeApi::class)
 class MainActivity : ComponentActivity() {
-    
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         initKoin {
             androidContext(applicationContext)
         }
-        
+
         val rootComponent =
             DefaultRootComponent(
                 componentContext = defaultComponentContext(),
                 storeFactory = DefaultStoreFactory(),
                 featureInstaller = DefaultFeatureInstaller(context = this),
-                )
-        
+            )
+
         setContent {
-            App(rootComponent=rootComponent)
+            App(rootComponent = rootComponent)
         }
     }
-    
+
     override fun onDestroy() {
         super.onDestroy()
         stopKoin()
@@ -67,7 +80,7 @@ class MainActivity : ComponentActivity() {
 @Preview(showSystemUi = true)
 @Composable
 fun AppAndroidPreview() {
-    App(rootComponent=PreviewRootComponent())
+    App(rootComponent = PreviewRootComponent())
 }
 
 @Preview(showSystemUi = true)
@@ -88,9 +101,17 @@ fun LandingUiPreview() {
 
 @Preview(showSystemUi = true)
 @Composable
-fun SignUpUiPreview() {
+fun SelfSignUpUiPreview() {
     AppTheme {
-        SignUpUi(PreviewSelfSignUpComponent())
+        SelfSignUpUi(PreviewSelfSignUpComponent())
+    }
+}
+
+@Preview(showSystemUi = true)
+@Composable
+fun AdminSignUpUiPreview() {
+    AppTheme {
+        AdminSignUpUi(PreviewAdminSignUpComponent())
     }
 }
 
@@ -107,6 +128,14 @@ fun SignInUiPreview() {
 fun ResetPreview() {
     AppTheme {
         ResetUi(PreviewResetComponent())
+    }
+}
+
+@Preview
+@Composable
+fun ProfilePreview() {
+    AppTheme {
+        ProfileUi(PreviewProfileComponent())
     }
 }
 
@@ -139,5 +168,37 @@ fun DashboardUiPreview() {
 fun SettingsUiPreview() {
     AppTheme {
         SettingsUi(PreviewSettingsComponent())
+    }
+}
+
+@Preview(showSystemUi = true)
+@Composable
+fun CMSPreview() {
+    AppTheme {
+        CMSUi(PreviewCMSComponent())
+    }
+}
+
+@Preview(showSystemUi = true)
+@Composable
+fun QueuePreview() {
+    AppTheme {
+        QueueUi(PreviewQueueComponent())
+    }
+}
+
+@Preview(showSystemUi = true)
+@Composable
+fun CDexPreview() {
+    AppTheme {
+        CDexUi(PreviewCDexComponent())
+    }
+}
+
+@Preview(showSystemUi = true)
+@Composable
+fun CDoxPreview() {
+    AppTheme {
+        CDoxUi(PreviewCDoxComponent())
     }
 }

@@ -20,6 +20,14 @@ import com.arkivanov.decompose.extensions.compose.lifecycle.LifecycleController
 import core.util.runOnUiThread
 import core.util.saveStateToFile
 import core.util.tryRestoreStateFromFile
+import ui.adminsignup.AdminSignUpUi
+import ui.adminsignup.PreviewAdminSignUpComponent
+import ui.cdex.CDexUi
+import ui.cdex.PreviewCDexComponent
+import ui.cdox.CDoxUi
+import ui.cdox.PreviewCDoxComponent
+import ui.cms.CMSUi
+import ui.cms.PreviewCMSComponent
 import ui.component.SaveStateDialog
 import ui.dashboard.DashboardUi
 import ui.dashboard.PreviewDashboardComponent
@@ -32,6 +40,10 @@ import ui.main.MainUi
 import ui.main.PreviewMainComponent
 import ui.map.MapUi
 import ui.map.PreviewMapComponent
+import ui.profile.PreviewProfileComponent
+import ui.profile.ProfileUi
+import ui.queue.PreviewQueueComponent
+import ui.queue.QueueUi
 import ui.reset.PreviewResetComponent
 import ui.reset.ResetUi
 import ui.root.PreviewRootComponent
@@ -40,7 +52,7 @@ import ui.settings.SettingsUi
 import ui.signin.PreviewSignInComponent
 import ui.signin.SignInUi
 import ui.selfsignup.PreviewSelfSignUpComponent
-import ui.selfsignup.SignUpUi
+import ui.selfsignup.SelfSignUpUi
 import ui.theme.AppTheme
 
 @OptIn(ExperimentalDecomposeApi::class)
@@ -118,9 +130,17 @@ fun LandingUiPreview() {
 
 @Preview
 @Composable
-fun SignUpUiPreview() {
+fun SelfSignUpUiPreview() {
     AppTheme {
-        SignUpUi(PreviewSelfSignUpComponent())
+        SelfSignUpUi(PreviewSelfSignUpComponent())
+    }
+}
+
+@Preview
+@Composable
+fun AdminSignUpUiPreview() {
+    AppTheme {
+        AdminSignUpUi(PreviewAdminSignUpComponent())
     }
 }
 
@@ -137,6 +157,14 @@ fun SignInUiPreview() {
 fun ResetPreview() {
     AppTheme {
         ResetUi(PreviewResetComponent())
+    }
+}
+
+@Preview
+@Composable
+fun ProfilePreview() {
+    AppTheme {
+        ProfileUi(PreviewProfileComponent())
     }
 }
 
@@ -169,5 +197,37 @@ fun DashboardUiPreview() {
 fun SettingsUiPreview() {
     AppTheme {
         SettingsUi(PreviewSettingsComponent())
+    }
+}
+
+@Preview
+@Composable
+fun CMSPreview() {
+    AppTheme {
+        CMSUi(PreviewCMSComponent())
+    }
+}
+
+@Preview
+@Composable
+fun QueuePreview() {
+    AppTheme {
+        QueueUi(PreviewQueueComponent())
+    }
+}
+
+@Preview
+@Composable
+fun CDexPreview() {
+    AppTheme {
+        CDexUi(PreviewCDexComponent())
+    }
+}
+
+@Preview
+@Composable
+fun CDoxPreview() {
+    AppTheme {
+        CDoxUi(PreviewCDoxComponent())
     }
 }

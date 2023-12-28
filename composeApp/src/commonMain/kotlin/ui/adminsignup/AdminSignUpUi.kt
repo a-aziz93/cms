@@ -7,7 +7,7 @@ import org.jetbrains.compose.resources.ExperimentalResourceApi
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
-fun SignUpUi(component: AdminSignUpComponent) {
+fun AdminSignUpUi(component: AdminSignUpComponent) {
 
 
 }
