@@ -38,6 +38,7 @@ kotlin {
             implementation(libs.kotlin.result)
             implementation(libs.kotlin.noarg)
             implementation(libs.bundles.kmputils)
+            implementation(libs.bundles.kotlinx.serialization)
         }
     }
 }

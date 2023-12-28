@@ -199,7 +199,7 @@ ksp {
 sqldelight {
     databases {
         create("Database") {
-            packageName.set("digital.sadad.project")
+            packageName.set("")
             generateAsync.set(true)
         }
     }
