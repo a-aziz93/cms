@@ -1,3 +1,6 @@
+package core
+
+import core.CoroutineDispatchers
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 

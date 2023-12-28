@@ -13,7 +13,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
-import coroutineDispatchers
+import core.coroutineDispatchers
 
 internal class CMSStoreFactory(
     private val storeFactory: StoreFactory,

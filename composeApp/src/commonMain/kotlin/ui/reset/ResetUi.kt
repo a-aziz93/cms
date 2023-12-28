@@ -6,7 +6,7 @@ import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import coroutineDispatchers
+import core.coroutineDispatchers
 
 @Composable
 fun ResetUi(component: ResetComponent) {

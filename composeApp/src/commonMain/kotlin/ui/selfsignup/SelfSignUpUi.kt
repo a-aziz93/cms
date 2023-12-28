@@ -27,7 +27,7 @@ import compose.icons.EvaIcons
 import compose.icons.evaicons.Outline
 import compose.icons.evaicons.outline.Eye
 import compose.icons.evaicons.outline.EyeOff2
-import coroutineDispatchers
+import core.coroutineDispatchers
 import org.jetbrains.compose.resources.painterResource
 
 
