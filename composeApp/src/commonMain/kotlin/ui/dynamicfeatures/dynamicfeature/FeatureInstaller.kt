@@ -1,7 +1,5 @@
 package ui.dynamicfeatures.dynamicfeature
 
-import kotlinx.coroutines.flow.Flow
-
 interface FeatureInstaller {
 
     suspend fun install(name: String): Result

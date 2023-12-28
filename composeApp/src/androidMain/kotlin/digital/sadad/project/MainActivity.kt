@@ -46,7 +46,6 @@ import ui.signin.PreviewSignInComponent
 import ui.signin.SignInUi
 import ui.selfsignup.PreviewSelfSignUpComponent
 import ui.selfsignup.SelfSignUpUi
-import ui.selfsignup.SignUpUi
 import ui.theme.AppTheme
 
 @OptIn(ExperimentalDecomposeApi::class)
@@ -189,16 +188,16 @@ fun QueuePreview() {
 
 @Preview(showSystemUi = true)
 @Composable
-fun CDexPreview() {
+fun CDoxPreview() {
     AppTheme {
-        CDexUi(PreviewCDexComponent())
+        CDoxUi(PreviewCDoxComponent())
     }
 }
 
 @Preview(showSystemUi = true)
 @Composable
-fun CDoxPreview() {
+fun CDexPreview() {
     AppTheme {
-        CDoxUi(PreviewCDoxComponent())
+        CDexUi(PreviewCDexComponent())
     }
 }

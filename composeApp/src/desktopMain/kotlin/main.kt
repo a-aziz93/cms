@@ -218,16 +218,16 @@ fun QueuePreview() {
 
 @Preview
 @Composable
-fun CDexPreview() {
+fun CDoxPreview() {
     AppTheme {
-        CDexUi(PreviewCDexComponent())
+        CDoxUi(PreviewCDoxComponent())
     }
 }
 
 @Preview
 @Composable
-fun CDoxPreview() {
+fun CDexPreview() {
     AppTheme {
-        CDoxUi(PreviewCDoxComponent())
+        CDexUi(PreviewCDexComponent())
     }
 }
