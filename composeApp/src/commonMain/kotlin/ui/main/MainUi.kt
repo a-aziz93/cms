@@ -31,7 +31,7 @@ import ui.component.navigation.NavigationLayoutType
 import ui.component.navigation.TabRowType
 import ui.component.navigation.TabType
 import ui.map.MapUi
-import ui.model.NavigationItem
+import ui.model.navigation.NavigationItem
 import ui.profile.ProfileUi
 import ui.reset.ResetUi
 import ui.selfsignup.SelfSignUpUi
@@ -97,19 +97,6 @@ internal fun MainUi(component: MainComponent) {
                     compactLayoutType = NavigationLayoutType.DRAWER,
                     mediumLayoutType = NavigationLayoutType.BOTTOM_BAR,
                     expandedLayoutType = NavigationLayoutType.TOP_BAR,
-//                    userHead = {
-//                        UserHead(
-//                            id = "SomeId",
-//                            firstName = "Aziz",
-//                            lastName = "Atoev",
-//                            role = "User",
-//                            onClick = {
-//                                component.onOutput(MainComponent.Output.NavigateToProfile)
-//                                title = namedNavigationItems["profile"]!!.title
-//                                selectedNavigationItemIndex.intValue = -1
-//                            }
-//                        )
-//                    },
                     hasTopAppBar = true,
                     title = title,
                     topAppBarColors = TopAppBarDefaults.topAppBarColors(

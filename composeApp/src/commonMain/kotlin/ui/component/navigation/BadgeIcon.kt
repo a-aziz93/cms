@@ -2,7 +2,7 @@ package ui.component.navigation
 
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import ui.model.NavigationItem
+import ui.model.navigation.NavigationItem
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

@@ -13,7 +13,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Blue
 import androidx.compose.ui.unit.dp
 import compose.icons.EvaIcons
@@ -25,12 +24,12 @@ import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import ui.component.avatar.Avatar
-import ui.component.avatar.InitialsAvatar
 import ui.component.locale.LocaleDialog
 import ui.i18n.supportedLocaleCodes
 import ui.i18n.toCountryAlpha2Code
 import ui.i18n.toLanguageAlpha2Code
-import ui.model.NavigationItem
+import ui.model.dropdown.DropDownItem
+import ui.model.navigation.NavigationItem
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -75,6 +74,13 @@ fun AdaptiveNavigationLayout(
                         Avatar(
                             firstName = "Aziz",
                             lastName = "Atoev",
+                            contextMenuItems = listOf(
+                                DropDownItem("Profile"),
+                                DropDownItem("LogOut", icon = EvaIcons.Outline.LogOut)
+                            ),
+                            onItemClick = {
+
+                            },
                             onClick = onAvatarClick
                         )
                         Text("Admin")

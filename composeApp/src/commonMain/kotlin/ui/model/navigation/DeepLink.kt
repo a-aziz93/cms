@@ -1,4 +1,4 @@
-package ui.model
+package ui.model.navigation
 
  sealed interface DeepLink {
      data object None : DeepLink

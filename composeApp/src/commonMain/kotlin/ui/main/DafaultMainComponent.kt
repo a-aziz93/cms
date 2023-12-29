@@ -15,7 +15,7 @@ import com.arkivanov.decompose.value.Value
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import ui.dashboard.DefaultDashboardComponent
 import ui.home.DefaultHomeComponent
-import ui.model.DeepLink
+import ui.model.navigation.DeepLink
 import ui.main.MainComponent.Config
 import ui.main.MainComponent.Output
 import ui.main.MainComponent.Child

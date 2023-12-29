@@ -7,9 +7,9 @@ import compose.icons.evaicons.Fill
 import compose.icons.evaicons.Outline
 import compose.icons.evaicons.fill.*
 import compose.icons.evaicons.outline.*
-import ui.model.NavigationIcon
-import ui.model.NavigationItem
-import ui.model.NavigationTitle
+import ui.model.navigation.NavigationIcon
+import ui.model.navigation.NavigationItem
+import ui.model.navigation.NavigationTitle
 
 @Composable
 fun profileNavigationItem() = NavigationItem(

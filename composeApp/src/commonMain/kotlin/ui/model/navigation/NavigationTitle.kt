@@ -1,6 +1,4 @@
-package ui.model
-
-import androidx.compose.ui.graphics.Color
+package ui.model.navigation
 
 data class NavigationTitle(
     val value: String,

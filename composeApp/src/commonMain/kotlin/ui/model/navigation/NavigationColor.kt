@@ -1,4 +1,4 @@
-package ui.model
+package ui.model.navigation
 
 import androidx.compose.ui.graphics.Color
 
