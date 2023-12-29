@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.dp
 import core.util.toHslColor
 
 @Composable
-fun InitialsAvatar(
+internal fun InitialsAvatar(
     firstName: String,
     lastName: String,
     size: Dp = 40.dp,

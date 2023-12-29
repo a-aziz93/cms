@@ -10,6 +10,7 @@ import androidx.compose.material3.*
 import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -23,6 +24,7 @@ import core.util.countryAlpha2CodeFlagPathMap
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
+import ui.component.avatar.Avatar
 import ui.component.avatar.InitialsAvatar
 import ui.component.locale.LocaleDialog
 import ui.i18n.supportedLocaleCodes
@@ -69,11 +71,14 @@ fun AdaptiveNavigationLayout(
             drawerState = drawerState,
             head = {
                 if (onAvatarClick != null) {
-                    InitialsAvatar(
-                        firstName = "Aziz",
-                        lastName = "Atoev",
-                        onClick = onAvatarClick
-                    )
+                    Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+                        Avatar(
+                            firstName = "Aziz",
+                            lastName = "Atoev",
+                            onClick = onAvatarClick
+                        )
+                        Text("Admin")
+                    }
                 }
             },
             items = items,
@@ -192,7 +197,7 @@ private fun BarNavigationLayout(
                         if (onBackClick != null) {
                             IconButton(onClick = onBackClick) {
                                 Icon(
-                                    imageVector = EvaIcons.Outline.ArrowheadLeft,
+                                    imageVector = EvaIcons.Outline.ArrowLeft,
                                     contentDescription = "Back navigation"
                                 )
                             }
@@ -217,13 +222,11 @@ private fun BarNavigationLayout(
                                 )
                             }
                         }
-                        if (onAvatarClick != null) {
-                            InitialsAvatar(
-                                firstName = "Aziz",
-                                lastName = "Atoev",
-                                onClick = onAvatarClick
-                            )
-                        }
+                        Avatar(
+                            firstName = "Aziz",
+                            lastName = "Atoev",
+                            onClick = onAvatarClick
+                        )
                     },
                     colors = topAppBarColors,
                 )
