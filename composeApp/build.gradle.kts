@@ -204,6 +204,8 @@ ksp {
     arg("lyricist.generateStringsProperty", "true")
     // Compile Safety - check your Koin config at compile time (since 1.3.0)
     arg("KOIN_CONFIG_CHECK", "true")
+    // 0 - Turn off all Ktorfit related error checking, 1 - Check for errors, 2 - Turn errors into warnings
+    arg("Ktorfit_Errors", "1")
 }
 
 sqldelight {

@@ -3,7 +3,9 @@ package ui.component.navigation
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
@@ -21,7 +23,7 @@ import core.util.countryAlpha2CodeFlagPathMap
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
-import ui.component.avatar.Avatar
+import ui.component.avatar.InitialsAvatar
 import ui.component.locale.LocaleDialog
 import ui.i18n.supportedLocaleCodes
 import ui.i18n.toCountryAlpha2Code
@@ -45,6 +47,7 @@ fun AdaptiveNavigationLayout(
     onThemeClick: (() -> Unit)? = null,
     language: String,
     onLanguageClick: ((String) -> Unit)? = null,
+    onAvatarClick: (() -> Unit)? = null,
     items: List<NavigationItem>,
     selectedItemIndex: Int = 0,
     onItemClick: (Int) -> Unit,
@@ -65,15 +68,13 @@ fun AdaptiveNavigationLayout(
             layoutType = layoutType,
             drawerState = drawerState,
             head = {
-                Avatar(
-                    id = "SomeId",
-                    firstName = "Aziz",
-                    lastName = "Atoev",
-                    role = "User",
-                    onClick = {
-                        onItemClick(-1)
-                    }
-                )
+                if (onAvatarClick != null) {
+                    InitialsAvatar(
+                        firstName = "Aziz",
+                        lastName = "Atoev",
+                        onClick = onAvatarClick
+                    )
+                }
             },
             items = items,
             selectedItemIndex = selectedItemIndex,
@@ -95,6 +96,7 @@ fun AdaptiveNavigationLayout(
                 onThemeClick,
                 language,
                 onLanguageClick,
+                onAvatarClick,
                 items,
                 selectedItemIndex,
                 onItemClick,
@@ -119,6 +121,7 @@ fun AdaptiveNavigationLayout(
             onThemeClick,
             language,
             onLanguageClick,
+            onAvatarClick,
             items,
             selectedItemIndex,
             onItemClick,
@@ -135,19 +138,20 @@ private fun BarNavigationLayout(
     compactLayoutType: NavigationLayoutType,
     mediumLayoutType: NavigationLayoutType,
     expandedLayoutType: NavigationLayoutType,
-    hasTopAppBar: Boolean = true,
-    title: String = "",
+    hasTopAppBar: Boolean,
+    title: String,
     topAppBarColors: TopAppBarColors,
-    tabRowType: TabRowType = TabRowType.TAB_ROW,
-    tabType: TabType = TabType.TAB,
-    drawerState: DrawerState? = null,
-    onBackClick: (() -> Unit)? = null,
+    tabRowType: TabRowType,
+    tabType: TabType,
+    drawerState: DrawerState?,
+    onBackClick: (() -> Unit)?,
     darkTheme: Boolean,
-    onThemeClick: (() -> Unit)? = null,
+    onThemeClick: (() -> Unit)?,
     language: String,
-    onLanguageClick: ((String) -> Unit)? = null,
+    onLanguageClick: ((String) -> Unit)?,
+    onAvatarClick: (() -> Unit)?,
     items: List<NavigationItem>,
-    selectedItemIndex: Int = 0,
+    selectedItemIndex: Int,
     onItemClick: (Int) -> Unit,
     content: @Composable () -> Unit,
 ) {
@@ -212,6 +216,13 @@ private fun BarNavigationLayout(
                                     null
                                 )
                             }
+                        }
+                        if (onAvatarClick != null) {
+                            InitialsAvatar(
+                                firstName = "Aziz",
+                                lastName = "Atoev",
+                                onClick = onAvatarClick
+                            )
                         }
                     },
                     colors = topAppBarColors,
@@ -281,14 +292,16 @@ private fun BarNavigationLayout(
                         Spacer(modifier = Modifier.height(5.dp))
                     },
                     indicator = { tabPositions ->
-                        Box(
-                            modifier = Modifier
-                                .tabIndicatorOffset(tabPositions[selectedItemIndex])
-                                .height(4.dp)
-                                .clip(RoundedCornerShape(8.dp)) // clip modifier not working
-                                .padding(horizontal = 28.dp)
-                                .background(color = Blue)
-                        )
+                        if (selectedItemIndex > -1) {
+                            Box(
+                                modifier = Modifier
+                                    .tabIndicatorOffset(tabPositions[selectedItemIndex])
+                                    .height(4.dp)
+                                    .clip(RoundedCornerShape(8.dp)) // clip modifier not working
+                                    .padding(horizontal = 28.dp)
+                                    .background(color = Blue)
+                            )
+                        }
                     },
                 ) {
                     items.forEachIndexed { index, item ->
@@ -340,7 +353,9 @@ private fun BarNavigationLayout(
                     },
                 )
             }
-            Box(modifier = contentBoxModifier) {
+            val scrollState = rememberScrollState()
+
+            Box(modifier = contentBoxModifier.verticalScroll(state = scrollState)) {
                 content()
             }
         }

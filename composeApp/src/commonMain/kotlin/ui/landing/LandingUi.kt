@@ -23,17 +23,17 @@ internal fun LandingUi(component: LandingComponent) {
             items = listOf(
                 {
                     Banner(
-                        backgroundResource = asyncPainterResource(data = File("/drawable/banner/customs.jpg")),
+                        resource = asyncPainterResource(data = "https://t4.ftcdn.net/jpg/02/18/18/55/360_F_218185587_P4zituDtWJOfClUKL6merI0BgLMIxoeC.jpg"),
                     )
                 },
                 {
                     Banner(
-                        backgroundResource = asyncPainterResource(data = File("/drawable/banner/hand.jpg")),
+                        resource = asyncPainterResource(data = "/drawable/banner/hand.jpg"),
                     )
                 },
                 {
                     Banner(
-                        backgroundResource = asyncPainterResource(data = File("/drawable/banner/watch.jpg")),
+                        resource = asyncPainterResource(data = File("/drawable/banner/watch.jpg")),
                     )
                 },
             ),

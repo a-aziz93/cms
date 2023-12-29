@@ -79,12 +79,12 @@ internal fun MainUi(component: MainComponent) {
 
                 val profileNavigationItem = profileNavigationItem()
 
-                val NavigationItems = NavigationItems()
+                val navigationItems = NavigationItems()
 
                 val selectedNavigationItemIndex = remember {
                     mutableIntStateOf(
                         getActiveNavigationItemIndex(
-                            NavigationItems,
+                            navigationItems,
                             component.childStack.active.configuration as MainComponent.Config
                         )
                     )
@@ -125,7 +125,7 @@ internal fun MainUi(component: MainComponent) {
                         {
                             component.onOutput(MainComponent.Output.NavigateBack)
                             selectedNavigationItemIndex.intValue = getActiveNavigationItemIndex(
-                                NavigationItems,
+                                navigationItems,
                                 component.childStack.active.configuration as MainComponent.Config
                             )
                         }
@@ -140,11 +140,16 @@ internal fun MainUi(component: MainComponent) {
                         lyricist.languageTag = it
                         keyValueStorage.set(StorageKeys.LANGUAGE.key, it)
                     },
-                    items = NavigationItems,
+                    {
+                        component.onOutput(MainComponent.Output.NavigateToProfile)
+                        selectedNavigationItemIndex.intValue = -1
+                        title = profileNavigationItem.title?.value ?: ""
+                    },
+                    items = navigationItems,
                     selectedItemIndex = selectedNavigationItemIndex.intValue,
                     onItemClick = { index ->
                         selectedNavigationItemIndex.intValue = index
-                        component.onOutput(navConfigOutputMapper[NavigationItems[selectedNavigationItemIndex.intValue].route!!]!!)
+                        component.onOutput(navConfigOutputMapper[navigationItems[selectedNavigationItemIndex.intValue].route!!]!!)
                     }
                 ) {
                     Children(component = component)

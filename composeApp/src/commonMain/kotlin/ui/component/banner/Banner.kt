@@ -16,15 +16,15 @@ fun Banner(
     modifier: Modifier = Modifier,
     title: @Composable () -> Unit = {},
     text: @Composable () -> Unit = {},
-    backgroundResource: Resource<Painter>,
-    onBackgroundLoading: @Composable (BoxScope.(Float) -> Unit)? = { painterResource("drawable/image_loading.png") },
-    onBackgroundFailure: @Composable (BoxScope.(Throwable) -> Unit)? = { painterResource("drawable/image_load_error.png") },
+    resource: Resource<Painter>,
+    onResourceLoading: @Composable (BoxScope.(Float) -> Unit)? = { painterResource("drawable/image_loading.png") },
+    onResourceFailure: @Composable (BoxScope.(Throwable) -> Unit)? = { painterResource("drawable/image_load_error.png") },
 ) {
     KamelImage(
-        resource = backgroundResource,
+        resource = resource,
         contentDescription = null,
-        onLoading = onBackgroundLoading,
-        onFailure = onBackgroundFailure,
+        onLoading = onResourceLoading,
+        onFailure = onResourceFailure,
         contentScale = ContentScale.FillBounds,
         modifier = modifier
     )
