@@ -7,5 +7,5 @@ interface QueueClient{
 
 }
 
-@Single
-fun injectClient(ktorfit: Ktorfit): QueueClient = ktorfit.create()
+//@Single
+//fun injectClient(ktorfit: Ktorfit): QueueClient = ktorfit.create()

@@ -7,5 +7,5 @@ interface CMSClient{
 
 }
 
-@Single
-fun injectClient(ktorfit: Ktorfit): CMSClient = ktorfit.create()
+//@Single
+//fun injectClient(ktorfit: Ktorfit): CMSClient = ktorfit.create()

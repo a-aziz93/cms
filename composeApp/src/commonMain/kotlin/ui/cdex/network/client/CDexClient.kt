@@ -7,5 +7,5 @@ interface CDexClient{
 
 }
 
-@Single
-fun injectClient(ktorfit: Ktorfit): CDexClient = ktorfit.create()
+//@Single
+//fun injectClient(ktorfit: Ktorfit): CDexClient = ktorfit.create()

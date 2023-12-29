@@ -1,10 +1,10 @@
 package ui.selfsignup.data.repository
 
-import core.network.client.signup.SignUpClient
+import ui.selfsignup.network.client.SelfSignUpClient
 import org.koin.core.annotation.Single
 
-@Single
-class SignUpServiceImpl(private val signUpClient: SignUpClient): SignUpService {
-
-}
+//@Single
+//class SignUpServiceImpl(private val signUpClient: SelfSignUpClient): SignUpService {
+//
+//}
    

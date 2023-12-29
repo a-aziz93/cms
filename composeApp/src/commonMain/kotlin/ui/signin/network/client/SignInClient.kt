@@ -8,5 +8,5 @@ interface SignInClient{
 }
 
 
-@Single
-fun injectClient(ktorfit: Ktorfit): SignInClient = ktorfit.create()
+//@Single
+//fun injectClient(ktorfit: Ktorfit): SignInClient = ktorfit.create()
