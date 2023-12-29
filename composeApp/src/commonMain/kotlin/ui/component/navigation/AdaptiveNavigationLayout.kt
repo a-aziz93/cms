@@ -5,11 +5,13 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
+import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Color.Companion.Blue
 import androidx.compose.ui.unit.dp
 import compose.icons.EvaIcons
 import compose.icons.evaicons.Outline
@@ -279,9 +281,13 @@ private fun BarNavigationLayout(
                         Spacer(modifier = Modifier.height(5.dp))
                     },
                     indicator = { tabPositions ->
-                        TabRowDefaults.Indicator(
-                            height = 1.dp,
-                            color = Color.White
+                        Box(
+                            modifier = Modifier
+                                .tabIndicatorOffset(tabPositions[selectedItemIndex])
+                                .height(4.dp)
+                                .clip(RoundedCornerShape(8.dp)) // clip modifier not working
+                                .padding(horizontal = 28.dp)
+                                .background(color = Blue)
                         )
                     },
                 ) {
@@ -291,7 +297,7 @@ private fun BarNavigationLayout(
                             modifier = navigationModifierColor(
                                 selected = selected,
                                 navigationColor = item.color
-                            ).clip(RoundedCornerShape(50)),
+                            ).clip(RoundedCornerShape(8)),
                             selected = selected,
                             onClick = {
                                 onItemClick(index)
