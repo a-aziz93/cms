@@ -6,15 +6,6 @@ import kotlinx.serialization.modules.SerializersModule
 import kotlin.reflect.KClass
 
 interface KeyValueStorage {
-    // #1 - Primitive type
-    var token: String?
-
-    // #2 - Custom type
-    var loginInfo: LoginInfo?
-
-    // #3 - Observer token value changes
-    val observableToken: Flow<String>
-
     fun set(key:String,value:Any)
     
     fun <T: Any> get(key:String,kClass:KClass<T>):T?

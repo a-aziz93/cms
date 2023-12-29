@@ -15,84 +15,67 @@ import kotlin.reflect.KClass
 @Single
 class KeyValueStorageImpl : KeyValueStorage {
     private val settings: Settings by lazy { Settings() }
-    private val observableSettings: ObservableSettings by lazy { settings as ObservableSettings }
 
-    // #1 - store/retrive primitive type
-    override var token: String?
-        get() = settings.getStringOrNull(StorageKeys.TOKEN.key)
-        set(value) {
-            settings[StorageKeys.TOKEN.key]=value
+    override fun set(key: String, value: Any) {
+        when (value) {
+            is Boolean -> settings.putBoolean(key, value)
+            is Int -> settings.putInt(key, value)
+            is Long -> settings.putLong(key, value)
+            is Float -> settings.putFloat(key, value)
+            is Double -> settings.putDouble(key, value)
+            is String -> settings.putString(key, value)
         }
-
-    @OptIn(ExperimentalSerializationApi::class,ExperimentalSettingsApi::class)
-    // #2 - store/retrive custom types
-    override var loginInfo: LoginInfo?
-        get() = settings.decodeValueOrNull(LoginInfo.serializer(), StorageKeys.LOGIN_INFO.key)
-        set(value) {
-            if (value != null) {
-                settings.encodeValue(LoginInfo.serializer(), StorageKeys.LOGIN_INFO.key, value)
-            } else {
-                settings.remove(StorageKeys.TOKEN.key)
-            }
-        }
-    
-
-    @OptIn(ExperimentalSettingsApi::class)
-    // #3 - listen to token value changes
-    override val observableToken: Flow<String>
-        get() = observableSettings.getStringFlow(StorageKeys.TOKEN.key, "")
-    
-   override fun set(key:String,value:Any){
-       when(value){
-          is Boolean->settings.putBoolean(key,value)
-          is Int->settings.putInt(key,value)
-          is Long->settings.putLong(key,value)
-          is Float->settings.putFloat(key,value)
-          is Double->settings.putDouble(key,value)
-          is String->settings.putString(key,value)
-       }
-   }
-
-    override fun <T: Any> get(key:String,kClass:KClass<T>):T?=  when(kClass){
-        Boolean::class-> settings.getBooleanOrNull(key)
-        Int::class-> settings.getIntOrNull(key)
-        Long::class-> settings.getLongOrNull(key)
-        Float::class-> settings.getFloatOrNull(key)
-        Double::class-> settings.getDoubleOrNull(key)
-        String::class -> settings.getStringOrNull(key)
-        else->null
-    } as T?
-    
-    override fun <T: Any> get(key:String,kClass:KClass<T>,defaultValue:T):T =  when(kClass){
-            Boolean::class-> settings.getBoolean(key,defaultValue as Boolean)
-            Int::class-> settings.getInt(key,defaultValue as Int)
-            Long::class-> settings.getLong(key,defaultValue as Long)
-            Float::class-> settings.getFloat(key,defaultValue as Float)
-            Double::class-> settings.getDouble(key,defaultValue as Double)
-            else -> settings.getString(key,defaultValue as String)
-        } as T
-    
-    
-    @OptIn(ExperimentalSerializationApi::class,ExperimentalSettingsApi::class)
-   override fun <T> set(serializer: KSerializer<T>, key: String, value: T, serializersModule: SerializersModule): Unit 
-   {
-       settings.encodeValue(serializer,key,value,serializersModule)
-   }
-
-    @OptIn(ExperimentalSerializationApi::class,ExperimentalSettingsApi::class)
- override   fun <T> get(serializer: KSerializer<T>, key: String, serializersModule: SerializersModule): T? {
-     return settings.decodeValueOrNull(serializer,key,serializersModule)
- }
-
-    @OptIn(ExperimentalSerializationApi::class,ExperimentalSettingsApi::class)
-  override  fun <T> get(serializer:KSerializer<T>, key: String, defaultValue: T, serializersModule: SerializersModule): T {
-      return settings.decodeValue(serializer,key,defaultValue,serializersModule)
-  }
-    
-    override fun remove(key:String): Unit{
-      settings.remove(key)  
     }
-    
+
+    override fun <T : Any> get(key: String, kClass: KClass<T>): T? = when (kClass) {
+        Boolean::class -> settings.getBooleanOrNull(key)
+        Int::class -> settings.getIntOrNull(key)
+        Long::class -> settings.getLongOrNull(key)
+        Float::class -> settings.getFloatOrNull(key)
+        Double::class -> settings.getDoubleOrNull(key)
+        String::class -> settings.getStringOrNull(key)
+        else -> null
+    } as T?
+
+    override fun <T : Any> get(key: String, kClass: KClass<T>, defaultValue: T): T = when (kClass) {
+        Boolean::class -> settings.getBoolean(key, defaultValue as Boolean)
+        Int::class -> settings.getInt(key, defaultValue as Int)
+        Long::class -> settings.getLong(key, defaultValue as Long)
+        Float::class -> settings.getFloat(key, defaultValue as Float)
+        Double::class -> settings.getDouble(key, defaultValue as Double)
+        else -> settings.getString(key, defaultValue as String)
+    } as T
+
+
+    @OptIn(ExperimentalSerializationApi::class, ExperimentalSettingsApi::class)
+    override fun <T> set(
+        serializer: KSerializer<T>,
+        key: String,
+        value: T,
+        serializersModule: SerializersModule
+    ): Unit {
+        settings.encodeValue(serializer, key, value, serializersModule)
+    }
+
+    @OptIn(ExperimentalSerializationApi::class, ExperimentalSettingsApi::class)
+    override fun <T> get(serializer: KSerializer<T>, key: String, serializersModule: SerializersModule): T? {
+        return settings.decodeValueOrNull(serializer, key, serializersModule)
+    }
+
+    @OptIn(ExperimentalSerializationApi::class, ExperimentalSettingsApi::class)
+    override fun <T> get(
+        serializer: KSerializer<T>,
+        key: String,
+        defaultValue: T,
+        serializersModule: SerializersModule
+    ): T {
+        return settings.decodeValue(serializer, key, defaultValue, serializersModule)
+    }
+
+    override fun remove(key: String): Unit {
+        settings.remove(key)
+    }
+
     // clean all the stored values
     override fun cleanStorage() {
         settings.clear()
