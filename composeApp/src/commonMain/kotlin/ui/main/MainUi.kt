@@ -55,6 +55,7 @@ import core.util.tabAnimation
 import org.koin.compose.koinInject
 import ui.dashboard.DashboardUi
 import ui.i18n.*
+import ui.main.component.NavigationLayoutType
 import ui.selfsignup.SelfSignUpUi
 
 @OptIn(ExperimentalResourceApi::class, ExperimentalMaterial3Api::class, ExperimentalMaterial3WindowSizeClassApi::class)
@@ -94,12 +95,6 @@ internal fun MainUi(component: MainComponent) {
 
                 val windowSizeClass = calculateWindowSizeClass()
 
-                val navDrawerState =
-                    rememberDrawerState(initialValue = if (windowSizeClass.widthSizeClass == WindowWidthSizeClass.Compact) DrawerValue.Closed else DrawerValue.Open)
-                val scope = rememberCoroutineScope()
-
-                var openLocaleDialog by remember { mutableStateOf(false) }
-
                 val namedNavigationItems = NamedNavigationItems()
                 val indexedNavigationItems = IndexedNavigationItems()
 
@@ -116,47 +111,40 @@ internal fun MainUi(component: MainComponent) {
 
                 AdaptiveNavigationLayout(
                     layoutType = windowSizeClass.widthSizeClass,
-                    drawerState = navDrawerState,
-                    userHead = {
-                        UserHead(
-                            id = "SomeId",
-                            firstName = "Aziz",
-                            lastName = "Atoev",
-                            role = "User",
-                            onClick = {
-                                component.onOutput(MainComponent.Output.NavigateToProfile)
-                                title = namedNavigationItems["profile"]!!.title
-                                selectedNavigationItemIndex.intValue = -1
-                            }
-                        )
-                    },
-                    userHeadProvided = true,
+                    compactLayoutType = NavigationLayoutType.DRAWER,
+                    mediumLayoutType = NavigationLayoutType.DRAWER,
+                    expandedLayoutType = NavigationLayoutType.DRAWER,
+//                    userHead = {
+//                        UserHead(
+//                            id = "SomeId",
+//                            firstName = "Aziz",
+//                            lastName = "Atoev",
+//                            role = "User",
+//                            onClick = {
+//                                component.onOutput(MainComponent.Output.NavigateToProfile)
+//                                title = namedNavigationItems["profile"]!!.title
+//                                selectedNavigationItemIndex.intValue = -1
+//                            }
+//                        )
+//                    },
+                    hasTopAppBar = true,
+                    title = title,
+                    actions = {},
+                    topAppBarColors = TopAppBarDefaults.topAppBarColors(
+                        containerColor = MaterialTheme.colorScheme.primary,
+                        scrolledContainerColor = MaterialTheme.colorScheme.surface,
+                        navigationIconContentColor = topAppBarElementColor,
+                        titleContentColor = topAppBarElementColor,
+                        actionIconContentColor = topAppBarElementColor,
+                    ),
                     items = indexedNavigationItems,
                     selectedItemIndex = selectedNavigationItemIndex.intValue,
                     onNavigate = { index ->
                         selectedNavigationItemIndex.intValue = index
                         component.onOutput(navConfigOutputMapper[indexedNavigationItems[selectedNavigationItemIndex.intValue].route!!]!!)
                     }
-                ) {innerPadding->
-                    if (openLocaleDialog) {
-                        LocalePickerDialog(
-                            countries = supportedLocaleCodes.map { lng ->
-                                val lngCountryAlpha2Code = lng.toCountryAlpha2Code()
-                                countries.find { it.alpha2Code == lngCountryAlpha2Code }!!
-                            },
-                            defaultSelectedCountry = countries.find { it.alpha2Code == currentLngCountryAlpha2Code }!!,
-                            pickedCountry = { c ->
-                                lyricist.languageTag = c.alpha2Code.toLanguageAlpha2Code()
-                                openLocaleDialog = false
-                            },
-                            onDismissRequest = {
-                                openLocaleDialog = false
-                            },
-                        )
-                    }
-                    Box(modifier = Modifier.fillMaxSize().padding(innerPadding)) {
-                        Children(component = component)
-                    }
+                ) {
+                    Children(component = component)
                 }
             }
         }

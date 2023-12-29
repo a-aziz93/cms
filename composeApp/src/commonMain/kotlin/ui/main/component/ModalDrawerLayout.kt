@@ -1,5 +1,6 @@
 package ui.main.component
 
+import androidx.compose.foundation.background
 import androidx.compose.runtime.Composable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
@@ -11,56 +12,58 @@ import ui.model.NavigationItem
 
 @Composable
 fun ModalDrawerLayout(
-    modifier:Modifier=Modifier,
+    modifier: Modifier = Modifier,
     drawerState: DrawerState = rememberDrawerState(DrawerValue.Closed),
-    userHead:@Composable ()->Unit={},
-    userHeadProvided:Boolean=false,
-    items:List<NavigationItem>,
-    selectedItemIndex:Int=0,
+    head: @Composable () -> Unit = {},
+    items: List<NavigationItem>,
+    selectedItemIndex: Int = 0,
     onNavigate: (Int) -> Unit,
     content: @Composable () -> Unit,
-    ){
+) {
     val scope = rememberCoroutineScope()
     ModalNavigationDrawer(
-        modifier=modifier,
+        modifier = modifier,
         drawerContent = {
             ModalDrawerSheet {
                 Spacer(modifier = Modifier.height(12.dp))
-                if (userHeadProvided){
-                    userHead()
-                }
+                head()
                 items.forEachIndexed { index, item ->
+                    val selected = index == selectedItemIndex
                     NavigationDrawerItem(
+                        modifier = (if (selected) Modifier
+                            .background(item.color.selectedColor)
+                        else Modifier
+                            .background(item.color.unselectedColor))
+                            .padding(NavigationDrawerItemDefaults.ItemPadding),
                         label = {
-                            Text(text = item.title)
-                                },
-                        selected = index == selectedItemIndex,
+                            Text(text = item.title ?: "")
+                        },
+                        selected = selected,
                         onClick = {
                             scope.launch {
                                 drawerState.close()
                             }
                             onNavigate(index)
-                                  },
+                        },
                         icon = {
-                            (if (index == selectedItemIndex) item.icon?.selectedIcon
-                             else item.icon?.unselectedIcon)?.let {
+                            (if (selected) item.icon?.selectedIcon
+                            else item.icon?.unselectedIcon)?.let {
                                 Icon(
                                     imageVector = it,
                                     contentDescription = item.title
                                 )
                             }
-                               },
+                        },
                         badge = {
                             item.badgeCount?.let {
                                 Text(text = item.badgeCount.toString())
                             }
-                                },
-                        modifier = Modifier
-                            .padding(NavigationDrawerItemDefaults.ItemPadding)
+                        },
+
                     )
                 }
             }
-                        },
+        },
         drawerState = drawerState
     ) {
         content()

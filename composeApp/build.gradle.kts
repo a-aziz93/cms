@@ -198,7 +198,7 @@ ksp {
 
 sqldelight {
     databases {
-        create("db1") {
+        create("Default") {
             srcDirs.setFrom("src/commonMain/sqldelight")
             packageName.set("digital.sadad.project")
             generateAsync.set(true)

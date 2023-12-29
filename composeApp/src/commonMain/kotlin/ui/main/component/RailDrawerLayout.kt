@@ -1,5 +1,6 @@
 package ui.main.component
 
+import androidx.compose.foundation.background
 import androidx.compose.runtime.Composable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
@@ -10,24 +11,23 @@ import ui.model.NavigationItem
 
 @Composable
 fun RailDrawerLayout(
-    modifier:Modifier=Modifier,
+    modifier: Modifier = Modifier,
     drawerState: DrawerState = rememberDrawerState(DrawerValue.Open),
-    userHead:@Composable ()->Unit={},
-    userHeadProvided:Boolean=false,
-    items:List<NavigationItem>,
-    selectedItemIndex:Int=0,
+    head: (@Composable () -> Unit)? = null,
+    items: List<NavigationItem>,
+    selectedItemIndex: Int = 0,
     onNavigate: (Int) -> Unit,
     content: @Composable () -> Unit,
-    ){
+) {
     Row {
-        if(drawerState.isOpen){
+        if (drawerState.isOpen) {
             NavigationRail(
-                modifier=modifier,
+                modifier = modifier,
                 header = {
                     Spacer(modifier = Modifier.height(8.dp))
-                    if (userHeadProvided){
-                        Box(modifier=Modifier.width(80.dp)){
-                            userHead()
+                    if (head != null) {
+                        Box(modifier = Modifier.width(80.dp)) {
+                            head()
                         }
                     }
                     Column(
@@ -35,25 +35,30 @@ fun RailDrawerLayout(
                         verticalArrangement = Arrangement.spacedBy(12.dp, Alignment.Top)
                     ) {
                         items.forEachIndexed { index, item ->
+                            val selected = selectedItemIndex == index
                             NavigationRailItem(
-                                selected = selectedItemIndex == index,
+                                modifier = if (selected) Modifier
+                                    .background(item.color.selectedColor)
+                                else Modifier
+                                    .background(item.color.unselectedColor),
+                                selected = selected,
                                 onClick = {
                                     onNavigate(index)
-                                          },
+                                },
                                 icon = {
                                     NavigationIcon(
                                         item = item,
-                                        selected = selectedItemIndex == index
+                                        selected = selected
                                     )
-                                       },
+                                },
                                 label = {
-                                    Text(text = item.title)
-                                        },
-                                )
+                                    Text(text = item.title ?: "")
+                                },
+                            )
                         }
                     }
-                         },
-                ) {
+                },
+            ) {
 
             }
         }
