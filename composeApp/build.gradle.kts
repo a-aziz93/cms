@@ -1,5 +1,6 @@
 import org.jetbrains.compose.ExperimentalComposeLibrary
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
+import org.jetbrains.kotlin.gradle.dsl.KotlinCompile
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -170,15 +171,24 @@ compose.experimental {
 }
 
 dependencies {
+    // Localization files generation
     add("kspCommonMainMetadata", libs.lyricist.processor)
     // For import org.koin.ksp.generated.*
     add("kspCommonMainMetadata", libs.koin.ksp.compiler)
+    // Ktorfit client generation
     add("kspCommonMainMetadata", libs.ktorfit.ksp)
+    add("kspAndroid",libs.ktorfit.ksp)
+    add("kspDesktop",libs.ktorfit.ksp)
+    // TODO: support
+//    add("kspIosArm64", libs.ktorfit.ksp)
+//    add("kspIosSimulatorArm64", libs.ktorfit.ksp)
+//    add("kspIosX64", libs.ktorfit.ksp)
+//    add("kspJs", libs.ktorfit.ksp)
 }
 
 // workaround for KSP only in Common Main.
 // https://github.com/google/ksp/issues/567
-tasks.withType<org.jetbrains.kotlin.gradle.dsl.KotlinCompile<*>>().all {
+tasks.withType<KotlinCompile<*>>().all {
     if (name != "kspCommonMainKotlinMetadata") {
         dependsOn("kspCommonMainKotlinMetadata")
     }
