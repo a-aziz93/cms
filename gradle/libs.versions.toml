@@ -57,6 +57,7 @@ kmputils = "1.1.2"
 ktorfit = "1.11.1"
 konfigure = "1.3.1"
 kotlinx-serialization = "1.6.2"
+slf4j = "2.0.9"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -217,6 +218,9 @@ ktorfit-ksp = { module = "de.jensklingenberg.ktorfit:ktorfit-ksp", version.ref =
 konfigure = { module = "nz.co.trademe.konfigure:konfigure", version.ref = "konfigure" }
 konfigure-android = { module = "nz.co.trademe.konfigure:konfigure-android", version.ref = "konfigure" }
 konfigure-firebase = { module = "nz.co.trademe.konfigure:konfigure-firebase", version.ref = "konfigure" }
+# Logging
+slf4j-api = { module = "org.slf4j:slf4j-api", version.ref = "slf4j" }
+slf4j-simple = { module = "org.slf4j:slf4j-simple", version.ref = "slf4j" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
@@ -315,4 +319,8 @@ konfigure = [
 kotlinx-serialization = [
     "kotlinx-serialization-core",
     "kotlinx-serialization-json",
+]
+slf4j = [
+    "slf4j-api",
+    "slf4j-simple",
 ]

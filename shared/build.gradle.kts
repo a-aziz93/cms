@@ -39,6 +39,7 @@ kotlin {
             implementation(libs.kotlin.noarg)
             implementation(libs.bundles.kmputils)
             implementation(libs.bundles.kotlinx.serialization)
+            implementation(libs.bundles.slf4j)
         }
     }
 }
