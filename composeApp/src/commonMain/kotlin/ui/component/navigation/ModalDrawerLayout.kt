@@ -38,7 +38,7 @@ fun ModalDrawerLayout(
                         label = {
                             if (item.title != null) {
                                 navigationTextColor(
-                                    item.title.title,
+                                    item.title.value,
                                     selected,
                                     item.title.color
                                 )

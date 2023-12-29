@@ -50,9 +50,9 @@ fun navigationBadgeColor(
     selected: Boolean,
 ) =
     Badge {
-        if (badge.count != null) {
+        if (badge.value != null) {
             navigationTextColor(
-                badge.count.toString(), selected, badge.color
+                badge.value, selected, badge.color
             )
         }
     }

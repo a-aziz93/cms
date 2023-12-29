@@ -159,7 +159,7 @@ private fun BarNavigationLayout(
                 TopAppBar(
                     title = {
                         Text(
-                            text = if (selectedItemIndex > -1) items[selectedItemIndex].title?.title ?: "" else title
+                            text = if (selectedItemIndex > -1) items[selectedItemIndex].title?.value ?: "" else title
                         )
                     },
                     navigationIcon = {
@@ -239,7 +239,7 @@ private fun BarNavigationLayout(
                             label = {
                                 if (item.title != null) {
                                     navigationTextColor(
-                                        item.title.title,
+                                        item.title.value,
                                         selected,
                                         item.title.color
                                     )
@@ -299,7 +299,7 @@ private fun BarNavigationLayout(
                             text = {
                                 if (item.title != null) {
                                     navigationTextColor(
-                                        item.title.title,
+                                        item.title.value,
                                         selected,
                                         item.title.color
                                     )

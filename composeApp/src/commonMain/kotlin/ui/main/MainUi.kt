@@ -77,13 +77,14 @@ internal fun MainUi(component: MainComponent) {
 
                 val windowSizeClass = calculateWindowSizeClass()
 
-                val namedNavigationItems = NamedNavigationItems()
-                val indexedNavigationItems = IndexedNavigationItems()
+                val profileNavigationItem = profileNavigationItem()
+
+                val NavigationItems = NavigationItems()
 
                 val selectedNavigationItemIndex = remember {
                     mutableIntStateOf(
                         getActiveNavigationItemIndex(
-                            indexedNavigationItems,
+                            NavigationItems,
                             component.childStack.active.configuration as MainComponent.Config
                         )
                     )
@@ -124,7 +125,7 @@ internal fun MainUi(component: MainComponent) {
                         {
                             component.onOutput(MainComponent.Output.NavigateBack)
                             selectedNavigationItemIndex.intValue = getActiveNavigationItemIndex(
-                                indexedNavigationItems,
+                                NavigationItems,
                                 component.childStack.active.configuration as MainComponent.Config
                             )
                         }
@@ -139,11 +140,11 @@ internal fun MainUi(component: MainComponent) {
                         lyricist.languageTag = it
                         keyValueStorage.set(StorageKeys.LANGUAGE.key, it)
                     },
-                    items = indexedNavigationItems,
+                    items = NavigationItems,
                     selectedItemIndex = selectedNavigationItemIndex.intValue,
                     onItemClick = { index ->
                         selectedNavigationItemIndex.intValue = index
-                        component.onOutput(navConfigOutputMapper[indexedNavigationItems[selectedNavigationItemIndex.intValue].route!!]!!)
+                        component.onOutput(navConfigOutputMapper[NavigationItems[selectedNavigationItemIndex.intValue].route!!]!!)
                     }
                 ) {
                     Children(component = component)

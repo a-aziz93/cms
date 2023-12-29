@@ -12,20 +12,18 @@ import ui.model.NavigationItem
 import ui.model.NavigationTitle
 
 @Composable
-fun NamedNavigationItems() = mapOf(
-    "profile" to NavigationItem(
+fun profileNavigationItem() = NavigationItem(
         title = NavigationTitle(
-            title = strings.profile
+            value = strings.profile
         ),
         route = MainComponent.Config.Profile,
-    ),
-)
+    )
 
 @Composable
-fun IndexedNavigationItems() = listOf(
+fun NavigationItems() = listOf(
     NavigationItem(
         title = NavigationTitle(
-            title = strings.signIn
+            value = strings.signIn
         ),
         icon = NavigationIcon(
             selectedIcon = EvaIcons.Fill.LogIn,
@@ -35,7 +33,7 @@ fun IndexedNavigationItems() = listOf(
     ),
     NavigationItem(
         title = NavigationTitle(
-            title = strings.main
+            value = strings.main
         ),
         icon = NavigationIcon(
             selectedIcon = EvaIcons.Fill.Home,
@@ -45,7 +43,7 @@ fun IndexedNavigationItems() = listOf(
     ),
     NavigationItem(
         title = NavigationTitle(
-            title = strings.map
+            value = strings.map
         ),
         icon = NavigationIcon(
             selectedIcon = EvaIcons.Fill.Map,
@@ -55,7 +53,7 @@ fun IndexedNavigationItems() = listOf(
     ),
     NavigationItem(
         title = NavigationTitle(
-            title = strings.dashboard
+            value = strings.dashboard
         ),
         icon = NavigationIcon(
             selectedIcon = EvaIcons.Fill.Monitor,
@@ -65,7 +63,7 @@ fun IndexedNavigationItems() = listOf(
     ),
     NavigationItem(
         title = NavigationTitle(
-            title = strings.settings
+            value = strings.settings
         ),
         icon = NavigationIcon(
             selectedIcon = EvaIcons.Fill.Settings2,

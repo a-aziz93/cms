@@ -1,6 +1,6 @@
 package ui.model
 
 data class NavigationBadge(
-    val count: Int? = null,
+    val value: String? = null,
     val color: NavigationColor? = null,
 )
