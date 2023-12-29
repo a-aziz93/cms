@@ -92,7 +92,7 @@ internal fun MainUi(component: MainComponent) {
                 AdaptiveNavigationLayout(
                     layoutType = windowSizeClass.widthSizeClass,
                     compactLayoutType = NavigationLayoutType.DRAWER,
-                    mediumLayoutType = NavigationLayoutType.DRAWER,
+                    mediumLayoutType = NavigationLayoutType.BOTTOM_BAR,
                     expandedLayoutType = NavigationLayoutType.TOP_BAR,
 //                    userHead = {
 //                        UserHead(

@@ -11,7 +11,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import io.kamel.image.asyncPainterResource
 import ui.component.carousel.Carousel
-import ui.landing.component.Banner
+import ui.component.banner.Banner
 import java.io.File
 
 @Composable

@@ -1,4 +1,4 @@
-package ui.landing.component
+package ui.component.banner
 
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.runtime.Composable

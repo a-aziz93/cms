@@ -304,7 +304,7 @@ private fun BarNavigationLayout(
                     }
                 }
             } else {
-                contentBoxModifier.padding(innerPadding)
+                contentBoxModifier = contentBoxModifier.padding(innerPadding)
             }
             if (lpDialogState) {
                 LocaleDialog(
