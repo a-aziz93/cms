@@ -37,22 +37,28 @@ fun RailDrawerLayout(
                         items.forEachIndexed { index, item ->
                             val selected = selectedItemIndex == index
                             NavigationRailItem(
-                                modifier = if (selected) Modifier
-                                    .background(item.color.selectedColor)
-                                else Modifier
-                                    .background(item.color.unselectedColor),
+                                modifier = navigationModifierColor(
+                                    selected = selected,
+                                    navigationColor = item.color
+                                ),
                                 selected = selected,
                                 onClick = {
                                     onItemClick(index)
                                 },
                                 icon = {
-                                    NavigationIcon(
+                                    BadgeIcon(
                                         item = item,
                                         selected = selected
                                     )
                                 },
                                 label = {
-                                    Text(text = item.title ?: "")
+                                    if(item.title!=null) {
+                                        navigationTextColor(
+                                            item.title.title,
+                                            selected,
+                                            item.title.color
+                                        )
+                                    }
                                 },
                             )
                         }
@@ -66,28 +72,3 @@ fun RailDrawerLayout(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun NavigationIcon(
-    item: NavigationItem,
-    selected: Boolean
-) {
-    BadgedBox(
-        badge = {
-            if (item.badgeCount != null) {
-                Badge {
-                    Text(text = item.badgeCount.toString())
-                }
-            } else if (item.hasNews) {
-                Badge()
-            }
-        }
-    ) {
-        (if (selected) item.icon?.selectedIcon else item.icon?.unselectedIcon)?.let {
-            Icon(
-                imageVector = it,
-                contentDescription = item.title
-            )
-        }
-    }
-}

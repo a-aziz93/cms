@@ -150,7 +150,7 @@ private fun BarNavigationLayout(
                 TopAppBar(
                     title = {
                         Text(
-                            text = if (selectedItemIndex > -1) items[selectedItemIndex].title ?: "" else title
+                            text = if (selectedItemIndex > -1) items[selectedItemIndex].title?.title ?: "" else title
                         )
                     },
                     navigationIcon = {
@@ -217,36 +217,31 @@ private fun BarNavigationLayout(
             ) {
                 NavigationBar {
                     items.forEachIndexed { index, item ->
+                        val selected = index == selectedItemIndex
                         NavigationBarItem(
-                            selected = index == selectedItemIndex,
+                            modifier = navigationModifierColor(
+                                selected = selected,
+                                navigationColor = item.color
+                            ),
+                            selected = selected,
                             onClick = {
                                 onItemClick(index)
                             },
                             label = {
-                                Text(text = item.title ?: "")
+                                if (item.title != null) {
+                                    navigationTextColor(
+                                        item.title.title,
+                                        selected,
+                                        item.title.color
+                                    )
+                                }
                             },
                             alwaysShowLabel = false,
                             icon = {
-                                BadgedBox(
-                                    badge = {
-                                        if (item.badgeCount != null) {
-                                            Badge {
-                                                Text(text = item.badgeCount.toString())
-                                            }
-                                        } else if (item.hasNews) {
-                                            Badge()
-                                        }
-                                    }
-                                ) {
-                                    (if (index == selectedItemIndex) {
-                                        item.icon?.selectedIcon
-                                    } else item.icon?.unselectedIcon)?.let {
-                                        Icon(
-                                            imageVector = it,
-                                            contentDescription = item.title
-                                        )
-                                    }
-                                }
+                                BadgeIcon(
+                                    item,
+                                    index == selectedItemIndex,
+                                )
                             }
                         )
                     }
@@ -280,32 +275,30 @@ private fun BarNavigationLayout(
 
                     ) {
                     items.forEachIndexed { index, item ->
+                        val selected = index == selectedItemIndex
                         Tab(
-                            modifier = if (index == selectedItemIndex) Modifier
-                                .clip(RoundedCornerShape(50))
-                                .background(
-                                    item.color.selectedColor
-                                )
-                            else Modifier
-                                .clip(RoundedCornerShape(50))
-                                .background(
-                                    item.color.unselectedColor
-                                ),
-                            selected = index == selectedItemIndex,
+                            modifier = navigationModifierColor(
+                                selected = selected,
+                                navigationColor = item.color
+                            ).clip(RoundedCornerShape(50)),
+                            selected = selected,
                             onClick = {
                                 onItemClick(index)
                             },
                             text = {
-                                Text(text = item.title ?: "")
-                            },
-                            icon = {
-                                (if (index == selectedItemIndex)
-                                    item.icon?.selectedIcon else item.icon?.unselectedIcon)?.let { icon ->
-                                    Icon(
-                                        imageVector = icon,
-                                        contentDescription = item.title
+                                if (item.title != null) {
+                                    navigationTextColor(
+                                        item.title.title,
+                                        selected,
+                                        item.title.color
                                     )
                                 }
+                            },
+                            icon = {
+                                BadgeIcon(
+                                    item,
+                                    index == selectedItemIndex
+                                )
                             }
                         )
                     }

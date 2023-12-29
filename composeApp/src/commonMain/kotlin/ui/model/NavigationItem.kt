@@ -1,14 +1,11 @@
 package ui.model
 
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 
 data class NavigationItem(
-    val title: String? = null,
+    val title: NavigationTitle? = null,
     val icon: NavigationIcon? = null,
-    val color: NavigationColor = NavigationColor(Color.Transparent, Color.Transparent),
-    val badgeCount: Int? = null,
-    val hasNews: Boolean = false,
+    val color: NavigationColor? = null,
+    val badge: NavigationBadge? = null,
     val route: Any?,
 )

@@ -27,29 +27,39 @@ fun DismissableDrawerLayout(
                 items.forEachIndexed { index, item ->
                     val selected = index == selectedItemIndex
                     NavigationDrawerItem(
-                        modifier = (if (selected) Modifier
-                            .background(item.color.selectedColor)
-                        else Modifier
-                            .background(item.color.unselectedColor))
+                        modifier = navigationModifierColor(
+                            selected = selected,
+                            navigationColor = item.color
+                        )
                             .padding(NavigationDrawerItemDefaults.ItemPadding),
                         label = {
-                            Text(text = item.title ?: "")
+                            if(item.title!=null) {
+                                navigationTextColor(
+                                    item.title.title,
+                                    selected,
+                                    item.title.color
+                                )
+                            }
                         },
                         selected = selected,
                         onClick = {
                             onItemClick(index)
                         },
                         icon = {
-                            (if (selected) item.icon?.selectedIcon else item.icon?.unselectedIcon)?.let {
-                                Icon(
-                                    imageVector = it,
-                                    contentDescription = item.title
+                            if (item.icon != null) {
+                                navigationIconColor(
+                                    if (selected) item.icon.selectedIcon else item.icon.unselectedIcon,
+                                    selected,
+                                    item.icon.color
                                 )
                             }
                         },
                         badge = {
-                            item.badgeCount?.let {
-                                Text(text = item.badgeCount.toString())
+                            if(item.badge!=null) {
+                                navigationBadgeColor(
+                                    item.badge,
+                                    selected,
+                                )
                             }
                         },
                     )
