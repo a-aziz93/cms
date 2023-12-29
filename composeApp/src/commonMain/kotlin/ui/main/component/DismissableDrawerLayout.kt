@@ -15,7 +15,7 @@ fun DismissableDrawerLayout(
     head: @Composable () -> Unit = {},
     items: List<NavigationItem>,
     selectedItemIndex: Int = 0,
-    onNavigate: (Int) -> Unit,
+    onItemClick: (Int) -> Unit,
     content: @Composable () -> Unit,
 ) {
     DismissibleNavigationDrawer(
@@ -37,7 +37,7 @@ fun DismissableDrawerLayout(
                         },
                         selected = selected,
                         onClick = {
-                            onNavigate(index)
+                            onItemClick(index)
                         },
                         icon = {
                             (if (selected) item.icon?.selectedIcon else item.icon?.unselectedIcon)?.let {

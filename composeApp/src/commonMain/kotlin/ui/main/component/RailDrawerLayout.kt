@@ -16,7 +16,7 @@ fun RailDrawerLayout(
     head: (@Composable () -> Unit)? = null,
     items: List<NavigationItem>,
     selectedItemIndex: Int = 0,
-    onNavigate: (Int) -> Unit,
+    onItemClick: (Int) -> Unit,
     content: @Composable () -> Unit,
 ) {
     Row {
@@ -43,7 +43,7 @@ fun RailDrawerLayout(
                                     .background(item.color.unselectedColor),
                                 selected = selected,
                                 onClick = {
-                                    onNavigate(index)
+                                    onItemClick(index)
                                 },
                                 icon = {
                                     NavigationIcon(

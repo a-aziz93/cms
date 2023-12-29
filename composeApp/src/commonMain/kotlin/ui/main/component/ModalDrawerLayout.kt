@@ -17,7 +17,7 @@ fun ModalDrawerLayout(
     head: @Composable () -> Unit = {},
     items: List<NavigationItem>,
     selectedItemIndex: Int = 0,
-    onNavigate: (Int) -> Unit,
+    onItemClick: (Int) -> Unit,
     content: @Composable () -> Unit,
 ) {
     val scope = rememberCoroutineScope()
@@ -43,7 +43,7 @@ fun ModalDrawerLayout(
                             scope.launch {
                                 drawerState.close()
                             }
-                            onNavigate(index)
+                            onItemClick(index)
                         },
                         icon = {
                             (if (selected) item.icon?.selectedIcon

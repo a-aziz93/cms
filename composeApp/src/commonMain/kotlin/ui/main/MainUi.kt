@@ -1,64 +1,43 @@
 package ui.main
 
-import androidx.compose.foundation.Image
-import androidx.compose.runtime.Composable
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.Surface
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
-import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.intl.Locale
-import androidx.compose.ui.unit.dp
 import cafe.adriel.lyricist.ProvideStrings
 import cafe.adriel.lyricist.rememberStrings
-import co.touchlab.kermit.Logger
 import com.arkivanov.decompose.extensions.compose.stack.Children
-import compose.icons.EvaIcons
-import compose.icons.evaicons.Outline
-import compose.icons.evaicons.outline.*
-import core.storage.StorageKeys
-import kotlinx.coroutines.launch
-import org.jetbrains.compose.resources.ExperimentalResourceApi
-import org.jetbrains.compose.resources.painterResource
-import ui.home.HomeUi
-import ui.main.component.AdaptiveNavigationLayout
-import ui.theme.AppTheme
-import ui.main.MainComponent.Child.SignUp
-import ui.main.MainComponent.Child.SignIn
-import ui.main.MainComponent.Child.Reset
-import ui.main.MainComponent.Child.Profile
-import ui.main.MainComponent.Child.Home
-import ui.main.MainComponent.Child.Map
-import ui.main.MainComponent.Child.Dashboard
-import ui.main.MainComponent.Child.Settings
-import ui.map.MapUi
-import ui.reset.ResetUi
-import ui.settings.SettingsUi
-import ui.signin.SignInUi
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.Icon
-import androidx.compose.material.Surface
-import androidx.compose.runtime.getValue
 import com.arkivanov.decompose.router.stack.active
 import com.arkivanov.decompose.router.stack.backStack
 import core.storage.KeyValueStorage
-import ui.main.component.LocalePickerDialog
-import ui.main.component.UserHead
-import ui.model.NavigationItem
-import ui.profile.ProfileUi
-import core.util.countries
-import core.util.countryAlpha2CodeFlagPathMap
+import core.storage.StorageKeys
 import core.util.tabAnimation
 import org.koin.compose.koinInject
 import ui.dashboard.DashboardUi
-import ui.i18n.*
+import ui.home.HomeUi
+import ui.i18n.toCountryAlpha2Code
+import ui.main.MainComponent.Child.*
+import ui.main.MainComponent.Child.Map
+import ui.main.component.AdaptiveNavigationLayout
 import ui.main.component.NavigationLayoutType
+import ui.map.MapUi
+import ui.model.NavigationItem
+import ui.profile.ProfileUi
+import ui.reset.ResetUi
 import ui.selfsignup.SelfSignUpUi
+import ui.settings.SettingsUi
+import ui.signin.SignInUi
+import ui.theme.AppTheme
 
-@OptIn(ExperimentalResourceApi::class, ExperimentalMaterial3Api::class, ExperimentalMaterial3WindowSizeClassApi::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3WindowSizeClassApi::class)
 @Composable
 internal fun MainUi(component: MainComponent) {
 
@@ -82,6 +61,7 @@ internal fun MainUi(component: MainComponent) {
             val currentLngCountryAlpha2Code = lyricist.languageTag.split("-")[0].toCountryAlpha2Code()
 
             val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
+
             val topAppBarElementColor = if (scrollBehavior.state.collapsedFraction > 0.5) {
                 MaterialTheme.colorScheme.onSurface
             } else {
@@ -129,7 +109,6 @@ internal fun MainUi(component: MainComponent) {
 //                    },
                     hasTopAppBar = true,
                     title = title,
-                    actions = {},
                     topAppBarColors = TopAppBarDefaults.topAppBarColors(
                         containerColor = MaterialTheme.colorScheme.primary,
                         scrolledContainerColor = MaterialTheme.colorScheme.surface,
@@ -137,9 +116,28 @@ internal fun MainUi(component: MainComponent) {
                         titleContentColor = topAppBarElementColor,
                         actionIconContentColor = topAppBarElementColor,
                     ),
+                    if (component.childStack.backStack.isNotEmpty()) {
+                        {
+                            component.onOutput(MainComponent.Output.NavigateBack)
+                            selectedNavigationItemIndex.intValue = getActiveNavigationItemIndex(
+                                indexedNavigationItems,
+                                component.childStack.active.configuration as MainComponent.Config
+                            )
+                        }
+                    } else null,
+                    darkTheme,
+                    {
+                        darkTheme = !darkTheme
+                        keyValueStorage.set(StorageKeys.IS_DARK_THEME.key, darkTheme)
+                    },
+                    currentLngCountryAlpha2Code,
+                    {
+                        lyricist.languageTag = it
+                        keyValueStorage.set(StorageKeys.LANGUAGE.key, it)
+                    },
                     items = indexedNavigationItems,
                     selectedItemIndex = selectedNavigationItemIndex.intValue,
-                    onNavigate = { index ->
+                    onItemClick = { index ->
                         selectedNavigationItemIndex.intValue = index
                         component.onOutput(navConfigOutputMapper[indexedNavigationItems[selectedNavigationItemIndex.intValue].route!!]!!)
                     }

@@ -9,24 +9,18 @@ import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import co.touchlab.kermit.Logger
-import com.arkivanov.decompose.router.stack.active
-import com.arkivanov.decompose.router.stack.backStack
 import compose.icons.EvaIcons
 import compose.icons.evaicons.Outline
 import compose.icons.evaicons.outline.*
-import core.storage.StorageKeys
 import core.util.countries
 import core.util.countryAlpha2CodeFlagPathMap
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import ui.i18n.supportedLocaleCodes
 import ui.i18n.toCountryAlpha2Code
 import ui.i18n.toLanguageAlpha2Code
-import ui.main.MainComponent
-import ui.main.getActiveNavigationItemIndex
 import ui.model.NavigationItem
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -38,16 +32,17 @@ fun AdaptiveNavigationLayout(
     expandedLayoutType: NavigationLayoutType = NavigationLayoutType.DRAWER,
     hasTopAppBar: Boolean = true,
     title: String,
-    actions: @Composable() (RowScope.() -> Unit) = {},
     topAppBarColors: TopAppBarColors = TopAppBarDefaults.topAppBarColors(),
+    onBackClick: (() -> Unit)? = null,
+    darkTheme: Boolean,
+    onThemeClick: (() -> Unit)? = null,
+    language: String,
+    onLanguageClick: ((String) -> Unit)? = null,
     items: List<NavigationItem>,
     selectedItemIndex: Int = 0,
-    onNavigate: (Int) -> Unit,
+    onItemClick: (Int) -> Unit,
     content: @Composable () -> Unit = {},
 ) {
-
-    val drawerState =
-        rememberDrawerState(initialValue = if (layoutType == WindowWidthSizeClass.Compact) DrawerValue.Closed else DrawerValue.Open)
 
     if (isDrawerLayout(
             layoutType,
@@ -56,6 +51,9 @@ fun AdaptiveNavigationLayout(
             expandedLayoutType
         )
     ) {
+        val drawerState =
+            rememberDrawerState(initialValue = if (layoutType == WindowWidthSizeClass.Compact) DrawerValue.Closed else DrawerValue.Open)
+
         AdaptiveDrawerNavigationLayout(
             layoutType = layoutType,
             drawerState = drawerState,
@@ -66,15 +64,13 @@ fun AdaptiveNavigationLayout(
                     lastName = "Atoev",
                     role = "User",
                     onClick = {
-                        onNavigate(-1)
+                        onItemClick(-1)
                     }
                 )
             },
             items = items,
             selectedItemIndex = selectedItemIndex,
-            onNavigate = { index ->
-                onNavigate(index)
-            }
+            onItemClick = onItemClick
         ) {
             BarNavigationLayout(
                 layoutType,
@@ -83,12 +79,16 @@ fun AdaptiveNavigationLayout(
                 expandedLayoutType,
                 hasTopAppBar,
                 title,
-                {},
-                actions,
                 topAppBarColors,
+                drawerState,
+                onBackClick,
+                darkTheme,
+                onThemeClick,
+                language,
+                onLanguageClick,
                 items,
                 selectedItemIndex,
-                onNavigate,
+                onItemClick,
             ) {
                 content()
             }
@@ -101,12 +101,16 @@ fun AdaptiveNavigationLayout(
             expandedLayoutType,
             hasTopAppBar,
             title,
-            {},
-            actions,
             topAppBarColors,
+            null,
+            onBackClick,
+            darkTheme,
+            onThemeClick,
+            language,
+            onLanguageClick,
             items,
             selectedItemIndex,
-            onNavigate,
+            onItemClick,
         ) {
             content()
         }
@@ -123,19 +127,19 @@ private fun BarNavigationLayout(
     hasTopAppBar: Boolean = true,
     title: String = "",
     topAppBarColors: TopAppBarColors,
-    items: List<NavigationItem>,
-    selectedItemIndex: Int = 0,
-    onDrawerClick: () -> Unit,
+    drawerState: DrawerState? = null,
     onBackClick: (() -> Unit)? = null,
     darkTheme: Boolean,
     onThemeClick: (() -> Unit)? = null,
     language: String,
     onLanguageClick: ((String) -> Unit)? = null,
-    onSignOutClick: (() -> Unit)? = null,
-    onNavigate: (Int) -> Unit,
+    items: List<NavigationItem>,
+    selectedItemIndex: Int = 0,
+    onItemClick: (Int) -> Unit,
     content: @Composable () -> Unit,
 ) {
 
+    val scope = rememberCoroutineScope()
     var lpDialogState by remember { mutableStateOf(false) }
 
     Scaffold(
@@ -148,15 +152,17 @@ private fun BarNavigationLayout(
                         )
                     },
                     navigationIcon = {
-                        if (isDrawerLayout(
-                                layoutType,
-                                compactLayoutType,
-                                mediumLayoutType,
-                                expandedLayoutType
-                            )
-                        ) {
+                        if (drawerState != null) {
                             Row {
-                                IconButton(onClick = onDrawerClick) {
+                                IconButton(onClick = {
+                                    scope.launch {
+                                        if (drawerState.isClosed) {
+                                            drawerState.open()
+                                        } else {
+                                            drawerState.close()
+                                        }
+                                    }
+                                }) {
                                     Icon(
                                         imageVector = EvaIcons.Outline.Menu2,
                                         contentDescription = "Menu"
@@ -194,11 +200,6 @@ private fun BarNavigationLayout(
                                 )
                             }
                         }
-                        if (onSignOutClick != null) {
-                            IconButton(onClick = onSignOutClick) {
-                                Icon(EvaIcons.Outline.LogOut, null)
-                            }
-                        }
                     },
                     colors = topAppBarColors,
                 )
@@ -217,7 +218,7 @@ private fun BarNavigationLayout(
                         NavigationBarItem(
                             selected = index == selectedItemIndex,
                             onClick = {
-                                onNavigate(index)
+                                onItemClick(index)
                             },
                             label = {
                                 Text(text = item.title ?: "")
@@ -290,7 +291,7 @@ private fun BarNavigationLayout(
                                 ),
                             selected = index == selectedItemIndex,
                             onClick = {
-                                onNavigate(index)
+                                onItemClick(index)
                             },
                             text = {
                                 Text(text = item.title ?: "")
@@ -361,14 +362,14 @@ private fun isBottomBarLayout(
         (layoutType == WindowWidthSizeClass.Expanded && expandedLayoutType == NavigationLayoutType.BOTTOM_BAR)
 
 @Composable
-fun AdaptiveDrawerNavigationLayout(
+private fun AdaptiveDrawerNavigationLayout(
     layoutType: WindowWidthSizeClass = WindowWidthSizeClass.Compact,
     modifier: Modifier = Modifier,
     drawerState: DrawerState = rememberDrawerState(DrawerValue.Closed),
     head: (@Composable () -> Unit)? = null,
     items: List<NavigationItem>,
     selectedItemIndex: Int = 0,
-    onNavigate: (Int) -> Unit,
+    onItemClick: (Int) -> Unit,
     content: @Composable () -> Unit,
 ) {
 
@@ -379,7 +380,7 @@ fun AdaptiveDrawerNavigationLayout(
             head ?: {},
             items,
             selectedItemIndex,
-            onNavigate,
+            onItemClick,
             content
         )
 
@@ -389,7 +390,7 @@ fun AdaptiveDrawerNavigationLayout(
             head,
             items,
             selectedItemIndex,
-            onNavigate,
+            onItemClick,
             content
         )
 
@@ -399,7 +400,7 @@ fun AdaptiveDrawerNavigationLayout(
             head ?: {},
             items,
             selectedItemIndex,
-            onNavigate,
+            onItemClick,
             content
         )
     }
