@@ -285,16 +285,17 @@ private fun BarNavigationLayout(
                     expandedLayoutType
                 )
             ) {
-                TabRow(
-                    modifier = Modifier
+                TabsRow(
+                    tabRowType,
+                    Modifier
                         .fillMaxWidth()
                         .wrapContentHeight()
                         .padding(innerPadding),
-                    selectedTabIndex = selectedItemIndex,
-                    divider = {
+                    selectedItemIndex,
+                    {
                         Spacer(modifier = Modifier.height(5.dp))
                     },
-                    indicator = { tabPositions ->
+                    { tabPositions ->
                         if (selectedItemIndex > -1) {
                             Box(
                                 modifier = Modifier
@@ -307,34 +308,13 @@ private fun BarNavigationLayout(
                         }
                     },
                 ) {
-                    items.forEachIndexed { index, item ->
-                        val selected = index == selectedItemIndex
-                        Tab(
-                            modifier = navigationModifierColor(
-                                selected = selected,
-                                navigationColor = item.color
-                            ).clip(RoundedCornerShape(8)),
-                            selected = selected,
-                            onClick = {
-                                onItemClick(index)
-                            },
-                            text = {
-                                if (item.title != null) {
-                                    navigationTextColor(
-                                        item.title.value,
-                                        selected,
-                                        item.title.color
-                                    )
-                                }
-                            },
-                            icon = {
-                                BadgeIcon(
-                                    item,
-                                    index == selectedItemIndex
-                                )
-                            }
-                        )
-                    }
+                    Tabs(
+                        tabType,
+                        Modifier.clip(RoundedCornerShape(8)),
+                        items,
+                        selectedItemIndex,
+                        onClick = onItemClick
+                    )
                 }
             } else {
                 contentBoxModifier = contentBoxModifier.padding(innerPadding)
@@ -361,6 +341,103 @@ private fun BarNavigationLayout(
             Box(modifier = contentBoxModifier.verticalScroll(state = scrollState)) {
                 content()
             }
+        }
+    }
+}
+
+@Composable
+private fun Tabs(
+    type: TabType,
+    modifier: Modifier,
+    items: List<NavigationItem>,
+    selectedItemIndex: Int,
+    onClick: (Int) -> Unit,
+) {
+    when (type) {
+        TabType.TAB -> items.forEachIndexed { index, item ->
+            val selected = index == selectedItemIndex
+            Tab(
+                modifier = navigationModifierColor(
+                    modifier,
+                    selected = selected,
+                    navigationColor = item.color
+                ),
+                selected = selected,
+                text = {
+                    if (item.title != null) {
+                        navigationTextColor(
+                            item.title.value,
+                            selected,
+                            item.title.color
+                        )
+                    }
+                },
+                icon = {
+                    BadgeIcon(
+                        item,
+                        index == selectedItemIndex
+                    )
+                },
+                onClick = { onClick(index) },
+            )
+        }
+
+        TabType.LEADING_ICON_TAB -> items.forEachIndexed { index, item ->
+            val selected = index == selectedItemIndex
+            LeadingIconTab(
+                modifier = navigationModifierColor(
+                    modifier,
+                    selected = selected,
+                    navigationColor = item.color
+                ),
+                selected = selected,
+                text = {
+                    if (item.title != null) {
+                        navigationTextColor(
+                            item.title.value,
+                            selected,
+                            item.title.color
+                        )
+                    }
+                },
+                icon = {
+                    BadgeIcon(
+                        item,
+                        index == selectedItemIndex
+                    )
+                },
+                onClick = { onClick(index) }
+            )
+        }
+    }
+}
+
+@Composable
+private fun TabsRow(
+    type: TabRowType,
+    modifier: Modifier,
+    selectedTabIndex: Int,
+    divider: @Composable () -> Unit,
+    indicator: @Composable (List<TabPosition>) -> Unit,
+    content: @Composable () -> Unit,
+) {
+    when (type) {
+        TabRowType.TAB_ROW -> TabRow(
+            modifier = modifier,
+            selectedTabIndex = selectedTabIndex,
+            divider = divider,
+            indicator = indicator,
+        ) {
+            content()
+        }
+
+        TabRowType.SCROLLABLE_TAB_ROW -> ScrollableTabRow(
+            modifier = modifier,
+            selectedTabIndex = selectedTabIndex,
+            divider = divider,
+            indicator = indicator,
+        ) {
+            content()
         }
     }
 }
