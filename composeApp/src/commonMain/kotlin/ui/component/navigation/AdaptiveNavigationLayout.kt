@@ -9,6 +9,7 @@ import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import compose.icons.EvaIcons
 import compose.icons.evaicons.Outline
@@ -35,6 +36,8 @@ fun AdaptiveNavigationLayout(
     hasTopAppBar: Boolean = true,
     title: String,
     topAppBarColors: TopAppBarColors = TopAppBarDefaults.topAppBarColors(),
+    tabRowType: TabRowType = TabRowType.TAB_ROW,
+    tabType: TabType = TabType.TAB,
     onBackClick: (() -> Unit)? = null,
     darkTheme: Boolean,
     onThemeClick: (() -> Unit)? = null,
@@ -82,6 +85,8 @@ fun AdaptiveNavigationLayout(
                 hasTopAppBar,
                 title,
                 topAppBarColors,
+                tabRowType,
+                tabType,
                 drawerState,
                 onBackClick,
                 darkTheme,
@@ -104,6 +109,8 @@ fun AdaptiveNavigationLayout(
             hasTopAppBar,
             title,
             topAppBarColors,
+            tabRowType,
+            tabType,
             null,
             onBackClick,
             darkTheme,
@@ -129,6 +136,8 @@ private fun BarNavigationLayout(
     hasTopAppBar: Boolean = true,
     title: String = "",
     topAppBarColors: TopAppBarColors,
+    tabRowType: TabRowType = TabRowType.TAB_ROW,
+    tabType: TabType = TabType.TAB,
     drawerState: DrawerState? = null,
     onBackClick: (() -> Unit)? = null,
     darkTheme: Boolean,
@@ -270,10 +279,12 @@ private fun BarNavigationLayout(
                         Spacer(modifier = Modifier.height(5.dp))
                     },
                     indicator = { tabPositions ->
-                        Box {}
+                        TabRowDefaults.Indicator(
+                            height = 1.dp,
+                            color = Color.White
+                        )
                     },
-
-                    ) {
+                ) {
                     items.forEachIndexed { index, item ->
                         val selected = index == selectedItemIndex
                         Tab(

@@ -28,6 +28,8 @@ import ui.main.MainComponent.Child.*
 import ui.main.MainComponent.Child.Map
 import ui.component.navigation.AdaptiveNavigationLayout
 import ui.component.navigation.NavigationLayoutType
+import ui.component.navigation.TabRowType
+import ui.component.navigation.TabType
 import ui.map.MapUi
 import ui.model.NavigationItem
 import ui.profile.ProfileUi
@@ -116,6 +118,8 @@ internal fun MainUi(component: MainComponent) {
                         titleContentColor = topAppBarElementColor,
                         actionIconContentColor = topAppBarElementColor,
                     ),
+                    TabRowType.TAB_ROW,
+                    TabType.TAB,
                     if (component.childStack.backStack.isNotEmpty()) {
                         {
                             component.onOutput(MainComponent.Output.NavigateBack)
