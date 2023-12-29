@@ -1,30 +1,27 @@
-package ui.main.component
+package ui.component.navigation
 
 import androidx.compose.foundation.background
 import androidx.compose.runtime.Composable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
-import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import kotlinx.coroutines.launch
 import ui.model.NavigationItem
 
 @Composable
-fun ModalDrawerLayout(
+fun DismissableDrawerLayout(
     modifier: Modifier = Modifier,
-    drawerState: DrawerState = rememberDrawerState(DrawerValue.Closed),
+    drawerState: DrawerState = rememberDrawerState(DrawerValue.Open),
     head: @Composable () -> Unit = {},
     items: List<NavigationItem>,
     selectedItemIndex: Int = 0,
     onItemClick: (Int) -> Unit,
     content: @Composable () -> Unit,
 ) {
-    val scope = rememberCoroutineScope()
-    ModalNavigationDrawer(
+    DismissibleNavigationDrawer(
         modifier = modifier,
         drawerContent = {
-            ModalDrawerSheet {
+            DismissibleDrawerSheet {
                 Spacer(modifier = Modifier.height(12.dp))
                 head()
                 items.forEachIndexed { index, item ->
@@ -40,14 +37,10 @@ fun ModalDrawerLayout(
                         },
                         selected = selected,
                         onClick = {
-                            scope.launch {
-                                drawerState.close()
-                            }
                             onItemClick(index)
                         },
                         icon = {
-                            (if (selected) item.icon?.selectedIcon
-                            else item.icon?.unselectedIcon)?.let {
+                            (if (selected) item.icon?.selectedIcon else item.icon?.unselectedIcon)?.let {
                                 Icon(
                                     imageVector = it,
                                     contentDescription = item.title
@@ -59,7 +52,6 @@ fun ModalDrawerLayout(
                                 Text(text = item.badgeCount.toString())
                             }
                         },
-
                     )
                 }
             }

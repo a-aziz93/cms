@@ -26,8 +26,8 @@ import ui.home.HomeUi
 import ui.i18n.toCountryAlpha2Code
 import ui.main.MainComponent.Child.*
 import ui.main.MainComponent.Child.Map
-import ui.main.component.AdaptiveNavigationLayout
-import ui.main.component.NavigationLayoutType
+import ui.component.navigation.AdaptiveNavigationLayout
+import ui.component.navigation.NavigationLayoutType
 import ui.map.MapUi
 import ui.model.NavigationItem
 import ui.profile.ProfileUi
@@ -93,7 +93,7 @@ internal fun MainUi(component: MainComponent) {
                     layoutType = windowSizeClass.widthSizeClass,
                     compactLayoutType = NavigationLayoutType.DRAWER,
                     mediumLayoutType = NavigationLayoutType.DRAWER,
-                    expandedLayoutType = NavigationLayoutType.DRAWER,
+                    expandedLayoutType = NavigationLayoutType.TOP_BAR,
 //                    userHead = {
 //                        UserHead(
 //                            id = "SomeId",

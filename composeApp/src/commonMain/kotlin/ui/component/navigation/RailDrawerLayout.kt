@@ -1,4 +1,4 @@
-package ui.main.component
+package ui.component.navigation
 
 import androidx.compose.foundation.background
 import androidx.compose.runtime.Composable

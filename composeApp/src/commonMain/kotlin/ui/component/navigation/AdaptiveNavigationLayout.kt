@@ -1,4 +1,4 @@
-package ui.main.component
+package ui.component.navigation
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -18,6 +18,8 @@ import core.util.countryAlpha2CodeFlagPathMap
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
+import ui.component.avatar.Avatar
+import ui.component.locale.LocaleDialog
 import ui.i18n.supportedLocaleCodes
 import ui.i18n.toCountryAlpha2Code
 import ui.i18n.toLanguageAlpha2Code
@@ -58,7 +60,7 @@ fun AdaptiveNavigationLayout(
             layoutType = layoutType,
             drawerState = drawerState,
             head = {
-                UserHead(
+                Avatar(
                     id = "SomeId",
                     firstName = "Aziz",
                     lastName = "Atoev",
@@ -312,7 +314,7 @@ private fun BarNavigationLayout(
                 contentBoxModifier.padding(innerPadding)
             }
             if (lpDialogState) {
-                LocalePickerDialog(
+                LocaleDialog(
                     countries = supportedLocaleCodes.map { lng ->
                         val lngCountryAlpha2Code = lng.toCountryAlpha2Code()
                         countries.find { it.alpha2Code == lngCountryAlpha2Code }!!
@@ -322,6 +324,7 @@ private fun BarNavigationLayout(
                         onLanguageClick!!(c.alpha2Code.toLanguageAlpha2Code())
                         lpDialogState = false
                     },
+                    searchHint = "Search ...",
                     onDismissRequest = {
                         lpDialogState = false
                     },
