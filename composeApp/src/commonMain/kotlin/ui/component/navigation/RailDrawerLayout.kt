@@ -45,7 +45,7 @@ fun RailDrawerLayout(
                                     onItemClick(index)
                                 },
                                 icon = {
-                                    BadgeIcon(
+                                    NavigationBadgeIcon(
                                         item = item,
                                         selected = selected
                                     )

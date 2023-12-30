@@ -6,7 +6,7 @@ import ui.component.navigation.model.NavigationItem
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BadgeIcon(
+fun NavigationBadgeIcon(
     item: NavigationItem,
     selected: Boolean
 ) {

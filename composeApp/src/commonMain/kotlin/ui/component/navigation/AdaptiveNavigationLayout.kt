@@ -269,7 +269,7 @@ private fun BarNavigationLayout(
                             },
                             alwaysShowLabel = false,
                             icon = {
-                                BadgeIcon(
+                                NavigationBadgeIcon(
                                     item,
                                     index == selectedItemIndex,
                                 )
@@ -379,7 +379,7 @@ private fun Tabs(
                     }
                 },
                 icon = {
-                    BadgeIcon(
+                    NavigationBadgeIcon(
                         item,
                         index == selectedItemIndex
                     )
@@ -407,7 +407,7 @@ private fun Tabs(
                     }
                 },
                 icon = {
-                    BadgeIcon(
+                    NavigationBadgeIcon(
                         item,
                         index == selectedItemIndex
                     )
