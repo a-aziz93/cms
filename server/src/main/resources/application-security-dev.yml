@@ -12,4 +12,10 @@ auth:
         default-scopes: [ ]
       url-provider:
         redirect-url: ""
-  jwt:
+  jwt-rs256:
+    keycloak:
+      private-key: String,
+      issuer: String,
+      audience: String,
+      realm: String,
+      expiration: 1000s,
