@@ -4,19 +4,19 @@ import auth.dto.UserCreateDto
 import auth.dto.UserDto
 import digital.sadad.project.auth.model.User
 
-fun User.toDto(): UserDto {
-    return UserDto(
-        id = this.id,
-        name = this.name,
-        email = this.email,
-        username = this.username,
-        avatar = this.avatar,
-        role = this.role,
-        createdAt = this.createdAt.toString(),
-        updatedAt = this.updatedAt.toString(),
-        isDeleted = this.deleted
-    )
-}
+fun User.toDto(roles: List<String>): UserDto = UserDto(
+    id = this.id,
+    name = this.name,
+    email = this.email,
+    username = this.username,
+    roles = roles,
+    avatar = this.avatar,
+    createdBy = this.createdBy,
+    createdAt = this.createdAt.toString(),
+    updatedBy = this.updatedBy,
+    updatedAt = this.updatedAt.toString(),
+    active = this.active
+)
 
 fun UserCreateDto.toModel(): User {
     return User(

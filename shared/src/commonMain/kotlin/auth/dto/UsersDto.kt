@@ -1,5 +1,6 @@
 package auth.dto
 
+import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.Serializable
 
 /**
@@ -7,15 +8,17 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class UserDto(
-    val id: Long,
+    val id: Long?,
     val name: String,
     val email: String,
     val username: String,
-    val avatar: String,
-    val roleId: Long,
-    val createdAt: String,
-    val updatedAt: String,
-    val isDeleted: Boolean = false
+    val roles: List<String>,
+    val avatar: String?,
+    val createdBy: String?,
+    val createdAt: LocalDateTime?,
+    val updatedBy: String?,
+    val updatedAt: LocalDateTime?,
+    val active: Boolean
 )
 
 /**
@@ -27,8 +30,8 @@ data class UserCreateDto(
     val email: String,
     val username: String,
     val password: String,
-    val avatar: String? = null,
-    val roleId: Long,
+    val avatar: String?,
+    val roles: List<Long>,
 )
 
 /**

@@ -32,27 +32,28 @@ interface CrudRepository<T : Any, ID : Any> {
     ): List<T> = withContext(Dispatchers.IO) {
         val result = arrayOfNulls<Any?>(entities.size) as Array<T>
 
-        val (insertEntitiesWithIndexes, updateEntitiesWithIndexes) = entities.withIndex()
-            .partition { getId(it.value) != null }
+        var createEntitiesWithIndexes: List<IndexedValue<T>> = emptyList()
 
-        for (it in updateEntitiesWithIndexes) {
-            if (find(getId(it.value)!!) == null) {
+        for (it in entities.withIndex()) {
+            val id = getId(it.value)
+
+            if (id == null || find(getId(it.value)!!) != null) {
+                createEntitiesWithIndexes.plus(it)
+            } else {
 
                 val entity = update(it.value, username, LocalDateTime.now())
 
                 update(entity, client update table).execute()
 
                 result[it.index] = entity
-            } else {
-                insertEntitiesWithIndexes.plus(it)
             }
         }
 
-        client.insertAndReturn(*arrayOf(insertEntitiesWithIndexes.map {
+        client.insertAndReturn(*arrayOf(createEntitiesWithIndexes.map {
             create(it.value, username, LocalDateTime.now())
-        })).collect { it.forEachIndexed { index, value -> result[insertEntitiesWithIndexes[index].index] = value } }
+        })).collect { it.forEachIndexed { index, value -> result[createEntitiesWithIndexes[index].index] = value } }
 
-        return@withContext result.map { it }
+        return@withContext result.toList()
     }
 
 
