@@ -5,7 +5,7 @@ import io.ktor.server.application.*
 import io.ktor.server.plugins.requestvalidation.*
 import io.ktor.server.plugins.statuspages.*
 import io.ktor.server.response.*
-import digital.sadad.project.auth.service.token.TokenException
+import digital.sadad.project.auth.model.TokenException
 
 /**
  * Configure the Status Pages plugin and configure it
