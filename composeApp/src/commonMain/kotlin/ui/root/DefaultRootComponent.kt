@@ -12,7 +12,7 @@ import ui.dynamicfeatures.dynamicfeature.FeatureInstaller
 import ui.landing.DefaultLandingComponent
 import ui.landing.LandingComponent
 import ui.main.DefaultMainComponent
-import ui.model.navigation.DeepLink
+import ui.component.navigation.model.DeepLink
 import ui.root.RootComponent.Child
 import ui.root.RootComponent.Child.Landing
 import ui.root.RootComponent.Child.Main

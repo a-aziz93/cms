@@ -1,4 +1,4 @@
-package ui.model.navigation
+package ui.component.navigation.model
 
 data class NavigationBadge(
     val value: String? = null,

@@ -5,7 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import ui.model.navigation.NavigationItem
+import ui.component.navigation.model.NavigationItem
 
 @Composable
 fun DismissableDrawerLayout(

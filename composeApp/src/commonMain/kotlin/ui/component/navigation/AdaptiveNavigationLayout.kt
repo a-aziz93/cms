@@ -28,8 +28,8 @@ import ui.component.locale.LocaleDialog
 import ui.i18n.supportedLocaleCodes
 import ui.i18n.toCountryAlpha2Code
 import ui.i18n.toLanguageAlpha2Code
-import ui.model.dropdown.DropDownItem
-import ui.model.navigation.NavigationItem
+import ui.component.dropdown.model.DropDownItem
+import ui.component.navigation.model.NavigationItem
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

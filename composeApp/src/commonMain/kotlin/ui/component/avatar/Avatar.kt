@@ -1,41 +1,27 @@
 package ui.component.avatar
 
 import androidx.compose.foundation.*
-import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.foundation.indication
-import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.interaction.PressInteraction
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.input.pointer.PointerButton
-import androidx.compose.ui.input.pointer.PointerEventType
-import androidx.compose.ui.input.pointer.isSecondaryPressed
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.layout.onSizeChanged
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import core.util.toHslColor
 import io.kamel.core.Resource
 import io.kamel.image.KamelImage
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
-import ui.component.dropdown.Dropdown
-import ui.component.navigation.navigationBadgeColor
-import ui.component.navigation.navigationIconColor
-import ui.model.dropdown.DropDownItem
+import ui.component.dropdown.DropdownMenu
+import ui.component.dropdown.model.DropDownItem
 
 @OptIn(ExperimentalResourceApi::class, ExperimentalFoundationApi::class)
 @Composable
@@ -53,7 +39,7 @@ fun Avatar(
     onClick: (() -> Unit)? = null,
 ) {
 
-    val modifier = Dropdown(
+    val modifier = DropdownMenu(
         items = contextMenuItems,
         dismiss = { true },
         onClick = {

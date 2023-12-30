@@ -1,4 +1,4 @@
-package ui.model.dropdown
+package ui.component.dropdown.model
 
 import androidx.compose.ui.graphics.vector.ImageVector
 

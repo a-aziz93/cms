@@ -8,8 +8,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import ui.model.navigation.NavigationBadge
-import ui.model.navigation.NavigationColor
+import ui.component.navigation.model.NavigationBadge
+import ui.component.navigation.model.NavigationColor
 
 fun navigationModifierColor(
     modifier: Modifier = Modifier,

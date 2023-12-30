@@ -11,19 +11,16 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.isSecondaryPressed
-import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import co.touchlab.kermit.Logger
-import ui.component.navigation.navigationTextColor
-import ui.model.dropdown.DropDownItem
+import ui.component.dropdown.model.DropDownItem
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Dropdown(
+fun DropdownMenu(
     items: List<DropDownItem>,
     dismiss: () -> Boolean,
     onClick: (DropDownItem) -> Boolean,

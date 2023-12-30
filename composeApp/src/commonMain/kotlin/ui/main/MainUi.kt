@@ -31,7 +31,7 @@ import ui.component.navigation.NavigationLayoutType
 import ui.component.navigation.TabRowType
 import ui.component.navigation.TabType
 import ui.map.MapUi
-import ui.model.navigation.NavigationItem
+import ui.component.navigation.model.NavigationItem
 import ui.profile.ProfileUi
 import ui.reset.ResetUi
 import ui.selfsignup.SelfSignUpUi
