@@ -1,7 +1,8 @@
 package auth.dto
 
-import kotlinx.datetime.LocalDateTime
+import core.serializers.LocalDateTimeSerializer
 import kotlinx.serialization.Serializable
+import java.time.LocalDateTime
 
 /**
  * User DTO for response
@@ -14,9 +15,9 @@ data class UserDto(
     val username: String,
     val roles: List<String>,
     val avatar: String?,
-    val createdBy: String?,
+    @Serializable(with = LocalDateTimeSerializer::class)
     val createdAt: LocalDateTime?,
-    val updatedBy: String?,
+    @Serializable(with = LocalDateTimeSerializer::class)
     val updatedAt: LocalDateTime?,
     val active: Boolean
 )

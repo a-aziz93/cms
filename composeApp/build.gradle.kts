@@ -96,6 +96,7 @@ kotlin {
             implementation(libs.bundles.kmputils)
             implementation(libs.bundles.ktorfit)
             implementation(libs.bundles.konfigure)
+            implementation(libs.data.table.material3)
         }
 
         desktopMain.dependencies {
