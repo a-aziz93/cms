@@ -210,9 +210,9 @@ ksp {
 
 sqldelight {
     databases {
-        create("Default") {
+        create("Shared") {
             srcDirs.setFrom("src/commonMain/sqldelight")
-            packageName.set("digital.sadad.project")
+            packageName.set("digital.sadad.project.common")
             generateAsync.set(true)
         }
     }

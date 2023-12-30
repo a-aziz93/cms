@@ -17,6 +17,7 @@ import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
+import co.touchlab.kermit.Logger
 import ui.component.navigation.navigationTextColor
 import ui.model.dropdown.DropDownItem
 
@@ -49,10 +50,11 @@ fun Dropdown(
         .pointerInput(true) {
             awaitPointerEventScope {
                 val event = awaitPointerEvent()
+                Logger.i("Click:" + event.type)
                 if (event.type == PointerEventType.Press &&
                     event.buttons.isSecondaryPressed
                 ) {
-                    event.changes.forEach { e -> e.consume() }
+//                    event.changes.forEach { e -> e.consume() }
                     // on-click logic here
                     isContextMenuVisible = true
                     val position = event.changes.first().position
@@ -73,46 +75,38 @@ fun Dropdown(
             )
         }
 
-    Card(
-//        elevation = 4.dp,
-        modifier = Modifier
-            .onSizeChanged {
-                itemHeight = with(density) { it.height.toDp() }
+    DropdownMenu(
+        expanded = isContextMenuVisible,
+        onDismissRequest = {
+            if (dismiss()) {
+                isContextMenuVisible = false
             }
+        },
+        offset = pressOffset.copy(
+            y = pressOffset.y - itemHeight
+        )
     ) {
-        DropdownMenu(
-            expanded = isContextMenuVisible,
-            onDismissRequest = {
-                if (dismiss()) {
-                    isContextMenuVisible = false
-                }
-            },
-            offset = pressOffset.copy(
-                y = pressOffset.y - itemHeight
-            )
-        ) {
-            items.forEach {
-                DropdownMenuItem(
-                    text = { it.text?.let { text -> Text(text = text) } },
-                    leadingIcon = {
-                        BadgedBox(
-                            badge = {
-                                if (it.badge != null) {
-                                    Badge {
-                                        Text(it.badge)
-                                    }
+        items.forEach {
+            DropdownMenuItem(
+                text = { it.text?.let { text -> Text(text = text) } },
+                leadingIcon = {
+                    BadgedBox(
+                        badge = {
+                            if (it.badge != null) {
+                                Badge {
+                                    Text(it.badge)
                                 }
                             }
-                        ) {
-                            it.icon?.let { it1 -> Icon(imageVector = it1, contentDescription = null) }
                         }
-                    },
-                    onClick = {
-                        if (onClick(it)) {
-                            isContextMenuVisible = false
-                        }
-                    })
-            }
+                    ) {
+                        it.icon?.let { text -> Icon(imageVector = text, contentDescription = null) }
+                    }
+                },
+                onClick = {
+                    if (onClick(it)) {
+                        isContextMenuVisible = false
+                    }
+                })
         }
     }
 
