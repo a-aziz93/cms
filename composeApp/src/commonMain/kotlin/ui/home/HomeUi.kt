@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import co.touchlab.kermit.Logger
 import com.seanproctor.datatable.DataColumn
 import com.seanproctor.datatable.DataTableScope
+import com.seanproctor.datatable.TableColumnWidth
 import com.seanproctor.datatable.material3.DataTable
 import com.seanproctor.datatable.material3.Material3CellContentProvider
 import com.seanproctor.datatable.material3.PaginatedDataTable
@@ -35,7 +36,7 @@ import com.seanproctor.datatable.paging.PaginatedDataTableState
 import com.seanproctor.datatable.paging.rememberPaginatedDataTableState
 import compose.icons.EvaIcons
 import compose.icons.evaicons.Outline
-import compose.icons.evaicons.outline.ChevronUp
+import compose.icons.evaicons.outline.*
 import core.util.toHslColor
 import java.util.stream.IntStream.range
 import kotlin.reflect.full.declaredMemberProperties
@@ -46,10 +47,13 @@ data class TableColumn(val headerName: String, val propertyName: String)
 @Composable
 internal fun HomeUi(component: HomeComponent) {
     Table(
+        modifier = Modifier.fillMaxSize(),
+        title = { Text(text = "USER MANAGEMENT", style = MaterialTheme.typography.titleLarge) },
         columns = listOf(
             TableColumn("HeaderName", "headerName"),
             TableColumn("PropertyName", "propertyName"),
         ),
+        pageCount = 100,
     ) {
         (1..10).map {
             TableColumn("Atoev$it", "Aziz$it")
@@ -58,97 +62,215 @@ internal fun HomeUi(component: HomeComponent) {
 }
 
 @Composable
+fun Paginator(
+    modifier: Modifier,
+    pageCount: Int,
+    pageSize: Int,
+    pageIndex: Int,
+    maxPageCount: Int,
+    onFirstPageClick: () -> Unit,
+    onPrevPageClick: () -> Unit,
+    onPageClick: (Int) -> Unit,
+    onNextPageClick: () -> Unit,
+    onLastPageClick: () -> Unit,
+) {
+    Row(
+        modifier = modifier,
+        horizontalArrangement = Arrangement.spacedBy(16.dp, alignment = Alignment.End),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        val start = min(pageIndex * pageSize + 1, pageCount)
+        val end = min(start + pageSize - 1, pageCount)
+        val pageCount = (pageCount + pageSize - 1) / pageSize
+        Text("$start-$end of $pageCount")
+        IconButton(
+            onClick = onFirstPageClick,
+            enabled = pageIndex > 0,
+        ) {
+            Icon(Icons.Default.FirstPage, "First")
+        }
+        IconButton(
+            onClick = onPrevPageClick,
+            enabled = pageIndex > 0,
+        ) {
+            Icon(Icons.Default.ChevronLeft, "Previous")
+        }
+        (0..<min(maxPageCount, pageCount)).map {
+            val pi = pageIndex + it
+            OutlinedIconButton(
+                onClick = { onPageClick(pi) }
+            ) {
+                Text(pi.toString())
+            }
+        }
+        IconButton(
+            onClick = onNextPageClick,
+            enabled = pageIndex < pageCount - 1
+        ) {
+            Icon(Icons.Default.ChevronRight, "Next")
+        }
+        IconButton(
+            onClick = onLastPageClick,
+            enabled = pageIndex < pageCount - 1
+        ) {
+            Icon(Icons.Default.LastPage, "Last")
+        }
+    }
+}
+
+@Composable
 fun Table(
     modifier: Modifier = Modifier,
-    separator: @Composable (rowIndex: Int) -> Unit = { Divider() },
+    title: @Composable () -> Unit = {},
+    commonActions: Boolean = true,
     headerHeight: Dp = 56.dp,
     rowHeight: Dp = 52.dp,
+    rowSeparator: @Composable (rowIndex: Int) -> Unit = { Divider() },
     horizontalPadding: Dp = 16.dp,
-    state: PaginatedDataTableState = rememberPaginatedDataTableState(10),
-    sortColumnIndex: Int? = null,
-    sortAscending: Boolean = true,
     columns: List<TableColumn>,
+    pageCount: Int,
+    pageSize: Int = 10,
+    pageIndex: Int = 0,
     items: (Int) -> List<Any>,
 ) {
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+    ) {
+        if (commonActions) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
 
-    BasicPaginatedDataTable(
-        columns = columns.map {
-            IconButton(
-                onClick = {}
             ) {
-                Icon(imageVector = EvaIcons.Outline.ChevronUp, contentDescription = null)
-            }
-            DataColumn {
-                Text(it.headerName)
-            }
-        },
-        modifier = modifier,
-        separator = separator,
-        headerHeight = headerHeight,
-        horizontalPadding = horizontalPadding,
-        state = state,
-        footer = {
-            Row(
-                modifier = Modifier.height(rowHeight).padding(horizontal = 16.dp).fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(16.dp, alignment = Alignment.End),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                val start = min(state.pageIndex * state.pageSize + 1, state.count)
-                val end = min(start + state.pageSize - 1, state.count)
-                val pageCount = (state.count + state.pageSize - 1) / state.pageSize
-                Text("$start-$end of ${state.count}")
-                IconButton(
-                    onClick = { state.pageIndex = 0 },
-                    enabled = state.pageIndex > 0,
+                Row(
+                    modifier = Modifier
+                        .align(Alignment.Center),
                 ) {
-                    Icon(Icons.Default.FirstPage, "First")
+                    title()
                 }
-                IconButton(
-                    onClick = { state.pageIndex-- },
-                    enabled = state.pageIndex > 0,
+                Row(
+                    modifier = Modifier
+                        .align(Alignment.CenterEnd),
                 ) {
-                    Icon(Icons.Default.ChevronLeft, "Previous")
-                }
-                (0..10).map {
-                    Box(
-                        modifier
-                            .clip(shape = CircleShape)
-                            .size(30.dp), contentAlignment = Alignment.Center
+                    IconButton(
+                        onClick = {}
                     ) {
-                        Canvas(modifier = Modifier.fillMaxSize()) {
-                            drawCircle(SolidColor(Color.Black))
-                        }
-                        Text(text = (state.pageIndex + it).toString(), color = Color.White)
+                        Icon(imageVector = EvaIcons.Outline.Search, contentDescription = null)
+                    }
+                    IconButton(
+                        onClick = {}
+                    ) {
+                        Icon(imageVector = EvaIcons.Outline.Save, contentDescription = null)
+                    }
+                    IconButton(
+                        onClick = {}
+                    ) {
+                        Icon(imageVector = EvaIcons.Outline.Plus, contentDescription = null)
+                    }
+                    IconButton(
+                        onClick = {}
+                    ) {
+                        Icon(imageVector = EvaIcons.Outline.Edit, contentDescription = null)
+                    }
+                    IconButton(
+                        onClick = {}
+                    ) {
+                        Icon(imageVector = EvaIcons.Outline.Trash2, contentDescription = null)
                     }
                 }
-                IconButton(
-                    onClick = { state.pageIndex++ },
-                    enabled = state.pageIndex < pageCount - 1
-                ) {
-                    Icon(Icons.Default.ChevronRight, "Next")
+            }
+        }
+
+        val state = rememberPaginatedDataTableState(pageSize, pageIndex)
+
+        BasicPaginatedDataTable(
+            columns = listOf(DataColumn(
+                alignment = Alignment.CenterHorizontally,
+                width = TableColumnWidth.Fixed(100.dp),
+            ) {
+                Checkbox(checked = false, onCheckedChange = {
+
+                })
+            }) + columns.map {
+                DataColumn(alignment = Alignment.CenterHorizontally) {
+                    IconButton(onClick = {}) {
+                        Icon(imageVector = EvaIcons.Outline.ChevronUp, contentDescription = null)
+                    }
+                    Text(it.headerName)
                 }
-                IconButton(
-                    onClick = { state.pageIndex = pageCount - 1 },
-                    enabled = state.pageIndex < pageCount - 1
-                ) {
-                    Icon(Icons.Default.LastPage, "Last")
+            } + DataColumn(
+                alignment = Alignment.CenterHorizontally,
+                width = TableColumnWidth.Fixed(120.dp),
+            ) {
+                Text("Actions")
+            },
+            modifier = modifier,
+            separator = rowSeparator,
+            headerHeight = headerHeight,
+            horizontalPadding = horizontalPadding,
+            state = state,
+            footer = {
+                Paginator(
+                    modifier = Modifier
+                        .height(rowHeight)
+                        .padding(horizontal = 16.dp)
+                        .fillMaxWidth(),
+                    pageCount = state.count,
+                    pageSize = state.pageSize,
+                    pageIndex = state.pageIndex,
+                    maxPageCount = 5,
+                    onFirstPageClick = {
+                        state.pageIndex = 0
+                    },
+                    onPrevPageClick = {
+                        state.pageIndex--
+                    },
+                    onPageClick = {
+                        state.pageIndex = it
+                    },
+                    onNextPageClick = {
+                        state.pageIndex++
+                    },
+                    onLastPageClick = {
+                        state.pageIndex = state.count - 1
+                    }
+                )
+            },
+            cellContentProvider = Material3CellContentProvider,
+        ) {
+            row {
+                cell {
+                    Text("Search")
+                }
+                columns.map {
+                    cell {
+                        OutlinedTextField(value = "", onValueChange = {})
+                    }
                 }
             }
-        },
-        cellContentProvider = Material3CellContentProvider,
-        sortColumnIndex = sortColumnIndex,
-        sortAscending = sortAscending,
-    ) {
-        items(state.pageIndex).map { item ->
-            row {
-                columns.map { (_, propertyName) ->
+            items(state.pageIndex).map { item ->
+                row {
                     cell {
-                        Text(
-                            item::class.declaredMemberProperties.first {
+                        Checkbox(checked = false, onCheckedChange = {
+
+                        })
+                    }
+                    columns.map { (_, propertyName) ->
+                        cell {
+                            TextField(value = item::class.declaredMemberProperties.first {
                                 it.name.lowercase() == propertyName.lowercase()
-                            }.call(item)
-                                .toString()
-                        )
+                            }.call(item).toString(), enabled = false, onValueChange = {
+
+                            })
+                        }
+                    }
+                    cell {
+                        IconButton(onClick = {}) {
+                            Icon(imageVector = EvaIcons.Outline.Edit, contentDescription = null)
+                        }
+                        IconButton(onClick = {}) {
+                            Icon(imageVector = EvaIcons.Outline.Trash2, contentDescription = null)
+                        }
                     }
                 }
             }

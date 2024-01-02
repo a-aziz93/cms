@@ -203,7 +203,7 @@ private fun BarNavigationLayout(
                         if (onBackClick != null) {
                             IconButton(onClick = onBackClick) {
                                 Icon(
-                                    imageVector = EvaIcons.Outline.ArrowLeft,
+                                    imageVector = EvaIcons.Outline.ChevronLeft,
                                     contentDescription = "Back navigation"
                                 )
                             }
