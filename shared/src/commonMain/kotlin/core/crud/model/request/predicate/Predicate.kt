@@ -1,11 +1,12 @@
-package core.model.request.predicate
+package core.crud.model.request.predicate
 
+import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 
 @Serializable
-abstract class Predicate<T>(
+abstract class Predicate<T : Any>(
     val operation: T,
-    vararg val values: Any
+    vararg val values:@Contextual Any
 ) {
     @Suppress("UNUSED")
     fun and(vararg value: Any) = LogicalPredicate.and(this, value)

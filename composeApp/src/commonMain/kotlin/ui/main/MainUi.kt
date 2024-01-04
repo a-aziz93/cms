@@ -130,7 +130,7 @@ internal fun MainUi(component: MainComponent) {
                     {
                         component.onOutput(MainComponent.Output.NavigateToProfile)
                         selectedNavigationItemIndex.intValue = -1
-                        title = profileNavigationItem.title?.value ?: ""
+                        title = profileNavigationItem.text ?: ""
                     },
                     items = navigationItems,
                     selectedItemIndex = selectedNavigationItemIndex.intValue,

@@ -1,46 +1,40 @@
-package ui.component.locale
+package ui.component.pickerdialog
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import core.util.Country
-import core.util.countryAlpha2CodeFlagPathMap
+import core.util.stringMatcher
 import org.jetbrains.compose.resources.ExperimentalResourceApi
-import org.jetbrains.compose.resources.painterResource
 import ui.component.search.SearchField
-import core.util.countries as countriesList
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
-fun LocaleDialog(
-    countries: List<Country> = countriesList,
-    defaultSelectedCountry: Country = countriesList.first(),
-    pickedCountry: (Country) -> Unit,
+fun <T : Any> PickerDialog(
+    items: List<T>,
+    selectedItem: T = items.first(),
+    getIcon: @Composable ((T) -> Unit)? = null,
+    onItemClick: (T) -> Unit,
     search: Boolean = true,
-    searchHint: String ="Search ...",
+    searchHint: String = "Search ...",
     rounded: Int = 12,
     onDismissRequest: () -> Unit,
 ) {
-    var isPickCountry by remember { mutableStateOf(defaultSelectedCountry) }
+    var isPick by remember { mutableStateOf(selectedItem) }
 
     var searchValue by remember { mutableStateOf("") }
 
+    var matchCase by remember { mutableStateOf(true) }
+    var matchWord by remember { mutableStateOf(true) }
+    var matchRegex by remember { mutableStateOf(false) }
 
 
     Dialog(
@@ -67,6 +61,19 @@ fun LocaleDialog(
                             fontSize = 14.sp,
                             hint = searchHint,
                             textAlign = TextAlign.Start,
+                            onMatchCase = {
+                                matchCase = !matchCase
+                                matchRegex = false
+                            },
+                            onMatchWord = {
+                                matchWord = !matchWord
+                                matchRegex = false
+                            },
+                            onMatchRegex = {
+                                matchRegex = !matchRegex
+                                matchCase = false
+                                matchWord = false
+                            },
                         )
                     }
                 }
@@ -74,11 +81,14 @@ fun LocaleDialog(
                 LazyColumn {
                     items(
                         (if (searchValue.isEmpty()) {
-                            countries
+                            items
                         } else {
-                            countries.filter { it.name == searchValue }
+                            val matcher = stringMatcher(matchCase, matchWord, matchRegex)
+                            items.filter {
+                                matcher(searchValue, it.toString())
+                            }
                         })
-                    ) { c ->
+                    ) { item ->
                         Row(
                             Modifier
                                 .padding(
@@ -86,16 +96,15 @@ fun LocaleDialog(
                                     vertical = 18.dp
                                 )
                                 .clickable {
-                                    pickedCountry(c)
-                                    isPickCountry = c
+                                    onItemClick(item)
+                                    isPick = item
                                     onDismissRequest()
                                 }) {
-                            Image(
-                                painter = painterResource(countryAlpha2CodeFlagPathMap[c.alpha2Code]!!),
-                                contentDescription = null
-                            )
+                            if (getIcon != null) {
+                                getIcon(item)
+                            }
                             Text(
-                                c.name,
+                                item.toString(),
                                 Modifier.padding(horizontal = 18.dp)
                             )
                         }

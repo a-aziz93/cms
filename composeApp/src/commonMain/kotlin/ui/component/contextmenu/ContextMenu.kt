@@ -16,14 +16,14 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import co.touchlab.kermit.Logger
-import ui.component.contextmenu.model.ContextMenuItem
+import ui.model.Item
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DropdownMenu(
-    items: List<ContextMenuItem>,
-    dismiss: () -> Boolean,
-    onClick: (ContextMenuItem) -> Boolean,
+fun ContextMenu(
+    items: List<Item>,
+    onItemClick: (Item) -> Boolean,
+    onDismissRequest: () -> Boolean,
 ): Modifier {
 
     var isContextMenuVisible by rememberSaveable {
@@ -75,7 +75,7 @@ fun DropdownMenu(
     DropdownMenu(
         expanded = isContextMenuVisible,
         onDismissRequest = {
-            if (dismiss()) {
+            if (onDismissRequest()) {
                 isContextMenuVisible = false
             }
         },
@@ -100,7 +100,7 @@ fun DropdownMenu(
                     }
                 },
                 onClick = {
-                    if (onClick(it)) {
+                    if (onItemClick(it)) {
                         isContextMenuVisible = false
                     }
                 })

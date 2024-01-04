@@ -1,10 +1,8 @@
-package core.model.request.predicate
+package core.crud.model.request.predicate
 
-import graph.predicate.LogicalOperation
-import graph.predicate.LogicalOperation.*
+import core.crud.model.request.predicate.LogicalOperation.*
 import kotlinx.serialization.Serializable
 
-@Serializable
 class LogicalPredicate private constructor(
     operation: LogicalOperation,
     vararg values: Any

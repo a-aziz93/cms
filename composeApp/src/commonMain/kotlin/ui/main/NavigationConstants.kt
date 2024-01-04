@@ -7,68 +7,45 @@ import compose.icons.evaicons.Fill
 import compose.icons.evaicons.Outline
 import compose.icons.evaicons.fill.*
 import compose.icons.evaicons.outline.*
-import ui.component.navigation.model.NavigationIcon
 import ui.component.navigation.model.NavigationItem
-import ui.component.navigation.model.NavigationTitle
 
 @Composable
 fun profileNavigationItem() = NavigationItem(
-        title = NavigationTitle(
-            value = strings.profile
-        ),
+        text = strings.profile,
         route = MainComponent.Config.Profile,
     )
 
 @Composable
 fun NavigationItems() = listOf(
     NavigationItem(
-        title = NavigationTitle(
-            value = strings.signIn
-        ),
-        icon = NavigationIcon(
-            selectedIcon = EvaIcons.Fill.LogIn,
+        text =  strings.signIn,
+        icon =  EvaIcons.Fill.LogIn,
             unselectedIcon = EvaIcons.Outline.LogIn,
-        ),
         route = MainComponent.Config.SignIn,
     ),
     NavigationItem(
-        title = NavigationTitle(
-            value = strings.main
-        ),
-        icon = NavigationIcon(
-            selectedIcon = EvaIcons.Fill.Home,
+        text = strings.main,
+        icon = EvaIcons.Fill.Home,
             unselectedIcon = EvaIcons.Outline.Home,
-        ),
         route = MainComponent.Config.Home,
     ),
     NavigationItem(
-        title = NavigationTitle(
-            value = strings.map
-        ),
-        icon = NavigationIcon(
-            selectedIcon = EvaIcons.Fill.Map,
+        text =  strings.map,
+        icon =  EvaIcons.Fill.Map,
             unselectedIcon = EvaIcons.Outline.Map,
-        ),
         route = MainComponent.Config.Map,
     ),
     NavigationItem(
-        title = NavigationTitle(
-            value = strings.dashboard
-        ),
-        icon = NavigationIcon(
-            selectedIcon = EvaIcons.Fill.Monitor,
+        text =  strings.dashboard,
+        icon  = EvaIcons.Fill.Monitor,
             unselectedIcon = EvaIcons.Outline.Monitor,
-        ),
+
         route = MainComponent.Config.Dashboard,
     ),
     NavigationItem(
-        title = NavigationTitle(
-            value = strings.settings
-        ),
-        icon = NavigationIcon(
-            selectedIcon = EvaIcons.Fill.Settings2,
+        text =  strings.settings,
+        icon = EvaIcons.Fill.Settings2,
             unselectedIcon = EvaIcons.Outline.Settings2,
-        ),
         route = MainComponent.Config.Settings,
     ),
 )

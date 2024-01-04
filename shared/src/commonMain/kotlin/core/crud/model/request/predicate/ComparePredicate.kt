@@ -1,15 +1,10 @@
-package core.model.request.predicate
+package core.crud.model.request.predicate
 
-import core.model.request.predicate.CompareOperation.*
-import core.serializers.AnySerializer
-import core.serializers.LocalDateTimeSerializer
-import kotlinx.serialization.Serializable
+import core.crud.model.request.predicate.CompareOperation.*
 
-@Serializable
 class ComparePredicate private constructor(
     @Suppress("UNUSED")
     operation: CompareOperation,
-    @Serializable(with = AnySerializer::class)
     vararg values: Any
 ) : Predicate<CompareOperation>(operation, *values) {
     companion object {

@@ -20,7 +20,7 @@ import io.kamel.core.Resource
 import io.kamel.image.KamelImage
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
-import ui.component.contextmenu.DropdownMenu
+import ui.component.contextmenu.ContextMenu
 import ui.model.Item
 
 @OptIn(ExperimentalResourceApi::class, ExperimentalFoundationApi::class)
@@ -34,17 +34,16 @@ fun Avatar(
     firstName: String,
     lastName: String,
     textStyle: TextStyle = MaterialTheme.typography.titleSmall,
-    contextMenuItems: List<Item> = emptyList(),
-    onItemClick: (ContextMenuItem) -> Unit = {},
     onClick: (() -> Unit)? = null,
+    contextMenuItems: List<Item> = emptyList(),
+    onContextMenuItemClick: (Item) -> Unit = {},
 ) {
-
-    val modifier = DropdownMenu(
+    val modifier = ContextMenu(
         items = contextMenuItems,
-        dismiss = { true },
-        onClick = {
+        onItemClick = {
             true
-        }
+        },
+        onDismissRequest = { true }
     )
 
     if (resource == null) InitialsAvatar(

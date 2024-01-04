@@ -33,3 +33,17 @@ fun Modifier.carouselTransition(
     alpha = transformation.blurRadius
     scaleY = transformation.blurRadius
 }
+
+fun stringMatcher(
+    caseSensitive: Boolean = true,
+    wholeWord: Boolean = true,
+    regex: Boolean = false,
+): (String, String) -> Boolean =
+    if (regex) {
+        { str, pattern -> Regex(pattern).matches(str) }
+    } else if (wholeWord) { str1, str2 -> str1.equals(str2, !caseSensitive) } else { str1, str2 ->
+        str2.contains(
+            str1,
+            !caseSensitive
+        )
+    }
