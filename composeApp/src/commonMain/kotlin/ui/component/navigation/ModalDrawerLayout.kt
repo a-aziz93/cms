@@ -30,18 +30,15 @@ fun ModalDrawerLayout(
                     val selected = index == selectedItemIndex
                     NavigationDrawerItem(
                         modifier = navigationModifierColor(
-                            selected = selected,
-                            navigationColor = item.color
+                            item,
+                            selected,
                         )
                             .padding(NavigationDrawerItemDefaults.ItemPadding),
                         label = {
-                            if (item.title != null) {
-                                navigationTextColor(
-                                    item.title.value,
-                                    selected,
-                                    item.title.color
-                                )
-                            }
+                            navigationTextColor(
+                                item,
+                                selected,
+                            )
                         },
                         selected = selected,
                         onClick = {
@@ -51,21 +48,16 @@ fun ModalDrawerLayout(
                             onItemClick(index)
                         },
                         icon = {
-                            if (item.icon != null) {
-                                navigationIconColor(
-                                    if (selected) item.icon.selectedIcon else item.icon.unselectedIcon,
-                                    selected,
-                                    item.icon.color
-                                )
-                            }
+                            navigationIconColor(
+                                item,
+                                selected,
+                            )
                         },
                         badge = {
-                            if(item.badge!=null) {
-                                navigationBadgeColor(
-                                    item.badge,
-                                    selected,
-                                )
-                            }
+                            navigationBadgeColor(
+                                item,
+                                selected,
+                            )
                         },
 
                         )

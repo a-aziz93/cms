@@ -1,8 +1,8 @@
-package ui.component.contextmenu.model
+package ui.model
 
 import androidx.compose.ui.graphics.vector.ImageVector
 
-data class ContextMenuItem(
+open class Item(
     val text: String? = null,
     val icon: ImageVector? = null,
     val badge: String? = null,

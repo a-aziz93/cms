@@ -12,20 +12,15 @@ fun NavigationBadgeIcon(
 ) {
     BadgedBox(
         badge = {
-            if(item.badge!=null) {
-                navigationBadgeColor(
-                    item.badge,
-                    selected,
-                )
-            }
-        }
-    ) {
-        if (item.icon != null) {
-            navigationIconColor(
-                if (selected) item.icon.selectedIcon else item.icon.unselectedIcon,
+            navigationBadgeColor(
+                item,
                 selected,
-                item.icon.color
             )
         }
+    ) {
+        navigationIconColor(
+            item,
+            selected,
+        )
     }
 }

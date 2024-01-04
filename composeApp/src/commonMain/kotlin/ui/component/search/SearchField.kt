@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.FirstPage
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -17,12 +16,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import compose.icons.EvaIcons
-import compose.icons.evaicons.Outline
-import org.jetbrains.compose.resources.ExperimentalResourceApi
-import org.jetbrains.compose.resources.painterResource
 
-@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun SearchField(
     modifier: Modifier = Modifier,
@@ -31,7 +25,9 @@ fun SearchField(
     hint: String = "",
     fontSize: TextUnit = 16.sp,
     textAlign: TextAlign = TextAlign.Center,
-    onMatchCase: () -> Unit = {},
+    onMatchCase: (() -> Unit)? = null,
+    onMatchWord: (() -> Unit)? = null,
+    onMatchRegex: (() -> Unit)? = null,
 ) {
     Box(
         modifier = modifier
@@ -40,7 +36,7 @@ fun SearchField(
             )
     ) {
         Row {
-            TextField(
+            OutlinedTextField(
                 modifier = Modifier
                     .fillMaxWidth(),
                 value = value,
@@ -58,27 +54,34 @@ fun SearchField(
                     )
                 },
                 colors = TextFieldDefaults.colors(
-                    //TODO
-//                    backgroundColor = Color.Transparent,
+                    focusedContainerColor = Color.Transparent,
+                    unfocusedContainerColor = Color.Transparent,
+                    disabledContainerColor = Color.Transparent,
                     focusedIndicatorColor = Color.Transparent,
                     disabledIndicatorColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent
                 )
             )
-            IconButton(
-                onClick = {},
-            ) {
-                Text("Cc")
+            if (onMatchCase != null) {
+                IconButton(
+                    onClick = onMatchCase,
+                ) {
+                    Text("Cc")
+                }
             }
-            IconButton(
-                onClick = {},
-            ) {
-                Text("W")
+            if (onMatchWord != null) {
+                IconButton(
+                    onClick = onMatchWord,
+                ) {
+                    Text("W")
+                }
             }
-            IconButton(
-                onClick = {},
-            ) {
-                Text(".*")
+            if (onMatchRegex != null) {
+                IconButton(
+                    onClick = onMatchRegex,
+                ) {
+                    Text(".*")
+                }
             }
         }
         if (value.isEmpty()) {

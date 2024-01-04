@@ -1,8 +1,8 @@
-package ui.component.navigation.model
+package ui.model
 
 import androidx.compose.ui.graphics.Color
 
-data class NavigationColor(
+data class SelectableColor(
     val selectedColor: Color,
     val unselectedColor: Color,
 )

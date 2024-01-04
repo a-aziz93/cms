@@ -8,7 +8,7 @@ import androidx.compose.ui.unit.dp
 import ui.component.navigation.model.NavigationItem
 
 @Composable
-fun DismissableDrawerLayout(
+fun DismissibleDrawerLayout(
     modifier: Modifier = Modifier,
     drawerState: DrawerState = rememberDrawerState(DrawerValue.Open),
     head: @Composable () -> Unit = {},
@@ -27,39 +27,31 @@ fun DismissableDrawerLayout(
                     val selected = index == selectedItemIndex
                     NavigationDrawerItem(
                         modifier = navigationModifierColor(
-                            selected = selected,
-                            navigationColor = item.color
+                            item,
+                            selected,
                         )
                             .padding(NavigationDrawerItemDefaults.ItemPadding),
                         label = {
-                            if(item.title!=null) {
-                                navigationTextColor(
-                                    item.title.value,
+                           navigationTextColor(
+                                    item,
                                     selected,
-                                    item.title.color
                                 )
-                            }
                         },
                         selected = selected,
                         onClick = {
                             onItemClick(index)
                         },
                         icon = {
-                            if (item.icon != null) {
-                                navigationIconColor(
-                                    if (selected) item.icon.selectedIcon else item.icon.unselectedIcon,
-                                    selected,
-                                    item.icon.color
-                                )
-                            }
+                            navigationIconColor(
+                                item,
+                                selected,
+                            )
                         },
                         badge = {
-                            if(item.badge!=null) {
-                                navigationBadgeColor(
-                                    item.badge,
-                                    selected,
-                                )
-                            }
+                            navigationBadgeColor(
+                                item,
+                                selected,
+                            )
                         },
                     )
                 }

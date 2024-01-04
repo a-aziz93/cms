@@ -37,8 +37,8 @@ fun RailDrawerLayout(
                             val selected = selectedItemIndex == index
                             NavigationRailItem(
                                 modifier = navigationModifierColor(
-                                    selected = selected,
-                                    navigationColor = item.color
+                                    item,
+                                    selected,
                                 ),
                                 selected = selected,
                                 onClick = {
@@ -51,13 +51,10 @@ fun RailDrawerLayout(
                                     )
                                 },
                                 label = {
-                                    if(item.title!=null) {
-                                        navigationTextColor(
-                                            item.title.value,
-                                            selected,
-                                            item.title.color
-                                        )
-                                    }
+                                    navigationTextColor(
+                                        item,
+                                        selected,
+                                    )
                                 },
                             )
                         }

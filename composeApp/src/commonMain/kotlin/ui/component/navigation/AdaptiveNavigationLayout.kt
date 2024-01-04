@@ -28,8 +28,8 @@ import ui.component.locale.LocaleDialog
 import ui.i18n.supportedLocaleCodes
 import ui.i18n.toCountryAlpha2Code
 import ui.i18n.toLanguageAlpha2Code
-import ui.component.contextmenu.model.ContextMenuItem
 import ui.component.navigation.model.NavigationItem
+import ui.model.Item
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -75,8 +75,8 @@ fun AdaptiveNavigationLayout(
                             firstName = "Aziz",
                             lastName = "Atoev",
                             contextMenuItems = listOf(
-                                ContextMenuItem("Profile"),
-                                ContextMenuItem("LogOut", icon = EvaIcons.Outline.LogOut)
+                                Item("Profile"),
+                                Item("LogOut", icon = EvaIcons.Outline.LogOut)
                             ),
                             onItemClick = {
 
@@ -176,7 +176,7 @@ private fun BarNavigationLayout(
                 TopAppBar(
                     title = {
                         Text(
-                            text = if (selectedItemIndex > -1) items[selectedItemIndex].title?.value ?: "" else title
+                            text = if (selectedItemIndex > -1) items[selectedItemIndex].text ?: "" else title
                         )
                     },
                     navigationIcon = {
@@ -251,21 +251,18 @@ private fun BarNavigationLayout(
                         val selected = index == selectedItemIndex
                         NavigationBarItem(
                             modifier = navigationModifierColor(
-                                selected = selected,
-                                navigationColor = item.color
+                                item,
+                                selected,
                             ),
                             selected = selected,
                             onClick = {
                                 onItemClick(index)
                             },
                             label = {
-                                if (item.title != null) {
                                     navigationTextColor(
-                                        item.title.value,
+                                        item,
                                         selected,
-                                        item.title.color
                                     )
-                                }
                             },
                             alwaysShowLabel = false,
                             icon = {
@@ -364,19 +361,16 @@ private fun Tabs(
             val selected = index == selectedItemIndex
             Tab(
                 modifier = navigationModifierColor(
-                    modifier,
-                    selected = selected,
-                    navigationColor = item.color
+                    item,
+                    selected,
+                    modifier
                 ),
                 selected = selected,
                 text = {
-                    if (item.title != null) {
                         navigationTextColor(
-                            item.title.value,
+                            item,
                             selected,
-                            item.title.color
                         )
-                    }
                 },
                 icon = {
                     NavigationBadgeIcon(
@@ -392,19 +386,16 @@ private fun Tabs(
             val selected = index == selectedItemIndex
             LeadingIconTab(
                 modifier = navigationModifierColor(
+                    item,
+                    selected,
                     modifier,
-                    selected = selected,
-                    navigationColor = item.color
                 ),
                 selected = selected,
                 text = {
-                    if (item.title != null) {
                         navigationTextColor(
-                            item.title.value,
+                            item,
                             selected,
-                            item.title.color
                         )
-                    }
                 },
                 icon = {
                     NavigationBadgeIcon(
@@ -508,7 +499,7 @@ private fun AdaptiveDrawerNavigationLayout(
             content
         )
 
-        WindowWidthSizeClass.Expanded -> DismissableDrawerLayout(
+        WindowWidthSizeClass.Expanded -> DismissibleDrawerLayout(
             modifier,
             drawerState,
             head ?: {},

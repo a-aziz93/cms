@@ -7,51 +7,74 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import ui.component.navigation.model.NavigationBadge
-import ui.component.navigation.model.NavigationColor
+import ui.component.navigation.model.NavigationItem
+import ui.model.SelectableColor
 
 fun navigationModifierColor(
-    modifier: Modifier = Modifier,
+    item: NavigationItem,
     selected: Boolean,
-    navigationColor: NavigationColor? = null,
+    modifier: Modifier = Modifier,
 ) =
-    if (navigationColor == null) modifier else modifier.background(if (selected) navigationColor.selectedColor else navigationColor.unselectedColor)
+    if (item.backgroundColor == null) modifier else modifier
+        .background(if (selected) item.backgroundColor.selectedColor else item.backgroundColor.unselectedColor)
 
 @Composable
 fun navigationTextColor(
-    text: String,
+    item: NavigationItem,
     selected: Boolean,
-    navigationColor: NavigationColor? = null,
-) = if (navigationColor == null) Text(text = text) else Text(
-    text = text,
-    color = if (selected) navigationColor.selectedColor else navigationColor.unselectedColor
-)
+) {
+    if (item.text != null) {
+        if (item.textColor == null) {
+            Text(text = item.text)
+        } else {
+            Text(
+                text = item.text,
+                color = if (selected) item.textColor.selectedColor else item.textColor.unselectedColor
+            )
+        }
+    }
+}
 
 @Composable
 fun navigationIconColor(
-    imageVector: ImageVector,
+    item: NavigationItem,
     selected: Boolean,
-    navigationColor: NavigationColor? = null,
-) = if (navigationColor == null) Icon(
-    imageVector = imageVector,
-    contentDescription = null,
-) else Icon(
-    imageVector = imageVector,
-    contentDescription = null,
-    tint = if (selected) navigationColor.selectedColor else navigationColor.unselectedColor
-)
+) {
+    val icon = if (selected) item.icon else item.unselectedIcon
+    if (icon != null) {
+        if (item.iconColor == null) {
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+            )
+        } else {
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                tint = if (selected) item.iconColor.selectedColor else item.iconColor.unselectedColor
+            )
+        }
+    }
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun navigationBadgeColor(
-    badge: NavigationBadge,
+    item: NavigationItem,
     selected: Boolean,
-) =
-    Badge {
-        if (badge.value != null) {
-            navigationTextColor(
-                badge.value, selected, badge.color
-            )
+) {
+    if (item.badge != null) {
+        Badge {
+            if (item.badgeColor == null) {
+                Text(item.badge)
+            } else {
+                Text(
+                    text = item.badge,
+                    color = if (selected) item.badgeColor.selectedColor else item.badgeColor.unselectedColor
+                )
+            }
         }
     }
+}
