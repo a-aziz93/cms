@@ -8,6 +8,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -15,6 +16,7 @@ import androidx.compose.ui.window.Dialog
 import core.util.stringMatcher
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import ui.component.search.SearchField
+import ui.model.SelectableColor
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
@@ -32,8 +34,8 @@ fun <T : Any> PickerDialog(
 
     var searchValue by remember { mutableStateOf("") }
 
-    var matchCase by remember { mutableStateOf(true) }
-    var matchWord by remember { mutableStateOf(true) }
+    var matchCase by remember { mutableStateOf(false) }
+    var matchWord by remember { mutableStateOf(false) }
     var matchRegex by remember { mutableStateOf(false) }
 
 
@@ -61,14 +63,26 @@ fun <T : Any> PickerDialog(
                             fontSize = 14.sp,
                             hint = searchHint,
                             textAlign = TextAlign.Start,
+                            matchCase = matchCase,
+                            matchCaseColor = SelectableColor(
+                                selectedColor = Color.Yellow,
+                            ),
                             onMatchCase = {
                                 matchCase = !matchCase
                                 matchRegex = false
                             },
+                            matchWord = matchWord,
+                            matchWordColor = SelectableColor(
+                                selectedColor = Color.Yellow,
+                            ),
                             onMatchWord = {
                                 matchWord = !matchWord
                                 matchRegex = false
                             },
+                            matchRegex = matchRegex,
+                            matchRegexColor = SelectableColor(
+                                selectedColor = Color.Yellow,
+                            ),
                             onMatchRegex = {
                                 matchRegex = !matchRegex
                                 matchCase = false

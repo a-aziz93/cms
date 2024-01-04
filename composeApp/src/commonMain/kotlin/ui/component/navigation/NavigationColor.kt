@@ -17,8 +17,8 @@ fun navigationModifierColor(
     selected: Boolean,
     modifier: Modifier = Modifier,
 ) =
-    if (item.backgroundColor == null) modifier else modifier
-        .background(if (selected) item.backgroundColor.selectedColor else item.backgroundColor.unselectedColor)
+    if (item.backgroundColor == null || (!selected && item.backgroundColor.unselectedColor == null)) modifier else modifier
+        .background(if (selected) item.backgroundColor.selectedColor else item.backgroundColor.unselectedColor!!)
 
 @Composable
 fun navigationTextColor(
@@ -26,12 +26,12 @@ fun navigationTextColor(
     selected: Boolean,
 ) {
     if (item.text != null) {
-        if (item.textColor == null) {
+        if (item.textColor == null || (!selected && item.textColor.unselectedColor == null)) {
             Text(text = item.text)
         } else {
             Text(
                 text = item.text,
-                color = if (selected) item.textColor.selectedColor else item.textColor.unselectedColor
+                color = if (selected) item.textColor.selectedColor else item.textColor.unselectedColor!!
             )
         }
     }
@@ -44,7 +44,7 @@ fun navigationIconColor(
 ) {
     val icon = if (selected) item.icon else item.unselectedIcon
     if (icon != null) {
-        if (item.iconColor == null) {
+        if (item.iconColor == null || (!selected && item.iconColor.unselectedColor == null)) {
             Icon(
                 imageVector = icon,
                 contentDescription = null,
@@ -53,7 +53,7 @@ fun navigationIconColor(
             Icon(
                 imageVector = icon,
                 contentDescription = null,
-                tint = if (selected) item.iconColor.selectedColor else item.iconColor.unselectedColor
+                tint = if (selected) item.iconColor.selectedColor else item.iconColor.unselectedColor!!
             )
         }
     }
@@ -67,12 +67,12 @@ fun navigationBadgeColor(
 ) {
     if (item.badge != null) {
         Badge {
-            if (item.badgeColor == null) {
+            if (item.badgeColor == null || (!selected && item.badgeColor.unselectedColor == null)) {
                 Text(item.badge)
             } else {
                 Text(
                     text = item.badge,
-                    color = if (selected) item.badgeColor.selectedColor else item.badgeColor.unselectedColor
+                    color = if (selected) item.badgeColor.selectedColor else item.badgeColor.unselectedColor!!
                 )
             }
         }

@@ -16,6 +16,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import ui.model.SelectableColor
 
 @Composable
 fun SearchField(
@@ -25,8 +26,14 @@ fun SearchField(
     hint: String = "",
     fontSize: TextUnit = 16.sp,
     textAlign: TextAlign = TextAlign.Center,
+    matchCase: Boolean = true,
+    matchCaseColor: SelectableColor? = null,
     onMatchCase: (() -> Unit)? = null,
+    matchWord: Boolean = true,
+    matchWordColor: SelectableColor? = null,
     onMatchWord: (() -> Unit)? = null,
+    matchRegex: Boolean = true,
+    matchRegexColor: SelectableColor? = null,
     onMatchRegex: (() -> Unit)? = null,
 ) {
     Box(
@@ -35,17 +42,24 @@ fun SearchField(
                 color = Color.White.copy(alpha = 0.1f)
             )
     ) {
-        Row {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(),
+        ) {
             OutlinedTextField(
-                modifier = Modifier
-                    .fillMaxWidth(),
                 value = value,
                 onValueChange = onValueChange,
+                placeholder = {
+                    Text(
+                        text = hint,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = Color.Gray,
+                    )
+                },
                 textStyle = LocalTextStyle.current.copy(
                     textAlign = textAlign,
                     fontSize = fontSize
                 ),
-                singleLine = true,
                 leadingIcon = {
                     Icon(
                         Icons.Default.Search,
@@ -66,35 +80,32 @@ fun SearchField(
                 IconButton(
                     onClick = onMatchCase,
                 ) {
-                    Text("Cc")
+                    if (matchCaseColor == null || (!matchCase && matchCaseColor.unselectedColor == null)) Text("Cc") else Text(
+                        text = "Cc",
+                        color = if (matchCase) matchCaseColor.selectedColor else matchCaseColor.unselectedColor!!
+                    )
                 }
             }
             if (onMatchWord != null) {
                 IconButton(
                     onClick = onMatchWord,
                 ) {
-                    Text("W")
+                    if (matchWordColor == null || (!matchWord && matchWordColor.unselectedColor == null)) Text("W") else Text(
+                        text = "W",
+                        color = if (matchWord) matchWordColor.selectedColor else matchWordColor.unselectedColor!!
+                    )
                 }
             }
             if (onMatchRegex != null) {
                 IconButton(
                     onClick = onMatchRegex,
                 ) {
-                    Text(".*")
+                    if (matchRegexColor == null || (!matchRegex && matchRegexColor.unselectedColor == null)) Text(".*") else Text(
+                        text = ".*",
+                        color = if (matchRegex) matchRegexColor.selectedColor else matchRegexColor.unselectedColor!!
+                    )
                 }
             }
-        }
-        if (value.isEmpty()) {
-            Text(
-                text = hint,
-                style = MaterialTheme.typography.bodySmall,
-                color = Color.Gray,
-                modifier = Modifier.then(
-                    Modifier
-                        .align(Alignment.CenterStart)
-                        .padding(start = 52.dp)
-                )
-            )
         }
     }
 }
