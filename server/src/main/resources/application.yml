@@ -13,7 +13,6 @@ ktor:
       - classes
       - resources
 
-
   # Configure the main module
   application:
     modules:

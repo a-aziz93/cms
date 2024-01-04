@@ -1,4 +1,4 @@
-package core.model.request
+package core.crud.model.request
 
 import core.model.request.predicate.Predicate
 import kotlinx.serialization.Serializable

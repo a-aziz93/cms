@@ -1,4 +1,4 @@
-package core.model.response
+package core.crud.model.response
 
 import kotlinx.serialization.Serializable
 
