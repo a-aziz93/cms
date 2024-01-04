@@ -21,7 +21,7 @@ import ui.component.search.SearchField
 fun <T : Any> PickerDialog(
     items: List<T>,
     selectedItem: T = items.first(),
-    getIcon: @Composable ((T) -> Unit)? = null,
+    onGetIcon: @Composable ((T) -> Unit)? = null,
     onItemClick: (T) -> Unit,
     search: Boolean = true,
     searchHint: String = "Search ...",
@@ -100,8 +100,8 @@ fun <T : Any> PickerDialog(
                                     isPick = item
                                     onDismissRequest()
                                 }) {
-                            if (getIcon != null) {
-                                getIcon(item)
+                            if (onGetIcon != null) {
+                                onGetIcon(item)
                             }
                             Text(
                                 item.toString(),

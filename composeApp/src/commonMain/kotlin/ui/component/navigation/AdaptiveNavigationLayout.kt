@@ -329,7 +329,7 @@ private fun BarNavigationLayout(
                         countries.find { it.alpha2Code == lngCountryAlpha2Code }!!
                     },
                     selectedItem = countries.find { it.alpha2Code == language }!!,
-                    getIcon = {
+                    onGetIcon = {
                         Image(
                             painter = painterResource(countryAlpha2CodeFlagPathMap[it.alpha2Code]!!),
                             contentDescription = null
