@@ -51,45 +51,43 @@ fun <T : Any> PickerDialog(
         ) {
             Column {
                 if (search) {
-                    Row {
-                        SearchField(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(48.dp),
-                            value = searchValue,
-                            onValueChange = {
-                                searchValue = it
-                            },
-                            fontSize = 14.sp,
-                            hint = searchHint,
-                            textAlign = TextAlign.Start,
-                            matchCase = matchCase,
-                            matchCaseColor = SelectableColor(
-                                selectedColor = Color.Yellow,
-                            ),
-                            onMatchCase = {
-                                matchCase = !matchCase
-                                matchRegex = false
-                            },
-                            matchWord = matchWord,
-                            matchWordColor = SelectableColor(
-                                selectedColor = Color.Yellow,
-                            ),
-                            onMatchWord = {
-                                matchWord = !matchWord
-                                matchRegex = false
-                            },
-                            matchRegex = matchRegex,
-                            matchRegexColor = SelectableColor(
-                                selectedColor = Color.Yellow,
-                            ),
-                            onMatchRegex = {
-                                matchRegex = !matchRegex
-                                matchCase = false
-                                matchWord = false
-                            },
-                        )
-                    }
+                    SearchField(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(48.dp),
+                        value = searchValue,
+                        onValueChange = {
+                            searchValue = it
+                        },
+                        fontSize = 14.sp,
+                        hint = searchHint,
+                        textAlign = TextAlign.Start,
+                        matchCase = matchCase,
+                        matchCaseColor = SelectableColor(
+                            selectedColor = Color.Yellow,
+                        ),
+                        onMatchCase = {
+                            matchCase = !matchCase
+                            matchRegex = false
+                        },
+                        matchWord = matchWord,
+                        matchWordColor = SelectableColor(
+                            selectedColor = Color.Yellow,
+                        ),
+                        onMatchWord = {
+                            matchWord = !matchWord
+                            matchRegex = false
+                        },
+                        matchRegex = matchRegex,
+                        matchRegexColor = SelectableColor(
+                            selectedColor = Color.Yellow,
+                        ),
+                        onMatchRegex = {
+                            matchRegex = !matchRegex
+                            matchCase = false
+                            matchWord = false
+                        },
+                    )
                 }
                 Divider(thickness = 1.dp)
                 LazyColumn {
