@@ -28,7 +28,7 @@ import ui.component.locale.LocaleDialog
 import ui.i18n.supportedLocaleCodes
 import ui.i18n.toCountryAlpha2Code
 import ui.i18n.toLanguageAlpha2Code
-import ui.component.dropdown.model.DropDownItem
+import ui.component.contextmenu.model.ContextMenuItem
 import ui.component.navigation.model.NavigationItem
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -75,8 +75,8 @@ fun AdaptiveNavigationLayout(
                             firstName = "Aziz",
                             lastName = "Atoev",
                             contextMenuItems = listOf(
-                                DropDownItem("Profile"),
-                                DropDownItem("LogOut", icon = EvaIcons.Outline.LogOut)
+                                ContextMenuItem("Profile"),
+                                ContextMenuItem("LogOut", icon = EvaIcons.Outline.LogOut)
                             ),
                             onItemClick = {
 

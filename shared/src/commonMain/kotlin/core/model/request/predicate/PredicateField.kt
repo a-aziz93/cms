@@ -1,5 +1,9 @@
-package graph.predicate
+package core.model.request.predicate
 
+import kotlinx.serialization.Serializable
+
+
+@Serializable
 class PredicateField private constructor(val name: String) {
     fun eq(value: Any) = ComparePredicate.eq(this, value)
 

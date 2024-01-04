@@ -12,6 +12,8 @@ plugins {
     alias(libs.plugins.sqlDelight)
     alias(libs.plugins.dokka)
     alias(libs.plugins.ktorfit)
+    alias(libs.plugins.allopen)
+    alias(libs.plugins.noarg)
 }
 
 kotlin {
@@ -85,6 +87,7 @@ kotlin {
             implementation(libs.bundles.multiplatform.settings)
             implementation(libs.bundles.koin)
             implementation(libs.koin.compose)
+            implementation(libs.bundles.ktor.common)
             implementation(libs.bundles.ktor.client)
             implementation(libs.bundles.sql.delight)
             implementation(libs.bundles.mvi.kotlin)
@@ -97,6 +100,7 @@ kotlin {
             implementation(libs.bundles.ktorfit)
             implementation(libs.bundles.konfigure)
             implementation(libs.data.table.material3)
+            implementation(libs.compose.settings.ui.m3)
         }
 
         desktopMain.dependencies {

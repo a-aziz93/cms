@@ -5,6 +5,8 @@ plugins {
     alias(libs.plugins.ksp)
     alias(libs.plugins.kotlinSerialization)
     alias(libs.plugins.dokka)
+    alias(libs.plugins.allopen)
+    alias(libs.plugins.noarg)
 }
 
 group = "digital.sadad.project"
@@ -14,9 +16,18 @@ application {
     applicationDefaultJvmArgs = listOf("-Dio.ktor.development=${extra["development"] ?: "false"}")
 }
 
+val osName = System.getProperty("os.name").lowercase()
+val tcnativeClassifier = when {
+    osName.contains("win") -> "windows-x86_64"
+    osName.contains("linux") -> "linux-x86_64"
+    osName.contains("mac") -> "osx-x86_64"
+    else -> null
+}
+
 dependencies {
     implementation(projects.shared)
     implementation(libs.logback)
+    implementation(libs.bundles.ktor.common)
     implementation(libs.bundles.ktor.server)
     testImplementation(libs.kotlin.test.junit)
     // Added
@@ -31,8 +42,15 @@ dependencies {
     implementation(libs.kotlin.result)
     implementation(libs.bcrypt)
     implementation(libs.reflections)
-    implementation (libs.hoplite.core)
+    implementation(libs.hoplite.core)
     implementation(libs.bundles.kmputils)
+    // To enable HTTP/2 in Netty, use OpenSSL bindings (tcnative netty port).
+    // The below shows how to add a native implementation (statically linked BoringSSL library, a fork of OpenSSL)
+    if (tcnativeClassifier != null) {
+        implementation("io.netty:netty-tcnative-boringssl-static:${libs.versions.tcnative.get()}:$tcnativeClassifier")
+    } else {
+        implementation("io.netty:netty-tcnative-boringssl-static:${libs.versions.tcnative.get()}")
+    }
     // For import org.koin.ksp.generated.*
 //    add("kspServerMainMetadata", libs.koin.ksp.compiler)
 }

@@ -1,7 +1,9 @@
-package graph.predicate
+package core.model.request.predicate
 
-import graph.predicate.CompareOperation.*
+import core.model.request.predicate.CompareOperation.*
+import kotlinx.serialization.Serializable
 
+@Serializable
 class ComparePredicate private constructor(
     @Suppress("UNUSED")
     operation: CompareOperation,

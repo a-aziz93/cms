@@ -1,4 +1,4 @@
-package ui.component.dropdown
+package ui.component.contextmenu
 
 import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -16,14 +16,14 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import co.touchlab.kermit.Logger
-import ui.component.dropdown.model.DropDownItem
+import ui.component.contextmenu.model.ContextMenuItem
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DropdownMenu(
-    items: List<DropDownItem>,
+    items: List<ContextMenuItem>,
     dismiss: () -> Boolean,
-    onClick: (DropDownItem) -> Boolean,
+    onClick: (ContextMenuItem) -> Boolean,
 ): Modifier {
 
     var isContextMenuVisible by rememberSaveable {

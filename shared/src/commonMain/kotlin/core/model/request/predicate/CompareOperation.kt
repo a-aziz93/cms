@@ -1,4 +1,4 @@
-package graph.predicate
+package core.model.request.predicate
 
 enum class CompareOperation {
     EQUALS,

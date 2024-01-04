@@ -140,7 +140,6 @@ fun Table(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-
             ) {
                 Row(
                     modifier = Modifier

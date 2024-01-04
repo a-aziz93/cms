@@ -1,7 +1,10 @@
-package graph.predicate
+package core.model.request.predicate
 
+import graph.predicate.LogicalOperation
 import graph.predicate.LogicalOperation.*
+import kotlinx.serialization.Serializable
 
+@Serializable
 class LogicalPredicate private constructor(
     operation: LogicalOperation,
     vararg values: Any

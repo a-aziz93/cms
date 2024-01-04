@@ -1,5 +1,8 @@
-package graph.predicate
+package core.model.request.predicate
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 abstract class Predicate<T>(
     val operation: T,
     vararg val values: Any

@@ -20,8 +20,8 @@ import io.kamel.core.Resource
 import io.kamel.image.KamelImage
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
-import ui.component.dropdown.DropdownMenu
-import ui.component.dropdown.model.DropDownItem
+import ui.component.contextmenu.DropdownMenu
+import ui.component.contextmenu.model.ContextMenuItem
 
 @OptIn(ExperimentalResourceApi::class, ExperimentalFoundationApi::class)
 @Composable
@@ -34,8 +34,8 @@ fun Avatar(
     firstName: String,
     lastName: String,
     textStyle: TextStyle = MaterialTheme.typography.titleSmall,
-    contextMenuItems: List<DropDownItem> = emptyList(),
-    onItemClick: (DropDownItem) -> Unit = {},
+    contextMenuItems: List<ContextMenuItem> = emptyList(),
+    onItemClick: (ContextMenuItem) -> Unit = {},
     onClick: (() -> Unit)? = null,
 ) {
 

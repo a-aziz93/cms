@@ -11,4 +11,6 @@ plugins {
     alias(libs.plugins.apollo3) apply false
     alias(libs.plugins.sqlDelight) apply false
     alias(libs.plugins.dokka) apply false
+    alias(libs.plugins.allopen) apply false
+    alias(libs.plugins.noarg) apply false
 }

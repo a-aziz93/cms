@@ -4,6 +4,8 @@ plugins {
     alias(libs.plugins.kotlinSerialization)
     alias(libs.plugins.ksp)
     alias(libs.plugins.dokka)
+    alias(libs.plugins.allopen)
+    alias(libs.plugins.noarg)
 }
 
 kotlin {
@@ -39,6 +41,7 @@ kotlin {
             implementation(libs.kotlin.noarg)
             implementation(libs.bundles.kmputils)
             implementation(libs.bundles.kotlinx.serialization)
+            implementation(libs.bundles.ktor.common)
             implementation(libs.bundles.slf4j)
         }
     }
@@ -54,4 +57,12 @@ android {
 
 dependencies {
     ksp(libs.koin.ksp.compiler) // Koin KSP Compiler for KSP
+}
+
+allOpen {
+    annotation("core.annotation.clazz.Open")
+}
+
+noArg {
+    annotation("core.annotation.clazz.NoArg")
 }

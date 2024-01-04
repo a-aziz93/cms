@@ -4,11 +4,6 @@ import core.serializers.LocalDateTimeSerializer
 import kotlinx.serialization.Serializable
 import java.time.LocalDateTime
 
-
-/**
- * Notification class
- * @param T Data type of the notification
- */
 @Serializable
 data class NotificationDto<T>(
     val entity: String,

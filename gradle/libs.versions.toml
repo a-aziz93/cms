@@ -59,6 +59,8 @@ konfigure = "1.3.1"
 kotlinx-serialization = "1.6.2"
 slf4j = "2.0.9"
 data-table = "0.5.1"
+compose-settings-ui-m3 = "1.0.3"
+tcnative = "2.0.62.Final"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -77,28 +79,34 @@ compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview"
 compose-foundation = { module = "androidx.compose.foundation:foundation", version.ref = "compose" }
 compose-material = { module = "androidx.compose.material:material", version.ref = "compose" }
 logback = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
+# Ktor common
+# serialization
+ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
+ktor-serialization-kotlinx-xml = { module = "io.ktor:ktor-serialization-kotlinx-xml", version.ref = "ktor" }
+ktor-serialization-kotlinx-cbor = { module = "io.ktor:ktor-serialization-kotlinx-cbor", version.ref = "ktor" }
+ktor-serialization-kotlinx-protobuf = { module = "io.ktor:ktor-serialization-kotlinx-protobuf", version.ref = "ktor" }
+# ssl/tls
+ktor-network-tls-certificates = { module = "io.ktor:ktor-network-tls-certificates", version.ref = "ktor" }
+
 # Ktor HTTP Server
-ktor-server-core-jvm = { module = "io.ktor:ktor-server-core-jvm", version.ref = "ktor" }
-ktor-server-netty-jvm = { module = "io.ktor:ktor-server-netty-jvm", version.ref = "ktor" }
-ktor-server-tests-jvm = { module = "io.ktor:ktor-server-tests-jvm", version.ref = "ktor" }
+ktor-server-core = { module = "io.ktor:ktor-server-core", version.ref = "ktor" }
+ktor-server-netty = { module = "io.ktor:ktor-server-netty", version.ref = "ktor" }
+ktor-server-tests = { module = "io.ktor:ktor-server-tests", version.ref = "ktor" }
 # Ktor Yaml configuration file
-ktor-server-config-yaml-jvm = { module = "io.ktor:ktor-server-config-yaml-jvm", version.ref = "ktor" }
+ktor-server-config-yaml = { module = "io.ktor:ktor-server-config-yaml", version.ref = "ktor" }
 # Ktor HTTP Server plugins
 # cors
 ktor-server-cors = { module = "io.ktor:ktor-server-cors", version.ref = "ktor" }
 # auth jwt
-ktor-server-auth-jvm = { module = "io.ktor:ktor-server-auth-jvm", version.ref = "ktor" }
-ktor-server-auth-jwt-jvm = { module = "io.ktor:ktor-server-auth-jwt-jvm", version.ref = "ktor" }
-ktor-server-host-common-jvm = { module = "io.ktor:ktor-server-host-common-jvm", version.ref = "ktor" }
-# ssl/tls
-ktor-network-tls-certificates = { module = "io.ktor:ktor-network-tls-certificates", version.ref = "ktor" }
+ktor-server-auth = { module = "io.ktor:ktor-server-auth", version.ref = "ktor" }
+ktor-server-auth-jwt = { module = "io.ktor:ktor-server-auth-jwt", version.ref = "ktor" }
+ktor-server-host-common = { module = "io.ktor:ktor-server-host-common", version.ref = "ktor" }
 # compression
 ktor-server-compression = { module = "io.ktor:ktor-server-compression", version.ref = "ktor" }
 # websockets
 ktor-server-websockets = { module = "io.ktor:ktor-server-websockets", version.ref = "ktor" }
-# content negotiation and serialization
-ktor-server-content-negotiation-jvm = { module = "io.ktor:ktor-server-content-negotiation-jvm", version.ref = "ktor" }
-ktor-serialization-kotlinx-json-jvm = { module = "io.ktor:ktor-serialization-kotlinx-json-jvm", version.ref = "ktor" }
+# content negotiation
+ktor-server-content-negotiation = { module = "io.ktor:ktor-server-content-negotiation", version.ref = "ktor" }
 #  content validation
 ktor-server-request-validation = { module = "io.ktor:ktor-server-request-validation", version.ref = "ktor" }
 # server status pages
@@ -106,12 +114,11 @@ ktor-server-status-pages = { module = "io.ktor:ktor-server-status-pages", versio
 # openapi swagger ui
 ktor-swagger-ui = { module = "io.github.smiley4:ktor-swagger-ui", version.ref = "ktor-swagger-ui" }
 # Ktor HTTP Client
+ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
 ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
 ktor-client-auth = { module = "io.ktor:ktor-client-auth", version.ref = "ktor" }
-ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
 ktor-client-logging = { module = "io.ktor:ktor-client-logging", version.ref = "ktor" }
 ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
-ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
 ktor-client-android = { module = "io.ktor:ktor-client-android", version.ref = "ktor" }
 ktor-client-darwin = { module = "io.ktor:ktor-client-darwin", version.ref = "ktor" }
 ktor-client-java = { module = "io.ktor:ktor-client-java", version.ref = "ktor" }
@@ -224,6 +231,8 @@ slf4j-api = { module = "org.slf4j:slf4j-api", version.ref = "slf4j" }
 slf4j-simple = { module = "org.slf4j:slf4j-simple", version.ref = "slf4j" }
 # Data table
 data-table-material3 = { module = "com.seanproctor:data-table-material3", version.ref = "data-table" }
+# Settings screen
+compose-settings-ui-m3 = { module = "com.github.alorma:compose-settings-ui-m3", version.ref = "compose-settings-ui-m3" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
@@ -242,6 +251,10 @@ sqlDelight = { id = "app.cash.sqldelight", version.ref = "sql-delight" }
 dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
 # Http Client generator
 ktorfit = { id = "de.jensklingenberg.ktorfit", version.ref = "ktorfit" }
+# Make kotlin class open
+allopen = { id = "org.jetbrains.kotlin.plugin.allopen", version.ref = "kotlin" }
+# Make kotlin class open
+noarg = { id = "org.jetbrains.kotlin.plugin.noarg", version.ref = "kotlin" }
 
 [bundles]
 compose-icons = [
@@ -268,26 +281,30 @@ koin = [
     "koin-ksp-compiler"
 ]
 apollo3 = ["apollo-runtime", "apollo-normalized-cache"]
+ktor-common = [
+    "ktor-serialization-kotlinx-json",
+    "ktor-serialization-kotlinx-xml",
+    "ktor-serialization-kotlinx-cbor",
+    "ktor-serialization-kotlinx-protobuf",
+    "ktor-network-tls-certificates",
+]
 ktor-client = [
     "ktor-client-content-negotiation",
     "ktor-client-core",
     "ktor-client-logging",
-    "ktor-serialization-kotlinx-json"
 ]
 ktor-server = [
-    "ktor-server-core-jvm",
-    "ktor-server-netty-jvm",
-    "ktor-server-tests-jvm",
-    "ktor-server-config-yaml-jvm",
+    "ktor-server-core",
+    "ktor-server-netty",
+    "ktor-server-tests",
+    "ktor-server-config-yaml",
     "ktor-server-cors",
-    "ktor-server-auth-jvm",
-    "ktor-server-auth-jwt-jvm",
-    "ktor-server-host-common-jvm",
-    "ktor-network-tls-certificates",
+    "ktor-server-auth",
+    "ktor-server-auth-jwt",
+    "ktor-server-host-common",
     "ktor-server-compression",
     "ktor-server-websockets",
-    "ktor-server-content-negotiation-jvm",
-    "ktor-serialization-kotlinx-json-jvm",
+    "ktor-server-content-negotiation",
     "ktor-server-request-validation",
     "ktor-server-status-pages",
     "ktor-swagger-ui",
