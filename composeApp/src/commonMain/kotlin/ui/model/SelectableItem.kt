@@ -6,13 +6,13 @@ import androidx.compose.ui.graphics.vector.ImageVector
 
 open class SelectableItem(
     text: (@Composable () -> Unit)? = null,
-    val selectedText: (@Composable () -> Unit)? = null,
+    private val selectedText: (@Composable () -> Unit)? = null,
     icon: (@Composable () -> Unit)? = null,
-    val selectedIcon: (@Composable () -> Unit)? = null,
+    private val selectedIcon: (@Composable () -> Unit)? = null,
     badge: (@Composable () -> Unit)? = null,
-    val selectedBadge: (@Composable () -> Unit)? = null,
+    private val selectedBadge: (@Composable () -> Unit)? = null,
     val modifier: Modifier = Modifier,
-    val selectedModifier: Modifier = Modifier,
+    private val selectedModifier: Modifier = Modifier,
 ) : Item(text, icon, badge) {
     fun getText(selected: Boolean): @Composable () -> Unit = (if (selected) selectedText else text) ?: {}
 
