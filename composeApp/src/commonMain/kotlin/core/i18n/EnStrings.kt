@@ -1,4 +1,4 @@
-package ui.i18n
+package core.i18n
 
 
 import cafe.adriel.lyricist.LyricistStrings

@@ -25,9 +25,9 @@ import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import ui.component.avatar.Avatar
 import ui.component.pickerdialog.PickerDialog
-import ui.i18n.supportedLocaleCodes
-import ui.i18n.toCountryAlpha2Code
-import ui.i18n.toLanguageAlpha2Code
+import core.i18n.supportedLocaleCodes
+import core.i18n.toCountryAlpha2Code
+import core.i18n.toLanguageAlpha2Code
 import ui.component.navigation.model.NavigationItem
 import ui.model.Item
 
@@ -39,7 +39,7 @@ fun AdaptiveNavigationLayout(
     mediumLayoutType: NavigationLayoutType = NavigationLayoutType.DRAWER,
     expandedLayoutType: NavigationLayoutType = NavigationLayoutType.DRAWER,
     hasTopAppBar: Boolean = true,
-    title: String,
+    title: @Composable () -> Unit,
     topAppBarColors: TopAppBarColors = TopAppBarDefaults.topAppBarColors(),
     tabRowType: TabRowType = TabRowType.TAB_ROW,
     tabType: TabType = TabType.TAB,
@@ -75,8 +75,8 @@ fun AdaptiveNavigationLayout(
                             firstName = "Aziz",
                             lastName = "Atoev",
                             contextMenuItems = listOf(
-                                Item("Profile"),
-                                Item("LogOut", icon = EvaIcons.Outline.LogOut)
+                                Item({ Text("Profile") }),
+                                Item({ Text("LogOut") }, { Icon(EvaIcons.Outline.LogOut, null) })
                             ),
                             onContextMenuItemClick = {
 
@@ -150,7 +150,7 @@ private fun BarNavigationLayout(
     mediumLayoutType: NavigationLayoutType,
     expandedLayoutType: NavigationLayoutType,
     hasTopAppBar: Boolean,
-    title: String,
+    title: @Composable () -> Unit,
     topAppBarColors: TopAppBarColors,
     tabRowType: TabRowType,
     tabType: TabType,
@@ -175,9 +175,7 @@ private fun BarNavigationLayout(
             if (hasTopAppBar) {
                 TopAppBar(
                     title = {
-                        Text(
-                            text = if (selectedItemIndex > -1) items[selectedItemIndex].text ?: "" else title
-                        )
+                        if (selectedItemIndex > -1) items[selectedItemIndex].text ?: "" else title()
                     },
                     navigationIcon = {
                         if (drawerState != null) {
@@ -250,26 +248,23 @@ private fun BarNavigationLayout(
                     items.forEachIndexed { index, item ->
                         val selected = index == selectedItemIndex
                         NavigationBarItem(
-                            modifier = navigationModifierColor(
-                                item,
-                                selected,
-                            ),
+                            modifier = item.getModifier(selected),
                             selected = selected,
                             onClick = {
                                 onItemClick(index)
                             },
                             label = {
-                                navigationTextColor(
-                                    item,
-                                    selected,
-                                )
+                                item.getText(selected)
                             },
                             alwaysShowLabel = false,
                             icon = {
-                                NavigationBadgeIcon(
-                                    item,
-                                    index == selectedItemIndex,
-                                )
+                                BadgedBox(
+                                    badge = {
+                                        item.getBadge(selected)
+                                    }
+                                ) {
+                                    item.getIcon(selected)
+                                }
                             }
                         )
                     }
@@ -313,7 +308,6 @@ private fun BarNavigationLayout(
                 ) {
                     Tabs(
                         tabType,
-                        Modifier.clip(RoundedCornerShape(8)),
                         items,
                         selectedItemIndex,
                         onClick = onItemClick
@@ -354,10 +348,10 @@ private fun BarNavigationLayout(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun Tabs(
     type: TabType,
-    modifier: Modifier,
     items: List<NavigationItem>,
     selectedItemIndex: Int,
     onClick: (Int) -> Unit,
@@ -366,23 +360,20 @@ private fun Tabs(
         TabType.TAB -> items.forEachIndexed { index, item ->
             val selected = index == selectedItemIndex
             Tab(
-                modifier = navigationModifierColor(
-                    item,
-                    selected,
-                    modifier
-                ),
+                modifier =
+                item.getModifier(selected).clip(RoundedCornerShape(8)),
                 selected = selected,
                 text = {
-                    navigationTextColor(
-                        item,
-                        selected,
-                    )
+                    item.getText(selected)
                 },
                 icon = {
-                    NavigationBadgeIcon(
-                        item,
-                        index == selectedItemIndex
-                    )
+                    BadgedBox(
+                        badge = {
+                            item.getBadge(selected)
+                        }
+                    ) {
+                        item.getIcon(selected)
+                    }
                 },
                 onClick = { onClick(index) },
             )
@@ -391,23 +382,19 @@ private fun Tabs(
         TabType.LEADING_ICON_TAB -> items.forEachIndexed { index, item ->
             val selected = index == selectedItemIndex
             LeadingIconTab(
-                modifier = navigationModifierColor(
-                    item,
-                    selected,
-                    modifier,
-                ),
+                modifier = item.getModifier(selected).clip(RoundedCornerShape(8)),
                 selected = selected,
                 text = {
-                    navigationTextColor(
-                        item,
-                        selected,
-                    )
+                    item.getText(selected)
                 },
                 icon = {
-                    NavigationBadgeIcon(
-                        item,
-                        index == selectedItemIndex
-                    )
+                    BadgedBox(
+                        badge = {
+                            item.getBadge(selected)
+                        }
+                    ) {
+                        item.getIcon(selected)
+                    }
                 },
                 onClick = { onClick(index) }
             )

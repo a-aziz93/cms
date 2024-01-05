@@ -100,7 +100,6 @@ kotlin {
             implementation(libs.bundles.ktorfit)
             implementation(libs.bundles.konfigure)
             implementation(libs.data.table.material3)
-//            implementation(libs.compose.settings.ui.m3)
         }
 
         desktopMain.dependencies {

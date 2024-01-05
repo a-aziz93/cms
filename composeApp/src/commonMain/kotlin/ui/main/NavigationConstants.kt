@@ -1,5 +1,7 @@
 package ui.main
 
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import cafe.adriel.lyricist.strings
 import compose.icons.EvaIcons
@@ -11,41 +13,40 @@ import ui.component.navigation.model.NavigationItem
 
 @Composable
 fun profileNavigationItem() = NavigationItem(
-        text = strings.profile,
+        text = {Text(strings.profile)},
         route = MainComponent.Config.Profile,
     )
 
 @Composable
 fun NavigationItems() = listOf(
     NavigationItem(
-        text =  strings.signIn,
-        icon =  EvaIcons.Fill.LogIn,
-            unselectedIcon = EvaIcons.Outline.LogIn,
+        text =  {Text(strings.signIn)},
+        icon = {Icon(EvaIcons.Outline.LogIn,null)},
+        selectedIcon = {Icon(EvaIcons.Fill.LogIn,null)},
         route = MainComponent.Config.SignIn,
     ),
     NavigationItem(
-        text = strings.main,
-        icon = EvaIcons.Fill.Home,
-            unselectedIcon = EvaIcons.Outline.Home,
+        text = {Text(strings.main)},
+        icon = {Icon(EvaIcons.Outline.Home,null)},
+        selectedIcon = {Icon(EvaIcons.Fill.Home,null)},
         route = MainComponent.Config.Home,
     ),
     NavigationItem(
-        text =  strings.map,
-        icon =  EvaIcons.Fill.Map,
-            unselectedIcon = EvaIcons.Outline.Map,
+        text =  {Text(strings.map)},
+        icon = {Icon(EvaIcons.Outline.Map,null)},
+        selectedIcon = {Icon(EvaIcons.Fill.Map,null)},
         route = MainComponent.Config.Map,
     ),
     NavigationItem(
-        text =  strings.dashboard,
-        icon  = EvaIcons.Fill.Monitor,
-            unselectedIcon = EvaIcons.Outline.Monitor,
-
+        text =  {Text(strings.dashboard)},
+        icon = {Icon(EvaIcons.Outline.Monitor,null)},
+        selectedIcon = {Icon(EvaIcons.Fill.Monitor,null)},
         route = MainComponent.Config.Dashboard,
     ),
     NavigationItem(
-        text =  strings.settings,
-        icon = EvaIcons.Fill.Settings2,
-            unselectedIcon = EvaIcons.Outline.Settings2,
+        text =  {Text(strings.settings)},
+        icon = {Icon(EvaIcons.Outline.Settings2,null)},
+        selectedIcon = {Icon(EvaIcons.Fill.Settings2,null)},
         route = MainComponent.Config.Settings,
     ),
 )

@@ -83,9 +83,9 @@ fun SearchField(
                 IconButton(
                     onClick = onMatchCase,
                 ) {
-                    if (matchCaseColor == null || (!matchCase && matchCaseColor.unselectedColor == null)) Text("Cc") else Text(
+                    if (matchCaseColor == null || (!matchCase && matchCaseColor.color == null)) Text("Cc") else Text(
                         text = "Cc",
-                        color = if (matchCase) matchCaseColor.selectedColor else matchCaseColor.unselectedColor!!
+                        color = if (matchCase) matchCaseColor.selectedColor else matchCaseColor.color!!
                     )
                 }
             }
@@ -93,9 +93,9 @@ fun SearchField(
                 IconButton(
                     onClick = onMatchWord,
                 ) {
-                    if (matchWordColor == null || (!matchWord && matchWordColor.unselectedColor == null)) Text("W") else Text(
+                    if (matchWordColor == null || (!matchWord && matchWordColor.color == null)) Text("W") else Text(
                         text = "W",
-                        color = if (matchWord) matchWordColor.selectedColor else matchWordColor.unselectedColor!!
+                        color = if (matchWord) matchWordColor.selectedColor else matchWordColor.color!!
                     )
                 }
             }
@@ -103,9 +103,9 @@ fun SearchField(
                 IconButton(
                     onClick = onMatchRegex,
                 ) {
-                    if (matchRegexColor == null || (!matchRegex && matchRegexColor.unselectedColor == null)) Text(".*") else Text(
+                    if (matchRegexColor == null || (!matchRegex && matchRegexColor.color == null)) Text(".*") else Text(
                         text = ".*",
-                        color = if (matchRegex) matchRegexColor.selectedColor else matchRegexColor.unselectedColor!!
+                        color = if (matchRegex) matchRegexColor.selectedColor else matchRegexColor.color!!
                     )
                 }
             }

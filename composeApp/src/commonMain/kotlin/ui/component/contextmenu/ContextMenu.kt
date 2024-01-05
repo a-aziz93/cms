@@ -85,18 +85,14 @@ fun ContextMenu(
     ) {
         items.forEach {
             DropdownMenuItem(
-                text = { it.text?.let { text -> Text(text = text) } },
+                text = { it.text?.let { text -> text() } },
                 leadingIcon = {
                     BadgedBox(
                         badge = {
-                            if (it.badge != null) {
-                                Badge {
-                                    Text(it.badge)
-                                }
-                            }
+                            it.badge?.let { badge -> badge() }
                         }
                     ) {
-                        it.icon?.let { text -> Icon(imageVector = text, contentDescription = null) }
+                        it.icon?.let { icon -> icon() }
                     }
                 },
                 onClick = {

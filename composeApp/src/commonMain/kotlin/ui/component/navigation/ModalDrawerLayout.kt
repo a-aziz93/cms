@@ -29,16 +29,11 @@ fun ModalDrawerLayout(
                 items.forEachIndexed { index, item ->
                     val selected = index == selectedItemIndex
                     NavigationDrawerItem(
-                        modifier = navigationModifierColor(
-                            item,
-                            selected,
-                        )
+                        modifier =
+                        item.getModifier(selected)
                             .padding(NavigationDrawerItemDefaults.ItemPadding),
                         label = {
-                            navigationTextColor(
-                                item,
-                                selected,
-                            )
+                            item.getText(selected)
                         },
                         selected = selected,
                         onClick = {
@@ -48,16 +43,10 @@ fun ModalDrawerLayout(
                             onItemClick(index)
                         },
                         icon = {
-                            navigationIconColor(
-                                item,
-                                selected,
-                            )
+                            item.getIcon(selected)
                         },
                         badge = {
-                            navigationBadgeColor(
-                                item,
-                                selected,
-                            )
+                            item.getBadge(selected)
                         },
 
                         )

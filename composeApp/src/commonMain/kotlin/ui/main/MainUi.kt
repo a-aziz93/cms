@@ -3,10 +3,7 @@ package ui.main
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Surface
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.rememberTopAppBarState
+import androidx.compose.material3.*
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.*
@@ -23,7 +20,7 @@ import core.util.tabAnimation
 import org.koin.compose.koinInject
 import ui.dashboard.DashboardUi
 import ui.home.HomeUi
-import ui.i18n.toCountryAlpha2Code
+import core.i18n.toCountryAlpha2Code
 import ui.main.MainComponent.Child.*
 import ui.main.MainComponent.Child.Map
 import ui.component.navigation.AdaptiveNavigationLayout
@@ -90,7 +87,7 @@ internal fun MainUi(component: MainComponent) {
                     )
                 }
 
-                var title by remember { mutableStateOf("") }
+                var curremtNavigationItem by remember { mutableStateOf(navigationItems[selectedNavigationItemIndex.intValue]) }
 
                 AdaptiveNavigationLayout(
                     layoutType = windowSizeClass.widthSizeClass,
@@ -98,7 +95,7 @@ internal fun MainUi(component: MainComponent) {
                     mediumLayoutType = NavigationLayoutType.BOTTOM_BAR,
                     expandedLayoutType = NavigationLayoutType.TOP_BAR,
                     hasTopAppBar = true,
-                    title = title,
+                    title = { curremtNavigationItem.text },
                     topAppBarColors = TopAppBarDefaults.topAppBarColors(
                         containerColor = MaterialTheme.colorScheme.primary,
                         scrolledContainerColor = MaterialTheme.colorScheme.surface,
@@ -130,7 +127,7 @@ internal fun MainUi(component: MainComponent) {
                     {
                         component.onOutput(MainComponent.Output.NavigateToProfile)
                         selectedNavigationItemIndex.intValue = -1
-                        title = profileNavigationItem.text ?: ""
+                        curremtNavigationItem = profileNavigationItem
                     },
                     items = navigationItems,
                     selectedItemIndex = selectedNavigationItemIndex.intValue,

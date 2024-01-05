@@ -1,9 +1,10 @@
 package ui.model
 
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
 
 open class Item(
-    val text: String? = null,
-    val icon: ImageVector? = null,
-    val badge: String? = null,
+    val text: (@Composable () -> Unit)? = null,
+    val icon: (@Composable () -> Unit)? = null,
+    val badge: (@Composable () -> Unit)? = null,
 )

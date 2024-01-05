@@ -8,6 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import ui.component.navigation.model.NavigationItem
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RailDrawerLayout(
     modifier: Modifier = Modifier,
@@ -36,25 +37,22 @@ fun RailDrawerLayout(
                         items.forEachIndexed { index, item ->
                             val selected = selectedItemIndex == index
                             NavigationRailItem(
-                                modifier = navigationModifierColor(
-                                    item,
-                                    selected,
-                                ),
+                                modifier = item.getModifier(selected),
                                 selected = selected,
                                 onClick = {
                                     onItemClick(index)
                                 },
                                 icon = {
-                                    NavigationBadgeIcon(
-                                        item = item,
-                                        selected = selected
-                                    )
+                                    BadgedBox(
+                                        badge = {
+                                            item.getBadge(selected)
+                                        }
+                                    ) {
+                                        item.getIcon(selected)
+                                    }
                                 },
                                 label = {
-                                    navigationTextColor(
-                                        item,
-                                        selected,
-                                    )
+                                    item.getText(selected)
                                 },
                             )
                         }
