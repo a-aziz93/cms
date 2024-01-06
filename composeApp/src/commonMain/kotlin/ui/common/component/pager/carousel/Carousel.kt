@@ -5,7 +5,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.gestures.snapping.SnapFlingBehavior
 import androidx.compose.foundation.interaction.collectIsDraggedAsState
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.pager.*
 import androidx.compose.material3.Card
@@ -20,12 +20,10 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import ui.common.component.pager.HorizontalPagerIndicator
 
-@OptIn(
-    ExperimentalFoundationApi::class,
-)
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun Carousel(
-    carouselLabel: (@Composable () -> Unit)? = null,
+    carouselLabel: (@Composable BoxScope.(Int) -> Unit)? = null,
     title: (@Composable () -> Unit)? = null,
     text: (@Composable () -> Unit)? = null,
     items: List<@Composable () -> Unit>,
@@ -42,10 +40,12 @@ fun Carousel(
     flingBehavior: SnapFlingBehavior = PagerDefaults.flingBehavior(state = state),
     userScrollEnabled: Boolean = true,
     reverseLayout: Boolean = false,
-    indicator: (@Composable () -> Unit)? = {
+    indicator: (@Composable BoxScope.() -> Unit)? = {
         val scope = rememberCoroutineScope()
         HorizontalPagerIndicator(
             state = state,
+            modifier = Modifier
+                .align(Alignment.BottomCenter),
             onIndicatorClick = {
                 scope.launch {
                     state.animateScrollToPage(it)
@@ -79,56 +79,54 @@ fun Carousel(
         }
     }
 
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Box {
-            if (horizontal) {
-                HorizontalPager(
+    Box(contentAlignment = Alignment.Center) {
+        if (horizontal) {
+            HorizontalPager(
+                state,
+                modifier,
+                contentPadding,
+                pageSize,
+                beyondBoundsPageCount,
+                pageSpacing,
+                verticalAlignment,
+                flingBehavior,
+                userScrollEnabled,
+                reverseLayout,
+            ) { page: Int ->
+                CarouselContent(
                     state,
-                    modifier,
-                    contentPadding,
-                    pageSize,
-                    beyondBoundsPageCount,
-                    pageSpacing,
-                    verticalAlignment,
-                    flingBehavior,
-                    userScrollEnabled,
-                    reverseLayout,
-                ) { page: Int ->
-                    CarouselContent(
-                        state,
-                        page,
-                        title,
-                        text,
-                        { items[page]() },
-                        onItemClicked,
-                    )
-                }
-            } else {
-                VerticalPager(
+                    page,
+                    title,
+                    text,
+                    { items[page]() },
+                    onItemClicked,
+                )
+            }
+        } else {
+            VerticalPager(
+                state,
+                modifier,
+                contentPadding,
+                pageSize,
+                beyondBoundsPageCount,
+                pageSpacing,
+                horizontalAlignment,
+                flingBehavior,
+                userScrollEnabled,
+                reverseLayout,
+            ) { page ->
+                CarouselContent(
                     state,
-                    modifier,
-                    contentPadding,
-                    pageSize,
-                    beyondBoundsPageCount,
-                    pageSpacing,
-                    horizontalAlignment,
-                    flingBehavior,
-                    userScrollEnabled,
-                    reverseLayout,
-                ) { page ->
-                    CarouselContent(
-                        state,
-                        page,
-                        title,
-                        text,
-                        { items[page]() },
-                        onItemClicked,
-                    )
-                }
+                    page,
+                    title,
+                    text,
+                    { items[page]() },
+                    onItemClicked,
+                )
             }
         }
-        indicator?.invoke()
-        carouselLabel?.invoke()
+        indicator?.invoke(this)
+        carouselLabel?.invoke(this, state.currentPage)
     }
 }
 
