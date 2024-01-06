@@ -76,6 +76,7 @@ fun SearchField(
                 IconButton(
                     onClick = {
                         state.matchCase = !state.matchCase
+                        state.matchRegex = false
                     },
                 ) {
                     if (matchCaseColor == null || (!state.matchCase && matchCaseColor.color == null)) Text("Cc") else Text(
@@ -87,6 +88,7 @@ fun SearchField(
                 IconButton(
                     onClick = {
                         state.matchWord = !state.matchWord
+                        state.matchRegex = false
                     },
                 ) {
                     if (matchWordColor == null || (!state.matchWord && matchWordColor.color == null)) Text("W") else Text(
@@ -97,6 +99,8 @@ fun SearchField(
                 IconButton(
                     onClick = {
                         state.matchRegex = !state.matchRegex
+                        state.matchCase = false
+                        state.matchWord = false
                     },
                 ) {
                     if (matchRegexColor == null || (!state.matchRegex && matchRegexColor.color == null)) Text(".*") else Text(

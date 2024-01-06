@@ -173,11 +173,11 @@ private fun BarNavigationLayout(
                     title = {
                         BadgedBox(
                             badge = {
-                                (selectedItem.value.selectedIcon ?: selectedItem.value.icon)?.let { it() }
+                                (selectedItem.value.selectedIcon ?: selectedItem.value.icon)?.invoke()
                             }
                         ) {
                             ProvideTextStyle(value = MaterialTheme.typography.titleMedium) {
-                                (selectedItem.value.selectedText ?: selectedItem.value.text)?.let { it() }
+                                (selectedItem.value.selectedText ?: selectedItem.value.text)?.invoke()
                             }
                         }
                     },
@@ -258,7 +258,8 @@ private fun BarNavigationLayout(
                                 onItemClick(index)
                             },
                             label = {
-                                item.getText(selected)
+                                Text("test")
+//                                item.getText(selected)
                             },
                             alwaysShowLabel = false,
                             icon = {

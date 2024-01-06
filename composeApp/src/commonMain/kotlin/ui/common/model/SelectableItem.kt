@@ -16,13 +16,13 @@ open class SelectableItem(
     @Composable
     fun getText(selected: Boolean) =
         (if (selected)
-            selectedText else text)?.let { it() }
+            selectedText else text)?.invoke()
 
     @Composable
-    fun getIcon(selected: Boolean) = (if (selected) selectedIcon else icon)?.let { it() }
+    fun getIcon(selected: Boolean) = (if (selected) selectedIcon else icon)?.invoke()
 
     @Composable
-    fun getBadge(selected: Boolean) = (if (selected) selectedBadge else badge)?.let { it() }
+    fun getBadge(selected: Boolean) = (if (selected) selectedBadge else badge)?.invoke()
 
     fun getModifier(selected: Boolean): Modifier = if (selected) selectedModifier else modifier
 }

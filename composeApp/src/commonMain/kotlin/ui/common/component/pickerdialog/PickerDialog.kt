@@ -33,7 +33,7 @@ fun <T : Any> PickerDialog(
 
     var searchValue by remember { mutableStateOf("") }
 
-    val searchFieldState= rememberSearchFieldState()
+    val searchFieldState = rememberSearchFieldState()
 
     Dialog(
         onDismissRequest = onDismissRequest,
@@ -76,7 +76,11 @@ fun <T : Any> PickerDialog(
                         (if (searchValue.isEmpty()) {
                             items
                         } else {
-                            val matcher = stringMatcher(searchFieldState.matchCase, searchFieldState.matchWord, searchFieldState.matchRegex)
+                            val matcher = stringMatcher(
+                                searchFieldState.matchCase,
+                                searchFieldState.matchWord,
+                                searchFieldState.matchRegex
+                            )
                             items.filter {
                                 matcher(searchValue, it.toString())
                             }
@@ -93,8 +97,8 @@ fun <T : Any> PickerDialog(
                                     isPick = item
                                     onDismissRequest()
                                 }) {
-                            item.icon?.let { it() }
-                            item.text?.let { it() }
+                            item.icon?.invoke()
+                            item.text?.invoke()
                         }
                     }
                 }

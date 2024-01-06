@@ -82,23 +82,23 @@ fun ContextMenu(
     ) {
         items.forEach {
             DropdownMenuItem(
-                text = { it.text?.let { text -> text() } },
+                text = { it.text?.invoke() },
                 leadingIcon = {
                     BadgedBox(
                         badge = {
-                            it.badge?.let { badge -> badge() }
+                            it.badge?.invoke()
                         }
                     ) {
-                        it.icon?.let { icon -> icon() }
+                        it.icon?.invoke()
                     }
                 },
                 trailingIcon = {
                     BadgedBox(
                         badge = {
-                            it.trailingBadge?.let { badge -> badge() }
+                            it.trailingBadge?.invoke()
                         }
                     ) {
-                        it.trailingIcon?.let { icon -> icon() }
+                        it.trailingIcon?.invoke()
                     }
                 },
                 onClick = {

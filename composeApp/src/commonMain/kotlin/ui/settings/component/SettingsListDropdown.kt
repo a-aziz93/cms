@@ -63,8 +63,8 @@ fun SettingsListDropdown(
                                 verticalAlignment = Alignment.CenterVertically,
                             ) {
                                 val item = items[state.value]
-                                item.icon?.let { icon -> icon() }
-                                item.text?.let { text -> text() }
+                                item.icon?.invoke()
+                                item.text?.invoke()
                                 Icon(
                                     modifier = Modifier.padding(start = 8.dp),
                                     imageVector = Icons.Outlined.ArrowDropDown,
@@ -79,10 +79,10 @@ fun SettingsListDropdown(
                                 items.forEachIndexed { index, item ->
                                     DropdownMenuItem(
                                         leadingIcon = {
-                                            item.icon?.let { icon -> icon() }
+                                            item.icon?.invoke()
                                         },
                                         text = {
-                                            item.text?.let { text -> text() }
+                                            item.text?.invoke()
                                         },
                                         onClick = {
                                             state.value = index
