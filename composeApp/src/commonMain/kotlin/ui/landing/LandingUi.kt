@@ -39,7 +39,7 @@ internal fun LandingUi(component: LandingComponent) {
                 },
                 {
                     Banner(
-                        resource = asyncPainterResource(data = this::class.java.getClassLoader().getResourceAsStream("/drawable/banner/customs.jpg")),
+                        resource = asyncPainterResource(data = this::class.java.getClassLoader().getResourceAsStream("drawable/banner/customs.jpg")),
                     )
                 },
             ),
