@@ -35,13 +35,12 @@ import compose.icons.EvaIcons
 import compose.icons.evaicons.Outline
 import compose.icons.evaicons.outline.Eye
 import compose.icons.evaicons.outline.EyeOff2
+import ui.main.MainComponent
 
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
 internal fun SignInUi(component: SignInComponent) {
-
-    val image = painterResource("compose-multiplatform.xml")
 
     val emailValue = remember { mutableStateOf("") }
     val passwordValue = remember { mutableStateOf("") }
@@ -69,7 +68,7 @@ internal fun SignInUi(component: SignInComponent) {
                         .height(100.dp),
                     contentAlignment = Alignment.TopCenter
                 ) {
-                    Image(image, contentDescription = null)
+                    Image(painterResource("compose-multiplatform.xml"), contentDescription = null)
                 }
                 Text(
                     text = "Sign In",
@@ -123,9 +122,9 @@ internal fun SignInUi(component: SignInComponent) {
                         horizontalArrangement = Arrangement.Center,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text(text ="Remember me ")
+                        Text(text = "Remember me ")
                         var switchState by remember { mutableStateOf(false) }
-                        Switch (
+                        Switch(
                             checked = switchState,
                             onCheckedChange = { switchState = it }
                         )
@@ -144,13 +143,13 @@ internal fun SignInUi(component: SignInComponent) {
                     Text(
                         text = "Create An Account",
                         modifier = Modifier.clickable(onClick = {
-                            component.onOutput(SignInComponent.Output.NavigateSignUp)
+                            component.onNavigate(MainComponent.Config.SelfSignUp)
                         })
                     )
                     Text(
                         text = "Forget password?",
                         modifier = Modifier.clickable(onClick = {
-                            component.onOutput(SignInComponent.Output.NavigateToReset)
+                            component.onNavigate(MainComponent.Config.Reset)
                         })
                     )
                     Spacer(modifier = Modifier.padding(20.dp))

@@ -127,7 +127,6 @@ fun LandingUiPreview() {
     }
 }
 
-
 @Preview
 @Composable
 fun SelfSignUpUiPreview() {

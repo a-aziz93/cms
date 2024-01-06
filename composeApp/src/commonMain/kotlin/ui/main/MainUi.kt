@@ -22,6 +22,10 @@ import org.koin.compose.koinInject
 import ui.dashboard.DashboardUi
 import ui.home.HomeUi
 import core.i18n.toCountryAlpha2Code
+import ui.adminsignup.AdminSignUpUi
+import ui.cdex.CDexUi
+import ui.cdox.CDoxUi
+import ui.cms.CMSUi
 import ui.main.MainComponent.Child.*
 import ui.main.MainComponent.Child.Map
 import ui.component.navigation.AdaptiveNavigationLayout
@@ -31,6 +35,7 @@ import ui.component.navigation.TabType
 import ui.map.MapUi
 import ui.component.navigation.model.NavigationItem
 import ui.profile.ProfileUi
+import ui.queue.QueueUi
 import ui.reset.ResetUi
 import ui.selfsignup.SelfSignUpUi
 import ui.settings.SettingsUi
@@ -159,20 +164,12 @@ private fun Children(component: MainComponent, modifier: Modifier = Modifier) {
         // Workaround for https://issuetracker.google.com/issues/270656235
 //        animation = stackAnimation(fade()),
         animation = tabAnimation {
-            when (it) {
-                is SignUp -> 0
-                is SignIn -> 1
-                is Reset -> 2
-                is Profile -> 3
-                is Home -> 4
-                is Map -> 5
-                is Dashboard -> 6
-                is Settings -> 7
-            }
+            it.indexOfChild()
         },
     ) {
         when (val child = it.instance) {
-            is SignUp -> SelfSignUpUi(child.component)
+            is SelfSignUp -> SelfSignUpUi(child.component)
+            is AdminSignUp -> AdminSignUpUi(child.component)
             is SignIn -> SignInUi(child.component)
             is Reset -> ResetUi(child.component)
             is Profile -> ProfileUi(child.component)
@@ -180,6 +177,10 @@ private fun Children(component: MainComponent, modifier: Modifier = Modifier) {
             is Map -> MapUi(child.component)
             is Dashboard -> DashboardUi(child.component)
             is Settings -> SettingsUi(child.component)
+            is CMS -> CMSUi(child.component)
+            is Queue -> QueueUi(child.component)
+            is CDox -> CDoxUi(child.component)
+            is CDex -> CDexUi(child.component)
         }
     }
 }

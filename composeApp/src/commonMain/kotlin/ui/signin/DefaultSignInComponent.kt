@@ -5,12 +5,12 @@ import com.arkivanov.mvikotlin.core.store.StoreFactory
 import core.util.componentCoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
-import ui.signin.SignInComponent.Output
+import ui.main.MainComponent
 
 class DefaultSignInComponent(
     componentContext: ComponentContext,
     storeFactory: StoreFactory,
-    override val onOutput: (Output) -> Unit
+    val onNavigateHandler: (MainComponent.Config) -> Unit
 ) : ComponentContext by componentContext, SignInComponent {
 
     override val login = MutableStateFlow("")
@@ -35,7 +35,9 @@ class DefaultSignInComponent(
 //            authorizationRepository.signIn(login.value, password.value)
             inProgress.value = false
 
-        // TODO: navigate to the next screen
+            // TODO: navigate to the next screen
         }
     }
+
+    override fun onNavigate(config: MainComponent.Config) = onNavigateHandler(config)
 }

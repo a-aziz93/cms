@@ -1,9 +1,10 @@
 package ui.signin
 
 import kotlinx.coroutines.flow.StateFlow
+import ui.component.navigation.NavigationComponent
+import ui.main.MainComponent
 
-interface SignInComponent {
-    val onOutput: (Output) -> Unit
+interface SignInComponent: NavigationComponent<MainComponent.Config> {
     
     val login: StateFlow<String>
 
@@ -16,9 +17,4 @@ interface SignInComponent {
     fun onPasswordChanged(password: String)
 
     fun onSignInClick()
-    
-    sealed class Output {
-        data object NavigateSignUp : Output()
-        data object NavigateToReset: Output()
-    }
 }

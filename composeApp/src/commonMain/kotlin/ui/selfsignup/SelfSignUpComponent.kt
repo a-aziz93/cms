@@ -1,6 +1,8 @@
 package ui.selfsignup
 
 import kotlinx.coroutines.flow.StateFlow
+import ui.component.navigation.NavigationComponent
+import ui.main.MainComponent
 
 interface SelfSignUpComponent {
 
