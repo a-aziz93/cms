@@ -16,6 +16,7 @@ import androidx.compose.ui.window.Dialog
 import core.util.stringMatcher
 import ui.common.component.pickerdialog.model.PickerItem
 import ui.common.component.search.SearchField
+import ui.common.component.search.model.rememberSearchFieldState
 import ui.common.model.SelectableColor
 
 @Composable
@@ -32,10 +33,7 @@ fun <T : Any> PickerDialog(
 
     var searchValue by remember { mutableStateOf("") }
 
-    var matchCase by remember { mutableStateOf(false) }
-    var matchWord by remember { mutableStateOf(false) }
-    var matchRegex by remember { mutableStateOf(false) }
-
+    val searchFieldState= rememberSearchFieldState()
 
     Dialog(
         onDismissRequest = onDismissRequest,
@@ -60,31 +58,16 @@ fun <T : Any> PickerDialog(
                         fontSize = 14.sp,
                         hint = searchHint,
                         textAlign = TextAlign.Start,
-                        matchCase = matchCase,
+                        state = searchFieldState,
                         matchCaseColor = SelectableColor(
                             selectedColor = Color.Yellow,
                         ),
-                        onMatchCase = {
-                            matchCase = !matchCase
-                            matchRegex = false
-                        },
-                        matchWord = matchWord,
                         matchWordColor = SelectableColor(
                             selectedColor = Color.Yellow,
                         ),
-                        onMatchWord = {
-                            matchWord = !matchWord
-                            matchRegex = false
-                        },
-                        matchRegex = matchRegex,
                         matchRegexColor = SelectableColor(
                             selectedColor = Color.Yellow,
                         ),
-                        onMatchRegex = {
-                            matchRegex = !matchRegex
-                            matchCase = false
-                            matchWord = false
-                        },
                     )
                 }
                 Divider(thickness = 1.dp)
@@ -93,7 +76,7 @@ fun <T : Any> PickerDialog(
                         (if (searchValue.isEmpty()) {
                             items
                         } else {
-                            val matcher = stringMatcher(matchCase, matchWord, matchRegex)
+                            val matcher = stringMatcher(searchFieldState.matchCase, searchFieldState.matchWord, searchFieldState.matchRegex)
                             items.filter {
                                 matcher(searchValue, it.toString())
                             }

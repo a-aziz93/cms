@@ -11,6 +11,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
+import ui.common.component.search.model.SearchFieldState
+import ui.common.component.search.model.rememberSearchFieldState
 import ui.common.model.SelectableColor
 
 @Composable
@@ -21,15 +23,11 @@ fun SearchField(
     hint: String = "",
     fontSize: TextUnit = 16.sp,
     textAlign: TextAlign = TextAlign.Center,
-    matchCase: Boolean = true,
+    showMatchers: Boolean = true,
+    state: SearchFieldState = rememberSearchFieldState(),
     matchCaseColor: SelectableColor? = null,
-    onMatchCase: (() -> Unit)? = null,
-    matchWord: Boolean = true,
     matchWordColor: SelectableColor? = null,
-    onMatchWord: (() -> Unit)? = null,
-    matchRegex: Boolean = true,
     matchRegexColor: SelectableColor? = null,
-    onMatchRegex: (() -> Unit)? = null,
 ) {
     Box(
         modifier = modifier
@@ -74,33 +72,36 @@ fun SearchField(
                     unfocusedIndicatorColor = Color.Transparent
                 )
             )
-            if (onMatchCase != null) {
+            if (showMatchers) {
                 IconButton(
-                    onClick = onMatchCase,
+                    onClick = {
+                        state.matchCase = !state.matchCase
+                    },
                 ) {
-                    if (matchCaseColor == null || (!matchCase && matchCaseColor.color == null)) Text("Cc") else Text(
+                    if (matchCaseColor == null || (!state.matchCase && matchCaseColor.color == null)) Text("Cc") else Text(
                         text = "Cc",
-                        color = if (matchCase) matchCaseColor.selectedColor else matchCaseColor.color!!
+                        color = if (state.matchCase) matchCaseColor.selectedColor else matchCaseColor.color!!
                     )
                 }
-            }
-            if (onMatchWord != null) {
+
                 IconButton(
-                    onClick = onMatchWord,
+                    onClick = {
+                        state.matchWord = !state.matchWord
+                    },
                 ) {
-                    if (matchWordColor == null || (!matchWord && matchWordColor.color == null)) Text("W") else Text(
+                    if (matchWordColor == null || (!state.matchWord && matchWordColor.color == null)) Text("W") else Text(
                         text = "W",
-                        color = if (matchWord) matchWordColor.selectedColor else matchWordColor.color!!
+                        color = if (state.matchWord) matchWordColor.selectedColor else matchWordColor.color!!
                     )
                 }
-            }
-            if (onMatchRegex != null) {
                 IconButton(
-                    onClick = onMatchRegex,
+                    onClick = {
+                        state.matchRegex = !state.matchRegex
+                    },
                 ) {
-                    if (matchRegexColor == null || (!matchRegex && matchRegexColor.color == null)) Text(".*") else Text(
+                    if (matchRegexColor == null || (!state.matchRegex && matchRegexColor.color == null)) Text(".*") else Text(
                         text = ".*",
-                        color = if (matchRegex) matchRegexColor.selectedColor else matchRegexColor.color!!
+                        color = if (state.matchRegex) matchRegexColor.selectedColor else matchRegexColor.color!!
                     )
                 }
             }
