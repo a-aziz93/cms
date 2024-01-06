@@ -1,7 +1,7 @@
 package ui.signin
 
 import kotlinx.coroutines.flow.StateFlow
-import ui.component.navigation.NavigationComponent
+import ui.common.component.navigation.NavigationComponent
 import ui.main.MainComponent
 
 interface SignInComponent: NavigationComponent<MainComponent.Config> {

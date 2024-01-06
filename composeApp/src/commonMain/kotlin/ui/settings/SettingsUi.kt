@@ -4,10 +4,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
-import androidx.compose.ui.graphics.vector.ImageVector
-import compose.icons.EvaIcons
-import compose.icons.evaicons.Outline
-import compose.icons.evaicons.outline.Globe2
 import core.i18n.supportedLocaleCodes
 import core.i18n.toCountryAlpha2Code
 import core.util.countries
@@ -15,7 +11,7 @@ import core.util.countryAlpha2CodeFlagPathMap
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import ui.settings.component.*
-import ui.model.Item
+import ui.common.model.Item
 
 
 @OptIn(ExperimentalResourceApi::class)

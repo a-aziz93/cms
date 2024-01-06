@@ -10,9 +10,8 @@ import com.arkivanov.decompose.value.Value
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import ui.dynamicfeatures.dynamicfeature.FeatureInstaller
 import ui.landing.DefaultLandingComponent
-import ui.landing.LandingComponent
 import ui.main.DefaultMainComponent
-import ui.component.navigation.model.DeepLink
+import ui.common.component.navigation.model.DeepLink
 import ui.root.RootComponent.Child
 import ui.root.RootComponent.Child.Landing
 import ui.root.RootComponent.Child.Main

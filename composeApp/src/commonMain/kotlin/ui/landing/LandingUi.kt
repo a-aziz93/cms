@@ -10,8 +10,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import io.kamel.image.asyncPainterResource
-import ui.component.carousel.Carousel
-import ui.component.banner.Banner
+import ui.common.component.carousel.Carousel
+import ui.common.component.banner.Banner
 import ui.root.RootComponent
 import java.io.File
 

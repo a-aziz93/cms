@@ -9,7 +9,7 @@ import compose.icons.evaicons.Fill
 import compose.icons.evaicons.Outline
 import compose.icons.evaicons.fill.*
 import compose.icons.evaicons.outline.*
-import ui.component.navigation.model.NavigationItem
+import ui.common.component.navigation.model.NavigationItem
 
 @Composable
 fun profileNavigationItem() = NavigationItem(
@@ -20,7 +20,7 @@ fun profileNavigationItem() = NavigationItem(
 @Composable
 fun NavigationItems() = listOf(
     NavigationItem(
-        text = { Text(strings.signIn) },
+        text = { Text(strings.signUp) },
         icon = { Icon(EvaIcons.Outline.PersonAdd, null) },
         selectedIcon = { Icon(EvaIcons.Fill.PersonAdd, null) },
         route = MainComponent.Config.SelfSignUp,

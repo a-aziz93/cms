@@ -7,10 +7,10 @@ import ui.adminsignup.AdminSignUpComponent
 import ui.cdex.CDexComponent
 import ui.cdox.CDoxComponent
 import ui.cms.CMSComponent
-import ui.component.navigation.EventComponent
-import ui.component.navigation.NavigationChild
-import ui.component.navigation.NavigationComponent
-import ui.component.navigation.NavigationConfig
+import ui.common.component.navigation.EventComponent
+import ui.common.component.navigation.NavigationChild
+import ui.common.component.navigation.NavigationComponent
+import ui.common.component.navigation.NavigationConfig
 import ui.dashboard.DashboardComponent
 import ui.home.HomeComponent
 import ui.map.MapComponent
@@ -20,7 +20,6 @@ import ui.reset.ResetComponent
 import ui.settings.SettingsComponent
 import ui.signin.SignInComponent
 import ui.selfsignup.SelfSignUpComponent
-import kotlin.reflect.KClass
 
 interface MainComponent : NavigationComponent<MainComponent.Config>, EventComponent<MainComponent.Event> {
 

@@ -25,7 +25,7 @@ import ui.cdox.DefaultCDoxComponent
 import ui.cms.DefaultCMSComponent
 import ui.dashboard.DefaultDashboardComponent
 import ui.home.DefaultHomeComponent
-import ui.component.navigation.model.DeepLink
+import ui.common.component.navigation.model.DeepLink
 import ui.main.MainComponent.Config
 import ui.main.MainComponent.Child
 import ui.main.MainComponent.Child.SelfSignUp
@@ -47,7 +47,6 @@ import ui.queue.DefaultQueueComponent
 import ui.reset.DefaultResetComponent
 import ui.settings.DefaultSettingsComponent
 import ui.signin.DefaultSignInComponent
-import ui.signin.SignInComponent
 import ui.selfsignup.DefaultSelfSignUpComponent
 
 @OptIn(ExperimentalDecomposeApi::class)

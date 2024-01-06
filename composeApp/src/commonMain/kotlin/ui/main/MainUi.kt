@@ -26,11 +26,11 @@ import ui.adminsignup.AdminSignUpUi
 import ui.cdex.CDexUi
 import ui.cdox.CDoxUi
 import ui.cms.CMSUi
-import ui.component.navigation.AdaptiveNavigationLayout
-import ui.component.navigation.NavigationLayoutType
-import ui.component.navigation.TabRowType
-import ui.component.navigation.TabType
-import ui.component.navigation.model.NavigationItem
+import ui.common.component.navigation.AdaptiveNavigationLayout
+import ui.common.component.navigation.NavigationLayoutType
+import ui.common.component.navigation.TabRowType
+import ui.common.component.navigation.TabType
+import ui.common.component.navigation.model.NavigationItem
 import ui.dashboard.DashboardUi
 import ui.home.HomeUi
 import ui.main.MainComponent.Child.*
