@@ -27,22 +27,20 @@ internal fun LandingUi(component: LandingComponent) {
                 .height(200.dp),
             horizontal = false,
             items = listOf(
+                "/drawable/banner/customs.jpg",
+                "/drawable/banner/hand.jpg",
+                "/drawable/banner/watch.jpg"
+            ).map {
                 {
                     Banner(
-                        resource = asyncPainterResource(data = "https://t4.ftcdn.net/jpg/02/18/18/55/360_F_218185587_P4zituDtWJOfClUKL6merI0BgLMIxoeC.jpg"),
+                        resource = asyncPainterResource(
+                            data = File(
+                                this::class.java.getResource(it).getPath()
+                            )
+                        ),
                     )
-                },
-                {
-                    Banner(
-                        resource = asyncPainterResource(data = "/drawable/banner/hand.jpg"),
-                    )
-                },
-                {
-                    Banner(
-                        resource = asyncPainterResource(data = this::class.java.getClassLoader().getResourceAsStream("drawable/banner/customs.jpg")),
-                    )
-                },
-            ),
+                }
+            },
             onItemClicked = {
 
             }

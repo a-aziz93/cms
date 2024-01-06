@@ -29,7 +29,7 @@ fun Carousel(
     title: (@Composable () -> Unit)? = null,
     text: (@Composable () -> Unit)? = null,
     items: List<@Composable () -> Unit>,
-    onItemClicked: () -> Unit,
+    onItemClicked: (() -> Unit)? = null,
     state: PagerState = rememberPagerState(pageCount = { items.size }),
     modifier: Modifier = Modifier,
     horizontal: Boolean = true,
@@ -140,10 +140,10 @@ fun CarouselContent(
     title: (@Composable () -> Unit)? = null,
     text: (@Composable () -> Unit)? = null,
     item: @Composable () -> Unit,
-    onItemClicked: () -> Unit,
+    onItemClicked: (() -> Unit)? = null,
 ) {
     Card(
-        onClick = onItemClicked,
+        onClick = { onItemClicked?.invoke() },
         modifier = Modifier.carouselTransition(
             page,
             state
