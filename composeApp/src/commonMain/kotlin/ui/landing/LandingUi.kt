@@ -1,5 +1,6 @@
 package ui.landing
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedButton
@@ -10,17 +11,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import io.kamel.image.asyncPainterResource
-import ui.common.component.carousel.Carousel
+import ui.common.component.pager.carousel.Carousel
 import ui.common.component.banner.Banner
 import ui.root.RootComponent
 import java.io.File
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun LandingUi(component: LandingComponent) {
     Box(
         modifier = Modifier.fillMaxSize(),
     ) {
         Carousel(
+            modifier = Modifier
+                .height(200.dp),
+            horizontal = false,
             items = listOf(
                 {
                     Banner(
@@ -34,7 +39,7 @@ internal fun LandingUi(component: LandingComponent) {
                 },
                 {
                     Banner(
-                        resource = asyncPainterResource(data = File("/drawable/banner/watch.jpg")),
+                        resource = asyncPainterResource(data = this::class.java.getClassLoader().getResourceAsStream("/drawable/banner/customs.jpg")),
                     )
                 },
             ),
