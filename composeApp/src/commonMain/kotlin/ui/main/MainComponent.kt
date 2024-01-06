@@ -34,12 +34,12 @@ interface MainComponent : NavigationComponent<MainComponent.Config>, EventCompon
         class Profile(val component: DefaultProfileComponent) : Child()
         class Home(val component: HomeComponent) : Child()
         class Map(val component: MapComponent) : Child()
-        class Dashboard(val component: DashboardComponent) : Child()
-        class Settings(val component: SettingsComponent) : Child()
         class CMS(val component: CMSComponent) : Child()
         class Queue(val component: QueueComponent) : Child()
         class CDox(val component: CDoxComponent) : Child()
         class CDex(val component: CDexComponent) : Child()
+        class Dashboard(val component: DashboardComponent) : Child()
+        class Settings(val component: SettingsComponent) : Child()
 
         fun indexOfChild() =
             this::class.nestedClasses.indexOf(this::class)
@@ -72,9 +72,6 @@ interface MainComponent : NavigationComponent<MainComponent.Config>, EventCompon
         data object Dashboard : Config()
 
         @Serializable
-        data object Settings : Config()
-
-        @Serializable
         data object CMS : Config()
 
         @Serializable
@@ -85,6 +82,9 @@ interface MainComponent : NavigationComponent<MainComponent.Config>, EventCompon
 
         @Serializable
         data object CDex : Config()
+
+        @Serializable
+        data object Settings : Config()
     }
 
     enum class Event {

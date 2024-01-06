@@ -9,10 +9,10 @@ internal val TjStrings = Strings(
     profile="Профил",
     main="Асосӣ",
     map="Харита",
-    dashboard="Нишонаҳо",
-    settings="Ҷӯр",
     cms = "Назорат",
     queue = "Навбат",
     cdox = "Ҳуҷҷатҳо",
     cdex = "Эъломия",
+    dashboard="Нишонаҳо",
+    settings="Ҷӯр",
 )

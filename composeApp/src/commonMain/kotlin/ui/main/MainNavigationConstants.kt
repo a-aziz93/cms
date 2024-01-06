@@ -44,18 +44,6 @@ fun NavigationItems() = listOf(
         route = MainComponent.Config.Map,
     ),
     NavigationItem(
-        text = { Text(strings.dashboard) },
-        icon = { Icon(EvaIcons.Outline.DiagonalArrowRightUp, null) },
-        selectedIcon = { Icon(EvaIcons.Fill.DiagonalArrowRightUp, null) },
-        route = MainComponent.Config.Dashboard,
-    ),
-    NavigationItem(
-        text = { Text(strings.settings) },
-        icon = { Icon(EvaIcons.Outline.Settings2, null) },
-        selectedIcon = { Icon(EvaIcons.Fill.Settings2, null) },
-        route = MainComponent.Config.Settings,
-    ),
-    NavigationItem(
         text = { Text(strings.cms) },
         icon = { Icon(EvaIcons.Outline.Monitor, null) },
         selectedIcon = { Icon(EvaIcons.Fill.Monitor, null) },
@@ -78,6 +66,18 @@ fun NavigationItems() = listOf(
         icon = { Icon(EvaIcons.Outline.BookOpen, null) },
         selectedIcon = { Icon(EvaIcons.Fill.BookOpen, null) },
         route = MainComponent.Config.CDex,
+    ),
+    NavigationItem(
+        text = { Text(strings.dashboard) },
+        icon = { Icon(EvaIcons.Outline.DiagonalArrowRightUp, null) },
+        selectedIcon = { Icon(EvaIcons.Fill.DiagonalArrowRightUp, null) },
+        route = MainComponent.Config.Dashboard,
+    ),
+    NavigationItem(
+        text = { Text(strings.settings) },
+        icon = { Icon(EvaIcons.Outline.Settings2, null) },
+        selectedIcon = { Icon(EvaIcons.Fill.Settings2, null) },
+        route = MainComponent.Config.Settings,
     ),
 )
 

@@ -8,11 +8,12 @@ const val WEB_PATH_RESET = "reset"
 const val WEB_PATH_PROFILE = "profile"
 const val WEB_PATH_HOME = "home"
 const val WEB_PATH_MAP = "map"
-const val WEB_PATH_SETTINGS = "settings"
 const val WEB_PATH_CMS = "cms"
 const val WEB_PATH_QUEUE = "queue"
 const val WEB_PATH_CDOX = "cdox"
 const val WEB_PATH_CDEX = "cdex"
+const val WEB_PATH_DASHBOARD = "dashboard"
+const val WEB_PATH_SETTINGS = "settings"
 
 // Backend constants
 const val ROLE_ENDPOINT = "api/role"

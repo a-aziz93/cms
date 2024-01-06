@@ -9,10 +9,10 @@ internal val RuStrings = Strings(
     profile = "Профиль",
     main = "Главная",
     map = "Карта",
-    dashboard = "Показатели",
-    settings = "Настройки",
     cms = "Мониторинг",
     queue = "Очередь",
     cdox = "Документы",
     cdex = "Декларация",
+    dashboard = "Показатели",
+    settings = "Настройки",
 )

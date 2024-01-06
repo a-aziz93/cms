@@ -156,22 +156,6 @@ fun MapUiPreview() {
 
 @Preview(showSystemUi = true)
 @Composable
-fun DashboardUiPreview() {
-    AppTheme {
-        DashboardUi(PreviewDashboardComponent())
-    }
-}
-
-@Preview(showSystemUi = true)
-@Composable
-fun SettingsUiPreview() {
-    AppTheme {
-        SettingsUi(PreviewSettingsComponent())
-    }
-}
-
-@Preview(showSystemUi = true)
-@Composable
 fun CMSPreview() {
     AppTheme {
         CMSUi(PreviewCMSComponent())
@@ -199,5 +183,21 @@ fun CDoxPreview() {
 fun CDexPreview() {
     AppTheme {
         CDexUi(PreviewCDexComponent())
+    }
+}
+
+@Preview(showSystemUi = true)
+@Composable
+fun DashboardUiPreview() {
+    AppTheme {
+        DashboardUi(PreviewDashboardComponent())
+    }
+}
+
+@Preview(showSystemUi = true)
+@Composable
+fun SettingsUiPreview() {
+    AppTheme {
+        SettingsUi(PreviewSettingsComponent())
     }
 }

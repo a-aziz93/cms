@@ -1,10 +1,12 @@
 package ui.main
 
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Surface
-import androidx.compose.material3.*
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.*
@@ -15,25 +17,25 @@ import cafe.adriel.lyricist.rememberStrings
 import com.arkivanov.decompose.extensions.compose.stack.Children
 import com.arkivanov.decompose.router.stack.active
 import com.arkivanov.decompose.router.stack.backStack
+import core.i18n.toCountryAlpha2Code
 import core.storage.KeyValueStorage
 import core.storage.StorageKeys
 import core.util.tabAnimation
 import org.koin.compose.koinInject
-import ui.dashboard.DashboardUi
-import ui.home.HomeUi
-import core.i18n.toCountryAlpha2Code
 import ui.adminsignup.AdminSignUpUi
 import ui.cdex.CDexUi
 import ui.cdox.CDoxUi
 import ui.cms.CMSUi
-import ui.main.MainComponent.Child.*
-import ui.main.MainComponent.Child.Map
 import ui.component.navigation.AdaptiveNavigationLayout
 import ui.component.navigation.NavigationLayoutType
 import ui.component.navigation.TabRowType
 import ui.component.navigation.TabType
-import ui.map.MapUi
 import ui.component.navigation.model.NavigationItem
+import ui.dashboard.DashboardUi
+import ui.home.HomeUi
+import ui.main.MainComponent.Child.*
+import ui.main.MainComponent.Child.Map
+import ui.map.MapUi
 import ui.profile.ProfileUi
 import ui.queue.QueueUi
 import ui.reset.ResetUi
@@ -175,12 +177,12 @@ private fun Children(component: MainComponent, modifier: Modifier = Modifier) {
             is Profile -> ProfileUi(child.component)
             is Home -> HomeUi(child.component)
             is Map -> MapUi(child.component)
-            is Dashboard -> DashboardUi(child.component)
-            is Settings -> SettingsUi(child.component)
             is CMS -> CMSUi(child.component)
             is Queue -> QueueUi(child.component)
             is CDox -> CDoxUi(child.component)
             is CDex -> CDexUi(child.component)
+            is Dashboard -> DashboardUi(child.component)
+            is Settings -> SettingsUi(child.component)
         }
     }
 }

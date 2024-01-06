@@ -10,10 +10,11 @@ internal val EnStrings = Strings(
     profile = "Profile",
     main = "Main",
     map = "Map",
-    dashboard = "Dashboard",
-    settings = "Settings",
     cms = "CMS",
     queue = "Queue",
     cdox = "Documents",
     cdex = "Declaration",
+    dashboard = "Dashboard",
+    settings = "Settings",
+
 )

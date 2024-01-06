@@ -8,12 +8,12 @@ internal data class Strings(
     val profile: String,
     val main: String,
     val map: String,
-    val dashboard: String,
-    val settings: String,
     val cms: String,
     val queue: String,
     val cdox: String,
     val cdex: String,
+    val dashboard: String,
+    val settings: String,
 ) {
 
     operator fun get(key: String): String{

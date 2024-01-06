@@ -4,6 +4,7 @@ import WEB_PATH_ADMIN_SIGN_UP
 import WEB_PATH_CDEX
 import WEB_PATH_CDOX
 import WEB_PATH_CMS
+import WEB_PATH_DASHBOARD
 import WEB_PATH_HOME
 import WEB_PATH_MAP
 import WEB_PATH_PROFILE
@@ -84,12 +85,12 @@ class DefaultMainComponent(
             is Config.Profile -> Profile(DefaultProfileComponent(componentContext, storeFactory))
             is Config.Home -> Home(DefaultHomeComponent(componentContext, storeFactory))
             is Config.Map -> Map(DefaultMapComponent(componentContext, storeFactory))
-            is Config.Dashboard -> Dashboard(DefaultDashboardComponent(componentContext, storeFactory))
-            is Config.Settings -> Settings(DefaultSettingsComponent(componentContext, storeFactory))
             is Config.CMS -> CMS(DefaultCMSComponent(componentContext, storeFactory))
             is Config.Queue -> Queue(DefaultQueueComponent(componentContext, storeFactory))
             is Config.CDox -> CDox(DefaultCDoxComponent(componentContext, storeFactory))
             is Config.CDex -> CDex(DefaultCDexComponent(componentContext, storeFactory))
+            is Config.Dashboard -> Dashboard(DefaultDashboardComponent(componentContext, storeFactory))
+            is Config.Settings -> Settings(DefaultSettingsComponent(componentContext, storeFactory))
         }
 
     init {
@@ -130,11 +131,12 @@ class DefaultMainComponent(
             WEB_PATH_PROFILE to Config.Profile,
             WEB_PATH_HOME to Config.Home,
             WEB_PATH_MAP to Config.Map,
-            WEB_PATH_SETTINGS to Config.Settings,
             WEB_PATH_CMS to Config.CMS,
             WEB_PATH_QUEUE to Config.Queue,
             WEB_PATH_CDOX to Config.CDox,
             WEB_PATH_CDEX to Config.CDex,
+            WEB_PATH_DASHBOARD to Config.Settings,
+            WEB_PATH_SETTINGS to Config.Settings,
         )
 
         private fun getPathForConfig(config: Config): String =
