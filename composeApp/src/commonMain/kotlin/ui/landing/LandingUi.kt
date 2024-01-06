@@ -12,6 +12,7 @@ import androidx.compose.ui.unit.dp
 import io.kamel.image.asyncPainterResource
 import ui.component.carousel.Carousel
 import ui.component.banner.Banner
+import ui.root.RootComponent
 import java.io.File
 
 @Composable
@@ -56,7 +57,7 @@ internal fun LandingUi(component: LandingComponent) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Button(
                         onClick = {
-                            component.onOutput(LandingComponent.Output.NavigateToMain)
+                            component.onNavigate(RootComponent.Config.Main)
                         },
                         modifier = Modifier
                             .fillMaxWidth()

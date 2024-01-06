@@ -17,7 +17,6 @@ import ui.dashboard.DefaultDashboardComponent
 import ui.home.DefaultHomeComponent
 import ui.component.navigation.model.DeepLink
 import ui.main.MainComponent.Config
-import ui.main.MainComponent.Output
 import ui.main.MainComponent.Child
 import ui.main.MainComponent.Child.SignUp
 import ui.main.MainComponent.Child.SignIn
@@ -82,14 +81,10 @@ class DefaultMainComponent(
         )
     }
 
-    override fun onOutput(output: Output) = when (output) {
-        Output.NavigateBack -> navigation.pop()
-        Output.NavigateToSignIn -> navigation.bringToFront(Config.SignIn)
-        Output.NavigateToProfile -> navigation.bringToFront(Config.Profile)
-        Output.NavigateToHome -> navigation.bringToFront(Config.Home)
-        Output.NavigateToMap -> navigation.bringToFront(Config.Map)
-        Output.NavigateToDashboard -> navigation.bringToFront(Config.Dashboard)
-        Output.NavigateToSettings -> navigation.bringToFront(Config.Settings)
+    override fun onNavigate(config: Config) = navigation.bringToFront(config)
+
+    override fun onEvent(event: MainComponent.Event) = when (event) {
+        MainComponent.Event.NAVIGATE_BACK -> navigation.pop()
     }
 
     private fun onSignInOutput(output: SignInComponent.Output): Unit =

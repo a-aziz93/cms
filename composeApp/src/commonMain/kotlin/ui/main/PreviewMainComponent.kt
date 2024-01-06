@@ -10,16 +10,20 @@ import ui.main.MainComponent.Config
 import ui.main.MainComponent.Child
 import ui.main.MainComponent.Child.Home
 
-class PreviewMainComponent: MainComponent, ComponentContext by PreviewComponentContext {
+class PreviewMainComponent : MainComponent, ComponentContext by PreviewComponentContext {
     override val childStack: Value<ChildStack<*, Child>> =
         MutableValue(
             ChildStack(
                 configuration = Unit,
-                instance =Home(component = PreviewHomeComponent()),
-                )
+                instance = Home(component = PreviewHomeComponent()),
+            )
         )
 
-    override fun onOutput(output: MainComponent.Output) {
-        
+    override fun onNavigate(config: Config) {
+
+    }
+
+    override fun onEvent(event: MainComponent.Event) {
+
     }
 }

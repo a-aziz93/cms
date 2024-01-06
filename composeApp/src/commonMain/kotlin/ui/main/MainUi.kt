@@ -79,16 +79,19 @@ internal fun MainUi(component: MainComponent) {
 
                 val navigationItems = NavigationItems()
 
-                val selectedNavigationItemIndex = remember {
-                    mutableIntStateOf(
-                        getActiveNavigationItemIndex(
-                            navigationItems,
-                            component.childStack.active.configuration as MainComponent.Config
+                val activeNavigationItemIndex = getActiveNavigationItemIndex(
+                    navigationItems,
+                    component.childStack.active.configuration as MainComponent.Config
+                )
+
+                var selectedNavigationItem by remember {
+                    mutableStateOf(
+                        IndexedValue(
+                            activeNavigationItemIndex,
+                            navigationItems[activeNavigationItemIndex]
                         )
                     )
                 }
-
-                var curremtNavigationItem by remember { mutableStateOf(navigationItems[selectedNavigationItemIndex.intValue]) }
 
                 AdaptiveNavigationLayout(
                     layoutType = windowSizeClass.widthSizeClass,
@@ -107,11 +110,12 @@ internal fun MainUi(component: MainComponent) {
                     TabType.TAB,
                     if (component.childStack.backStack.isNotEmpty()) {
                         {
-                            component.onOutput(MainComponent.Output.NavigateBack)
-                            selectedNavigationItemIndex.intValue = getActiveNavigationItemIndex(
+                            component.onEvent(MainComponent.Event.NAVIGATE_BACK)
+                            val ai = getActiveNavigationItemIndex(
                                 navigationItems,
                                 component.childStack.active.configuration as MainComponent.Config
                             )
+                            selectedNavigationItem = IndexedValue(ai, navigationItems[ai])
                         }
                     } else null,
                     darkTheme,
@@ -125,15 +129,14 @@ internal fun MainUi(component: MainComponent) {
                         keyValueStorage.set(StorageKeys.LANGUAGE.key, it)
                     },
                     {
-                        component.onOutput(MainComponent.Output.NavigateToProfile)
-                        selectedNavigationItemIndex.intValue = -1
-                        curremtNavigationItem = profileNavigationItem
+                        selectedNavigationItem = IndexedValue(-1, profileNavigationItem)
+                        component.onNavigate(selectedNavigationItem.value.route as MainComponent.Config)
                     },
                     items = navigationItems,
-                    selectedItem = IndexedValue(selectedNavigationItemIndex.intValue, curremtNavigationItem),
+                    selectedItem = selectedNavigationItem,
                     onItemClick = { index ->
-                        selectedNavigationItemIndex.intValue = index
-                        component.onOutput(navConfigOutputMapper[navigationItems[selectedNavigationItemIndex.intValue].route!!]!!)
+                        selectedNavigationItem = IndexedValue(index, navigationItems[index])
+                        component.onNavigate(selectedNavigationItem.value.route as MainComponent.Config)
                     }
                 ) {
                     Children(component = component)

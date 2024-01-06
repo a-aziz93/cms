@@ -1,11 +1,6 @@
 package ui.landing
 
-interface LandingComponent {
-    val onOutput: (Output) -> Unit
-    
-    sealed class Output {
-        data object NavigateToMain : Output()
-//        data object NavigateToSignIn : Output()
-//        data object NavigateToSignUp : Output()
-    }
-}
+import ui.component.navigation.NavigationComponent
+import ui.root.RootComponent
+
+interface LandingComponent : NavigationComponent<RootComponent.Config>

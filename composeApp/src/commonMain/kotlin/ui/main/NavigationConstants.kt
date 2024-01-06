@@ -51,11 +51,3 @@ fun NavigationItems() = listOf(
     ),
 )
 
-val navConfigOutputMapper = mapOf(
-    MainComponent.Config.SignIn to MainComponent.Output.NavigateToSignIn,
-    MainComponent.Config.Home to MainComponent.Output.NavigateToHome,
-    MainComponent.Config.Map to MainComponent.Output.NavigateToMap,
-    MainComponent.Config.Dashboard to MainComponent.Output.NavigateToDashboard,
-    MainComponent.Config.Settings to MainComponent.Output.NavigateToSettings
-)
-

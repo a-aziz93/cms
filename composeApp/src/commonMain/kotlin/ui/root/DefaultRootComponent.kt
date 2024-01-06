@@ -47,14 +47,11 @@ class DefaultRootComponent(
 
     private fun child(config: Config, componentContext: ComponentContext): Child =
         when (config) {
-            is Config.Landing -> Landing(DefaultLandingComponent(componentContext, storeFactory, ::onLandingOutput))
+            is Config.Landing -> Landing(DefaultLandingComponent(componentContext, storeFactory, ::onLandingNavigate))
             is Config.Main -> Main(DefaultMainComponent(componentContext, storeFactory))
         }
 
-    private fun onLandingOutput(output: LandingComponent.Output): Unit =
-        when (output) {
-            LandingComponent.Output.NavigateToMain -> navigation.bringToFront(Config.Main)
-        }
+    private fun onLandingNavigate(config: RootComponent.Config): Unit = navigation.bringToFront(config)
 
     init {
         webHistoryController?.attach(
