@@ -1,6 +1,7 @@
 package ui.main
 
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Surface
 import androidx.compose.material3.*
@@ -95,7 +96,6 @@ internal fun MainUi(component: MainComponent) {
                     mediumLayoutType = NavigationLayoutType.BOTTOM_BAR,
                     expandedLayoutType = NavigationLayoutType.TOP_BAR,
                     hasTopAppBar = true,
-                    title = { curremtNavigationItem.text },
                     topAppBarColors = TopAppBarDefaults.topAppBarColors(
                         containerColor = MaterialTheme.colorScheme.primary,
                         scrolledContainerColor = MaterialTheme.colorScheme.surface,
@@ -130,7 +130,7 @@ internal fun MainUi(component: MainComponent) {
                         curremtNavigationItem = profileNavigationItem
                     },
                     items = navigationItems,
-                    selectedItemIndex = selectedNavigationItemIndex.intValue,
+                    selectedItem = IndexedValue(selectedNavigationItemIndex.intValue, curremtNavigationItem),
                     onItemClick = { index ->
                         selectedNavigationItemIndex.intValue = index
                         component.onOutput(navConfigOutputMapper[navigationItems[selectedNavigationItemIndex.intValue].route!!]!!)

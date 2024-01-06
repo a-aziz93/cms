@@ -19,7 +19,7 @@ fun main() {
 
     val lifecycle = LifecycleRegistry()
 
-    val root =
+    val rootComponent =
         DefaultRootComponent(
             componentContext = DefaultComponentContext(lifecycle = lifecycle),
             featureInstaller = DefaultFeatureInstaller,
@@ -29,5 +29,5 @@ fun main() {
 
     lifecycle.attachToDocument()
     
-    CanvasBasedWindow(canvasElementId = "ComposeTarget") { App() }
+    CanvasBasedWindow(canvasElementId = "ComposeTarget") { App(rootComponent) }
 }

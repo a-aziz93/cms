@@ -11,7 +11,6 @@ import com.arkivanov.decompose.ExperimentalDecomposeApi
 import com.arkivanov.decompose.defaultComponentContext
 import com.arkivanov.mvikotlin.main.store.DefaultStoreFactory
 import core.di.initKoin
-import earth.worldwind.WorldWindow
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.stopKoin
 import ui.adminsignup.AdminSignUpUi
@@ -67,7 +66,7 @@ class MainActivity : ComponentActivity() {
             )
 
         setContent {
-            App(rootComponent = rootComponent)
+            App(rootComponent)
         }
     }
 
@@ -80,7 +79,7 @@ class MainActivity : ComponentActivity() {
 @Preview(showSystemUi = true)
 @Composable
 fun AppAndroidPreview() {
-    App(rootComponent = PreviewRootComponent())
+    App(PreviewRootComponent())
 }
 
 @Preview(showSystemUi = true)

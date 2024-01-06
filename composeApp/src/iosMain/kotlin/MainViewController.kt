@@ -37,7 +37,7 @@ fun MainViewController(
 
         // Bind safe area as the value for LocalSafeArea
         CompositionLocalProvider(LocalSafeArea provides safeArea) {
-            App(rootComponent=rootComponent)
+            App(rootComponent)
         }
     }
 }

@@ -21,9 +21,10 @@ import io.kamel.image.KamelImage
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import ui.component.dropdown.ContextMenu
+import ui.component.dropdown.model.DropdownItem
 import ui.model.Item
 
-@OptIn(ExperimentalResourceApi::class, ExperimentalFoundationApi::class)
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun Avatar(
     resource: Resource<Painter>? = null,
@@ -35,7 +36,7 @@ fun Avatar(
     lastName: String,
     textStyle: TextStyle = MaterialTheme.typography.titleSmall,
     onClick: (() -> Unit)? = null,
-    contextMenuItems: List<Item> = emptyList(),
+    contextMenuItems: List<DropdownItem> = emptyList(),
     onContextMenuItemClick: (Item) -> Unit = {},
 ) {
     val modifier = ContextMenu(

@@ -92,7 +92,7 @@ fun main() {
                               },
             state = windowState,
             title = "cms") {
-            App(rootComponent=rootComponent)
+            App(rootComponent)
             
                 if (isCloseRequested) {
                     SaveStateDialog(
@@ -108,7 +108,7 @@ fun main() {
 @Preview
 @Composable
 fun AppDesktopPreview() {
-    App(rootComponent=PreviewRootComponent())
+    App(PreviewRootComponent())
 }
 
 @Preview()

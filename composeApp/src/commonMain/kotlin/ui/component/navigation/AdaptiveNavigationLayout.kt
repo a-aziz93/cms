@@ -28,6 +28,7 @@ import ui.component.pickerdialog.PickerDialog
 import core.i18n.supportedLocaleCodes
 import core.i18n.toCountryAlpha2Code
 import core.i18n.toLanguageAlpha2Code
+import ui.component.dropdown.model.DropdownItem
 import ui.component.navigation.model.NavigationItem
 import ui.component.pickerdialog.locale.LocalePickerDialog
 import ui.model.Item
@@ -40,7 +41,6 @@ fun AdaptiveNavigationLayout(
     mediumLayoutType: NavigationLayoutType = NavigationLayoutType.DRAWER,
     expandedLayoutType: NavigationLayoutType = NavigationLayoutType.DRAWER,
     hasTopAppBar: Boolean = true,
-    title: @Composable () -> Unit,
     topAppBarColors: TopAppBarColors = TopAppBarDefaults.topAppBarColors(),
     tabRowType: TabRowType = TabRowType.TAB_ROW,
     tabType: TabType = TabType.TAB,
@@ -51,7 +51,7 @@ fun AdaptiveNavigationLayout(
     onLanguageClick: ((String) -> Unit)? = null,
     onAvatarClick: (() -> Unit)? = null,
     items: List<NavigationItem>,
-    selectedItemIndex: Int = 0,
+    selectedItem: IndexedValue<NavigationItem>,
     onItemClick: (Int) -> Unit,
     content: @Composable () -> Unit = {},
 ) {
@@ -76,8 +76,8 @@ fun AdaptiveNavigationLayout(
                             firstName = "Aziz",
                             lastName = "Atoev",
                             contextMenuItems = listOf(
-                                Item({ Text("Profile") }),
-                                Item({ Text("LogOut") }, { Icon(EvaIcons.Outline.LogOut, null) })
+                                DropdownItem({ Text("Profile") }),
+                                DropdownItem({ Text("LogOut") }, { Icon(EvaIcons.Outline.LogOut, null) })
                             ),
                             onContextMenuItemClick = {
 
@@ -89,7 +89,7 @@ fun AdaptiveNavigationLayout(
                 }
             },
             items = items,
-            selectedItemIndex = selectedItemIndex,
+            selectedItemIndex = selectedItem.index,
             onItemClick = onItemClick
         ) {
             BarNavigationLayout(
@@ -98,7 +98,6 @@ fun AdaptiveNavigationLayout(
                 mediumLayoutType,
                 expandedLayoutType,
                 hasTopAppBar,
-                title,
                 topAppBarColors,
                 tabRowType,
                 tabType,
@@ -110,7 +109,7 @@ fun AdaptiveNavigationLayout(
                 onLanguageClick,
                 onAvatarClick,
                 items,
-                selectedItemIndex,
+                selectedItem,
                 onItemClick,
             ) {
                 content()
@@ -123,7 +122,6 @@ fun AdaptiveNavigationLayout(
             mediumLayoutType,
             expandedLayoutType,
             hasTopAppBar,
-            title,
             topAppBarColors,
             tabRowType,
             tabType,
@@ -135,7 +133,7 @@ fun AdaptiveNavigationLayout(
             onLanguageClick,
             onAvatarClick,
             items,
-            selectedItemIndex,
+            selectedItem,
             onItemClick,
         ) {
             content()
@@ -151,7 +149,6 @@ private fun BarNavigationLayout(
     mediumLayoutType: NavigationLayoutType,
     expandedLayoutType: NavigationLayoutType,
     hasTopAppBar: Boolean,
-    title: @Composable () -> Unit,
     topAppBarColors: TopAppBarColors,
     tabRowType: TabRowType,
     tabType: TabType,
@@ -163,7 +160,7 @@ private fun BarNavigationLayout(
     onLanguageClick: ((String) -> Unit)?,
     onAvatarClick: (() -> Unit)?,
     items: List<NavigationItem>,
-    selectedItemIndex: Int,
+    selectedItem: IndexedValue<NavigationItem>,
     onItemClick: (Int) -> Unit,
     content: @Composable () -> Unit,
 ) {
@@ -176,7 +173,13 @@ private fun BarNavigationLayout(
             if (hasTopAppBar) {
                 TopAppBar(
                     title = {
-                        if (selectedItemIndex > -1) items[selectedItemIndex].text ?: "" else title()
+                        BadgedBox(
+                            badge = {
+                                (selectedItem.value.selectedIcon ?: selectedItem.value.icon)?.let { it() }
+                            }
+                        ) {
+                            (selectedItem.value.selectedText ?: selectedItem.value.text)?.let { it() }
+                        }
                     },
                     navigationIcon = {
                         if (drawerState != null) {
@@ -247,7 +250,7 @@ private fun BarNavigationLayout(
             ) {
                 NavigationBar {
                     items.forEachIndexed { index, item ->
-                        val selected = index == selectedItemIndex
+                        val selected = index == selectedItem.index
                         NavigationBarItem(
                             modifier = item.getModifier(selected),
                             selected = selected,
@@ -290,15 +293,15 @@ private fun BarNavigationLayout(
                         .fillMaxWidth()
                         .wrapContentHeight()
                         .padding(innerPadding),
-                    selectedItemIndex,
+                    selectedItem.index,
                     {
                         Spacer(modifier = Modifier.height(5.dp))
                     },
                     { tabPositions ->
-                        if (selectedItemIndex > -1) {
+                        if (selectedItem.index > -1) {
                             Box(
                                 modifier = Modifier
-                                    .tabIndicatorOffset(tabPositions[selectedItemIndex])
+                                    .tabIndicatorOffset(tabPositions[selectedItem.index])
                                     .height(4.dp)
                                     .clip(RoundedCornerShape(8.dp)) // clip modifier not working
                                     .padding(horizontal = 28.dp)
@@ -310,7 +313,7 @@ private fun BarNavigationLayout(
                     Tabs(
                         tabType,
                         items,
-                        selectedItemIndex,
+                        selectedItem.index,
                         onClick = onItemClick
                     )
                 }
