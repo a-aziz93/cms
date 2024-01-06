@@ -14,17 +14,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import core.util.stringMatcher
-import org.jetbrains.compose.resources.ExperimentalResourceApi
+import ui.component.pickerdialog.model.PickerItem
 import ui.component.search.SearchField
 import ui.model.SelectableColor
 
-@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun <T : Any> PickerDialog(
-    items: List<T>,
-    selectedItem: T = items.first(),
-    onGetIcon: @Composable ((T) -> Unit)? = null,
-    onItemClick: (T) -> Unit,
+    items: List<PickerItem<T>>,
+    selectedItem: PickerItem<T> = items.first(),
+    onItemClick: (PickerItem<T>) -> Unit,
     search: Boolean = true,
     searchHint: String = "Search ...",
     rounded: Int = 12,
@@ -112,13 +110,8 @@ fun <T : Any> PickerDialog(
                                     isPick = item
                                     onDismissRequest()
                                 }) {
-                            if (onGetIcon != null) {
-                                onGetIcon(item)
-                            }
-                            Text(
-                                item.toString(),
-                                Modifier.padding(horizontal = 18.dp)
-                            )
+                            item.icon?.let { it() }
+                            item.text?.let { it() }
                         }
                     }
                 }

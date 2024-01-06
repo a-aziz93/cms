@@ -1,4 +1,4 @@
-package ui.component.contextmenu
+package ui.component.dropdown
 
 import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -16,13 +16,14 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import co.touchlab.kermit.Logger
+import ui.component.dropdown.model.DropdownItem
 import ui.model.Item
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ContextMenu(
-    items: List<Item>,
-    onItemClick: (Item) -> Boolean,
+    items: List<DropdownItem>,
+    onItemClick: (DropdownItem) -> Boolean,
     onDismissRequest: () -> Boolean,
 ): Modifier {
 
@@ -39,8 +40,6 @@ fun ContextMenu(
     val interactionSource = remember {
         MutableInteractionSource()
     }
-
-    val density = LocalDensity.current
 
     val modifier = Modifier
         .indication(interactionSource, LocalIndication.current)
@@ -93,6 +92,15 @@ fun ContextMenu(
                         }
                     ) {
                         it.icon?.let { icon -> icon() }
+                    }
+                },
+                trailingIcon = {
+                    BadgedBox(
+                        badge = {
+                            it.trailingBadge?.let { badge -> badge() }
+                        }
+                    ) {
+                        it.trailingIcon?.let { icon -> icon() }
                     }
                 },
                 onClick = {

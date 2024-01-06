@@ -29,6 +29,7 @@ import core.i18n.supportedLocaleCodes
 import core.i18n.toCountryAlpha2Code
 import core.i18n.toLanguageAlpha2Code
 import ui.component.navigation.model.NavigationItem
+import ui.component.pickerdialog.locale.LocalePickerDialog
 import ui.model.Item
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -317,18 +318,12 @@ private fun BarNavigationLayout(
                 contentBoxModifier = contentBoxModifier.padding(innerPadding)
             }
             if (lpDialogState) {
-                PickerDialog(
+                LocalePickerDialog(
                     items = supportedLocaleCodes.map { lng ->
                         val lngCountryAlpha2Code = lng.toCountryAlpha2Code()
                         countries.find { it.alpha2Code == lngCountryAlpha2Code }!!
                     },
                     selectedItem = countries.find { it.alpha2Code == language }!!,
-                    onGetIcon = {
-                        Image(
-                            painter = painterResource(countryAlpha2CodeFlagPathMap[it.alpha2Code]!!),
-                            contentDescription = null
-                        )
-                    },
                     onItemClick = { c ->
                         onLanguageClick!!(c.alpha2Code.toLanguageAlpha2Code())
                         lpDialogState = false

@@ -12,3 +12,5 @@ expect class DatabaseDriverFactory() {
     ): SqlDriver
 }
 
+fun createDatabase(driverFactory:DatabaseDriverFactory): Database = Database(driverFactory.createDriver())
+

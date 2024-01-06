@@ -20,7 +20,7 @@ import io.kamel.core.Resource
 import io.kamel.image.KamelImage
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
-import ui.component.contextmenu.ContextMenu
+import ui.component.dropdown.ContextMenu
 import ui.model.Item
 
 @OptIn(ExperimentalResourceApi::class, ExperimentalFoundationApi::class)
