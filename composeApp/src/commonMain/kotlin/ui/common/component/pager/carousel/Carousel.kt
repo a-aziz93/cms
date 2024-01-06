@@ -7,6 +7,7 @@ import androidx.compose.foundation.interaction.collectIsDraggedAsState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.*
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -45,6 +46,7 @@ fun Carousel(
         HorizontalPagerIndicator(
             state = state,
             modifier = Modifier
+                .padding(8.dp)
                 .align(Alignment.BottomCenter),
             onIndicatorClick = {
                 scope.launch {
