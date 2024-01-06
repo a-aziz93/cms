@@ -3,12 +3,14 @@ package ui.landing
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import io.kamel.image.asyncPainterResource
 import ui.common.component.pager.carousel.Carousel
@@ -19,12 +21,14 @@ import java.io.File
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun LandingUi(component: LandingComponent) {
-    Box(
+    Column(
         modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.SpaceBetween,
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Carousel(
             modifier = Modifier
-                .height(200.dp),
+                .height(400.dp),
             horizontal = false,
             items = listOf(
                 "/drawable/banner/customs.jpg",
@@ -41,49 +45,32 @@ internal fun LandingUi(component: LandingComponent) {
                     )
                 }
             },
-            onItemClicked = {
-
-            }
+        )
+        Text(
+            text = "Welcome to the Electronic Border App",
+            style = MaterialTheme.typography.titleLarge,
+            textAlign = TextAlign.Center,
         )
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(40.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.SpaceEvenly
+            modifier = Modifier.width(200.dp)
         ) {
-
-            Box(
+            Button(
+                onClick = {
+                    component.onNavigate(RootComponent.Config.Main)
+                },
                 modifier = Modifier
-                    .width(600.dp)
+                    .fillMaxWidth()
             ) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Button(
-                        onClick = {
-                            component.onNavigate(RootComponent.Config.Main)
-                        },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(50.dp)
-                            .absolutePadding(bottom = 5.dp),
-                    ) {
-                        Text(text = "Sign In")
-                    }
-
-                    OutlinedButton(
-                        onClick = { },
-                        Modifier
-                            .fillMaxWidth()
-                            .height(50.dp)
-                            .absolutePadding(top = 5.dp)
-                    ) {
-                        Text(
-                            text = "Sign Up",
-                            color = Color(red = 255, green = 125, blue = 0)
-                        )
-
-                    }
-                }
+                Text(text = "Sign In")
+            }
+            Button(
+                onClick = { },
+                Modifier
+                    .fillMaxWidth()
+            ) {
+                Text(
+                    text = "Sign Up",
+                )
             }
         }
     }
