@@ -18,8 +18,6 @@ import androidx.compose.ui.unit.dp
 import compose.icons.EvaIcons
 import compose.icons.evaicons.Outline
 import compose.icons.evaicons.outline.*
-import core.util.countries
-import core.util.countryAlpha2CodeFlagPathMap
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
@@ -27,6 +25,8 @@ import ui.common.component.avatar.Avatar
 import core.i18n.supportedLocaleCodes
 import core.i18n.toCountryAlpha2Code
 import core.i18n.toLanguageAlpha2Code
+import core.model.countries
+import core.model.countryAlpha2CodeFlagPathMap
 import ui.common.component.dropdown.model.DropdownItem
 import ui.common.component.navigation.model.NavigationItem
 import ui.common.component.pickerdialog.locale.LocalePickerDialog
