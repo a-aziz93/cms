@@ -1,4 +1,4 @@
-package ui.common.component.pickerdialog.locale
+package ui.common.component.dialog.locale
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.padding
@@ -11,8 +11,8 @@ import core.model.countries
 import core.model.countryAlpha2CodeFlagPathMap
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
-import ui.common.component.pickerdialog.PickerDialog
-import ui.common.component.pickerdialog.model.PickerItem
+import ui.common.component.dialog.PickerDialog
+import ui.common.component.dialog.model.PickerItem
 
 @Composable
 fun LocalePickerDialog(

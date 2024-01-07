@@ -4,9 +4,9 @@ import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 
 @Serializable
-abstract class Predicate<T : Any>(
-    val operation: T,
-    vararg val values:@Contextual Any
+abstract class Predicate(
+    val operation: @Contextual Any,
+    vararg val values: @Contextual Any
 ) {
     @Suppress("UNUSED")
     fun and(vararg value: Any) = LogicalPredicate.and(this, value)
@@ -18,12 +18,13 @@ abstract class Predicate<T : Any>(
 
     //TODO
     @Suppress("UNUSED")
-    fun <T : Any> convert(converter: (predicate: Predicate<*>) -> T): Any {
-        val predicates = mutableListOf<Any>()
+    fun <D : Any> convert(converter: (predicate: Predicate) -> D): D {
+        val predicates = mutableListOf<Triple<Predicate, Int, D?>>(Triple(this, 0, null))
+
         while (predicates.size > 0) {
 
         }
 
-        return predicates.first()
+        return predicates.first().third!!
     }
 }

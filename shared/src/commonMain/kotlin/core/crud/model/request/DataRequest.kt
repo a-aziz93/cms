@@ -6,8 +6,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class DataRequest(
-    var projections: List<String>? = null,
-    var predicate: Predicate<@Contextual Any>? = null,
-    var page: Page? = null,
-    var sort: List<Order>? = null,
+    val projections: List<String>? = null,
+    val predicate: Predicate? = null,
+    val page: Page? = null,
+    val sort: List<Order>? = null,
 )

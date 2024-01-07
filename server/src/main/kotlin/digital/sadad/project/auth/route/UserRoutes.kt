@@ -19,12 +19,10 @@ import auth.dto.UserCreateDto
 import auth.dto.UserLoginDto
 import auth.dto.UserUpdateDto
 import auth.dto.UserWithTokenDto
-import core.error.*
 import digital.sadad.project.auth.mapper.toDto
 import digital.sadad.project.auth.mapper.toModel
 import digital.sadad.project.core.storage.service.StorageService
 import digital.sadad.project.auth.service.user.UserService
-import digital.sadad.project.auth.service.token.TokensService
 import kotlinx.coroutines.flow.toList
 import mu.two.KotlinLogging
 import org.koin.ktor.ext.inject

@@ -28,7 +28,7 @@ import ui.cdox.CDoxUi
 import ui.cdox.PreviewCDoxComponent
 import ui.cms.CMSUi
 import ui.cms.PreviewCMSComponent
-import ui.component.SaveStateDialog
+import ui.common.component.dialog.savestate.SaveStateDialog
 import ui.dashboard.DashboardUi
 import ui.dashboard.PreviewDashboardComponent
 import ui.dynamicfeatures.dynamicfeature.DefaultFeatureInstaller

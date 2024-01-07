@@ -29,7 +29,7 @@ import core.model.countries
 import core.model.countryAlpha2CodeFlagPathMap
 import ui.common.component.dropdown.model.DropdownItem
 import ui.common.component.navigation.model.NavigationItem
-import ui.common.component.pickerdialog.locale.LocalePickerDialog
+import ui.common.component.dialog.locale.LocalePickerDialog
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -261,8 +261,7 @@ private fun BarNavigationLayout(
                                 onItemClick(index)
                             },
                             label = {
-                                Text("test")
-//                                item.getText(selected)
+                                item.getText(selected)
                             },
                             alwaysShowLabel = false,
                             icon = {

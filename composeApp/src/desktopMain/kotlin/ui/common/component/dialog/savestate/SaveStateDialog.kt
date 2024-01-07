@@ -1,4 +1,4 @@
-package ui.component
+package ui.common.component.dialog.savestate
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.runtime.Composable

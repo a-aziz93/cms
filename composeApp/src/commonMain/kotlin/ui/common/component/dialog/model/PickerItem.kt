@@ -1,4 +1,4 @@
-package ui.common.component.pickerdialog.model
+package ui.common.component.dialog.model
 
 import androidx.compose.runtime.Composable
 import ui.common.model.Item

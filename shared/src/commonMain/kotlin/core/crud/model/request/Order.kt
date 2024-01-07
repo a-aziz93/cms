@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Order(
-    var name: String? = null,
-    var ascending: Boolean = true,
-    var nullFirst: Boolean = false,
+    val name: String? = null,
+    val ascending: Boolean = true,
+    val nullFirst: Boolean = false,
 )

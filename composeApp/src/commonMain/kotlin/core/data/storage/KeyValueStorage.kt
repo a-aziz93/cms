@@ -1,6 +1,5 @@
-package core.storage
+package core.data.storage
 
-import kotlinx.coroutines.flow.Flow
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.modules.SerializersModule
 import kotlin.reflect.KClass

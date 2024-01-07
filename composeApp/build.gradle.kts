@@ -100,6 +100,8 @@ kotlin {
             implementation(libs.bundles.ktorfit)
             implementation(libs.bundles.konfigure)
             implementation(libs.data.table.material3)
+            implementation(libs.worldwind)
+            implementation(libs.kconmapper.annotations)
         }
 
         desktopMain.dependencies {
@@ -188,6 +190,7 @@ dependencies {
 //    add("kspIosSimulatorArm64", libs.ktorfit.ksp)
 //    add("kspIosX64", libs.ktorfit.ksp)
 //    add("kspJs", libs.ktorfit.ksp)
+    ksp(libs.kconmapper.ksp)
 }
 
 // workaround for KSP only in Common Main.
@@ -210,6 +213,9 @@ ksp {
     arg("KOIN_CONFIG_CHECK", "true")
     // 0 - Turn off all Ktorfit related error checking, 1 - Check for errors, 2 - Turn errors into warnings
     arg("Ktorfit_Errors", "1")
+    // If set to true, this argument suppresses warnings about mapping mismatches,
+    // critical warnings are still emitted.
+    arg("kconmapper.suppressMappingMismatchWarnings", "false")
 }
 
 sqldelight {

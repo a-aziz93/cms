@@ -18,8 +18,8 @@ import com.arkivanov.decompose.extensions.compose.stack.Children
 import com.arkivanov.decompose.router.stack.active
 import com.arkivanov.decompose.router.stack.backStack
 import core.i18n.toCountryAlpha2Code
-import core.storage.KeyValueStorage
-import core.storage.StorageKeys
+import core.data.storage.KeyValueStorage
+import core.data.storage.StorageKeys
 import core.util.tabAnimation
 import org.koin.compose.koinInject
 import ui.adminsignup.AdminSignUpUi

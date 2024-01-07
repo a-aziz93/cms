@@ -6,7 +6,7 @@ class ComparePredicate private constructor(
     @Suppress("UNUSED")
     operation: CompareOperation,
     vararg values: Any
-) : Predicate<CompareOperation>(operation, *values) {
+) : Predicate(operation, *values) {
     companion object {
         fun eq(leftValue: Any, rightValue: Any) = ComparePredicate(EQUALS, leftValue, rightValue)
         fun neq(leftValue: Any, rightValue: Any) = ComparePredicate(NOT_EQUALS, leftValue, rightValue)

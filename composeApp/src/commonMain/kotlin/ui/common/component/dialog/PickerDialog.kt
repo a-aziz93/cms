@@ -1,4 +1,4 @@
-package ui.common.component.pickerdialog
+package ui.common.component.dialog
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -14,7 +14,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import ui.common.component.pickerdialog.model.PickerItem
+import ui.common.component.dialog.model.PickerItem
 import ui.common.component.search.SearchField
 import ui.common.component.search.model.rememberSearchFieldState
 import ui.common.model.SelectableColor

@@ -1,4 +1,4 @@
-package core.database
+package core.data.database
 
 class Database(
     private val driverProvider: DatabaseDriverFactory,

@@ -61,6 +61,8 @@ kotlinx-serialization = "1.6.2"
 slf4j = "2.0.9"
 data-table = "0.5.1"
 tcnative = "2.0.62.Final"
+kconmapper = "1.0.0-alpha08"
+worldwind = "1.3.7"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -232,6 +234,10 @@ slf4j-simple = { module = "org.slf4j:slf4j-simple", version.ref = "slf4j" }
 # Data table
 data-table-material3 = { module = "com.seanproctor:data-table-material3", version.ref = "data-table" }
 # Map
+worldwind = { module = "earth.worldwind:worldwind", version.ref = "worldwind" }
+# Data mapper
+kconmapper-annotations = { module = "com.github.yanneckreiss.kconmapper:annotations", version.ref = "kconmapper" }
+kconmapper-ksp = { module = "com.github.yanneckreiss.kconmapper:ksp", version.ref = "kconmapper" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

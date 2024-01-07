@@ -1,11 +1,9 @@
-package core.storage
+package core.data.storage
 
 import com.russhwolf.settings.*
-import com.russhwolf.settings.coroutines.getStringFlow
 import com.russhwolf.settings.serialization.decodeValue
 import com.russhwolf.settings.serialization.decodeValueOrNull
 import com.russhwolf.settings.serialization.encodeValue
-import kotlinx.coroutines.flow.Flow
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.modules.SerializersModule

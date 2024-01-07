@@ -1,4 +1,4 @@
-package core.storage
+package core.data.storage
 
 enum class StorageKeys {
                        TOKEN,

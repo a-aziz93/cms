@@ -14,15 +14,13 @@ open class SelectableItem(
     val selectedModifier: Modifier = modifier,
 ) : Item(text, icon, badge) {
     @Composable
-    fun getText(selected: Boolean) =
-        (if (selected)
-            selectedText else text)?.invoke()
+    fun getText(selected: Boolean)=if (selected) selectedText?.invoke() else text?.invoke()
 
     @Composable
-    fun getIcon(selected: Boolean) = (if (selected) selectedIcon else icon)?.invoke()
+    fun getIcon(selected: Boolean) = if (selected) selectedIcon?.invoke() else icon?.invoke()
 
     @Composable
-    fun getBadge(selected: Boolean) = (if (selected) selectedBadge else badge)?.invoke()
+    fun getBadge(selected: Boolean) = if (selected) selectedBadge?.invoke() else badge?.invoke()
 
     fun getModifier(selected: Boolean): Modifier = if (selected) selectedModifier else modifier
 }
