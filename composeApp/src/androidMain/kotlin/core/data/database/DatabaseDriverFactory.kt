@@ -1,4 +1,4 @@
-package core.database
+package core.data.database
 
 import app.cash.sqldelight.async.coroutines.synchronous
 import app.cash.sqldelight.db.QueryResult
