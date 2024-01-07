@@ -32,7 +32,7 @@ fun NavigationItems() = listOf(
         route = MainComponent.Config.SignIn,
     ),
     NavigationItem(
-        text = { Text(strings.main) },
+        text = { Text(strings.home) },
         icon = { Icon(EvaIcons.Outline.Home, null) },
         selectedIcon = { Icon(EvaIcons.Fill.Home, null) },
         route = MainComponent.Config.Home,

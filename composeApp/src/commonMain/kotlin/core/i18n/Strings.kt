@@ -6,7 +6,7 @@ internal data class Strings(
     val signUp: String,
     val signIn: String,
     val profile: String,
-    val main: String,
+    val home: String,
     val map: String,
     val cms: String,
     val queue: String,

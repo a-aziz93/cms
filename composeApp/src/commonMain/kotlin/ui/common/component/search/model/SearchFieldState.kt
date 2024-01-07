@@ -9,19 +9,21 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 
 class SearchFieldState(
+    searchTerm: String,
     matchCase: Boolean,
     matchWord: Boolean,
     matchRegex: Boolean,
 ) {
+    var searchTerm by mutableStateOf(searchTerm)
     var matchCase by mutableStateOf(matchCase)
     var matchWord by mutableStateOf(matchWord)
     var matchRegex by mutableStateOf(matchRegex)
 
     companion object {
         val Saver: Saver<SearchFieldState, *> = listSaver(
-            save = { listOf(it.matchCase, it.matchWord, it.matchRegex) },
+            save = { listOf(it.searchTerm, it.matchCase, it.matchWord, it.matchRegex) },
             restore = {
-                SearchFieldState(it[0], it[1], it[2])
+                SearchFieldState(it[0] as String, it[1] as Boolean, it[2] as Boolean, it[3] as Boolean)
             }
         )
     }
@@ -29,11 +31,12 @@ class SearchFieldState(
 
 @Composable
 fun rememberSearchFieldState(
+    searchTerm: String = "",
     initialMatchCase: Boolean = true,
     initialMatchWord: Boolean = true,
     initialMatchRegex: Boolean = false,
 ): SearchFieldState {
     return rememberSaveable(saver = SearchFieldState.Saver) {
-        SearchFieldState(initialMatchCase, initialMatchWord, initialMatchRegex)
+        SearchFieldState(searchTerm, initialMatchCase, initialMatchWord, initialMatchRegex)
     }
 }

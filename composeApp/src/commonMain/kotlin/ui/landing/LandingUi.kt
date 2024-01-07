@@ -17,6 +17,7 @@ import ui.common.component.pager.carousel.Carousel
 import ui.common.component.banner.Banner
 import ui.root.RootComponent
 import java.io.File
+import cafe.adriel.lyricist.strings
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -61,7 +62,16 @@ internal fun LandingUi(component: LandingComponent) {
                 modifier = Modifier
                     .fillMaxWidth()
             ) {
-                Text(text = "Sign In")
+                Text(strings.home)
+            }
+            Button(
+                onClick = {
+                    component.onNavigate(RootComponent.Config.Main)
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+            ) {
+                Text(strings.signIn)
             }
             Button(
                 onClick = { },
@@ -69,7 +79,7 @@ internal fun LandingUi(component: LandingComponent) {
                     .fillMaxWidth()
             ) {
                 Text(
-                    text = "Sign Up",
+                    strings.signUp,
                 )
             }
         }

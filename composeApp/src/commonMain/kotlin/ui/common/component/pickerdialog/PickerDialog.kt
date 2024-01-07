@@ -1,5 +1,6 @@
 package ui.common.component.pickerdialog
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -31,8 +32,6 @@ fun <T : Any> PickerDialog(
 ) {
     var isPick by remember { mutableStateOf(selectedItem) }
 
-    var searchValue by remember { mutableStateOf("") }
-
     val searchFieldState = rememberSearchFieldState()
 
     Dialog(
@@ -47,33 +46,36 @@ fun <T : Any> PickerDialog(
         ) {
             Column {
                 if (search) {
-                    SearchField(
+                    Box(
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .height(48.dp),
-                        value = searchValue,
-                        onValueChange = {
-                            searchValue = it
-                        },
-                        fontSize = 14.sp,
-                        hint = searchHint,
-                        textAlign = TextAlign.Start,
-                        state = searchFieldState,
-                        matchCaseColor = SelectableColor(
-                            selectedColor = Color.Yellow,
-                        ),
-                        matchWordColor = SelectableColor(
-                            selectedColor = Color.Yellow,
-                        ),
-                        matchRegexColor = SelectableColor(
-                            selectedColor = Color.Yellow,
-                        ),
-                    )
+                            .background(
+                                color = Color.White.copy(alpha = 0.1f)
+                            )
+                    ) {
+                        SearchField(
+                            state = searchFieldState,
+                            modifier = Modifier
+                                .wrapContentHeight()
+                                .fillMaxWidth(),
+                            hint = searchHint,
+                            fontSize = 14.sp,
+                            textAlign = TextAlign.Start,
+                            matchCaseColor = SelectableColor(
+                                selectedColor = Color.Yellow,
+                            ),
+                            matchWordColor = SelectableColor(
+                                selectedColor = Color.Yellow,
+                            ),
+                            matchRegexColor = SelectableColor(
+                                selectedColor = Color.Yellow,
+                            ),
+                        )
+                        Divider(thickness = 1.dp)
+                    }
                 }
-                Divider(thickness = 1.dp)
                 LazyColumn {
                     items(
-                        (if (searchValue.isEmpty()) {
+                        (if (searchFieldState.searchTerm.isEmpty()) {
                             items
                         } else {
                             val matcher = stringMatcher(
@@ -82,7 +84,7 @@ fun <T : Any> PickerDialog(
                                 searchFieldState.matchRegex
                             )
                             items.filter {
-                                matcher(searchValue, it.toString())
+                                matcher(searchFieldState.searchTerm, it.toString())
                             }
                         })
                     ) { item ->
