@@ -14,6 +14,7 @@ internal data class Strings(
     val cdex: String,
     val dashboard: String,
     val settings: String,
+    val serchHint: String,
 ) {
 
     operator fun get(key: String): String{

@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color.Companion.Blue
 import androidx.compose.ui.unit.dp
+import cafe.adriel.lyricist.strings
 import compose.icons.EvaIcons
 import compose.icons.evaicons.Outline
 import compose.icons.evaicons.outline.*
@@ -81,7 +82,7 @@ fun AdaptiveNavigationLayout(
                                 )
                             ),
                             onContextMenuItemClick = {
-
+                                true
                             },
                             onClick = onAvatarClick
                         )
@@ -334,7 +335,7 @@ private fun BarNavigationLayout(
                         onLanguageClick!!(c.alpha2Code.toLanguageAlpha2Code())
                         lpDialogState = false
                     },
-                    searchHint = "Search ...",
+                    searchHint = strings.serchHint,
                     onDismissRequest = {
                         lpDialogState = false
                     },

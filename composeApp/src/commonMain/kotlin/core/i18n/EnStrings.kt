@@ -16,5 +16,5 @@ internal val EnStrings = Strings(
     cdex = "Declaration",
     dashboard = "Dashboard",
     settings = "Settings",
-
+    serchHint="Search",
 )

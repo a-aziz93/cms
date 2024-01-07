@@ -20,6 +20,7 @@ import ui.common.component.dropdown.model.DropdownItem
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ContextMenu(
+    modifier: Modifier = Modifier,
     items: List<DropdownItem>,
     onItemClick: (DropdownItem) -> Boolean,
     onDismissRequest: () -> Boolean,
@@ -38,36 +39,6 @@ fun ContextMenu(
     val interactionSource = remember {
         MutableInteractionSource()
     }
-
-    val modifier = Modifier
-        .indication(interactionSource, LocalIndication.current)
-        .pointerInput(true) {
-            awaitPointerEventScope {
-                val event = awaitPointerEvent()
-                Logger.i("Click:" + event.type)
-                if (event.type == PointerEventType.Press &&
-                    event.buttons.isSecondaryPressed
-                ) {
-//                    event.changes.forEach { e -> e.consume() }
-                    // on-click logic here
-                    isContextMenuVisible = true
-                    val position = event.changes.first().position
-                    pressOffset = DpOffset(position.x.toDp(), position.y.toDp())
-                }
-            }
-            detectTapGestures(
-                onLongPress = {
-                    isContextMenuVisible = true
-                    pressOffset = DpOffset(it.x.toDp(), it.y.toDp())
-                },
-                onPress = {
-                    val press = PressInteraction.Press(it)
-                    interactionSource.emit(press)
-                    tryAwaitRelease()
-                    interactionSource.emit(PressInteraction.Release(press))
-                }
-            )
-        }
 
     DropdownMenu(
         expanded = isContextMenuVisible,
@@ -110,4 +81,32 @@ fun ContextMenu(
     }
 
     return modifier
+        .indication(interactionSource, LocalIndication.current)
+        .pointerInput(true) {
+            awaitPointerEventScope {
+                val event = awaitPointerEvent()
+                Logger.i("Click:" + event.type)
+                if (event.type == PointerEventType.Press &&
+                    event.buttons.isSecondaryPressed
+                ) {
+//                    event.changes.forEach { e -> e.consume() }
+                    // on-click logic here
+                    isContextMenuVisible = true
+                    val position = event.changes.first().position
+                    pressOffset = DpOffset(position.x.toDp(), position.y.toDp())
+                }
+            }
+            detectTapGestures(
+                onLongPress = {
+                    isContextMenuVisible = true
+                    pressOffset = DpOffset(it.x.toDp(), it.y.toDp())
+                },
+                onPress = {
+                    val press = PressInteraction.Press(it)
+                    interactionSource.emit(press)
+                    tryAwaitRelease()
+                    interactionSource.emit(PressInteraction.Release(press))
+                }
+            )
+        }
 }

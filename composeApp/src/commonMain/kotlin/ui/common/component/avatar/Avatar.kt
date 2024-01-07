@@ -37,15 +37,19 @@ fun Avatar(
     textStyle: TextStyle = MaterialTheme.typography.titleSmall,
     onClick: (() -> Unit)? = null,
     contextMenuItems: List<DropdownItem> = emptyList(),
-    onContextMenuItemClick: (Item) -> Unit = {},
+    onContextMenuItemClick: (DropdownItem) -> Boolean = { true },
 ) {
-    val modifier = ContextMenu(
+    var modifier = ContextMenu(
         items = contextMenuItems,
-        onItemClick = {
-            true
-        },
+        onItemClick = onContextMenuItemClick,
         onDismissRequest = { true }
     )
+
+    if (onClick != null) {
+        modifier = modifier.clickable {
+            onClick()
+        }
+    }
 
     if (resource == null) InitialsAvatar(
         modifier,
@@ -80,7 +84,9 @@ private fun InitialsAvatar(
             val name = listOf(firstName, lastName)
                 .joinToString(separator = "")
                 .uppercase()
-            Color((name.fold(0) { acc, char -> char.code + acc } / (name.length * 1000)).absoluteValue.toFloat(), 0.5f,0.4f)
+            Color((name.fold(0) { acc, char -> char.code + acc } / (name.length * 1000)).absoluteValue.toFloat(),
+                0.5f,
+                0.4f)
         }
         val initials = (firstName.take(1) + lastName.take(1)).uppercase()
         Canvas(modifier = Modifier.fillMaxSize()) {

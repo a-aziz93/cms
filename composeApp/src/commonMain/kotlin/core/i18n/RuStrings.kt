@@ -15,4 +15,5 @@ internal val RuStrings = Strings(
     cdex = "Декларация",
     dashboard = "Показатели",
     settings = "Настройки",
+    serchHint="Поиск",
 )
