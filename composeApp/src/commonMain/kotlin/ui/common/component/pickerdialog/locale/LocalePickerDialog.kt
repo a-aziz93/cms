@@ -7,8 +7,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import core.model.Country
-import core.util.countries
-import core.util.countryAlpha2CodeFlagPathMap
+import core.model.countries
+import core.model.countryAlpha2CodeFlagPathMap
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import ui.common.component.pickerdialog.PickerDialog

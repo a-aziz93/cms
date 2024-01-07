@@ -75,7 +75,10 @@ fun AdaptiveNavigationLayout(
                             lastName = "Atoev",
                             contextMenuItems = listOf(
                                 DropdownItem({ Text("Profile") }),
-                                DropdownItem({ Text("LogOut") }, { Icon(EvaIcons.Outline.LogOut, null) })
+                                DropdownItem(
+                                    { Text("LogOut") },
+                                    { Icon(EvaIcons.Outline.LogOut, null) }
+                                )
                             ),
                             onContextMenuItemClick = {
 

@@ -14,7 +14,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import core.util.stringMatcher
 import ui.common.component.pickerdialog.model.PickerItem
 import ui.common.component.search.SearchField
 import ui.common.component.search.model.rememberSearchFieldState
@@ -33,6 +32,8 @@ fun <T : Any> PickerDialog(
     var isPick by remember { mutableStateOf(selectedItem) }
 
     val searchFieldState = rememberSearchFieldState()
+
+    lateinit var matcher: (String, String) -> Boolean
 
     Dialog(
         onDismissRequest = onDismissRequest,
@@ -69,6 +70,9 @@ fun <T : Any> PickerDialog(
                             matchRegexColor = SelectableColor(
                                 selectedColor = Color.Yellow,
                             ),
+                            onMatcher = {
+                                matcher = it
+                            }
                         )
                         Divider(thickness = 1.dp)
                     }
@@ -78,11 +82,6 @@ fun <T : Any> PickerDialog(
                         (if (searchFieldState.searchTerm.isEmpty()) {
                             items
                         } else {
-                            val matcher = stringMatcher(
-                                searchFieldState.matchCase,
-                                searchFieldState.matchWord,
-                                searchFieldState.matchRegex
-                            )
                             items.filter {
                                 matcher(searchFieldState.searchTerm, it.toString())
                             }

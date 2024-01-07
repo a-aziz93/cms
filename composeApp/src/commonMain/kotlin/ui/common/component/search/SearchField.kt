@@ -33,6 +33,7 @@ fun SearchField(
     matchCaseColor: SelectableColor? = null,
     matchWordColor: SelectableColor? = null,
     matchRegexColor: SelectableColor? = null,
+    onMatcher: (((String, String) -> Boolean) -> Unit)? = null
 ) = TextField(
     modifier = modifier,
     textStyle = LocalTextStyle.current.copy(
@@ -61,6 +62,7 @@ fun SearchField(
                 onClick = {
                     state.matchCase = !state.matchCase
                     state.matchRegex = false
+                    onMatcher?.invoke(stringMatcher(state.matchCase,state.matchWord,state.matchRegex))
                 },
             ) {
                 if (matchCaseColor == null || (!state.matchCase && matchCaseColor.color == null)) Text("Cc") else Text(
@@ -68,11 +70,11 @@ fun SearchField(
                     color = if (state.matchCase) matchCaseColor.selectedColor else matchCaseColor.color!!
                 )
             }
-
             IconButton(
                 onClick = {
                     state.matchWord = !state.matchWord
                     state.matchRegex = false
+                    onMatcher?.invoke(stringMatcher(state.matchCase,state.matchWord,state.matchRegex))
                 },
             ) {
                 if (matchWordColor == null || (!state.matchWord && matchWordColor.color == null)) Text("W") else Text(
@@ -85,6 +87,7 @@ fun SearchField(
                     state.matchRegex = !state.matchRegex
                     state.matchCase = false
                     state.matchWord = false
+                    onMatcher?.invoke(stringMatcher(state.matchCase,state.matchWord,state.matchRegex))
                 },
             ) {
                 if (matchRegexColor == null || (!state.matchRegex && matchRegexColor.color == null)) Text(".*") else Text(
@@ -110,3 +113,17 @@ fun SearchField(
         unfocusedIndicatorColor = Color.Transparent
     )
 )
+
+private fun stringMatcher(
+    matchCase: Boolean = true,
+    matchWord: Boolean = true,
+    matchRegex: Boolean = false,
+): (String, String) -> Boolean =
+    if (matchRegex) {
+        { str, pattern -> Regex(pattern).matches(str) }
+    } else if (matchWord) { str1, str2 -> str1.equals(str2,matchCase) } else { str1, str2 ->
+        str2.contains(
+            str1,
+            matchCase
+        )
+    }

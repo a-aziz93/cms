@@ -23,6 +23,7 @@ import org.jetbrains.compose.resources.painterResource
 import ui.component.dropdown.ContextMenu
 import ui.common.component.dropdown.model.DropdownItem
 import ui.common.model.Item
+import kotlin.math.absoluteValue
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
@@ -80,7 +81,7 @@ private fun InitialsAvatar(
             val name = listOf(firstName, lastName)
                 .joinToString(separator = "")
                 .uppercase()
-            name.toHslColor()
+            Color((name.fold(0) { acc, char -> char.code + acc } / (name.length * 1000)).absoluteValue.toFloat(), 0.5f,0.4f)
         }
         val initials = (firstName.take(1) + lastName.take(1)).uppercase()
         Canvas(modifier = Modifier.fillMaxSize()) {

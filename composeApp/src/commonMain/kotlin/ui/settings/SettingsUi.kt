@@ -2,8 +2,11 @@ package ui.settings
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import core.i18n.supportedLocaleCodes
 import core.i18n.toCountryAlpha2Code
 import core.util.countries
@@ -19,7 +22,8 @@ import ui.common.model.Item
 internal fun SettingsUi(component: SettingsComponent) {
     val languageState: SettingValueState<Int> = rememberMemoryIntSettingState(defaultValue = 0)
     Column(
-
+        modifier = Modifier
+            .padding(16.dp)
     ) {
 
         SettingsGroup(
