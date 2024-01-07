@@ -14,7 +14,7 @@ import nz.co.trademe.konfigure.api.ConfigRegistrar
  * @param key The Config Key
  * @param defaultValue The default value of this config item
  */
-inline fun <reified T: Any> ConfigRegistry.config(
+inline fun <reified T : Any> ConfigRegistry.config(
     title: String? = null,
     description: String? = null,
     group: String? = null,
@@ -24,6 +24,6 @@ inline fun <reified T: Any> ConfigRegistry.config(
     key = key,
     defaultValue = defaultValue,
     metadataProvider = { property ->
-        DisplayMetadata.from(property, this@config, group, title, description)
+        DisplayMetadata.from(property, this, group, title, description)
     }
 )
