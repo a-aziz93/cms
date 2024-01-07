@@ -1,13 +1,14 @@
 package core.config
 
-import core.config.extension.config
 import core.config.handler.SettingsHandler
 import core.config.source.LocalSource
 import core.config.source.SettingsSource
 import core.config.subconfig.admin.AdminSubConfig
 import core.config.subconfig.ui.UISubConfig
 import nz.co.trademe.konfigure.Config
+import org.koin.core.annotation.Single
 
+@Single
 class AppConfig() : Config(
     configSources = listOf(LocalSource, SettingsSource),
     overrideHandler = SettingsHandler(),
