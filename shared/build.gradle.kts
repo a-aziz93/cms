@@ -43,7 +43,6 @@ kotlin {
             implementation(libs.bundles.kotlinx.serialization)
             implementation(libs.bundles.ktor.common)
             implementation(libs.bundles.slf4j)
-            implementation(libs.kconmapper.annotations)
         }
     }
 }

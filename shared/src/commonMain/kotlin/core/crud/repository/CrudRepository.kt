@@ -17,7 +17,7 @@ interface CrudRepository<T : Any, ID : Any> {
 
     suspend fun delete(id: ID): Boolean
 
-    suspend fun delete(predicate: Predicate<*>? = null): Long
+    suspend fun delete(predicate: Predicate? = null): Long
 
-    suspend fun count(predicate: Predicate<*>): Long
+    suspend fun count(predicate: Predicate): Long
 }
