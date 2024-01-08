@@ -17,6 +17,7 @@ fun Application.module() {
     configureSecurity() // Configure the security plugin with JWT
     configureSession() // Configure session with cookies
     configureWebSockets() // Configure the websockets plugin
+    configureGraphQL() // Configure the graphql plugin
     configureSerialization() // Configure the serialization plugin
     configureRouting() // Configure the routing plugin
     configureValidation() // Configure the validation plugin

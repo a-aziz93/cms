@@ -1,4 +1,3 @@
-# Configure Cache
 cache:
   role:
     maximumCacheSize: 1000

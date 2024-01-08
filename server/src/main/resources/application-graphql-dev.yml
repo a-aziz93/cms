@@ -1,0 +1,3 @@
+graphql:
+  playground: true
+  endpoint: /graphql

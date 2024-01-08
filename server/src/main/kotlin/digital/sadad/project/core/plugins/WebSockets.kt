@@ -1,12 +1,22 @@
 package digital.sadad.project.core.plugins
 
+import digital.sadad.project.core.config.AppConfig
 import io.ktor.serialization.kotlinx.*
 import io.ktor.server.application.*
 import io.ktor.server.websocket.*
 import kotlinx.serialization.json.Json
+import org.koin.ktor.ext.inject
+import java.time.Duration
 
 fun Application.configureWebSockets() {
+    val appConfig: AppConfig by inject()
+    val webSocketConfig = appConfig.config.websockets
+
     install(WebSockets) {
+        pingPeriod = webSocketConfig?.pingPeriod?.let { Duration.ofSeconds(it.inWholeSeconds) }
+        timeout = Duration.ofSeconds(webSocketConfig?.timeout?.inWholeSeconds ?: 15)
+        maxFrameSize = webSocketConfig?.maxFrameSize ?: Long.MAX_VALUE
+        masking = webSocketConfig?.masking ?: false
         // Configure WebSockets
         // Serializer for WebSockets
         contentConverter = KotlinxWebsocketSerializationConverter(Json {
@@ -14,7 +24,7 @@ fun Application.configureWebSockets() {
             isLenient = true
         })
 
-        // Remeber it will close the connection if you don't send a ping in 15 seconds
+        // Remember it will close the connection if you don't send a ping in 15 seconds
         // https://ktor.io/docs/websocket.html#configure
     }
 }

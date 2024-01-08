@@ -34,6 +34,8 @@ profiles:
   - cache
   - storage
   - database
+  - websockets
+  - graphql
 
 
 

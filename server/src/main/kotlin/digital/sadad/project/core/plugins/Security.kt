@@ -14,7 +14,6 @@ import kotlin.collections.set
 // Seguridad en base a JWT
 fun Application.configureSecurity() {
 
-    // Inject the AppConfig
     val appConfig: AppConfig by inject()
 
     val authConfig = appConfig.config.auth

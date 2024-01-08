@@ -53,6 +53,8 @@ dependencies {
     }
     // For import org.koin.ksp.generated.*
 //    add("kspServerMainMetadata", libs.koin.ksp.compiler)
+    implementation(libs.kgraphql)
+    implementation(libs.kgraphql.ktor)
 }
 
 ksp {

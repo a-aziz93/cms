@@ -101,6 +101,7 @@ kotlin {
             implementation(libs.bundles.konfigure)
             implementation(libs.data.table.material3)
             implementation(libs.worldwind)
+            implementation(libs.compose.material.context.menu)
         }
 
         desktopMain.dependencies {
