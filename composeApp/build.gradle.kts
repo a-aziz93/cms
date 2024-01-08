@@ -12,8 +12,8 @@ plugins {
     alias(libs.plugins.sqlDelight)
     alias(libs.plugins.dokka)
     alias(libs.plugins.ktorfit)
-//    alias(libs.plugins.allopen)
-//    alias(libs.plugins.noarg)
+    alias(libs.plugins.allopen)
+    alias(libs.plugins.noarg)
 }
 
 kotlin {
@@ -109,6 +109,7 @@ kotlin {
             implementation(libs.ktor.client.java)
             implementation(libs.sql.delight.sqlite.driver)
             implementation(libs.coroutines.swing)
+            implementation(libs.gov.worldwind)
         }
 
 //            iosMain.dependencies {
