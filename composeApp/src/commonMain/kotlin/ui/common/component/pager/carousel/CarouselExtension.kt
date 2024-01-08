@@ -1,4 +1,4 @@
-package core.util
+package ui.common.component.pager.carousel
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.pager.PagerState

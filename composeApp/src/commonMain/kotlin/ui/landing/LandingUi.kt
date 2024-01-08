@@ -2,10 +2,8 @@ package ui.landing
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.Text
+import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -18,6 +16,7 @@ import ui.common.component.banner.Banner
 import ui.root.RootComponent
 import java.io.File
 import cafe.adriel.lyricist.strings
+import ui.common.component.pager.carousel.carouselTransition
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -27,23 +26,33 @@ internal fun LandingUi(component: LandingComponent) {
         verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
+        val bannerImagePaths = listOf(
+            "/drawable/banner/customs.jpg",
+            "/drawable/banner/hand.jpg",
+            "/drawable/banner/watch.jpg"
+        )
+        val carouselPagerState = rememberPagerState(pageCount = { bannerImagePaths.size })
         Carousel(
+            state = carouselPagerState,
             modifier = Modifier
                 .height(400.dp),
             horizontal = false,
-            items = listOf(
-                "/drawable/banner/customs.jpg",
-                "/drawable/banner/hand.jpg",
-                "/drawable/banner/watch.jpg"
-            ).map {
+            item = {
                 {
-                    Banner(
-                        resource = asyncPainterResource(
-                            data = File(
-                                this::class.java.getResource(it).getPath()
-                            )
+                    Card(
+                        modifier = Modifier.carouselTransition(
+                            it,
+                            carouselPagerState,
                         ),
-                    )
+                    ) {
+                        Banner(
+                            resource = asyncPainterResource(
+                                data = File(
+                                    this::class.java.getResource(bannerImagePaths[it]).getPath()
+                                )
+                            ),
+                        )
+                    }
                 }
             },
         )

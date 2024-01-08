@@ -9,14 +9,11 @@ import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.*
-import androidx.compose.material3.Card
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import core.util.carouselTransition
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import ui.common.component.pager.horizontal.HorizontalPagerIndicator
@@ -24,12 +21,7 @@ import ui.common.component.pager.horizontal.HorizontalPagerIndicator
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun Carousel(
-    carouselLabel: (@Composable BoxScope.(Int) -> Unit)? = null,
-    title: (@Composable () -> Unit)? = null,
-    text: (@Composable () -> Unit)? = null,
-    items: List<@Composable () -> Unit>,
-    onItemClicked: (() -> Unit)? = null,
-    state: PagerState = rememberPagerState(pageCount = { items.size }),
+    state: PagerState,
     modifier: Modifier = Modifier,
     horizontal: Boolean = true,
     contentPadding: PaddingValues = PaddingValues(0.dp),
@@ -55,6 +47,8 @@ fun Carousel(
             }
         )
     },
+    label: (@Composable BoxScope.(Int) -> Unit)? = null,
+    item: (Int) -> @Composable () -> Unit,
     autoScroll: Boolean = true,
     autoScrollDuration: Long = 1000L,
     animationTime: Int = 800,
@@ -98,14 +92,7 @@ fun Carousel(
                 userScrollEnabled,
                 reverseLayout,
             ) { page: Int ->
-                CarouselContent(
-                    state,
-                    page,
-                    title,
-                    text,
-                    { items[page]() },
-                    onItemClicked,
-                )
+                item(page)
             }
         } else {
             VerticalPager(
@@ -120,42 +107,10 @@ fun Carousel(
                 userScrollEnabled,
                 reverseLayout,
             ) { page ->
-                CarouselContent(
-                    state,
-                    page,
-                    title,
-                    text,
-                    { items[page]() },
-                    onItemClicked,
-                )
+                item(page)
             }
         }
         indicator?.invoke(this)
-        carouselLabel?.invoke(this, state.currentPage)
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
-@Composable
-fun CarouselContent(
-    state: PagerState,
-    page: Int,
-    title: (@Composable () -> Unit)? = null,
-    text: (@Composable () -> Unit)? = null,
-    item: @Composable () -> Unit,
-    onItemClicked: (() -> Unit)? = null,
-) {
-    Card(
-        onClick = { onItemClicked?.invoke() },
-//        modifier = Modifier.carouselTransition(
-//            page,
-//            state
-//        ),
-    ) {
-        Box {
-            item()
-            title?.invoke()
-            text?.invoke()
-        }
+        label?.invoke(this, state.currentPage)
     }
 }
