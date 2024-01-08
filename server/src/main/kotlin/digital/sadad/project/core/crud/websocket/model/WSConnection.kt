@@ -3,7 +3,7 @@ package digital.sadad.project.core.crud.websocket.model
 import io.ktor.websocket.*
 import java.util.concurrent.atomic.*
 
-class WebSocketConnection(val session: DefaultWebSocketSession) {
+class WSConnection(val session: DefaultWebSocketSession) {
     companion object {
         val lastId = AtomicInteger(0)
     }

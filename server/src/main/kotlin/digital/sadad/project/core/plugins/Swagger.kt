@@ -29,7 +29,8 @@ fun Application.configureSwagger() {
 
         // We can filter paths and methods
         pathFilter = { method, url ->
-            url.contains("users")
+            true
+//            url.contains("users")
             //(method == HttpMethod.Get && url.firstOrNull() == "api")
             // || url.contains("test")
         }
