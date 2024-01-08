@@ -63,8 +63,12 @@ fun SettingsListDropdown(
                                 verticalAlignment = Alignment.CenterVertically,
                             ) {
                                 val item = items[state.value]
-                                item.icon?.invoke()
-                                item.text?.invoke()
+                                Column(
+                                    horizontalAlignment = Alignment.CenterHorizontally
+                                ) {
+                                    item.icon?.invoke()
+                                    item.text?.invoke()
+                                }
                                 Icon(
                                     modifier = Modifier.padding(start = 8.dp),
                                     imageVector = Icons.Outlined.ArrowDropDown,

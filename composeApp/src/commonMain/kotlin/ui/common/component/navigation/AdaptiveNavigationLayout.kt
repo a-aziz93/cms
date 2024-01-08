@@ -175,14 +175,11 @@ private fun BarNavigationLayout(
             if (hasTopAppBar) {
                 TopAppBar(
                     title = {
-                        BadgedBox(
-                            badge = {
-                                (selectedItem.value.selectedIcon ?: selectedItem.value.icon)?.invoke()
-                            }
-                        ) {
+                        Row {
                             ProvideTextStyle(value = MaterialTheme.typography.titleMedium) {
                                 (selectedItem.value.selectedText ?: selectedItem.value.text)?.invoke()
                             }
+                            (selectedItem.value.selectedIcon ?: selectedItem.value.icon)?.invoke()
                         }
                     },
                     navigationIcon = {

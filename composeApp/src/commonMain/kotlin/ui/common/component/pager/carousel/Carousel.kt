@@ -1,5 +1,6 @@
 package ui.common.component.pager.carousel
 
+import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.gestures.snapping.SnapFlingBehavior
@@ -48,15 +49,17 @@ fun Carousel(
         )
     },
     label: (@Composable BoxScope.(Int) -> Unit)? = null,
-    item: (Int) -> @Composable () -> Unit,
+    item: @Composable PagerScope.(Int) -> Unit,
     autoScroll: Boolean = true,
     autoScrollDuration: Long = 1000L,
-    animationTime: Int = 800,
+    animationSpec: AnimationSpec<Float> = tween(
+        durationMillis = 800
+    ),
 ) {
 
     if (autoScroll) {
         val isDragged by state.interactionSource.collectIsDraggedAsState()
-        if (isDragged.not()) {
+        if (!isDragged) {
             with(state) {
                 if (pageCount > 0) {
                     var currentPageKey by remember { mutableIntStateOf(0) }
@@ -66,9 +69,7 @@ fun Carousel(
                             val nextPage = (currentPage + 1).mod(pageCount)
                             animateScrollToPage(
                                 page = nextPage,
-                                animationSpec = tween(
-                                    durationMillis = animationTime
-                                )
+                                animationSpec = animationSpec
                             )
                             currentPageKey = nextPage
                         }

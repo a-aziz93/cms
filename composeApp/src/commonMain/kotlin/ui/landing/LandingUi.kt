@@ -27,9 +27,12 @@ internal fun LandingUi(component: LandingComponent) {
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         val bannerImagePaths = listOf(
-            "/drawable/banner/customs.jpg",
-            "/drawable/banner/hand.jpg",
-            "/drawable/banner/watch.jpg"
+            "/drawable/banner/banner1.jpg",
+            "/drawable/banner/banner2.jpg",
+            "/drawable/banner/banner3.jpg",
+            "/drawable/banner/banner4.jpg",
+            "/drawable/banner/banner5.jpg",
+            "/drawable/banner/banner6.jpg",
         )
         val carouselPagerState = rememberPagerState(pageCount = { bannerImagePaths.size })
         Carousel(
@@ -38,7 +41,6 @@ internal fun LandingUi(component: LandingComponent) {
                 .height(400.dp),
             horizontal = false,
             item = {
-                {
                     Card(
                         modifier = Modifier.carouselTransition(
                             it,
@@ -53,7 +55,6 @@ internal fun LandingUi(component: LandingComponent) {
                             ),
                         )
                     }
-                }
             },
         )
         Text(
