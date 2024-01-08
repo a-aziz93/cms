@@ -49,115 +49,105 @@ internal fun SignInUi(component: SignInComponent) {
     val focusRequester = remember { FocusRequester() }
 
     Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
         modifier = Modifier
             .fillMaxSize()
             .clip(RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp))
-            .padding(10.dp)
+            .padding(10.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
     ) {
-        Box(
+        Image(
             modifier = Modifier
-                .width(600.dp)
-                .height(540.dp)
+                .height(100.dp),
+            painter = painterResource("compose-multiplatform.xml"),
+            contentDescription = null
+        )
+        Column(
+            modifier = Modifier
+                .width(600.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
+            Text(
+                text = "Sign In",
+                style =  MaterialTheme.typography.headlineLarge
+            )
+            Spacer(modifier = Modifier.padding(20.dp))
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Box(
+                OutlinedTextField(
+                    value = emailValue.value,
+                    onValueChange = {
+
+                    },
+                    label = { Text("Email Address") },
+                    placeholder = { Text("Email Address") },
+                    singleLine = true,
+                    modifier = Modifier.fillMaxWidth(0.8f),
+                )
+
+                OutlinedTextField(
+                    value = passwordValue.value,
+                    onValueChange = {
+                        passwordValue.value = it
+                    },
+                    trailingIcon = {
+                        IconButton(onClick = {
+                            passwordVisibility.value = !passwordVisibility.value
+                        }) {
+                            Icon(
+                                imageVector = if (passwordVisibility.value) EvaIcons.Outline.EyeOff2 else EvaIcons.Outline.Eye,
+                                contentDescription = null
+                            )
+                        }
+                    },
+                    label = { Text("Password") },
+                    placeholder = { Text("Password") },
+                    singleLine = true,
+                    visualTransformation = if (passwordVisibility.value) VisualTransformation.None
+                    else PasswordVisualTransformation(),
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .height(100.dp),
-                    contentAlignment = Alignment.TopCenter
+                        .fillMaxWidth(0.8f)
+                        .focusRequester(focusRequester = focusRequester),
+
+                    )
+
+                Spacer(modifier = Modifier.padding(10.dp))
+                Row(
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Image(painterResource("compose-multiplatform.xml"), contentDescription = null)
+                    Text(text = "Remember me ")
+                    var switchState by remember { mutableStateOf(false) }
+                    Switch(
+                        checked = switchState,
+                        onCheckedChange = { switchState = it }
+                    )
                 }
+                Spacer(modifier = Modifier.padding(10.dp))
+                Button(
+                    onClick = {},
+                    modifier = Modifier
+                        .fillMaxWidth(0.8f)
+                        .height(50.dp)
+                ) {
+                    Text(text = "Sign In", fontSize = 20.sp)
+                }
+
+                Spacer(modifier = Modifier.padding(20.dp))
                 Text(
-                    text = "Sign In",
-                    style = TextStyle(
-                        fontWeight = FontWeight.Bold,
-                        letterSpacing = 2.sp
-                    ),
-                    fontSize = 30.sp
+                    text = "Create An Account",
+                    modifier = Modifier.clickable(onClick = {
+                        component.onNavigate(MainComponent.Config.SelfSignUp)
+                    })
+                )
+                Text(
+                    text = "Forget password?",
+                    modifier = Modifier.clickable(onClick = {
+                        component.onNavigate(MainComponent.Config.Reset)
+                    })
                 )
                 Spacer(modifier = Modifier.padding(20.dp))
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    OutlinedTextField(
-                        value = emailValue.value,
-                        onValueChange = {
-
-                        },
-                        label = { Text("Email Address") },
-                        placeholder = { Text("Email Address") },
-                        singleLine = true,
-                        modifier = Modifier.fillMaxWidth(0.8f),
-                    )
-
-                    OutlinedTextField(
-                        value = passwordValue.value,
-                        onValueChange = {
-                            passwordValue.value = it
-                        },
-                        trailingIcon = {
-                            IconButton(onClick = {
-                                passwordVisibility.value = !passwordVisibility.value
-                            }) {
-                                Icon(
-                                    imageVector = if (passwordVisibility.value) EvaIcons.Outline.EyeOff2 else EvaIcons.Outline.Eye,
-                                    contentDescription = null
-                                )
-                            }
-                        },
-                        label = { Text("Password") },
-                        placeholder = { Text("Password") },
-                        singleLine = true,
-                        visualTransformation = if (passwordVisibility.value) VisualTransformation.None
-                        else PasswordVisualTransformation(),
-                        modifier = Modifier
-                            .fillMaxWidth(0.8f)
-                            .focusRequester(focusRequester = focusRequester),
-
-                        )
-
-                    Spacer(modifier = Modifier.padding(10.dp))
-                    Row(
-                        horizontalArrangement = Arrangement.Center,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(text = "Remember me ")
-                        var switchState by remember { mutableStateOf(false) }
-                        Switch(
-                            checked = switchState,
-                            onCheckedChange = { switchState = it }
-                        )
-                    }
-                    Spacer(modifier = Modifier.padding(10.dp))
-                    Button(
-                        onClick = {},
-                        modifier = Modifier
-                            .fillMaxWidth(0.8f)
-                            .height(50.dp)
-                    ) {
-                        Text(text = "Sign In", fontSize = 20.sp)
-                    }
-
-                    Spacer(modifier = Modifier.padding(20.dp))
-                    Text(
-                        text = "Create An Account",
-                        modifier = Modifier.clickable(onClick = {
-                            component.onNavigate(MainComponent.Config.SelfSignUp)
-                        })
-                    )
-                    Text(
-                        text = "Forget password?",
-                        modifier = Modifier.clickable(onClick = {
-                            component.onNavigate(MainComponent.Config.Reset)
-                        })
-                    )
-                    Spacer(modifier = Modifier.padding(20.dp))
-                }
-
             }
         }
     }
-
 }
 

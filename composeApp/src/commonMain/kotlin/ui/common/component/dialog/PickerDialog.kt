@@ -26,6 +26,7 @@ fun <T : Any> PickerDialog(
     onItemClick: (PickerItem<T>) -> Unit,
     search: Boolean = true,
     searchHint: String = "Search ...",
+    searchSingleLine: Boolean = true,
     rounded: Int = 12,
     onDismissRequest: () -> Unit,
 ) {
@@ -59,6 +60,7 @@ fun <T : Any> PickerDialog(
                                 .wrapContentHeight()
                                 .fillMaxWidth(),
                             hint = searchHint,
+                            singleLine = searchSingleLine,
                             fontSize = 14.sp,
                             textAlign = TextAlign.Start,
                             matchCaseColor = SelectableColor(

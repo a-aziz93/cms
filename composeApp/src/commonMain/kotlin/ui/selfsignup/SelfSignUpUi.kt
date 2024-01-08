@@ -37,7 +37,7 @@ import org.jetbrains.compose.resources.ExperimentalResourceApi
 @Composable
 fun SelfSignUpUi(component: SelfSignUpComponent) {
 
-    val login =component.login.collectAsState(coroutineDispatchers.main)
+    val login = component.login.collectAsState(coroutineDispatchers.main)
     val password = component.password.collectAsState(coroutineDispatchers.main)
     val inProgress = component.inProgress.collectAsState()
 
@@ -50,131 +50,126 @@ fun SelfSignUpUi(component: SelfSignUpComponent) {
     val focusRequester = remember { FocusRequester() }
 
     Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
         modifier = Modifier
             .fillMaxSize()
             .clip(RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp))
-            .padding(10.dp)
+            .padding(10.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
     ) {
-        Box(
+        Image(
             modifier = Modifier
-                .width(600.dp)
-                .height(600.dp)
+                .height(100.dp),
+            painter = painterResource("compose-multiplatform.xml"),
+            contentDescription = null
+        )
+        Column(
+            modifier = Modifier
+                .width(600.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            Text(
+                text = "Sign Up",
+                style = TextStyle(
+                    fontWeight = FontWeight.Bold,
+                    letterSpacing = 2.sp
+                ),
+                fontSize = 30.sp
+            )
+            Spacer(modifier = Modifier.padding(20.dp))
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(100.dp),
-                    contentAlignment = Alignment.TopCenter
-                ) {
-                    Image(image, contentDescription = null)
-                }
-                Text(
-                    text = "Sign Up",
-                    style = TextStyle(
-                        fontWeight = FontWeight.Bold,
-                        letterSpacing = 2.sp
-                    ),
-                    fontSize = 30.sp
+                OutlinedTextField(
+                    value = emailValue.value,
+                    onValueChange = {
+                        emailValue.value = it
+                    },
+                    label = { Text("Name") },
+                    placeholder = { Text("Name") },
+                    singleLine = true,
+                    modifier = Modifier.fillMaxWidth(0.8f),
                 )
-                Spacer(modifier = Modifier.padding(20.dp))
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    OutlinedTextField(
-                        value = emailValue.value,
-                        onValueChange = {
-emailValue.value=it
-                        },
-                        label = { Text("Name") },
-                        placeholder = { Text("Name") },
-                        singleLine = true,
-                        modifier = Modifier.fillMaxWidth(0.8f),
+                OutlinedTextField(
+                    value = emailValue.value,
+                    onValueChange = {
+
+                    },
+                    label = { Text("Email Address") },
+                    placeholder = { Text("Email Address") },
+                    singleLine = true,
+                    modifier = Modifier.fillMaxWidth(0.8f),
+                )
+
+                OutlinedTextField(
+                    value = emailValue.value,
+                    onValueChange = {
+
+                    },
+                    label = { Text("Phone Number") },
+                    placeholder = { Text("Phone Number") },
+                    singleLine = true,
+                    modifier = Modifier.fillMaxWidth(0.8f),
+                )
+
+                OutlinedTextField(
+                    value = passwordValue.value,
+                    onValueChange = {
+
+                    },
+                    trailingIcon = {
+                        IconButton(onClick = {
+                            passwordVisibility.value = !passwordVisibility.value
+                        }) {
+                            Icon(
+                                imageVector = if (passwordVisibility.value) EvaIcons.Outline.EyeOff2 else EvaIcons.Outline.Eye,
+                                contentDescription = null
+                            )
+                        }
+                    },
+                    label = { Text("Password") },
+                    placeholder = { Text("Password") },
+                    singleLine = true,
+                    visualTransformation = if (passwordVisibility.value) VisualTransformation.None
+                    else PasswordVisualTransformation(),
+                    modifier = Modifier
+                        .fillMaxWidth(0.8f)
+                        .focusRequester(focusRequester = focusRequester),
+
                     )
-                    OutlinedTextField(
-                        value = emailValue.value,
-                        onValueChange = {
+                OutlinedTextField(
+                    value = passwordValue.value,
+                    onValueChange = {
 
-                        },
-                        label = { Text("Email Address") },
-                        placeholder = { Text("Email Address") },
-                        singleLine = true,
-                        modifier = Modifier.fillMaxWidth(0.8f),
+                    },
+                    trailingIcon = {
+                        IconButton(onClick = {
+                            passwordVisibility.value = !passwordVisibility.value
+                        }) {
+                            Icon(
+                                imageVector = if (passwordVisibility.value) EvaIcons.Outline.EyeOff2 else EvaIcons.Outline.Eye,
+                                contentDescription = null
+                            )
+                        }
+                    },
+                    label = { Text("Confirm Password") },
+                    placeholder = { Text("Confirm Password") },
+                    singleLine = true,
+                    visualTransformation = if (passwordVisibility.value) VisualTransformation.None
+                    else PasswordVisualTransformation(),
+                    modifier = Modifier
+                        .fillMaxWidth(0.8f)
+                        .focusRequester(focusRequester = focusRequester),
+
                     )
 
-                     OutlinedTextField(
-                        value = emailValue.value,
-                        onValueChange = {
-
-                        },
-                        label = { Text("Phone Number") },
-                        placeholder = { Text("Phone Number") },
-                        singleLine = true,
-                        modifier = Modifier.fillMaxWidth(0.8f),
-                    )
-
-                    OutlinedTextField(
-                        value = passwordValue.value,
-                        onValueChange = {
-
-                        },
-                        trailingIcon = {
-                            IconButton(onClick = {
-                                passwordVisibility.value = !passwordVisibility.value
-                            }) {
-                                Icon(
-                                    imageVector = if (passwordVisibility.value) EvaIcons.Outline.EyeOff2 else EvaIcons.Outline.Eye,
-                                    contentDescription = null
-                                )
-                            }
-                        },
-                        label = { Text("Password") },
-                        placeholder = { Text("Password") },
-                        singleLine = true,
-                        visualTransformation = if (passwordVisibility.value) VisualTransformation.None
-                        else PasswordVisualTransformation(),
-                        modifier = Modifier
-                            .fillMaxWidth(0.8f)
-                            .focusRequester(focusRequester = focusRequester),
-
-                        )
-                    OutlinedTextField(
-                        value = passwordValue.value,
-                        onValueChange = {
-
-                        },
-                        trailingIcon = {
-                            IconButton(onClick = {
-                                passwordVisibility.value = !passwordVisibility.value
-                            }) {
-                                Icon(
-                                    imageVector = if (passwordVisibility.value) EvaIcons.Outline.EyeOff2 else EvaIcons.Outline.Eye,
-                                    contentDescription = null
-                                )
-                            }
-                        },
-                        label = { Text("Confirm Password") },
-                        placeholder = { Text("Confirm Password") },
-                        singleLine = true,
-                        visualTransformation = if (passwordVisibility.value) VisualTransformation.None
-                        else PasswordVisualTransformation(),
-                        modifier = Modifier
-                            .fillMaxWidth(0.8f)
-                            .focusRequester(focusRequester = focusRequester),
-
-                        )
-
-                    Spacer(modifier = Modifier.padding(10.dp))
-                    Button(
-                        onClick = {},
-                        modifier = Modifier
-                            .fillMaxWidth(0.8f)
-                            .height(50.dp)
-                    ) {
-                        Text(text = "Sign Up", fontSize = 20.sp)
-                    }
+                Spacer(modifier = Modifier.padding(10.dp))
+                Button(
+                    onClick = {},
+                    modifier = Modifier
+                        .fillMaxWidth(0.8f)
+                        .height(50.dp)
+                ) {
+                    Text(text = "Sign Up", fontSize = 20.sp)
                 }
-
             }
         }
     }

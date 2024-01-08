@@ -31,6 +31,7 @@ fun LocalePickerDialog(
     onItemClick = {
         onItemClick(it.value!!)
     },
+    search = search,
     searchHint = searchHint,
     rounded = rounded,
     onDismissRequest = onDismissRequest,

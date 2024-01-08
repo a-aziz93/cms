@@ -55,26 +55,29 @@ fun Carousel(
             }
         )
     },
+    autoScroll: Boolean = true,
     autoScrollDuration: Long = 1000L,
     animationTime: Int = 800,
 ) {
 
-    val isDragged by state.interactionSource.collectIsDraggedAsState()
-    if (isDragged.not()) {
-        with(state) {
-            if (pageCount > 0) {
-                var currentPageKey by remember { mutableIntStateOf(0) }
-                LaunchedEffect(key1 = currentPageKey) {
-                    launch {
-                        delay(timeMillis = autoScrollDuration)
-                        val nextPage = (currentPage + 1).mod(pageCount)
-                        animateScrollToPage(
-                            page = nextPage,
-                            animationSpec = tween(
-                                durationMillis = animationTime
+    if (autoScroll) {
+        val isDragged by state.interactionSource.collectIsDraggedAsState()
+        if (isDragged.not()) {
+            with(state) {
+                if (pageCount > 0) {
+                    var currentPageKey by remember { mutableIntStateOf(0) }
+                    LaunchedEffect(key1 = currentPageKey) {
+                        launch {
+                            delay(timeMillis = autoScrollDuration)
+                            val nextPage = (currentPage + 1).mod(pageCount)
+                            animateScrollToPage(
+                                page = nextPage,
+                                animationSpec = tween(
+                                    durationMillis = animationTime
+                                )
                             )
-                        )
-                        currentPageKey = nextPage
+                            currentPageKey = nextPage
+                        }
                     }
                 }
             }
@@ -144,10 +147,10 @@ fun CarouselContent(
 ) {
     Card(
         onClick = { onItemClicked?.invoke() },
-        modifier = Modifier.carouselTransition(
-            page,
-            state
-        ),
+//        modifier = Modifier.carouselTransition(
+//            page,
+//            state
+//        ),
     ) {
         Box {
             item()
