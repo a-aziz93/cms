@@ -101,11 +101,11 @@ kotlin {
             implementation(libs.bundles.konfigure)
             implementation(libs.data.table.material3)
             implementation(libs.worldwind)
-            implementation(libs.kconmapper.annotations)
         }
 
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
+            // Added
             implementation(libs.ktor.client.java)
             implementation(libs.sql.delight.sqlite.driver)
             implementation(libs.coroutines.swing)
@@ -183,14 +183,6 @@ dependencies {
     add("kspCommonMainMetadata", libs.koin.ksp.compiler)
     // Ktorfit client generation
     add("kspCommonMainMetadata", libs.ktorfit.ksp)
-    add("kspAndroid",libs.ktorfit.ksp)
-    add("kspDesktop",libs.ktorfit.ksp)
-    // TODO: support
-//    add("kspIosArm64", libs.ktorfit.ksp)
-//    add("kspIosSimulatorArm64", libs.ktorfit.ksp)
-//    add("kspIosX64", libs.ktorfit.ksp)
-//    add("kspJs", libs.ktorfit.ksp)
-    ksp(libs.kconmapper.ksp)
 }
 
 // workaround for KSP only in Common Main.
@@ -215,12 +207,12 @@ ksp {
     arg("Ktorfit_Errors", "1")
     // If set to true, this argument suppresses warnings about mapping mismatches,
     // critical warnings are still emitted.
-    arg("kconmapper.suppressMappingMismatchWarnings", "false")
+//    arg("kconmapper.suppressMappingMismatchWarnings", "false")
 }
 
 sqldelight {
     databases {
-        create("Shared") {
+        create("SharedDatabase") {
             srcDirs.setFrom("src/commonMain/sqldelight")
             packageName.set("digital.sadad.project.common")
             generateAsync.set(true)

@@ -57,13 +57,6 @@ android {
 
 dependencies {
     ksp(libs.koin.ksp.compiler) // Koin KSP Compiler for KSP
-    ksp(libs.kconmapper.ksp)
-}
-
-ksp {
-    // If set to true, this argument suppresses warnings about mapping mismatches,
-    // critical warnings are still emitted.
-    arg("kconmapper.suppressMappingMismatchWarnings", "false")
 }
 
 allOpen {

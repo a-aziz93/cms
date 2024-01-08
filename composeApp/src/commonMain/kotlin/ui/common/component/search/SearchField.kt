@@ -58,42 +58,44 @@ fun SearchField(
     },
     trailingIcon = {
         if (showMatchers) {
-            IconButton(
-                onClick = {
-                    state.matchCase = !state.matchCase
-                    state.matchRegex = false
-                    onMatcher?.invoke(stringMatcher(state.matchCase,state.matchWord,state.matchRegex))
-                },
-            ) {
-                if (matchCaseColor == null || (!state.matchCase && matchCaseColor.color == null)) Text("Cc") else Text(
-                    text = "Cc",
-                    color = if (state.matchCase) matchCaseColor.selectedColor else matchCaseColor.color!!
-                )
-            }
-            IconButton(
-                onClick = {
-                    state.matchWord = !state.matchWord
-                    state.matchRegex = false
-                    onMatcher?.invoke(stringMatcher(state.matchCase,state.matchWord,state.matchRegex))
-                },
-            ) {
-                if (matchWordColor == null || (!state.matchWord && matchWordColor.color == null)) Text("W") else Text(
-                    text = "W",
-                    color = if (state.matchWord) matchWordColor.selectedColor else matchWordColor.color!!
-                )
-            }
-            IconButton(
-                onClick = {
-                    state.matchRegex = !state.matchRegex
-                    state.matchCase = false
-                    state.matchWord = false
-                    onMatcher?.invoke(stringMatcher(state.matchCase,state.matchWord,state.matchRegex))
-                },
-            ) {
-                if (matchRegexColor == null || (!state.matchRegex && matchRegexColor.color == null)) Text(".*") else Text(
-                    text = ".*",
-                    color = if (state.matchRegex) matchRegexColor.selectedColor else matchRegexColor.color!!
-                )
+            Row {
+                IconButton(
+                    onClick = {
+                        state.matchCase = !state.matchCase
+                        state.matchRegex = false
+                        onMatcher?.invoke(stringMatcher(state.matchCase, state.matchWord, state.matchRegex))
+                    },
+                ) {
+                    if (matchCaseColor == null || (!state.matchCase && matchCaseColor.color == null)) Text("Cc") else Text(
+                        text = "Cc",
+                        color = if (state.matchCase) matchCaseColor.selectedColor else matchCaseColor.color!!
+                    )
+                }
+                IconButton(
+                    onClick = {
+                        state.matchWord = !state.matchWord
+                        state.matchRegex = false
+                        onMatcher?.invoke(stringMatcher(state.matchCase, state.matchWord, state.matchRegex))
+                    },
+                ) {
+                    if (matchWordColor == null || (!state.matchWord && matchWordColor.color == null)) Text("W") else Text(
+                        text = "W",
+                        color = if (state.matchWord) matchWordColor.selectedColor else matchWordColor.color!!
+                    )
+                }
+                IconButton(
+                    onClick = {
+                        state.matchRegex = !state.matchRegex
+                        state.matchCase = false
+                        state.matchWord = false
+                        onMatcher?.invoke(stringMatcher(state.matchCase, state.matchWord, state.matchRegex))
+                    },
+                ) {
+                    if (matchRegexColor == null || (!state.matchRegex && matchRegexColor.color == null)) Text(".*") else Text(
+                        text = ".*",
+                        color = if (state.matchRegex) matchRegexColor.selectedColor else matchRegexColor.color!!
+                    )
+                }
             }
         }
     },
@@ -121,7 +123,7 @@ private fun stringMatcher(
 ): (String, String) -> Boolean =
     if (matchRegex) {
         { str, pattern -> Regex(pattern).matches(str) }
-    } else if (matchWord) { str1, str2 -> str1.equals(str2,matchCase) } else { str1, str2 ->
+    } else if (matchWord) { str1, str2 -> str1.equals(str2, matchCase) } else { str1, str2 ->
         str2.contains(
             str1,
             matchCase

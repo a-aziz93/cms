@@ -6,9 +6,7 @@ import core.config.source.SettingsSource
 import core.config.subconfig.admin.AdminSubConfig
 import core.config.subconfig.ui.UISubConfig
 import nz.co.trademe.konfigure.Config
-import org.koin.core.annotation.Single
 
-@Single
 class AppConfig() : Config(
     configSources = listOf(LocalSource, SettingsSource),
     overrideHandler = SettingsHandler(),

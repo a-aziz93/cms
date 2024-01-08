@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import core.util.carouselTransition
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import ui.common.component.pager.HorizontalPagerIndicator
+import ui.common.component.pager.horizontal.HorizontalPagerIndicator
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable

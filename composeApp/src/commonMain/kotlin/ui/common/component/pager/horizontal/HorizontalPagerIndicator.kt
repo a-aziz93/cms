@@ -1,4 +1,4 @@
-package ui.common.component.pager
+package ui.common.component.pager.horizontal
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background

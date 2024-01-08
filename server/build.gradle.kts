@@ -53,16 +53,11 @@ dependencies {
     }
     // For import org.koin.ksp.generated.*
 //    add("kspServerMainMetadata", libs.koin.ksp.compiler)
-    implementation(libs.kconmapper.annotations)
-    ksp(libs.kconmapper.ksp)
 }
 
 ksp {
     // Compile Safety - check your Koin config at compile time (since 1.3.0)
     arg("KOIN_CONFIG_CHECK", "true")
-    // If set to true, this argument suppresses warnings about mapping mismatches,
-    // critical warnings are still emitted.
-    arg("kconmapper.suppressMappingMismatchWarnings", "false")
 }
 
 // To generate Docker Image with JRE 17
