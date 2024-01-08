@@ -2,7 +2,9 @@ package ui.settings
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -22,6 +24,9 @@ import ui.common.model.Item
 @Composable
 internal fun SettingsUi(component: SettingsComponent) {
     val languageState: SettingValueState<Int> = rememberMemoryIntSettingState(defaultValue = 0)
+    val cardPadding = 5.dp
+    val cardShapeRadius = 10.dp
+    val cardElevation = 2.dp
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -34,35 +39,83 @@ internal fun SettingsUi(component: SettingsComponent) {
                 .width(600.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            SettingsGroup(
-                title = {
-                    Text(
-                        text = "User Interface",
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(cardPadding),
+                shape = RoundedCornerShape(cardShapeRadius),
+                elevation = CardDefaults.cardElevation(
+                    defaultElevation = cardElevation
+                ),
+            ) {
+                SettingsGroup(
+                    title = {
+                        Text(
+                            text = "Permissions",
+                        )
+                    }
+                ) {
+
+                }
+            }
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(cardPadding),
+                shape = RoundedCornerShape(cardShapeRadius),
+                elevation = CardDefaults.cardElevation(
+                    defaultElevation = cardElevation
+                ),
+            ) {
+                SettingsGroup(
+                    title = {
+                        Text(
+                            text = "Admin",
+                        )
+                    }
+                ) {
+
+                }
+            }
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(cardPadding),
+                shape = RoundedCornerShape(cardShapeRadius),
+                elevation = CardDefaults.cardElevation(
+                    defaultElevation = cardElevation
+                ),
+            ) {
+                SettingsGroup(
+                    title = {
+                        Text(
+                            text = "UI",
+                        )
+                    }
+                ) {
+                    SettingsSwitch(
+                        state = true,
+                        title = { Text(text = "Dark mode") },
+                        onCheckedChange = {},
+                    )
+                    SettingsListDropdown(
+                        title = { Text("Language") },
+                        items = supportedLocaleCodes.map { lng ->
+                            val lngCountryAlpha2Code = lng.toCountryAlpha2Code()
+                            val country = countries.find { it.alpha2Code == lngCountryAlpha2Code }!!
+                            Item(
+                                text = { Text(country.name) },
+                                icon = {
+                                    Image(
+                                        painter = painterResource(countryAlpha2CodeFlagPathMap[country.alpha2Code]!!),
+                                        contentDescription = country.name
+                                    )
+                                }
+                            )
+                        },
+                        state = languageState
                     )
                 }
-            ) {
-                SettingsSwitch(
-                    state = true,
-                    title = { Text(text = "Dark mode") },
-                    onCheckedChange = {},
-                )
-                SettingsListDropdown(
-                    title = { Text("Language") },
-                    items = supportedLocaleCodes.map { lng ->
-                        val lngCountryAlpha2Code = lng.toCountryAlpha2Code()
-                        val country = countries.find { it.alpha2Code == lngCountryAlpha2Code }!!
-                        Item(
-                            text = { Text(country.name) },
-                            icon = {
-                                Image(
-                                    painter = painterResource(countryAlpha2CodeFlagPathMap[country.alpha2Code]!!),
-                                    contentDescription = country.name
-                                )
-                            }
-                        )
-                    },
-                    state = languageState
-                )
             }
         }
     }
