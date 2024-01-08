@@ -3,6 +3,7 @@ package digital.sadad.project.core.plugins
 import digital.sadad.project.core.config.AppConfig
 import io.ktor.serialization.kotlinx.*
 import io.ktor.server.application.*
+import io.ktor.server.routing.*
 import io.ktor.server.websocket.*
 import kotlinx.serialization.json.Json
 import org.koin.ktor.ext.inject
@@ -24,7 +25,7 @@ fun Application.configureWebSockets() {
             isLenient = true
         })
 
-        // Remember it will close the connection if you don't send a ping in 15 seconds
+        // Remember it will close the connection if you don't send a ping in pingPeriod seconds
         // https://ktor.io/docs/websocket.html#configure
     }
 }

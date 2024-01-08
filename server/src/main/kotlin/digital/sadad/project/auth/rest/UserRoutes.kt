@@ -1,4 +1,4 @@
-package digital.sadad.project.auth.route
+package digital.sadad.project.auth.rest
 
 import USER_ENDPOINT
 import com.github.michaelbull.result.andThen
