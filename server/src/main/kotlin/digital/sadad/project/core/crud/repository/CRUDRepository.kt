@@ -1,34 +1,28 @@
 package digital.sadad.project.core.crud.repository
 
 import core.crud.CRUD
+import core.crud.model.Order
+import core.crud.model.predicate.Predicate
 import digital.sadad.project.auth.entity.UserTable
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 import org.ufoss.kotysa.*
-import org.ufoss.kotysa.columns.AbstractDbColumn
-import org.ufoss.kotysa.columns.DbVarcharColumn
-import org.ufoss.kotysa.columns.StringDbVarcharColumnNullable
+import org.ufoss.kotysa.columns.*
 import java.time.LocalDateTime
+import java.util.UUID
+import kotlin.reflect.full.declaredMemberProperties
+import kotlin.reflect.full.declaredMembers
 
 interface CRUDRepository<T : Any, ID : Any> : CRUD<T, ID> {
     val client: R2dbcSqlClient
     val table: Table<T>
 
-    fun getId(entity: T): ID?
+    fun id(entity: T): ID?
 
     fun create(entity: T, username: String?, dateTime: LocalDateTime): T
 
     fun update(entity: T, username: String?, dateTime: LocalDateTime): T
-
-    fun checkSelectIdEquality(
-        select: CoroutinesSqlClientSelect.FromTable<T, T>,
-        id: ID
-    ): CoroutinesSqlClientSelect.Return<T>
-
-    fun checkModifyIdEquality(
-        select: CoroutinesSqlClientDeleteOrUpdate.FirstDeleteOrUpdate<T>,
-        id: ID
-    ): CoroutinesSqlClientDeleteOrUpdate.Return
 
     suspend fun save(
         entities: List<T>,
@@ -40,15 +34,15 @@ interface CRUDRepository<T : Any, ID : Any> : CRUD<T, ID> {
         var createEntitiesWithIndexes: List<IndexedValue<T>> = emptyList()
 
         for (it in entities.withIndex()) {
-            val id = getId(it.value)
-
-            if (id == null || find(getId(it.value)!!) != null) {
+            val id = id(it.value)
+            if (id == null || find(id) != null) {
                 createEntitiesWithIndexes.plus(it)
             } else {
 
                 val entity = update(it.value, username, LocalDateTime.now())
 
-                client update table
+                (client.update(table)
+                    .set(UserTable.active as BooleanColumnNotNull<T>).eq(true))
 
                 update(entity, client update table).execute()
 
@@ -63,41 +57,68 @@ interface CRUDRepository<T : Any, ID : Any> : CRUD<T, ID> {
         return@withContext result.toList()
     }
 
+    override suspend fun find(id: ID): T? =
+        id.checkEquality(client.selectFrom(table)).fetchFirstOrNull()
 
-    suspend fun find(
-        predicate: (CoroutinesSqlClientSelect.FromTable<T, T>) -> CoroutinesSqlClientSelect.Return<T> = { it }
-    ): CoroutinesSqlClientSelect.Return<T> =
-        withContext(Dispatchers.IO) {
-            val col: StringDbVarcharColumnNullable<*> = UserTable.avatar
-            (client.selectFrom(table)
-                .where(col).eq("10").and(col).contains(col).or(col).startsWith("").and(col).endsWith(""))
+    override suspend fun find(projections: List<String>?, predicate: Predicate?, sort: List<Order>?): Flow<T> {
+        val selects = client.selects()
 
-
-            return@withContext predicate(client selectFrom table)
+        projections?.forEach { projection ->
+            selects.select(projection.column())
         }
 
-    suspend fun <V : Any> find(
-        builder: (ValueProvider) -> V,
-        predicate: (CoroutinesSqlClientSelect.FromTable<V, T>) -> CoroutinesSqlClientSelect.Return<V> = { it },
-    ): CoroutinesSqlClientSelect.Return<V> =
-        withContext(Dispatchers.IO) {
-            return@withContext predicate(client.selectAndBuild { builder(it) } from table)
+        val froms = selects.froms()
+        froms.from(table)
+
+        val wheres = froms.wheres()
+        if (predicate != null) {
+
         }
 
-    suspend fun find(id: ID): T? = find { checkSelectIdEquality(it, id) }.fetchFirstOrNull()
+        val ordersBy = wheres.ordersBy()
 
-    suspend fun delete(predicate: (CoroutinesSqlClientDeleteOrUpdate.FirstDeleteOrUpdate<T>) -> CoroutinesSqlClientDeleteOrUpdate.Return = { it }): Long =
-        withContext(Dispatchers.IO) {
-            return@withContext (client deleteFrom table)
-                .execute()
+        sort?.forEach {
+            if (it.ascending) {
+                ordersBy.orderByAsc(it.name.column())
+            } else {
+                ordersBy.orderByDesc(it.name.column())
+            }
         }
 
-    suspend fun delete(id: ID): Boolean = delete { checkModifyIdEquality(it, id) } == 0L
+        return ordersBy.fetchAll()
+    }
 
-    suspend fun delete(entity: T): Boolean = delete(getId(entity)!!)
+    override suspend fun delete(id: ID): Boolean = id.checkEquality(client deleteFrom table).execute() > 0L
 
-    suspend fun count(predicate: (CoroutinesSqlClientSelect.FromTable<Long, T>) -> CoroutinesSqlClientSelect.Return<Long> = { it }): Long =
-        withContext(Dispatchers.IO) {
-            return@withContext predicate(client selectCountFrom table).fetchOne()!!
+    suspend fun delete(entity: T): Boolean = delete(id(entity)!!)
+
+    private fun ID.checkEquality(fromTable: CoroutinesSqlClientSelect.FromTable<T, T>): CoroutinesSqlClientSelect.Where<T> {
+        for (prop in table::class.declaredMemberProperties) {
+            when (prop.returnType) {
+                is LongDbIdentityColumnNotNull<*> -> return fromTable.where(prop as LongDbIdentityColumnNotNull<*>)
+                    .eq(this as Long)
+
+                is UuidDbUuidColumnNullable<*> -> return fromTable.where(prop as UuidDbUuidColumnNullable<*>)
+                    .eq(this as UUID)
+            }
         }
+        throw Exception("Table doesn't have an id column")
+    }
+
+    private fun ID.checkEquality(modify: CoroutinesSqlClientDeleteOrUpdate.FirstDeleteOrUpdate<T>): CoroutinesSqlClientDeleteOrUpdate.Where<T> {
+        for (prop in table::class.declaredMemberProperties) {
+            when (prop.returnType) {
+                is LongDbIdentityColumnNotNull<*> -> return modify.where(prop as LongDbIdentityColumnNotNull<*>)
+                    .eq(this as Long)
+
+                is UuidDbUuidColumnNullable<*> -> return modify.where(prop as UuidDbUuidColumnNullable<*>)
+                    .eq(this as UUID)
+            }
+        }
+        throw Exception("Table doesn't have an id column")
+    }
+
+    private fun String.column(): Column<*, T> =
+        table::class.declaredMemberProperties.find { it.name == this } as Column<*, T>
+
 }
