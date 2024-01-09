@@ -1,12 +1,16 @@
 package digital.sadad.project.core.crud.repository
 
 import core.crud.CRUD
+import digital.sadad.project.auth.entity.UserTable
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.ufoss.kotysa.*
+import org.ufoss.kotysa.columns.AbstractDbColumn
+import org.ufoss.kotysa.columns.DbVarcharColumn
+import org.ufoss.kotysa.columns.StringDbVarcharColumnNullable
 import java.time.LocalDateTime
 
-interface CrudRepository<T : Any, ID : Any> : CRUD<T, ID> {
+interface CRUDRepository<T : Any, ID : Any> : CRUD<T, ID> {
     val client: R2dbcSqlClient
     val table: Table<T>
 
@@ -64,6 +68,11 @@ interface CrudRepository<T : Any, ID : Any> : CRUD<T, ID> {
         predicate: (CoroutinesSqlClientSelect.FromTable<T, T>) -> CoroutinesSqlClientSelect.Return<T> = { it }
     ): CoroutinesSqlClientSelect.Return<T> =
         withContext(Dispatchers.IO) {
+            val col: StringDbVarcharColumnNullable<*> = UserTable.avatar
+            (client.selectFrom(table)
+                .where(col).eq("10").and(col).contains(col).or(col).startsWith("").and(col).endsWith(""))
+
+
             return@withContext predicate(client selectFrom table)
         }
 
