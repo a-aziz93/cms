@@ -4,7 +4,7 @@ import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 
 @Serializable
-class DataResponse<T : Any>(
+class PageResponse<T : Any>(
     val items: List<@Contextual T>,
-    val pageCount: Int,
+    val pagesCount: Int,
 )
