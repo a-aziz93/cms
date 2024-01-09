@@ -14,8 +14,10 @@ interface CrudRepository<T : Any, ID : Any> {
 
     suspend fun find(id: ID): T?
 
-    suspend fun find(request: DataRequest? = null): Flow<T>
+    suspend fun find(predicate: Predicate? = null,sort:List<Order>?=null): Flow<T>
 
+    suspend fun find(predicate: Predicate? = null,sort:List<Order>?=null,page:Page): Flow<PageData<T>>
+    
     suspend fun delete(id: ID): Boolean
 
     suspend fun delete(predicate: Predicate? = null): Long
