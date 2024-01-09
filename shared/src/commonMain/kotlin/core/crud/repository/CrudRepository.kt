@@ -8,6 +8,7 @@ interface CrudRepository<T : Any, ID : Any> {
 
     suspend fun save(
         entities: List<T>,
+        updateIfExists:Boolean,
         byUsername: String?
     ): List<T>
 
