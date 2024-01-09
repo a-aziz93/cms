@@ -1,6 +1,6 @@
-package core.crud.model.request.predicate
+package core.crud.model.predicate
 
-import core.crud.model.request.predicate.CompareOperation.*
+import core.crud.model.predicate.CompareOperation.*
 
 class ComparePredicate private constructor(
     @Suppress("UNUSED")

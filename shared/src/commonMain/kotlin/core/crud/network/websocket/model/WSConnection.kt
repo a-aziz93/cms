@@ -1,4 +1,4 @@
-package digital.sadad.project.core.crud.websocket.model
+package core.crud.network.websocket.model
 
 import io.ktor.websocket.*
 import java.util.concurrent.atomic.*

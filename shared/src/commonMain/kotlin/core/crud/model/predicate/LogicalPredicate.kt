@@ -1,7 +1,6 @@
-package core.crud.model.request.predicate
+package core.crud.model.predicate
 
-import core.crud.model.request.predicate.LogicalOperation.*
-import kotlinx.serialization.Serializable
+import core.crud.model.predicate.LogicalOperation.*
 
 class LogicalPredicate private constructor(
     operation: LogicalOperation,

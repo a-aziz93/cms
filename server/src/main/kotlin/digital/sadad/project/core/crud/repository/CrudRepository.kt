@@ -1,11 +1,12 @@
 package digital.sadad.project.core.crud.repository
 
+import core.crud.CRUD
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.ufoss.kotysa.*
 import java.time.LocalDateTime
 
-interface CrudRepository<T : Any, ID : Any> {
+interface CrudRepository<T : Any, ID : Any> : CRUD<T, ID> {
     val client: R2dbcSqlClient
     val table: Table<T>
 
@@ -42,6 +43,8 @@ interface CrudRepository<T : Any, ID : Any> {
             } else {
 
                 val entity = update(it.value, username, LocalDateTime.now())
+
+                client update table
 
                 update(entity, client update table).execute()
 

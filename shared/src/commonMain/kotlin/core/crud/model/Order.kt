@@ -1,4 +1,4 @@
-package core.crud.model.request
+package core.crud.model
 
 import kotlinx.serialization.Serializable
 
