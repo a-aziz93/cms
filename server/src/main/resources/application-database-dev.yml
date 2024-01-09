@@ -1,2 +1,19 @@
 databases:
-  - oracle:
+  - h2-database:
+      type: H2
+      driver: h2
+      protocol: mem
+      user: sa
+      password:
+      database: r2dbc:h2:mem:///rackets;DB_CLOSE_DELAY=-1
+      init:
+        if-not-exists: true
+  - oracle-database:
+      type: ORACLE
+      driver: oracle
+      protocol: mem
+      user: sa
+      password:
+      database: r2dbc:h2:mem:///rackets;DB_CLOSE_DELAY=-1
+      init:
+        if-not-exists: true

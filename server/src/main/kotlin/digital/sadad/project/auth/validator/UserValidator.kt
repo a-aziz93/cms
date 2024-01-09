@@ -1,10 +1,9 @@
 package digital.sadad.project.auth.validator
 
+import auth.dto.user.UserCreateDto
+import auth.dto.user.UserLoginDto
+import auth.dto.user.UserUpdateDto
 import io.ktor.server.plugins.requestvalidation.*
-import auth.dto.UserCreateDto
-import auth.dto.UserLoginDto
-import auth.dto.UserUpdateDto
-
 
 fun RequestValidationConfig.userValidation() {
     // We can add as many as we want or need in your domain
