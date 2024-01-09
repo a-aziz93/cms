@@ -6,6 +6,7 @@ databases:
       database: r2dbc:h2:mem:///rackets;DB_CLOSE_DELAY=-1
       user: sa
       password:
+      packages: digital.sadad.project
       init:
         if-not-exists: true
         clean-before: false
@@ -17,6 +18,7 @@ databases:
 #      database: database
 #      user: sa
 #      password:
+#      packages: digital.sadad.project
 #      init:
 #        if-not-exists: true
 #        clean-before: false

@@ -156,13 +156,20 @@ class Database(
         private fun <T : Table<*>> getTablesInPackage(
             packages: List<String>,
             type: KClass<T>
-        ): List<T> {
-            val reflections = Reflections(packages[0])
-            return reflections.getSubTypesOf(type::class.java)
+        ): List<T> = packages.flatMap { it ->
+            val reflections = Reflections(it)
+            reflections.getSubTypesOf(type::class.java).map {
+                it.genericInterfaces[0] as T
+            }
         }
 
         private fun getH2TablesInPackage(packages: List<String>): H2Tables =
-            tables().h2(*getTablesInPackage(packages, IH2Table::class).toTypedArray())
+            tables().h2(
+                *(getTablesInPackage(packages, IH2Table::class) + getTablesInPackage(
+                    packages,
+                    GenericTable::class
+                )).toTypedArray()
+            )
 
         private fun getMariadbTablesInPackage(packages: List<String>): MariadbTables =
             tables().mariadb(*getTablesInPackage(packages, MariadbTable::class).toTypedArray())
@@ -171,11 +178,20 @@ class Database(
             tables().mysql(*getTablesInPackage(packages, MysqlTable::class).toTypedArray())
 
         private fun getMssqlTablesInPackage(packages: List<String>): MssqlTables =
-            tables().mssql(*getTablesInPackage(packages, MssqlTable::class).toTypedArray())
-
+            tables().mssql(
+                *(getTablesInPackage(packages, MssqlTable::class) + getTablesInPackage(
+                    packages,
+                    GenericTable::class
+                )).toTypedArray()
+            )
 
         private fun getPostgresqlTablesInPackage(packages: List<String>): PostgresqlTables =
-            tables().postgresql(*getTablesInPackage(packages, PostgresqlTable::class).toTypedArray())
+            tables().postgresql(
+                *(getTablesInPackage(packages, PostgresqlTable::class) + getTablesInPackage(
+                    packages,
+                    GenericTable::class
+                )).toTypedArray()
+            )
 
         private fun getOracleTablesInPackage(packages: List<String>): OracleTables =
             tables().oracle(*getTablesInPackage(packages, OracleTable::class).toTypedArray())
