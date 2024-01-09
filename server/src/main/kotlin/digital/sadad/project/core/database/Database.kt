@@ -1,16 +1,18 @@
 package digital.sadad.project.core.database
 
+import digital.sadad.project.auth.entity.UserTable
 import digital.sadad.project.core.config.AppConfig
 import digital.sadad.project.core.config.model.DatabaseConfig
+import digital.sadad.project.core.config.model.DatabaseInitConfig
 import io.r2dbc.spi.ConnectionFactories
+import io.r2dbc.spi.ConnectionFactory
 import io.r2dbc.spi.ConnectionFactoryOptions
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import org.koin.core.annotation.Single
 import org.reflections.Reflections
 import org.ufoss.kotysa.*
+import org.ufoss.kotysa.h2.H2Table
+import org.ufoss.kotysa.h2.IH2Table
 import org.ufoss.kotysa.mariadb.MariadbTable
 import org.ufoss.kotysa.mssql.MssqlTable
 import org.ufoss.kotysa.mysql.MysqlTable
@@ -27,98 +29,156 @@ class Database(
     val clients: Map<String, R2dbcSqlClient> =
         if (appConfig.config.databases == null) emptyMap()
         else appConfig.config.databases.mapNotNull {
+            var createTables: Set<Table<*>>? = null
             val client = when (it.value.type) {
-                DbType.H2 -> it.value.getConnectionFactory()
-                    .coSqlClient(tables=getH2TablesInPackage(it.value.tablesPackage))
+                DbType.H2 -> {
+                    val tables = getH2TablesInPackage(it.value.packages)
+                    createTables = tables.allTables.keys
+                    it.value.getConnectionFactory()
+                        .coSqlClient(tables)
+                }
 
-                DbType.MYSQL -> it.value.getConnectionFactory()
-                    .coSqlClient(getMysqlTablesInPackage(it.value.tablesPackage))
+                DbType.MARIADB -> {
+                    val tables = getMariadbTablesInPackage(it.value.packages)
+                    createTables = tables.allTables.keys
+                    it.value.getConnectionFactory()
+                        .coSqlClient(tables)
+                }
 
-                DbType.POSTGRESQL-> it.value.getConnectionFactory()
-                    .coSqlClient(getPostgresqlTablesInPackage(it.value.tablesPackage))
+                DbType.MYSQL -> {
+                    val tables = getMysqlTablesInPackage(it.value.packages)
+                    createTables = tables.allTables.keys
+                    it.value.getConnectionFactory()
+                        .coSqlClient(tables)
+                }
 
-                DbType.MSSQL-> it.value.getConnectionFactory()
-                    .coSqlClient(getMssqlTablesInPackage(it.value.tablesPackage))
+                DbType.MSSQL -> {
+                    val tables = getMssqlTablesInPackage(it.value.packages)
+                    createTables = tables.allTables.keys
+                    it.value.getConnectionFactory()
+                        .coSqlClient(tables)
+                }
 
-                DbType.MARIADB -> it.value.getConnectionFactory()
-                    .coSqlClient(getMariadbTablesInPackage(it.value.tablesPackage))
+                DbType.POSTGRESQL -> {
+                    val tables = getPostgresqlTablesInPackage(it.value.packages)
+                    createTables = tables.allTables.keys
+                    it.value.getConnectionFactory()
+                        .coSqlClient(tables)
+                }
 
-                DbType.ORACLE -> it.value.getConnectionFactory()
-                    .coSqlClient(getOracleTablesInPackage(it.value.tablesPackage))
+                DbType.ORACLE -> {
+                    val tables = getOracleTablesInPackage(it.value.packages)
+                    createTables = tables.allTables.keys
+                    it.value.getConnectionFactory()
+                        .coSqlClient(tables)
+                }
+
+                DbType.SQLITE -> null
             }
-//
-//                clearDatabaseData()
-//                initDatabaseData()
+            if (client == null) {
+                null
+            } else {
+                if (it.value.init != null && createTables != null) {
+                    runBlocking {
+                        initDatabase(client, createTables, it.value.init!!)
+                    }
+                }
                 it.key to client
+            }
         }.toMap()
 
     // Init data
-    private suspend fun initDatabaseData(client: R2dbcSqlClient, table: Tables) = withContext(Dispatchers.IO) {
-        launch {
-            client createTableIfNotExists tables
+    private suspend fun initDatabase(client: R2dbcSqlClient, tables: Set<Table<*>>, config: DatabaseInitConfig) =
+        withContext(Dispatchers.IO) {
+            launch {
+                if (config.ifNotExists) {
+                    for (table in tables) {
+                        client createTableIfNotExists table
+                    }
+                } else {
+                    if (config.clearBefore) {
+                        for (table in tables) {
+                            client deleteAllFrom table
+                        }
+                    }
+                    for (table in tables) {
+                        client createTable table
+                    }
+                }
+            }
         }
-    }
-
-    // Clear all data
-    private suspend fun clearDatabaseData(client: R2dbcSqlClient, table: Table<*>) = withContext(Dispatchers.IO) {
-        launch {
-            client deleteAllFrom table
-        }
-    }
 
     companion object {
-        private fun DatabaseConfig.getConnectionFactory() = ConnectionFactories.get(
-            ConnectionFactoryOptions.builder()
+        private fun DatabaseConfig.getConnectionFactory(): ConnectionFactory {
+            val connectionBuilder = ConnectionFactoryOptions.builder()
                 .option(
                     ConnectionFactoryOptions.DRIVER,
-                    this.driver
-                )
-                .option(
-                    ConnectionFactoryOptions.PROTOCOL,
-                    this.protocol
+                    driver
                 )
                 .option(
                     ConnectionFactoryOptions.USER,
-                    this.user
+                    user
                 )
                 .option(
                     ConnectionFactoryOptions.PASSWORD,
-                    this.password
+                    password
                 )
                 .option(
                     ConnectionFactoryOptions.DATABASE,
                     this.database
                 )
-                .build()
-        )
+            if (protocol != null) {
+                connectionBuilder
+                    .option(
+                        ConnectionFactoryOptions.PROTOCOL,
+                        protocol
+                    )
+            }
+            if (host != null) {
+                connectionBuilder
+                    .option(
+                        ConnectionFactoryOptions.HOST,
+                        host
+                    )
+            }
+            if (port != null) {
+                connectionBuilder
+                    .option(
+                        ConnectionFactoryOptions.PORT,
+                        port
+                    )
+            }
+            return ConnectionFactories.get(
+                connectionBuilder.build()
+            )
+        }
 
         private fun <T : Table<*>> getTablesInPackage(
-            packageName: String,
+            packages: List<String>,
             type: KClass<T>
-        ): MutableSet<Class<KClass<T>>>? {
-            val reflections = Reflections(packageName)
+        ): List<T> {
+            val reflections = Reflections(packages[0])
             return reflections.getSubTypesOf(type::class.java)
         }
 
-        private fun getH2TablesInPackage(packageName: String): H2Tables {
-            tables().h2()
-//            getTablesInPackage(packageName, H2Table::class)
-        }
+        private fun getH2TablesInPackage(packages: List<String>): H2Tables =
+            tables().h2(*getTablesInPackage(packages, IH2Table::class).toTypedArray())
 
-        private fun getMysqlTablesInPackage(packageName: String): MysqlTables =
-            getTablesInPackage(packageName, MysqlTable::class)
+        private fun getMariadbTablesInPackage(packages: List<String>): MariadbTables =
+            tables().mariadb(*getTablesInPackage(packages, MariadbTable::class).toTypedArray())
 
-        private fun getPostgresqlTablesInPackage(packageName: String): PostgresqlTables =
-            getTablesInPackage(packageName, PostgresqlTable::class)
+        private fun getMysqlTablesInPackage(packages: List<String>): MysqlTables =
+            tables().mysql(*getTablesInPackage(packages, MysqlTable::class).toTypedArray())
 
-        private fun getMssqlTablesInPackage(packageName: String): MssqlTables =
-            getTablesInPackage(packageName, MssqlTable::class)
+        private fun getMssqlTablesInPackage(packages: List<String>): MssqlTables =
+            tables().mssql(*getTablesInPackage(packages, MssqlTable::class).toTypedArray())
 
-        private fun getMariadbTablesInPackage(packageName: String): MariadbTables =
-            getTablesInPackage(packageName, MariadbTable::class)
 
-        private fun getOracleTablesInPackage(packageName: String): OracleTables =
-            tables().oracle(getTablesInPackage(packageName, OracleTable::class).toList())
+        private fun getPostgresqlTablesInPackage(packages: List<String>): PostgresqlTables =
+            tables().postgresql(*getTablesInPackage(packages, PostgresqlTable::class).toTypedArray())
+
+        private fun getOracleTablesInPackage(packages: List<String>): OracleTables =
+            tables().oracle(*getTablesInPackage(packages, OracleTable::class).toTypedArray())
 
 
     }

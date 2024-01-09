@@ -2,8 +2,10 @@ package digital.sadad.project.auth.entity
 
 import digital.sadad.project.auth.model.User
 import org.ufoss.kotysa.GenericTable
+import org.ufoss.kotysa.H2Tables
+import org.ufoss.kotysa.h2.H2Table
 
-object UserTable : GenericTable<User>("users") {
+object UserTable : H2Table<User>("users") {
     // Primary key
     val id = bigInt(User::id).identity().primaryKey("PK_users")
 

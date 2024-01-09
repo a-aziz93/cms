@@ -3,17 +3,20 @@ databases:
       type: H2
       driver: h2
       protocol: mem
+      database: r2dbc:h2:mem:///rackets;DB_CLOSE_DELAY=-1
       user: sa
       password:
-      database: r2dbc:h2:mem:///rackets;DB_CLOSE_DELAY=-1
       init:
         if-not-exists: true
-  - oracle-database:
-      type: ORACLE
-      driver: oracle
-      protocol: mem
-      user: sa
-      password:
-      database: r2dbc:h2:mem:///rackets;DB_CLOSE_DELAY=-1
-      init:
-        if-not-exists: true
+        clean-before: false
+#  - oracle-database:
+#      type: ORACLE
+#      driver: oracle
+#      host: localhost
+#      port: 1521
+#      database: database
+#      user: sa
+#      password:
+#      init:
+#        if-not-exists: true
+#        clean-before: false
