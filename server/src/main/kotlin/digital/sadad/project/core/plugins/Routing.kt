@@ -19,8 +19,14 @@ fun Application.configureRouting() {
         get("/") {
             call.respondText("\uD83D\uDC4B Hello Reactive API REST!")
         }
-    }
 
+        // Example of SSE
+//        val broadcastEventBus = BroadcastEventBus<SseEvent>()
+//
+//        get("/sse") {
+//            call.respondSse(broadcastEventBus)
+//        }
+    }
     // Add our routes
     roleRoutes() // Role routes
     userRoutes() // User routes
@@ -28,4 +34,4 @@ fun Application.configureRouting() {
 
 suspend fun PipelineContext<Unit, ApplicationCall>.handleHttpError(
     error: HttpError
-)= call.respond(HttpStatusCode.fromValue(error.statusCode), error.message)
+) = call.respond(HttpStatusCode.fromValue(error.statusCode), error.message)
