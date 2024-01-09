@@ -1,10 +1,10 @@
-package core.crud.repository
+package core.crud
 
 import core.crud.model.request.DataRequest
 import core.crud.model.request.predicate.Predicate
 import kotlinx.coroutines.flow.Flow
 
-interface CrudRepository<T : Any, ID : Any> {
+interface Crud<T : Any, ID : Any> {
 
     suspend fun save(
         entities: List<T>,
