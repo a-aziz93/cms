@@ -1,4 +1,4 @@
-package digital.sadad.project.core.model
+package core.model
 
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -9,7 +9,7 @@ class BroadcastEventBus<T>(
     replay: Int = 0,
     extraBufferCapacity: Int = 0,
     onBufferOverflow: BufferOverflow = BufferOverflow.SUSPEND
-) :FlowEvent<T>{
+) : FlowEvent<T> {
     private val _events = MutableSharedFlow<T>(
         replay,
         extraBufferCapacity,

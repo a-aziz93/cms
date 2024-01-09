@@ -1,7 +1,8 @@
-package digital.sadad.project.core.config
+package digital.sadad.project.core.database
 
 import digital.sadad.project.auth.entity.UserTable
 import digital.sadad.project.auth.model.User
+import digital.sadad.project.core.config.AppConfig
 import digital.sadad.project.core.config.model.DatabaseConfig
 import io.r2dbc.spi.ConnectionFactories
 import io.r2dbc.spi.ConnectionFactoryOptions

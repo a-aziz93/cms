@@ -1,4 +1,4 @@
-package digital.sadad.project.core.model
+package core.model
 
 import kotlinx.coroutines.flow.Flow
 

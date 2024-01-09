@@ -1,4 +1,4 @@
-package digital.sadad.project.core.model
+package core.model
 
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.channels.Channel
@@ -9,7 +9,7 @@ class SingleShotEventBus<T>(
     capacity: Int = Channel.RENDEZVOUS,
     onBufferOverflow: BufferOverflow = BufferOverflow.SUSPEND,
     onUndeliveredElement: ((T) -> Unit)? = null
-):FlowEvent<T> {
+): FlowEvent<T> {
     private val _events = Channel<T>(
         capacity,
         onBufferOverflow,

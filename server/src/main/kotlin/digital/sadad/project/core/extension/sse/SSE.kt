@@ -1,6 +1,6 @@
 package digital.sadad.project.core.extension.sse
 
-import digital.sadad.project.core.model.FlowEvent
+import core.model.FlowEvent
 import digital.sadad.project.core.extension.sse.model.SseEvent
 import io.ktor.http.*
 import io.ktor.server.application.*
