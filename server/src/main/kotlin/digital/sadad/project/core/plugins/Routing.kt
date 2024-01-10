@@ -17,7 +17,7 @@ import io.ktor.util.pipeline.*
 fun Application.configureRouting() {
     routing {
         get("/") {
-            call.respondText("\uD83D\uDC4B Hello Reactive API REST!")
+            call.respondText("Hello Reactive API REST!")
         }
 
         // Example of SSE
