@@ -1,4 +1,4 @@
-package digital.sadad.project.core.crud.websocket
+package digital.sadad.project.core.crud.network.websocket
 
 import core.crud.network.websocket.model.WSConnection
 import io.ktor.server.application.*

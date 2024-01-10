@@ -1,4 +1,4 @@
-package digital.sadad.project.core.crud.graphql
+package digital.sadad.project.core.crud.network.graphql
 
 import com.apurebase.kgraphql.GraphQL
 

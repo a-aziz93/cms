@@ -14,12 +14,12 @@ fun Application.configureSwagger() {
             forwardRoot = false
         }
         info {
-            title = "Ktor Hyperskill Reactive API REST"
+            title = "Ktor Reactive API REST"
             version = "latest"
-            description = "Example of a Ktor API REST using Kotlin and Ktor"
+            description = "Ktor API REST using Kotlin and Ktor"
             contact {
-                name = "José Luis González Sánchez"
-                url = "https://github.com/joseluisgs"
+                name = "Atoev Aziz"
+                url = "https://github.com/aaziz93"
             }
             license {
                 name = "Creative Commons Attribution-ShareAlike 4.0 International License"

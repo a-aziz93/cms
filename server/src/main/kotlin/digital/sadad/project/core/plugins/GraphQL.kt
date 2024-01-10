@@ -2,7 +2,6 @@ package digital.sadad.project.core.plugins
 
 import com.apurebase.kgraphql.GraphQL
 import digital.sadad.project.core.config.AppConfig
-import digital.sadad.project.core.crud.graphql.crudSchema
 import io.ktor.server.application.*
 import org.koin.ktor.ext.inject
 

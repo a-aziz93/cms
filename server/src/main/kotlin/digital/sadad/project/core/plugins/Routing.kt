@@ -15,6 +15,13 @@ import io.ktor.util.pipeline.*
  * we can define our routes in separate files like routes package
  */
 fun Application.configureRouting() {
+
+    install(Routing) {
+        graphQLPostRoute()
+        graphQLSubscriptionsRoute()
+    }
+
+
     routing {
         get("/") {
             call.respondText("\uD83D\uDC4B Hello Reactive API REST!")
