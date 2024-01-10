@@ -9,7 +9,7 @@ class BroadcastEventBus<T>(
     replay: Int = 0,
     extraBufferCapacity: Int = 0,
     onBufferOverflow: BufferOverflow = BufferOverflow.SUSPEND
-) : FlowEvent<T> {
+) : EventFlow<T> {
     private val _events = MutableSharedFlow<T>(
         replay,
         extraBufferCapacity,

@@ -2,6 +2,6 @@ package core.model
 
 import kotlinx.coroutines.flow.Flow
 
-interface FlowEvent<T> {
+interface EventFlow<T> {
     val events: Flow<T>
 }

@@ -3,7 +3,7 @@ package digital.sadad.project.core.crud.service
 import core.crud.CRUD
 import core.crud.model.Order
 import core.crud.model.Page
-import core.crud.model.PageData
+import core.crud.model.PageResult
 import core.crud.model.predicate.Predicate
 import digital.sadad.project.core.crud.repository.CRUDRepository
 import kotlinx.coroutines.flow.Flow
@@ -24,7 +24,7 @@ abstract class CRUDService<T : Any, ID : Any>(
         projections: List<String>?,
         predicate: Predicate?,
         sort: List<Order>?
-    ): PageData<T> = repository.find(page, projections, predicate, sort)
+    ): PageResult<T> = repository.find(page, projections, predicate, sort)
 
     override suspend fun delete(id: ID): Boolean = repository.delete(id)
 

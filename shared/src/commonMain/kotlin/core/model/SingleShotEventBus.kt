@@ -9,7 +9,7 @@ class SingleShotEventBus<T>(
     capacity: Int = Channel.RENDEZVOUS,
     onBufferOverflow: BufferOverflow = BufferOverflow.SUSPEND,
     onUndeliveredElement: ((T) -> Unit)? = null
-): FlowEvent<T> {
+): EventFlow<T> {
     private val _events = Channel<T>(
         capacity,
         onBufferOverflow,
