@@ -5,6 +5,7 @@ import kotlin.reflect.full.memberProperties
 internal data class Strings(
     val signUp: String,
     val signIn: String,
+    val signOut: String,
     val profile: String,
     val home: String,
     val map: String,

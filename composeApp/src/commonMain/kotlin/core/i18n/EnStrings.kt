@@ -7,6 +7,7 @@ import cafe.adriel.lyricist.LyricistStrings
 internal val EnStrings = Strings(
     signUp = "SignUp",
     signIn = "SignIn",
+    signOut = "SignOut",
     profile = "Profile",
     home = "Home",
     map = "Map",
@@ -16,5 +17,5 @@ internal val EnStrings = Strings(
     cdex = "Declaration",
     dashboard = "Dashboard",
     settings = "Settings",
-    serchHint="Search",
+    serchHint = "Search",
 )

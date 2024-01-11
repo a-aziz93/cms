@@ -6,6 +6,7 @@ import cafe.adriel.lyricist.LyricistStrings
 internal val RuStrings = Strings(
     signUp = "Регистрация",
     signIn = "Войти",
+    signOut = "Выйти",
     profile = "Профиль",
     home = "Главная",
     map = "Карта",

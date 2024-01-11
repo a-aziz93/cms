@@ -20,6 +20,7 @@ import com.arkivanov.decompose.router.stack.backStack
 import core.i18n.toCountryAlpha2Code
 import core.data.storage.KeyValueStorage
 import core.data.storage.StorageKeys
+import core.data.storage.model.LoginInfo
 import core.util.tabAnimation
 import org.koin.compose.koinInject
 import ui.adminsignup.AdminSignUpUi
@@ -86,7 +87,7 @@ internal fun MainUi(component: MainComponent) {
 
                 val navigationItems = NavigationItems()
 
-                val activeNavigationItemIndex = getActiveNavigationItemIndex(
+                val activeNavigationItemIndex = currentNavigationItemIndex(
                     navigationItems,
                     component.childStack.active.configuration as MainComponent.Config
                 )
@@ -118,7 +119,7 @@ internal fun MainUi(component: MainComponent) {
                     if (component.childStack.backStack.isNotEmpty()) {
                         {
                             component.onEvent(MainComponent.Event.NAVIGATE_BACK)
-                            val ai = getActiveNavigationItemIndex(
+                            val ai = currentNavigationItemIndex(
                                 navigationItems,
                                 component.childStack.active.configuration as MainComponent.Config
                             )
@@ -135,6 +136,11 @@ internal fun MainUi(component: MainComponent) {
                         lyricist.languageTag = it
                         keyValueStorage.set(StorageKeys.LANGUAGE.key, it)
                     },
+                    loginInfo = LoginInfo("Rick Sanches", "some", "User"),
+                    logOutLabel = strings.signOut,
+                    onLogOut = {
+
+                    },
                     {
                         selectedNavigationItem = IndexedValue(-1, profileNavigationItem)
                         component.onNavigate(selectedNavigationItem.value.route as MainComponent.Config)
@@ -146,46 +152,38 @@ internal fun MainUi(component: MainComponent) {
                         component.onNavigate(selectedNavigationItem.value.route as MainComponent.Config)
                     }
                 ) {
-                    Children(component = component)
+                    Children(
+                        stack = component.childStack,
+                        // Workaround for https://issuetracker.google.com/issues/270656235
+//        animation = stackAnimation(fade()),
+                        animation = tabAnimation {
+                            it.indexOfChild()
+                        },
+                    ) {
+                        when (val child = it.instance) {
+                            is SelfSignUp -> SelfSignUpUi(child.component)
+                            is AdminSignUp -> AdminSignUpUi(child.component)
+                            is SignIn -> SignInUi(child.component)
+                            is Reset -> ResetUi(child.component)
+                            is Profile -> ProfileUi(child.component)
+                            is Home -> HomeUi(child.component)
+                            is Map -> MapUi(child.component)
+                            is CMS -> CMSUi(child.component)
+                            is Queue -> QueueUi(child.component)
+                            is CDox -> CDoxUi(child.component)
+                            is CDex -> CDexUi(child.component)
+                            is Dashboard -> DashboardUi(child.component)
+                            is Settings -> SettingsUi(child.component)
+                        }
+                    }
                 }
             }
         }
     }
 }
 
-private fun getActiveNavigationItemIndex(navigationItems: List<NavigationItem>, activeConfig: MainComponent.Config) =
-    navigationItems.indexOfFirst { it.route == activeConfig }
-
-
-@Composable
-private fun Children(component: MainComponent, modifier: Modifier = Modifier) {
-    Children(
-        stack = component.childStack,
-        modifier = modifier,
-
-        // Workaround for https://issuetracker.google.com/issues/270656235
-//        animation = stackAnimation(fade()),
-        animation = tabAnimation {
-            it.indexOfChild()
-        },
-    ) {
-        when (val child = it.instance) {
-            is SelfSignUp -> SelfSignUpUi(child.component)
-            is AdminSignUp -> AdminSignUpUi(child.component)
-            is SignIn -> SignInUi(child.component)
-            is Reset -> ResetUi(child.component)
-            is Profile -> ProfileUi(child.component)
-            is Home -> HomeUi(child.component)
-            is Map -> MapUi(child.component)
-            is CMS -> CMSUi(child.component)
-            is Queue -> QueueUi(child.component)
-            is CDox -> CDoxUi(child.component)
-            is CDex -> CDexUi(child.component)
-            is Dashboard -> DashboardUi(child.component)
-            is Settings -> SettingsUi(child.component)
-        }
-    }
-}
+private fun currentNavigationItemIndex(navigationItems: List<NavigationItem>, currentRoute: MainComponent.Config) =
+    navigationItems.indexOfFirst { it.route == currentRoute }
 
 
 

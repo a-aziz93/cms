@@ -6,6 +6,7 @@ import cafe.adriel.lyricist.LyricistStrings
 internal val TjStrings = Strings(
     signUp = "Бақайдгирӣ",
     signIn = "Ворид",
+    signOut = "Баромад",
     profile = "Профил",
     home = "Асосӣ",
     map = "Харита",

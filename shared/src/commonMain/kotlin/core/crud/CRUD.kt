@@ -15,8 +15,6 @@ interface CRUD<T : Any, ID : Any> {
         byUser: String? = null,
     ): List<T>
 
-    suspend fun find(id: ID): T?
-
     suspend fun find(
         properties: List<String>? = null,
         predicate: Predicate? = null,
@@ -25,12 +23,10 @@ interface CRUD<T : Any, ID : Any> {
 
     suspend fun find(
         page: Page,
-        projections: List<String>? = null,
+        properties: List<String>? = null,
         predicate: Predicate? = null,
         sort: List<Order>? = null,
     ): PageResult<T>
-
-    suspend fun delete(id: ID): Boolean
 
     suspend fun delete(predicate: Predicate? = null): Long
 

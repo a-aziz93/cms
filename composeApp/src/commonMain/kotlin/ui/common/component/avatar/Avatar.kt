@@ -27,6 +27,7 @@ import kotlin.math.absoluteValue
 @OptIn(ExperimentalResourceApi::class)
 @Composable
 fun Avatar(
+    modifier: Modifier = Modifier,
     resource: Resource<Painter>? = null,
     onResourceLoading: @Composable (BoxScope.(Float) -> Unit)? = { painterResource("drawable/image_loading.png") },
     onResourceFailure: @Composable (BoxScope.(Throwable) -> Unit)? = { painterResource("drawable/image_load_error.png") },
@@ -35,50 +36,36 @@ fun Avatar(
     firstName: String,
     lastName: String,
     textStyle: TextStyle = MaterialTheme.typography.titleSmall,
-    onClick: (() -> Unit)? = null,
-    contextMenuItems: List<DropdownItem> = emptyList(),
-    onContextMenuItemClick: (DropdownItem) -> Boolean = { true },
-) {
-    var modifier = ContextMenu(
-        items = contextMenuItems,
-        onItemClick = onContextMenuItemClick,
-        onDismissRequest = { true }
-    )
-
-    if (onClick != null) {
-        modifier = modifier.clickable {
-            onClick()
+    contextMenuItems: List<ContextMenuItem> = emptyList(),
+) =
+    ContextMenuDataProvider(items = { contextMenuItems }) {
+        ContextMenuArea(items = { emptyList() }) {
+            if (resource == null)
+                InitialsAvatar(
+                    modifier,
+                    firstName,
+                    lastName,
+                    textStyle
+                ) else ImageAvatar(
+                modifier,
+                resource,
+                onResourceLoading,
+                onResourceFailure,
+                contentDescription,
+            )
         }
     }
 
-    if (resource == null) InitialsAvatar(
-        modifier,
-        firstName,
-        lastName,
-        size,
-        textStyle
-    ) else ImageAvatar(
-        modifier,
-        resource,
-        onResourceLoading,
-        onResourceFailure,
-        contentDescription,
-        size
-    )
-}
-
 @Composable
 private fun InitialsAvatar(
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     firstName: String,
     lastName: String,
-    size: Dp = 40.dp,
     textStyle: TextStyle = MaterialTheme.typography.titleSmall,
 ) {
     Box(
-        modifier
-            .clip(shape = CircleShape)
-            .size(size), contentAlignment = Alignment.Center
+        modifier,
+        contentAlignment = Alignment.Center
     ) {
         val color = remember(firstName, lastName) {
             val name = listOf(firstName, lastName)
@@ -88,28 +75,24 @@ private fun InitialsAvatar(
                 0.5f,
                 0.4f)
         }
-        val initials = (firstName.take(1) + lastName.take(1)).uppercase()
         Canvas(modifier = Modifier.fillMaxSize()) {
             drawCircle(SolidColor(color))
         }
-        Text(text = initials, style = textStyle, color = Color.White)
+        Text(text = (firstName.take(1) + lastName.take(1)).uppercase(), style = textStyle, color = Color.White)
     }
 }
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
 private fun ImageAvatar(
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     resource: Resource<Painter>,
     onBackgroundLoading: @Composable (BoxScope.(Float) -> Unit)? = { painterResource("drawable/image_loading.png") },
     onBackgroundFailure: @Composable (BoxScope.(Throwable) -> Unit)? = { painterResource("drawable/image_load_error.png") },
     contentDescription: String = "",
-    size: Dp = 50.dp,
 ) {
     KamelImage(
-        modifier = modifier
-            .clip(shape = CircleShape)
-            .size(size),
+        modifier = modifier,
         resource = resource,
         contentDescription = contentDescription,
         onLoading = onBackgroundLoading,

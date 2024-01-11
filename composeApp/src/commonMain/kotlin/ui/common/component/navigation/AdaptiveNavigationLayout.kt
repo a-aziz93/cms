@@ -1,11 +1,9 @@
 package ui.common.component.navigation
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
@@ -16,9 +14,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color.Companion.Blue
 import androidx.compose.ui.unit.dp
 import cafe.adriel.lyricist.strings
+import com.dzirbel.contextmenu.ContextMenuIcon
+import com.dzirbel.contextmenu.MaterialContextMenuItem
 import compose.icons.EvaIcons
 import compose.icons.evaicons.Outline
 import compose.icons.evaicons.outline.*
+import core.data.storage.model.LoginInfo
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
@@ -48,12 +49,47 @@ fun AdaptiveNavigationLayout(
     onThemeClick: (() -> Unit)? = null,
     language: String,
     onLanguageClick: ((String) -> Unit)? = null,
+    loginInfo: LoginInfo? = null,
+    logOutLabel: String = "SignOut",
+    onLogOut: () -> Unit,
     onAvatarClick: (() -> Unit)? = null,
     items: List<NavigationItem>,
     selectedItem: IndexedValue<NavigationItem>,
     onItemClick: (Int) -> Unit,
     content: @Composable () -> Unit = {},
 ) {
+    var avatar: (@Composable () -> Unit)? = null
+    var topBarAvatar: (@Composable () -> Unit)? = null
+    if (loginInfo != null) {
+        avatar =
+            {
+                val usernameSplit = loginInfo.username.split("\\s+".toRegex(), 2)
+                var avatarModifier = Modifier
+                    .clip(shape = CircleShape)
+                    .size(40.dp)
+                if (onAvatarClick != null) {
+                    avatarModifier = avatarModifier.clickable { onAvatarClick() }
+                }
+                Avatar(
+                    avatarModifier,
+                    firstName = usernameSplit[0],
+                    lastName = if (usernameSplit.size > 1) usernameSplit[1] else usernameSplit[0],
+                    contextMenuItems = listOf(
+                        MaterialContextMenuItem(
+                            label = logOutLabel,
+                            onClick = onLogOut,
+                            leadingIcon = ContextMenuIcon.OfVector(EvaIcons.Outline.LogOut),
+                        ),
+                    ),
+                )
+            }
+        topBarAvatar = {
+            Column {
+                avatar()
+                loginInfo.role?.let { Text(it) }
+            }
+        }
+    }
 
     if (isDrawerLayout(
             layoutType,
@@ -69,23 +105,9 @@ fun AdaptiveNavigationLayout(
             layoutType = layoutType,
             drawerState = drawerState,
             head = {
-                if (onAvatarClick != null) {
+                avatar?.let {
                     Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-                        Avatar(
-                            firstName = "Aziz",
-                            lastName = "Atoev",
-                            contextMenuItems = listOf(
-                                DropdownItem({ Text("Profile") }),
-                                DropdownItem(
-                                    { Text("LogOut") },
-                                    { Icon(EvaIcons.Outline.LogOut, null) }
-                                )
-                            ),
-                            onContextMenuItemClick = {
-                                true
-                            },
-                            onClick = onAvatarClick
-                        )
+                        it()
                         Text("Admin")
                     }
                 }
@@ -109,7 +131,7 @@ fun AdaptiveNavigationLayout(
                 onThemeClick,
                 language,
                 onLanguageClick,
-                onAvatarClick,
+                if (drawerState.isClosed) topBarAvatar else null,
                 items,
                 selectedItem,
                 onItemClick,
@@ -133,7 +155,7 @@ fun AdaptiveNavigationLayout(
             onThemeClick,
             language,
             onLanguageClick,
-            onAvatarClick,
+            topBarAvatar,
             items,
             selectedItem,
             onItemClick,
@@ -160,7 +182,7 @@ private fun BarNavigationLayout(
     onThemeClick: (() -> Unit)?,
     language: String,
     onLanguageClick: ((String) -> Unit)?,
-    onAvatarClick: (() -> Unit)?,
+    avatar: (@Composable () -> Unit)?,
     items: List<NavigationItem>,
     selectedItem: IndexedValue<NavigationItem>,
     onItemClick: (Int) -> Unit,
@@ -231,11 +253,7 @@ private fun BarNavigationLayout(
                                 )
                             }
                         }
-                        Avatar(
-                            firstName = "Aziz",
-                            lastName = "Atoev",
-                            onClick = onAvatarClick
-                        )
+                        avatar?.invoke()
                     },
                     colors = topAppBarColors,
                 )

@@ -1,18 +1,44 @@
 package core.data.storage
 
 import com.russhwolf.settings.*
+import com.russhwolf.settings.coroutines.getStringFlow
 import com.russhwolf.settings.serialization.decodeValue
 import com.russhwolf.settings.serialization.decodeValueOrNull
 import com.russhwolf.settings.serialization.encodeValue
+import core.data.storage.model.LoginInfo
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.modules.SerializersModule
 import org.koin.core.annotation.Single
 import kotlin.reflect.KClass
+import kotlinx.coroutines.flow.Flow
 
 @Single
 class KeyValueStorageImpl : KeyValueStorage {
     private val settings: Settings by lazy { Settings() }
+    private val observableSettings: ObservableSettings by lazy { settings as ObservableSettings }
+
+    override var token: String?
+        get() = settings[StorageKeys.TOKEN.key]
+        set(value) {
+            settings[StorageKeys.TOKEN.key] = value
+        }
+
+    @OptIn(ExperimentalSerializationApi::class)
+    override var loginInfo: LoginInfo?
+        get() = settings.decodeValueOrNull(LoginInfo.serializer(), StorageKeys.LOGIN_INFO.key)
+        set(value) {
+            if (value != null) {
+                settings.encodeValue(LoginInfo.serializer(), StorageKeys.LOGIN_INFO.key, value)
+            } else {
+                remove(StorageKeys.TOKEN.key)
+            }
+        }
+
+    @OptIn(ExperimentalSettingsApi::class)
+    override val observableToken: Flow<String>
+        get() = observableSettings.getStringFlow(StorageKeys.TOKEN.key, "")
+
 
     override fun set(key: String, value: Any) {
         when (value) {
