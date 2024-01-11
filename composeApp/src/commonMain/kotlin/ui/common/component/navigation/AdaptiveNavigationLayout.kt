@@ -29,7 +29,6 @@ import core.i18n.toCountryAlpha2Code
 import core.i18n.toLanguageAlpha2Code
 import core.model.countries
 import core.model.countryAlpha2CodeFlagPathMap
-import ui.common.component.dropdown.model.DropdownItem
 import ui.common.component.navigation.model.NavigationItem
 import ui.common.component.dialog.locale.LocalePickerDialog
 

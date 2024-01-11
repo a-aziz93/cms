@@ -141,7 +141,7 @@ abstract class CRUDRepository<T : Any, ID : Any>(
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     private fun T.setProperty(name: String, value: Any) =
-        this::class.declaredMemberProperties.associateBy { KProperty<*>::name }.find { it.name == name }?.call(this, value)
+        this::class.declaredMemberProperties.find { it.name == name }?.call(this, value)
 
     private fun Update.use(update: CoroutinesSqlClientDeleteOrUpdate.Update<T>) {
 

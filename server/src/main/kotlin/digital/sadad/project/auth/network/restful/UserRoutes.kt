@@ -1,4 +1,4 @@
-package digital.sadad.project.auth.rest
+package digital.sadad.project.auth.network.restful
 
 import USER_ENDPOINT
 import com.github.michaelbull.result.andThen

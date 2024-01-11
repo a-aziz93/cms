@@ -1,9 +1,13 @@
 package digital.sadad.project.core.crud.network.graphql
 
 import com.apurebase.kgraphql.GraphQL
+import core.crud.model.predicate.Predicate
 
-fun GraphQL.Configuration.crudSchema(){
-    schema{
-
+inline fun <reified T : Any> GraphQL.Configuration.crudSchema() {
+    schema {
+        type<T>()
+        query()
+        inputType<Predicate>()
+        mutation()
     }
 }

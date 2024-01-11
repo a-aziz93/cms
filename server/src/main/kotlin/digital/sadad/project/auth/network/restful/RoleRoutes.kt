@@ -1,4 +1,4 @@
-package digital.sadad.project.auth.rest
+package digital.sadad.project.auth.network.restful
 
 import ROLE_ENDPOINT
 import digital.sadad.project.auth.service.role.RoleService

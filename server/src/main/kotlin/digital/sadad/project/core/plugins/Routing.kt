@@ -1,8 +1,8 @@
 package digital.sadad.project.core.plugins
 
 import digital.sadad.project.core.error.HttpError
-import digital.sadad.project.auth.rest.roleRoutes
-import digital.sadad.project.auth.rest.userRoutes
+import digital.sadad.project.auth.network.restful.roleRoutes
+import digital.sadad.project.auth.network.restful.userRoutes
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.response.*
