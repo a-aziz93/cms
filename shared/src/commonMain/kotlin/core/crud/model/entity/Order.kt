@@ -1,4 +1,4 @@
-package core.crud.model
+package core.crud.model.entity
 
 import kotlinx.serialization.Serializable
 

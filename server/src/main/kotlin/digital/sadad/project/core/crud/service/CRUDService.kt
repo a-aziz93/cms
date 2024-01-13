@@ -1,10 +1,10 @@
 package digital.sadad.project.core.crud.service
 
 import core.crud.CRUD
-import core.crud.model.Order
-import core.crud.model.Page
-import core.crud.model.PageResult
-import core.crud.model.Update
+import core.crud.model.entity.Order
+import core.crud.model.entity.Page
+import core.crud.model.entity.PageResult
+import core.crud.model.entity.Update
 import core.crud.model.predicate.operation.Predicate
 import digital.sadad.project.core.crud.repository.CRUDRepository
 import kotlinx.coroutines.flow.Flow

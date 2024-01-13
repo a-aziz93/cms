@@ -1,9 +1,9 @@
 package core.crud
 
-import core.crud.model.Order
-import core.crud.model.Page
-import core.crud.model.PageResult
-import core.crud.model.Update
+import core.crud.model.entity.Order
+import core.crud.model.entity.Page
+import core.crud.model.entity.PageResult
+import core.crud.model.entity.Update
 import core.crud.model.predicate.operation.Predicate
 import kotlinx.coroutines.flow.Flow
 
