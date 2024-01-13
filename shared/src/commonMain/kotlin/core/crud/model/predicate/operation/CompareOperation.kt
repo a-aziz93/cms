@@ -1,6 +1,6 @@
-package core.crud.model.predicate
+package core.crud.model.predicate.operation
 
-enum class CompareOperation {
+enum class CompareOperation : PredicateOperation {
     EQUALS,
     NOT_EQUALS,
     GREATER_THAN,
@@ -8,5 +8,6 @@ enum class CompareOperation {
     LESS_THAN,
     LESS_THAN_EQUAL,
     BETWEEN,
-    LIKE
+    LIKE,
+    IN,
 }

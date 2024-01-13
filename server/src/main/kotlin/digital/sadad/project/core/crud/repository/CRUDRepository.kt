@@ -5,7 +5,7 @@ import core.crud.model.Order
 import core.crud.model.Page
 import core.crud.model.PageResult
 import core.crud.model.Update
-import core.crud.model.predicate.Predicate
+import core.crud.model.predicate.operation.Predicate
 import core.crud.model.predicate.PredicateField.Companion.field
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -14,7 +14,6 @@ import kotlinx.coroutines.withContext
 import org.ufoss.kotysa.*
 import org.ufoss.kotysa.columns.*
 import java.time.LocalDateTime
-import kotlin.reflect.KProperty
 import kotlin.reflect.full.declaredMemberProperties
 
 abstract class CRUDRepository<T : Any, ID : Any>(

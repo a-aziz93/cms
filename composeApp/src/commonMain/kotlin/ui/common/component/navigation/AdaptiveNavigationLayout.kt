@@ -196,11 +196,16 @@ private fun BarNavigationLayout(
             if (hasTopAppBar) {
                 TopAppBar(
                     title = {
-                        Row {
+                        Row(
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
                             ProvideTextStyle(value = MaterialTheme.typography.titleMedium) {
                                 (selectedItem.value.selectedText ?: selectedItem.value.text)?.invoke()
                             }
                             (selectedItem.value.selectedIcon ?: selectedItem.value.icon)?.invoke()
+                            Box {
+                                avatar?.invoke()
+                            }
                         }
                     },
                     navigationIcon = {
@@ -252,7 +257,6 @@ private fun BarNavigationLayout(
                                 )
                             }
                         }
-                        avatar?.invoke()
                     },
                     colors = topAppBarColors,
                 )

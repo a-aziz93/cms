@@ -19,9 +19,6 @@ import io.kamel.core.Resource
 import io.kamel.image.KamelImage
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
-import ui.component.dropdown.ContextMenu
-import ui.common.component.dropdown.model.DropdownItem
-import ui.common.model.Item
 import kotlin.math.absoluteValue
 
 @OptIn(ExperimentalResourceApi::class)

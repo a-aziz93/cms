@@ -1,8 +1,8 @@
 package ui.home.store
 
 import com.arkivanov.mvikotlin.core.store.Store
-import core.model.cms.CMS
-import core.model.cms.CMSSearchFilter
+import ui.cms.model.cms.CMS
+import ui.cms.model.cms.CMSSearchFilter
 
 interface CMSStore: Store<CMSStore.Intent, CMSStore.State, Nothing> {
 

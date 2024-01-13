@@ -4,7 +4,7 @@ import core.crud.model.Order
 import core.crud.model.Page
 import core.crud.model.PageResult
 import core.crud.model.Update
-import core.crud.model.predicate.Predicate
+import core.crud.model.predicate.operation.Predicate
 import kotlinx.coroutines.flow.Flow
 
 interface CRUD<T : Any, ID : Any> {

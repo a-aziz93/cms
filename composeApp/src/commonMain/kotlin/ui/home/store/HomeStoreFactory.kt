@@ -6,8 +6,8 @@ import com.arkivanov.mvikotlin.core.store.SimpleBootstrapper
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
-import core.model.cms.CMS
-import core.model.cms.CMSSearchFilter
+import ui.cms.model.cms.CMS
+import ui.cms.model.cms.CMSSearchFilter
 import ui.cms.data.repository.CMSRepository
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch

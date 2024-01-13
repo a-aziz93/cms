@@ -1,17 +1,17 @@
-package core.crud.model.predicate
+package core.crud.model.predicate.operation
 
-import kotlinx.serialization.Contextual
+import core.crud.model.predicate.PredicateValue
 import kotlinx.serialization.Serializable
 
 @Serializable
 abstract class Predicate(
-    val operation: @Contextual Any,
-    vararg val values: @Contextual Any
-) {
+    val operation: PredicateOperation,
+    vararg val values: PredicateValue
+) : PredicateValue {
     @Suppress("UNUSED")
-    fun and(vararg value: Any) = LogicalPredicate.and(this, value)
+    fun and(vararg value: PredicateValue) = LogicalPredicate.and(this, *value)
 
-    fun or(vararg value: Any) = LogicalPredicate.or(this, value)
+    fun or(vararg value: PredicateValue) = LogicalPredicate.or(this, *value)
 
     @Suppress("UNUSED")
     fun not() = LogicalPredicate.not(this)
