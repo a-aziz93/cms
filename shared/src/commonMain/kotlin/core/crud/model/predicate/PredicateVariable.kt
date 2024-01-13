@@ -1,3 +1,3 @@
 package core.crud.model.predicate
 
-interface PredicateValue
+interface PredicateVariable

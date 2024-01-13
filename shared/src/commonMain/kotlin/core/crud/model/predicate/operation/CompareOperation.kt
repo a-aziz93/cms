@@ -1,5 +1,8 @@
 package core.crud.model.predicate.operation
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 enum class CompareOperation : PredicateOperation {
     EQUALS,
     NOT_EQUALS,

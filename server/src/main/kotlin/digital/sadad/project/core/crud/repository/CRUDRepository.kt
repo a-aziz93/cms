@@ -7,6 +7,7 @@ import core.crud.model.PageResult
 import core.crud.model.Update
 import core.crud.model.predicate.operation.Predicate
 import core.crud.model.predicate.PredicateField.Companion.field
+import core.crud.model.predicate.extension.f
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
@@ -22,13 +23,14 @@ abstract class CRUDRepository<T : Any, ID : Any>(
     val tableIdColumnName: String = table::class.declaredMemberProperties.find {
         it.returnType.classifier == LongDbIdentityColumnNotNull::class || it.returnType.classifier == UuidDbUuidColumnNullable::class
     }!!.name,
-    val createByColumnName: String? = null,
-    val createDateTimeColumnName: String? = null,
-    val updateByColumnName: String? = null,
-    val updateDateTimeColumnName: String? = null,
 ) : CRUD<T, ID> {
 
-    protected abstract fun entityId(entity: T): ID?
+    protected abstract fun getEntityId(entity: T): ID?
+
+    fun onCreate(entity: T, byUser: String?, dateTime: LocalDateTime): T
+
+    fun onUpdate(entity: T, username: String?, dateTime: LocalDateTime): T
+
 
     override suspend fun save(
         entities: List<T>,
@@ -43,8 +45,8 @@ abstract class CRUDRepository<T : Any, ID : Any>(
             val updateEntitiesWithIndexes: List<IndexedValue<T>> = emptyList()
 
             for (indexedEntity in entities.withIndex()) {
-                val id = entityId(indexedEntity.value)
-                if (id == null || find(predicate = field(tableIdColumnName).eq(id)).firstOrNull() == null) {
+                val id = getEntityId(indexedEntity.value)
+                if (id == null || find(predicate = tableIdColumnName.f().eq(id)).firstOrNull() == null) {
                     createEntitiesWithIndexes + indexedEntity
                 } else {
                     updateEntitiesWithIndexes + indexedEntity
@@ -58,13 +60,7 @@ abstract class CRUDRepository<T : Any, ID : Any>(
             }
 
             client.insertAndReturn(*arrayOf(createEntitiesWithIndexes.map {
-                if (createByColumnName != null && byUser != null) {
-                    it.value.setProperty(createByColumnName, byUser)
-                }
-                if (createDateTimeColumnName != null) {
-                    it.value.setProperty(createDateTimeColumnName, LocalDateTime.now())
-                }
-                it.value
+                onCreate(it.value,byUser,LocalDateTime.now())
             })).collect { it.forEachIndexed { index, value -> result[createEntitiesWithIndexes[index].index] = value } }
 
             return@withContext result.toList()

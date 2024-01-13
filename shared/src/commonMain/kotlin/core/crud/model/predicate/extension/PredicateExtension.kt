@@ -1,9 +1,9 @@
 package core.crud.model.predicate.extension
 
-import core.crud.model.predicate.IntPredicateValue.Companion.int
-import core.crud.model.predicate.LongPredicateValue.Companion.long
-import core.crud.model.predicate.PredicateField.Companion.field
-import core.crud.model.predicate.StringPredicateValue.Companion.string
+import core.crud.model.predicate.value.IntPredicateValue.Companion.int
+import core.crud.model.predicate.value.LongPredicateValue.Companion.long
+import core.crud.model.predicate.value.PredicateField.Companion.field
+import core.crud.model.predicate.value.StringPredicateValue.Companion.string
 
 fun Int.v() = int(this)
 
