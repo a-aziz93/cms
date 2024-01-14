@@ -1,6 +1,6 @@
 package digital.sadad.project.core.storage.error
 
-import digital.sadad.project.core.error.IOError
+import core.error.Error
 
-class SaveError(message: String) : IOError(message)
-class NotFoundError(message: String) : IOError(message)
+class SaveError(message: String) : Error(message)
+class NotFoundError(message: String) : Error(message)

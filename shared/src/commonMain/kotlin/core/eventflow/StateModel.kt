@@ -1,4 +1,4 @@
-package core.model
+package core.eventflow
 
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

@@ -3,11 +3,10 @@ package digital.sadad.project.core.crud.repository
 import core.crud.CRUD
 import core.crud.model.entity.Order
 import core.crud.model.entity.Page
-import core.crud.model.entity.PageResult
 import core.crud.model.entity.Update
 import core.crud.model.predicate.operation.Predicate
-import core.crud.model.predicate.PredicateField.Companion.field
 import core.crud.model.predicate.extension.f
+import core.crud.model.predicate.extension.v
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
@@ -17,19 +16,21 @@ import org.ufoss.kotysa.columns.*
 import java.time.LocalDateTime
 import kotlin.reflect.full.declaredMemberProperties
 
-abstract class CRUDRepository<T : Any, ID : Any>(
+abstract class AbstractCRUDRepository<T : Any, ID : Any>(
     protected val client: R2dbcSqlClient,
     protected val table: Table<T>,
-    val tableIdColumnName: String = table::class.declaredMemberProperties.find {
-        it.returnType.classifier == LongDbIdentityColumnNotNull::class || it.returnType.classifier == UuidDbUuidColumnNullable::class
+    private val tableIdColumnName: String = table::class.declaredMemberProperties.find {
+        it.returnType.classifier == IntDbIdentityColumnNotNull::class ||
+                it.returnType.classifier == LongDbIdentityColumnNotNull::class ||
+                it.returnType.classifier ==  UuidDbUuidColumnNotNull::class
     }!!.name,
 ) : CRUD<T, ID> {
 
     protected abstract fun getEntityId(entity: T): ID?
 
-    fun onCreate(entity: T, byUser: String?, dateTime: LocalDateTime): T
+    abstract fun onCreate(entity: T, byUser: String?, dateTime: LocalDateTime): T
 
-    fun onUpdate(entity: T, username: String?, dateTime: LocalDateTime): T
+    abstract fun onUpdate(entity: T, username: String?, dateTime: LocalDateTime): T
 
 
     override suspend fun save(
@@ -46,7 +47,7 @@ abstract class CRUDRepository<T : Any, ID : Any>(
 
             for (indexedEntity in entities.withIndex()) {
                 val id = getEntityId(indexedEntity.value)
-                if (id == null || find(predicate = tableIdColumnName.f().eq(id)).firstOrNull() == null) {
+                if (id == null || find(predicate = tableIdColumnName.f().eq(id.v())).firstOrNull() == null) {
                     createEntitiesWithIndexes + indexedEntity
                 } else {
                     updateEntitiesWithIndexes + indexedEntity
@@ -60,24 +61,54 @@ abstract class CRUDRepository<T : Any, ID : Any>(
             }
 
             client.insertAndReturn(*arrayOf(createEntitiesWithIndexes.map {
-                onCreate(it.value,byUser,LocalDateTime.now())
+                onCreate(it.value, byUser, LocalDateTime.now())
             })).collect { it.forEachIndexed { index, value -> result[createEntitiesWithIndexes[index].index] = value } }
 
             return@withContext result.toList()
         }
     }!!
 
-    suspend fun find(
-        properties: List<String>?,
+    override suspend fun find(
         predicate: Predicate?,
         sort: List<Order>?,
-        offset: Long? = null,
-        limit: Long? = null
-    ) {
-        val selects = client.selects()
+        offset: Long?,
+        limit: Long?,
+    ): Flow<T> = withContext(Dispatchers.IO) {
+        val selectFrom = client.selectFrom(table)
 
-        properties?.forEach { projection ->
-            selects.select(projection.column())
+        val wheres = selectFrom.wheres()
+        predicate?.use(wheres)
+
+        val ordersBy = wheres.ordersBy()
+        sort?.forEach {
+            if (it.ascending) {
+                ordersBy.orderByAsc(it.name.column())
+            } else {
+                ordersBy.orderByDesc(it.name.column())
+            }
+        }
+
+        var limitOffset: CoroutinesSqlClientSelect.LimitOffset<T>? = null
+        if (offset != null) {
+            limitOffset = ordersBy.offset(offset)
+        }
+        if (limit != null) {
+            limitOffset = (limitOffset ?: ordersBy).limit(limit)
+        }
+
+        return@withContext (limitOffset ?: ordersBy).fetchAll()
+    }
+
+    override suspend fun find(
+        properties: List<String>,
+        predicate: Predicate?,
+        sort: List<Order>?,
+        offset: Long?,
+        limit: Long?,
+    ): Flow<List<Any?>> = withContext(Dispatchers.IO) {
+        val selects = client.selects()
+        properties.forEach {
+            selects.select(it.column())
         }
 
         val froms = selects.froms()
@@ -87,7 +118,6 @@ abstract class CRUDRepository<T : Any, ID : Any>(
         predicate?.use(wheres)
 
         val ordersBy = wheres.ordersBy()
-
         sort?.forEach {
             if (it.ascending) {
                 ordersBy.orderByAsc(it.name.column())
@@ -100,49 +130,40 @@ abstract class CRUDRepository<T : Any, ID : Any>(
         if (offset != null) {
             limitOffset = ordersBy.offset(offset)
         }
-
         if (limit != null) {
-            if (limitOffset == null) {
-                limitOffset = ordersBy.limit(limit)
-            } else {
-                limitOffset = limitOffset.limit(limit)
-            }
+            limitOffset = (limitOffset ?: ordersBy).limit(limit)
         }
 
-        return (limitOffset ?: ordersBy).fetchAll()
+        return@withContext (limitOffset ?: ordersBy).fetchAll()
     }
 
-    override suspend fun find(properties: List<String>?, predicate: Predicate?, sort: List<Order>?): Flow<T> {
-
+    override suspend fun delete(predicate: Predicate?): Long = withContext(Dispatchers.IO) {
+        return@withContext predicate?.use(client deleteFrom table)?.execute() ?: (client deleteAllFrom table)
     }
 
-    override suspend fun find(
-        page: Page,
-        properties: List<String>?,
-        predicate: Predicate?,
-        sort: List<Order>?
-    ): PageResult<T> {
-        TODO("Not yet implemented")
+    suspend fun delete(entity: T): Boolean =
+        withContext(Dispatchers.IO) {
+            return@withContext delete(
+                tableIdColumnName.f().eq(getEntityId(entity)!!.v())
+            ) > 0L
+        }
+
+    override suspend fun count(predicate: Predicate?): Long = withContext(Dispatchers.IO) {
+        return@withContext predicate?.use(client selectCountFrom table)?.fetchOne() ?: (client selectCountAllFrom table)
     }
-
-    override suspend fun delete(predicate: Predicate?): Long =
-        predicate?.use(client deleteFrom table)?.execute() ?: (client deleteAllFrom table)
-
-    suspend fun delete(entity: T): Boolean = delete(field(tableIdColumnName).eq(entityId(entity)!!)) > 0L
-
-    override suspend fun count(predicate: Predicate?): Long =
-        predicate?.use(client selectCountFrom table)?.fetchOne() ?: (client selectCountAllFrom table)
 
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    private fun T.setProperty(name: String, value: Any) =
-        this::class.declaredMemberProperties.find { it.name == name }?.call(this, value)
+    private fun String.column(): Column<*, *> =
+        table::class.declaredMemberProperties.find { it.name == this }
+            ?.let { it.getter.call(table) as Column<*, *> }!!
+
 
     private fun Update.use(update: CoroutinesSqlClientDeleteOrUpdate.Update<T>) {
 
     }
 
-    private fun Predicate.use(wheres: CoroutinesSqlClientSelect.Wheres<List<Any?>>) {
+    private fun Predicate.use(wheres: CoroutinesSqlClientSelect.Wheres<*>) {
 
     }
 
@@ -154,7 +175,5 @@ abstract class CRUDRepository<T : Any, ID : Any>(
 
     }
 
-    private fun String.column(): Column<*, *> =
-        table::class.declaredMemberProperties.find { it.name == this }?.let { it.getter.call(table) as Column<*, *> }!!
 
 }

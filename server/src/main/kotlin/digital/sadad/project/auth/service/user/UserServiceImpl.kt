@@ -2,13 +2,12 @@ package digital.sadad.project.auth.service.user
 
 import com.github.michaelbull.result.*
 import digital.sadad.project.auth.error.UserError
-import digital.sadad.project.auth.model.User
+import digital.sadad.project.auth.entity.UserEntity
 import digital.sadad.project.auth.repository.UserRepository
 import digital.sadad.project.core.config.AppConfig
 import io.github.reactivecircus.cache4k.Cache
 import mu.two.KotlinLogging
 import org.koin.core.annotation.Single
-import org.koin.core.annotation.Singleton
 
 private val logger = KotlinLogging.logger {}
 
@@ -21,7 +20,7 @@ class UserServiceImpl(
     // Configure the Cache with the options of every entity in the cache
     // by default
     val users by lazy {
-        var cacheBuilder = Cache.Builder<Long, User>()
+        var cacheBuilder = Cache.Builder<Long, UserEntity>()
         val userCacheConfig = appConfig.config.cache?.get("users")
         if (userCacheConfig != null) {
             if (userCacheConfig.maximumCacheSize != null) {
@@ -37,7 +36,7 @@ class UserServiceImpl(
         cacheBuilder.build()
     }
 
-    override suspend fun save(vararg users: User, username: String?): Result<List<User>, UserError> {
+    override suspend fun save(vararg users: UserEntity, username: String?): Result<List<UserEntity>, UserError> {
         logger.debug { "save: save user" }
         return findByUsername(user.username).onSuccess {
             return Err(UserError.BadRequest("Another user existe with this username: ${user.username}"))
@@ -55,7 +54,7 @@ class UserServiceImpl(
      * @param id Long Id of user
      * @return Result<User, UserError> Result of user or error if not found
      */
-    override suspend fun find(id: Long): Result<User, UserError> {
+    override suspend fun find(id: Long): Result<UserEntity, UserError> {
         logger.debug { "findById: search user by id" }
 
         // find in cache if not found in repository
@@ -76,7 +75,7 @@ class UserServiceImpl(
      * @param username String Username of user
      * @return Result<User, UserError> Result of user or error if not found
      */
-    override suspend fun findByUsername(username: String): Result<User, UserError> {
+    override suspend fun findByUsername(username: String): Result<UserEntity, UserError> {
         logger.debug { "findById: search user by username" }
 
         // find in cache if not found in repository
@@ -93,7 +92,7 @@ class UserServiceImpl(
      * @param password String Password of user
      * @return Result<User, UserError> Result of user or error if not found
      */
-    override suspend fun findUserNameAndPassword(username: String, password: String): Result<User, UserError> {
+    override suspend fun findUserNameAndPassword(username: String, password: String): Result<UserEntity, UserError> {
         logger.debug { "checkUserNameAndPassword: check username and password" }
 
         return usersRepository.checkUserNameAndPassword(username, password)?.let {
@@ -123,7 +122,7 @@ class UserServiceImpl(
     override suspend fun isAdmin(id: Long): Result<Boolean, UserError> {
         logger.debug { "isAdmin: chek if user is admin" }
         return findById(id).andThen {
-            if (it.role == User.Role.ADMIN) {
+            if (it.role == UserEntity.Role.ADMIN) {
                 cacheService.users.put(it.id, it)
                 Ok(true)
             } else {
@@ -138,7 +137,7 @@ class UserServiceImpl(
      * @param image String Image of user
      * @return Result<User, UserError> Result of user or error if not found
      */
-    override suspend fun updateImage(id: Long, image: String): Result<User, UserError> {
+    override suspend fun updateImage(id: Long, image: String): Result<UserEntity, UserError> {
         logger.debug { "updateImage: update image user" }
 
         // find, if exists update in cache and repository and notify

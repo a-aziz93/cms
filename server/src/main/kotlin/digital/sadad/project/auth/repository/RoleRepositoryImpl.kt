@@ -1,9 +1,7 @@
 package digital.sadad.project.auth.repository
 
 import digital.sadad.project.auth.entity.RoleTable
-import digital.sadad.project.auth.entity.UserTable
-import digital.sadad.project.auth.model.Role
-import digital.sadad.project.auth.model.User
+import digital.sadad.project.auth.entity.RoleEntity
 import digital.sadad.project.core.database.service.DatabaseService
 import mu.two.KotlinLogging
 import org.ufoss.kotysa.CoroutinesSqlClientDeleteOrUpdate
@@ -20,25 +18,25 @@ class RoleRepositoryImpl(
     override val table: RoleTable,
 ) : RoleRepository {
 
-    override fun getId(entity: Role): Long? = entity.id
+    override fun getId(entity: RoleEntity): Long? = entity.id
 
-    override fun create(entity: Role, username: String?, dateTime: LocalDateTime) = entity.copy(
+    override fun create(entity: RoleEntity, username: String?, dateTime: LocalDateTime) = entity.copy(
         createdBy = username,
         createdAt = dateTime,
     )
 
-    override fun update(entity: Role, username: String?, dateTime: LocalDateTime) = entity.copy(
+    override fun update(entity: RoleEntity, username: String?, dateTime: LocalDateTime) = entity.copy(
         updatedBy = username,
         updatedAt = dateTime,
     )
 
     override fun checkSelectIdEquality(
-        select: CoroutinesSqlClientSelect.FromTable<Role, Role>,
+        select: CoroutinesSqlClientSelect.FromTable<RoleEntity, RoleEntity>,
         id: Long
-    ): CoroutinesSqlClientSelect.Return<Role> = select where RoleTable.id eq id
+    ): CoroutinesSqlClientSelect.Return<RoleEntity> = select where RoleTable.id eq id
 
     override fun checkModifyIdEquality(
-        select: CoroutinesSqlClientDeleteOrUpdate.FirstDeleteOrUpdate<Role>,
+        select: CoroutinesSqlClientDeleteOrUpdate.FirstDeleteOrUpdate<RoleEntity>,
         id: Long
     ): CoroutinesSqlClientDeleteOrUpdate.Return = select where RoleTable.id eq id
 }

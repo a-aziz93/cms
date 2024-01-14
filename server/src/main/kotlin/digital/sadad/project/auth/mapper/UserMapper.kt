@@ -2,9 +2,9 @@ package digital.sadad.project.auth.mapper
 
 import auth.dto.UserCreateDto
 import auth.dto.UserDto
-import digital.sadad.project.auth.model.User
+import digital.sadad.project.auth.entity.UserEntity
 
-fun User.toDto(roles: List<String>): UserDto = UserDto(
+fun UserEntity.toDto(roles: List<String>): UserDto = UserDto(
     id = this.id,
     name = this.name,
     email = this.email,
@@ -18,7 +18,7 @@ fun User.toDto(roles: List<String>): UserDto = UserDto(
     active = this.active
 )
 
-fun UserCreateDto.toModel(): User {
+fun UserCreateDto.toModel(): UserEntity {
     return User(
         name = this.name,
         email = this.email,

@@ -1,35 +1,33 @@
-package core.crud
+package core.crud.service
 
+import com.github.michaelbull.result.Result
 import core.crud.model.entity.Order
 import core.crud.model.entity.Page
-import core.crud.model.entity.PageResult
 import core.crud.model.entity.Update
 import core.crud.model.predicate.operation.Predicate
 import kotlinx.coroutines.flow.Flow
 
-interface CRUD<T : Any, ID : Any> {
+interface CRUDService<T : Any, ID : Any> {
     suspend fun save(
         entities: List<T>,
         update: Update? = null,
         byUser: String? = null,
-    ): List<T>
+    ): Result<List<T>, Error>
 
     suspend fun find(
         predicate: Predicate? = null,
         sort: List<Order>? = null,
-        offset: Long? = null,
-        limit: Long? = null,
-    ): Flow<T>
+        page: Page? = null,
+    ): Result<Flow<T>, Error>
 
     suspend fun find(
         properties: List<String>,
         predicate: Predicate? = null,
         sort: List<Order>? = null,
-        offset: Long? = null,
-        limit: Long? = null,
-    ): Flow<List<Any?>>
+        page: Page? = null,
+    ): Result<Flow<List<Any?>>, Error>
 
-    suspend fun delete(predicate: Predicate? = null): Long
+    suspend fun delete(predicate: Predicate? = null): Result<Long, Error>
 
-    suspend fun count(predicate: Predicate? = null): Long
+    suspend fun count(predicate: Predicate? = null): Result<Long, Error>
 }

@@ -1,4 +1,4 @@
-package core.model
+package core.eventflow
 
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.channels.Channel

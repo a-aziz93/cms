@@ -1,12 +1,12 @@
 package digital.sadad.project.auth.repository
 
-import digital.sadad.project.auth.model.Role
-import digital.sadad.project.auth.model.User
+import digital.sadad.project.auth.entity.RoleEntity
+import digital.sadad.project.auth.entity.UserEntity
 import digital.sadad.project.core.crud.repository.CRUDRepository
 
-interface UserRepository : CRUDRepository<User, Long> {
-    suspend fun save(vararg users: User, username: String?): List<User>
-    suspend fun findWithRole(id: Long): Pair<User, Role>?
-    suspend fun findWithRole(username: String): Pair<User, Role>?
-    suspend fun findWithRole(username: String, password: String): Pair<User, Role>?
+interface UserRepository : CRUDRepository<UserEntity, Long> {
+    suspend fun save(vararg users: UserEntity, username: String?): List<UserEntity>
+    suspend fun findWithRole(id: Long): Pair<UserEntity, RoleEntity>?
+    suspend fun findWithRole(username: String): Pair<UserEntity, RoleEntity>?
+    suspend fun findWithRole(username: String, password: String): Pair<UserEntity, RoleEntity>?
 }

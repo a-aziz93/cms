@@ -4,8 +4,8 @@ import de.nycode.bcrypt.hash
 import de.nycode.bcrypt.verify
 import digital.sadad.project.auth.entity.RoleTable
 import digital.sadad.project.auth.entity.UserTable
-import digital.sadad.project.auth.model.Role
-import digital.sadad.project.auth.model.User
+import digital.sadad.project.auth.entity.RoleEntity
+import digital.sadad.project.auth.entity.UserEntity
 import digital.sadad.project.core.database.DatabaseConfig
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -25,30 +25,30 @@ class UserRepositoryImpl(
     override val table: UserTable,
 ) : UserRepository {
 
-    override fun getId(entity: User): Long? = entity.id
+    override fun getId(entity: UserEntity): Long? = entity.id
 
-    override fun create(entity: User, username: String?, dateTime: LocalDateTime) = entity.copy(
+    override fun create(entity: UserEntity, username: String?, dateTime: LocalDateTime) = entity.copy(
         password = hash(entity.password, BCRYPT_SALT).decodeToString(),
         createdBy = username,
         createdAt = dateTime,
     )
 
-    override fun update(entity: User, username: String?, dateTime: LocalDateTime) = entity.copy(
+    override fun update(entity: UserEntity, username: String?, dateTime: LocalDateTime) = entity.copy(
         updatedBy = username,
         updatedAt = dateTime,
     )
 
     override fun checkSelectIdEquality(
-        select: CoroutinesSqlClientSelect.FromTable<User, User>,
+        select: CoroutinesSqlClientSelect.FromTable<UserEntity, UserEntity>,
         id: Long
-    ): CoroutinesSqlClientSelect.Return<User> = select where UserTable.id eq id
+    ): CoroutinesSqlClientSelect.Return<UserEntity> = select where UserTable.id eq id
 
     override fun checkModifyIdEquality(
-        select: CoroutinesSqlClientDeleteOrUpdate.FirstDeleteOrUpdate<User>,
+        select: CoroutinesSqlClientDeleteOrUpdate.FirstDeleteOrUpdate<UserEntity>,
         id: Long
     ): CoroutinesSqlClientDeleteOrUpdate.Return = select where UserTable.id eq id
 
-    override suspend fun save(vararg users: User, username: String?) = save(listOf(*users), { entity, update ->
+    override suspend fun save(vararg users: UserEntity, username: String?) = save(listOf(*users), { entity, update ->
         update
             .set(UserTable.name).eq(entity.name)
             .set(UserTable.username).eq(entity.username)
@@ -61,21 +61,21 @@ class UserRepositoryImpl(
             .where(UserTable.id).eq(entity.id!!)
     }, username)
 
-    override suspend fun findWithRole(id: Long): Pair<User, Role>? =
+    override suspend fun findWithRole(id: Long): Pair<UserEntity, RoleEntity>? =
         find({
             withRole(it)
         }) {
             it innerJoin RoleTable on UserTable.roleId eq RoleTable.id where UserTable.id eq id
         }.fetchFirstOrNull()
 
-    override suspend fun findWithRole(username: String): Pair<User, Role>? =
+    override suspend fun findWithRole(username: String): Pair<UserEntity, RoleEntity>? =
         find({
             withRole(it)
         }) {
             it innerJoin RoleTable on UserTable.roleId eq RoleTable.id where UserTable.username eq username
         }.fetchFirstOrNull()
 
-    override suspend fun findWithRole(username: String, password: String): Pair<User, Role>? =
+    override suspend fun findWithRole(username: String, password: String): Pair<UserEntity, RoleEntity>? =
         withContext(Dispatchers.IO) {
             return@withContext findWithRole(username)?.let {
                 if (verify(password, it.first.password.encodeToByteArray())) {
@@ -86,7 +86,7 @@ class UserRepositoryImpl(
         }
 
     private fun withRole(valueProvider: ValueProvider) = Pair(
-        User(
+        UserEntity(
             valueProvider[UserTable.id],
             valueProvider[UserTable.name]!!,
             valueProvider[UserTable.email]!!,
@@ -99,7 +99,7 @@ class UserRepositoryImpl(
             valueProvider[UserTable.createdAt],
             valueProvider[UserTable.updatedBy],
             valueProvider[UserTable.updatedAt],
-        ), Role(
+        ), RoleEntity(
             valueProvider[RoleTable.id],
             valueProvider[RoleTable.label]!!,
             valueProvider[RoleTable.description],

@@ -1,14 +1,16 @@
 package core.serializers
 
 import kotlinx.serialization.KSerializer
+import kotlinx.serialization.Serializable
 import kotlinx.serialization.descriptors.PrimitiveKind
 import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import kotlinx.serialization.json.Json
+import java.math.BigDecimal
 
-internal object AnySerializer : KSerializer<Any> {
+object AnySerializer : KSerializer<Any> {
     override val descriptor = PrimitiveSerialDescriptor("Any", PrimitiveKind.STRING)
 
     override fun serialize(encoder: Encoder, value: Any) {
@@ -19,3 +21,5 @@ internal object AnySerializer : KSerializer<Any> {
         return Json.decodeFromString(decoder.decodeString())
     }
 }
+
+typealias AnyJson = @Serializable(with = AnySerializer::class) Any

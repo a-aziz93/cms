@@ -1,23 +1,21 @@
 package digital.sadad.project.auth.entity
 
-import digital.sadad.project.auth.model.Role
-import digital.sadad.project.auth.model.User
 import org.ufoss.kotysa.GenericTable
 
-object RoleTable : GenericTable<Role>("roles") {
+object RoleTable : GenericTable<RoleEntity>("roles") {
     // Primary key
-    val id = bigInt(Role::id)
+    val id = bigInt(RoleEntity::id)
         .identity()
         .primaryKey("PK_roles")
 
     // Other fields
-    val label = varchar(Role::label)
+    val label = varchar(RoleEntity::label)
         .unique()
-    val description = varchar(Role::description)
+    val description = varchar(RoleEntity::description)
 
     // metadata
-    val createdBy = varchar(Role::createdBy, "created_by")
-    val createdAt = timestamp(Role::createdAt, "created_at")
-    val updatedBy = varchar(Role::updatedBy, "updated_by")
-    val updatedAt = timestamp(Role::updatedAt, "updated_at")
+    val createdBy = varchar(RoleEntity::createdBy, "created_by")
+    val createdAt = timestamp(RoleEntity::createdAt, "created_at")
+    val updatedBy = varchar(RoleEntity::updatedBy, "updated_by")
+    val updatedAt = timestamp(RoleEntity::updatedAt, "updated_at")
 }

@@ -1,14 +1,16 @@
 package core.serializers
 
 import kotlinx.serialization.KSerializer
+import kotlinx.serialization.Serializable
 import kotlinx.serialization.descriptors.PrimitiveKind
 import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
+import java.math.BigDecimal
 import java.util.*
 
-internal object UUIDSerializer : KSerializer<UUID> {
+object UUIDSerializer : KSerializer<UUID> {
     override val descriptor = PrimitiveSerialDescriptor("UUID", PrimitiveKind.STRING)
 
     override fun serialize(encoder: Encoder, value: UUID) {
@@ -20,3 +22,5 @@ internal object UUIDSerializer : KSerializer<UUID> {
         return UUID.fromString(string)
     }
 }
+
+typealias UUIDJson = @Serializable(with = UUIDSerializer::class) UUID
