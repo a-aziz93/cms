@@ -30,8 +30,7 @@ abstract class AbstractCRUDRepository<T : Any, ID : Any>(
 
     abstract fun onCreate(entity: T, byUser: String?, dateTime: LocalDateTime): T
 
-    abstract fun onUpdate(entity: T, username: String?, dateTime: LocalDateTime): T
-
+    abstract fun onUpdate(entity: T, byUser: String?, dateTime: LocalDateTime): Update
 
     override suspend fun save(
         entities: List<T>,
