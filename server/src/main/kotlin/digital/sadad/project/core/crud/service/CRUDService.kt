@@ -2,7 +2,7 @@ package digital.sadad.project.core.crud.service
 
 import core.crud.CRUD
 import core.crud.model.entity.Order
-import core.crud.model.entity.Slice
+import core.crud.model.entity.LimitOffset
 import core.crud.model.entity.PageResult
 import core.crud.model.entity.Update
 import core.crud.model.predicate.operation.Predicate
@@ -25,7 +25,7 @@ abstract class CRUDService<T : Any, ID : Any>(
         repository.find(projections, predicate, sort)
 
     override suspend fun find(
-        page: Slice,
+        page: LimitOffset,
         projections: List<String>?,
         predicate: Predicate?,
         sort: List<Order>?

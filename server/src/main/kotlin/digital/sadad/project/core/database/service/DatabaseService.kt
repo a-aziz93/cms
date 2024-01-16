@@ -1,6 +1,5 @@
-package digital.sadad.project.core.database
+package digital.sadad.project.core.database.service
 
-import digital.sadad.project.auth.entity.UserTable
 import digital.sadad.project.core.config.AppConfig
 import digital.sadad.project.core.config.model.DatabaseConfig
 import digital.sadad.project.core.config.model.DatabaseInitConfig
@@ -11,7 +10,6 @@ import kotlinx.coroutines.*
 import org.koin.core.annotation.Single
 import org.reflections.Reflections
 import org.ufoss.kotysa.*
-import org.ufoss.kotysa.h2.H2Table
 import org.ufoss.kotysa.h2.IH2Table
 import org.ufoss.kotysa.mariadb.MariadbTable
 import org.ufoss.kotysa.mssql.MssqlTable
@@ -22,13 +20,12 @@ import org.ufoss.kotysa.r2dbc.coSqlClient
 import kotlin.reflect.KClass
 
 @Single
-class Database(
+class DatabaseService(
     appConfig: AppConfig,
     private val config: Map<String, DatabaseConfig>? = appConfig.config.databases
 ) {
     val clients: Map<String, R2dbcSqlClient> =
-        if (appConfig.config.databases == null) emptyMap()
-        else appConfig.config.databases.mapNotNull {
+        config?.mapNotNull {
             var createTables: Set<Table<*>>? = null
             val client = when (it.value.type) {
                 DbType.H2 -> {
@@ -73,19 +70,18 @@ class Database(
                         .coSqlClient(tables)
                 }
 
-                DbType.SQLITE -> null
+                DbType.SQLITE -> throw UnsupportedOperationException("SQLite is not supported")
             }
-            if (client == null) {
-                null
-            } else {
-                if (it.value.init != null && createTables != null) {
-                    runBlocking {
-                        initDatabase(client, createTables, it.value.init!!)
-                    }
+
+            if (it.value.init != null) {
+                runBlocking {
+                    initDatabase(client, createTables, it.value.init!!)
                 }
-                it.key to client
             }
-        }.toMap()
+
+            it.key to client
+        }?.toMap()
+            ?: emptyMap()
 
     // Init data
     private suspend fun initDatabase(client: R2dbcSqlClient, tables: Set<Table<*>>, config: DatabaseInitConfig) =

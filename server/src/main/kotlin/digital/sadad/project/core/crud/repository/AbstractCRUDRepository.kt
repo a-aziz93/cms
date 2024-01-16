@@ -2,7 +2,7 @@ package digital.sadad.project.core.crud.repository
 
 import core.crud.CRUD
 import core.crud.model.entity.Order
-import core.crud.model.entity.Slice
+import core.crud.model.entity.LimitOffset
 import core.crud.model.entity.Update
 import core.crud.model.entity.aggregate.AggregateOperation
 import core.crud.model.entity.aggregate.AggregateOperation.*
@@ -21,7 +21,6 @@ import kotlinx.datetime.LocalTime
 import org.ufoss.kotysa.*
 import org.ufoss.kotysa.columns.*
 import java.math.BigDecimal
-import java.math.BigInteger
 import java.time.OffsetDateTime
 import java.util.UUID
 import kotlin.reflect.full.*
@@ -81,19 +80,19 @@ abstract class AbstractCRUDRepository<T : Any, ID : Any>(
     override suspend fun find(
         sort: List<Order>?,
         predicate: Predicate?,
-        slice: Slice?,
+        limitOffset: LimitOffset?,
     ): Flow<T> = withContext(Dispatchers.IO) {
         val selectFrom = client.selectFrom(table)
 
         selectFrom.wheres()
-            .execute(sort, predicate, slice)
+            .execute(sort, predicate, limitOffset)
     }
 
     override suspend fun find(
         projections: List<Projection>,
         sort: List<Order>?,
         predicate: Predicate?,
-        slice: Slice?,
+        limitOffset: LimitOffset?,
     ): Flow<List<Any?>> = withContext(Dispatchers.IO) {
         val selects = client.selects()
         UserTable.email
@@ -109,7 +108,7 @@ abstract class AbstractCRUDRepository<T : Any, ID : Any>(
         froms.from(table)
 
         froms.wheres()
-            .execute(sort, predicate, slice)
+            .execute(sort, predicate, limitOffset)
     }
 
     override suspend fun delete(predicate: Predicate?): Long = withContext(Dispatchers.IO) {
@@ -364,7 +363,7 @@ abstract class AbstractCRUDRepository<T : Any, ID : Any>(
     private fun <R : Any> CoroutinesSqlClientSelect.Wheres<R>.execute(
         sort: List<Order>?,
         predicate: Predicate?,
-        slice: Slice?,
+        limitOffset: LimitOffset?,
     ): Flow<R> {
         val wheres = this.predicate(predicate)
 
@@ -380,13 +379,13 @@ abstract class AbstractCRUDRepository<T : Any, ID : Any>(
             }
         }
 
-        var limitOffset: CoroutinesSqlClientSelect.LimitOffset<R>? = null
-        if (slice != null) {
-            slice.offset()?.let { limitOffset = (ordersBy ?: wheres).offset(it) }
-            slice.size?.let { limitOffset = (limitOffset ?: ordersBy ?: wheres).limit(it) }
+        var lo: CoroutinesSqlClientSelect.LimitOffset<R>? = null
+        if (limitOffset != null) {
+            limitOffset.offset?.let { lo = (ordersBy ?: wheres).offset(it) }
+            limitOffset.limit?.let { lo = (lo ?: ordersBy ?: wheres).limit(it) }
         }
 
-        return (limitOffset ?: ordersBy ?: wheres).fetchAll()
+        return (lo ?: ordersBy ?: wheres).fetchAll()
     }
 
     private fun <R : Any> CoroutinesSqlClientSelect.Wheres<R>.predicate(predicate: Predicate?): CoroutinesSqlClientSelect.Wheres<R> {
