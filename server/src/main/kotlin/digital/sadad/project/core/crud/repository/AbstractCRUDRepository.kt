@@ -2,11 +2,10 @@ package digital.sadad.project.core.crud.repository
 
 import core.crud.CRUD
 import core.crud.model.entity.Order
-import core.crud.model.entity.Page
 import core.crud.model.entity.Update
 import core.crud.model.predicate.operation.Predicate
-import core.crud.model.predicate.extension.f
-import core.crud.model.predicate.extension.v
+import core.crud.model.entity.predicate.extension.f
+import core.crud.model.entity.predicate.extension.v
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
@@ -14,56 +13,82 @@ import kotlinx.coroutines.withContext
 import org.ufoss.kotysa.*
 import org.ufoss.kotysa.columns.*
 import java.time.LocalDateTime
-import kotlin.reflect.full.declaredMemberProperties
+import kotlin.reflect.full.createType
+import kotlin.reflect.full.isSubtypeOf
+import kotlin.reflect.full.memberProperties
 
 abstract class AbstractCRUDRepository<T : Any, ID : Any>(
     protected val client: R2dbcSqlClient,
     protected val table: Table<T>,
-    private val tableIdColumnName: String = table::class.declaredMemberProperties.find {
-        it.returnType.classifier == IntDbIdentityColumnNotNull::class ||
-                it.returnType.classifier == LongDbIdentityColumnNotNull::class ||
-                it.returnType.classifier ==  UuidDbUuidColumnNotNull::class
-    }!!.name,
 ) : CRUD<T, ID> {
 
-    protected abstract fun getEntityId(entity: T): ID?
+    private val identityDbColumn: Pair<String, AbstractDbColumn<T, ID>> = table::class.memberProperties.firstNotNullOf {
+        val value = when (it.returnType) {
+            uuidIdentityColumnKType -> (it.call(table) as UuidDbUuidColumnNotNull<T>) as AbstractDbColumn<T, ID>
+            intIdentityColumnKType -> (it.call(table) as IntDbIdentityColumnNotNull<T>) as AbstractDbColumn<T, ID>
+            longIdentityColumnKType -> (it.call(table) as LongDbIdentityColumnNotNull<T>) as AbstractDbColumn<T, ID>
+            else -> null
+        }
+        if (value == null) {
+            null
+        } else {
+            it.name to value
+        }
+    }
+
+    private val dbColumns: Map<String, AbstractDbColumn<T, *>> =
+        table::class.memberProperties.filter { it.returnType.isSubtypeOf(columnKType) }.associate {
+            it.name to it.call(table) as AbstractDbColumn<T, *>
+        }
 
     abstract fun onCreate(entity: T, byUser: String?, dateTime: LocalDateTime): T
 
-    abstract fun onUpdate(entity: T, byUser: String?, dateTime: LocalDateTime): Update
+    abstract fun onUpdate(entity: T, byUser: String?, dateTime: LocalDateTime): T
 
     override suspend fun save(
         entities: List<T>,
-        update: Update?,
+        updateIfExists: Boolean,
         byUser: String?
     ): List<T> = client.transactional {
         withContext(Dispatchers.IO) {
 
-            val result = arrayOfNulls<Any?>(entities.size) as Array<T>
 
-            val createEntitiesWithIndexes: List<IndexedValue<T>> = emptyList()
-            val updateEntitiesWithIndexes: List<IndexedValue<T>> = emptyList()
-
-            for (indexedEntity in entities.withIndex()) {
-                val id = getEntityId(indexedEntity.value)
-                if (id == null || find(predicate = tableIdColumnName.f().eq(id.v())).firstOrNull() == null) {
-                    createEntitiesWithIndexes + indexedEntity
+            val createOrUpdateEntities = entities.map {
+                val id = identityDbColumn.second.entityGetter(it)
+                if (id == null || find(predicate = identityDbColumn.first.f().eq(id.v())).firstOrNull() == null) {
+                    true to onCreate(it, byUser, LocalDateTime.now())
                 } else {
-                    updateEntitiesWithIndexes + indexedEntity
+                    false to it
                 }
             }
 
-            if (update != null) {
-                for (indexedEntity in updateEntitiesWithIndexes) {
-                    update.use(client update table)
+            createOrUpdateEntities.partition { it.first }.let { (createEntities, updateEntities) ->
+                if (updateIfExists) {
+                    update(updateEntities.map { updateEntity ->
+                        Update(
+                            dbColumns.entries.associate {
+                                it.key to it.value.entityGetter(updateEntity.second)
+                            },
+                            identityDbColumn.first.f()
+                                .eq(identityDbColumn.second.entityGetter(updateEntity.second)!!.v())
+                        )
+                    })
                 }
+
+                client.insertAndReturn(*arrayOf(createEntities.map {
+                    it.second
+                }))
             }
 
-            client.insertAndReturn(*arrayOf(createEntitiesWithIndexes.map {
-                onCreate(it.value, byUser, LocalDateTime.now())
-            })).collect { it.forEachIndexed { index, value -> result[createEntitiesWithIndexes[index].index] = value } }
+            createOrUpdateEntities.map { it.second }
+        }
+    }!!
 
-            return@withContext result.toList()
+    override suspend fun update(updates: List<Update>): List<Long> = client.transactional {
+        withContext(Dispatchers.IO) {
+            updates.map {
+                it.use(client update table).execute()
+            }
         }
     }!!
 
@@ -81,9 +106,9 @@ abstract class AbstractCRUDRepository<T : Any, ID : Any>(
         val ordersBy = wheres.ordersBy()
         sort?.forEach {
             if (it.ascending) {
-                ordersBy.orderByAsc(it.name.column())
+                ordersBy.orderByAsc(it.name.dbColumn())
             } else {
-                ordersBy.orderByDesc(it.name.column())
+                ordersBy.orderByDesc(it.name.dbColumn())
             }
         }
 
@@ -95,7 +120,7 @@ abstract class AbstractCRUDRepository<T : Any, ID : Any>(
             limitOffset = (limitOffset ?: ordersBy).limit(limit)
         }
 
-        return@withContext (limitOffset ?: ordersBy).fetchAll()
+        (limitOffset ?: ordersBy).fetchAll()
     }
 
     override suspend fun find(
@@ -107,7 +132,7 @@ abstract class AbstractCRUDRepository<T : Any, ID : Any>(
     ): Flow<List<Any?>> = withContext(Dispatchers.IO) {
         val selects = client.selects()
         properties.forEach {
-            selects.select(it.column())
+            selects.select(it.dbColumn())
         }
 
         val froms = selects.froms()
@@ -119,9 +144,9 @@ abstract class AbstractCRUDRepository<T : Any, ID : Any>(
         val ordersBy = wheres.ordersBy()
         sort?.forEach {
             if (it.ascending) {
-                ordersBy.orderByAsc(it.name.column())
+                ordersBy.orderByAsc(it.name.dbColumn())
             } else {
-                ordersBy.orderByDesc(it.name.column())
+                ordersBy.orderByDesc(it.name.dbColumn())
             }
         }
 
@@ -133,32 +158,21 @@ abstract class AbstractCRUDRepository<T : Any, ID : Any>(
             limitOffset = (limitOffset ?: ordersBy).limit(limit)
         }
 
-        return@withContext (limitOffset ?: ordersBy).fetchAll()
+        (limitOffset ?: ordersBy).fetchAll()
     }
 
     override suspend fun delete(predicate: Predicate?): Long = withContext(Dispatchers.IO) {
-        return@withContext predicate?.use(client deleteFrom table)?.execute() ?: (client deleteAllFrom table)
+        predicate?.use(client deleteFrom table)?.execute() ?: (client deleteAllFrom table)
     }
-
-    suspend fun delete(entity: T): Boolean =
-        withContext(Dispatchers.IO) {
-            return@withContext delete(
-                tableIdColumnName.f().eq(getEntityId(entity)!!.v())
-            ) > 0L
-        }
 
     override suspend fun count(predicate: Predicate?): Long = withContext(Dispatchers.IO) {
-        return@withContext predicate?.use(client selectCountFrom table)?.fetchOne() ?: (client selectCountAllFrom table)
+        predicate?.use(client selectCountFrom table)?.fetchOne() ?: (client selectCountAllFrom table)
     }
 
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    private fun String.column(): Column<*, *> =
-        table::class.declaredMemberProperties.find { it.name == this }
-            ?.let { it.getter.call(table) as Column<*, *> }!!
+    ///////////////////////////////////////////////////HELPER///////////////////////////////////////////////////
 
-
-    private fun Update.use(update: CoroutinesSqlClientDeleteOrUpdate.Update<T>) {
+    private fun Update.use(update: CoroutinesSqlClientDeleteOrUpdate.Update<T>): CoroutinesSqlClientDeleteOrUpdate.Return {
 
     }
 
@@ -174,5 +188,12 @@ abstract class AbstractCRUDRepository<T : Any, ID : Any>(
 
     }
 
+    private fun String.dbColumn(): AbstractDbColumn<T, *> = dbColumns[this]!!
 
+    companion object {
+        private val columnKType = Column::class.createType()
+        private val uuidIdentityColumnKType = UuidDbUuidColumnNotNull::class.createType()
+        private val intIdentityColumnKType = IntDbIdentityColumnNotNull::class.createType()
+        private val longIdentityColumnKType = LongDbIdentityColumnNotNull::class.createType()
+    }
 }

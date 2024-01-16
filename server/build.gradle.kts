@@ -52,6 +52,7 @@ dependencies {
 //    add("kspServerMainMetadata", libs.koin.ksp.compiler)
     implementation(libs.kgraphql)
     implementation(libs.kgraphql.ktor)
+    implementation(libs.keycloak.admin.client)
 }
 
 ksp {
