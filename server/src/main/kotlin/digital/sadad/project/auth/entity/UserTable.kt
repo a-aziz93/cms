@@ -7,7 +7,7 @@ object UserTable : GenericTable<UserEntity>("users") {
     val id = bigInt(UserEntity::id).identity().primaryKey("PK_users")
 
     // Other fields
-    val name = varchar(UserEntity::name)
+    val name = uuid(UserEntity::name)
     val email = varchar(UserEntity::email)
     val username = varchar(UserEntity::username).unique()
     val password = varchar(UserEntity::password)

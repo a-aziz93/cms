@@ -5,6 +5,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class Projection(
     val property: String,
-    val as_: String,
-    val distinct: Boolean,
+    val distinct: Boolean? = null,
 )
