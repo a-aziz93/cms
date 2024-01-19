@@ -9,6 +9,6 @@ class Projection private constructor(
     distinct: Boolean? = null,
 ) : FieldValue(value) {
     companion object {
-        fun projection(field: FieldValue, distinct: Boolean? = null) = Projection(field, distinct)
+        fun projection(value: String, distinct: Boolean? = null) = Projection(value, distinct)
     }
 }
