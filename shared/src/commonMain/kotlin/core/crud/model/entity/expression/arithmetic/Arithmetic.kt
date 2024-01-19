@@ -10,18 +10,6 @@ class Arithmetic(
     vararg val values: NumberVariable,
 ) : NumberVariable {
 
-    //TODO
-    @Suppress("UNUSED")
-    fun <D : Any> convert(converter: (Arithmetic) -> D): D {
-        val arithmetics = mutableListOf<Triple<Arithmetic, Int, D?>>(Triple(this, 0, null))
-
-        while (arithmetics.size > 0) {
-
-        }
-
-        return arithmetics.first().third!!
-    }
-
     companion object {
         fun add(vararg values: NumberVariable) =
             Arithmetic(ADD, *values)

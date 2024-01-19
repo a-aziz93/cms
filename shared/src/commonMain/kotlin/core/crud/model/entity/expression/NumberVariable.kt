@@ -55,4 +55,16 @@ interface NumberVariable : Variable {
 
     fun nin(value: NumberCollectionVariable) =
         Logic.nin(this, value)
+
+    //TODO
+    @Suppress("UNUSED")
+    fun <D : Any> convert(converter: (NumberVariable) -> D): D {
+        val numberVariables = mutableListOf<Triple<NumberVariable, Int, D?>>(Triple(this, 0, null))
+
+        while (numberVariables.size > 0) {
+
+        }
+
+        return numberVariables.first().third!!
+    }
 }

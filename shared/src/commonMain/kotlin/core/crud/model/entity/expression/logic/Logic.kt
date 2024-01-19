@@ -13,18 +13,6 @@ class Logic(
     vararg val values: Variable,
 ) : BooleanVariable {
 
-    //TODO
-    @Suppress("UNUSED")
-    fun <D : Any> convert(converter: (Logic) -> D): D {
-        val predicates = mutableListOf<Triple<Logic, Int, D?>>(Triple(this, 0, null))
-
-        while (predicates.size > 0) {
-
-        }
-
-        return predicates.first().third!!
-    }
-
     companion object {
         fun and(vararg values: BooleanVariable) =
             Logic(AND, *values)

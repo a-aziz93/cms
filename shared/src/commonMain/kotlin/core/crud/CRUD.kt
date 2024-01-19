@@ -3,9 +3,9 @@ package core.crud
 import core.crud.model.entity.Order
 import core.crud.model.entity.LimitOffset
 import core.crud.model.entity.Update
+import core.crud.model.entity.expression.BooleanVariable
+import core.crud.model.entity.expression.Variable
 import core.crud.model.entity.expression.aggregate.Aggregate
-import core.crud.model.entity.expression.logic.Logic
-import core.crud.model.entity.expression.projection.Projection
 import kotlinx.coroutines.flow.Flow
 
 interface CRUD<T : Any, ID : Any> {
@@ -19,21 +19,21 @@ interface CRUD<T : Any, ID : Any> {
 
     suspend fun find(
         sort: Collection<Order>? = null,
-        predicate: Logic? = null,
+        predicate: BooleanVariable? = null,
         limitOffset: LimitOffset? = null,
     ): Flow<T>
 
     suspend fun find(
-        projections: Collection<Projection>,
+        projections: Collection<Variable>,
         sort: Collection<Order>? = null,
-        predicate: Logic? = null,
+        predicate: BooleanVariable? = null,
         limitOffset: LimitOffset? = null,
     ): Flow<List<Any?>>
 
-    suspend fun delete(predicate: Logic? = null): Long
+    suspend fun delete(predicate: BooleanVariable? = null): Long
 
     suspend fun aggregate(
         aggregate: Aggregate,
-        predicate: Logic? = null,
+        predicate: BooleanVariable? = null,
     ): Number
 }

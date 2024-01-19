@@ -4,6 +4,9 @@ import core.crud.CRUD
 import core.crud.model.entity.Order
 import core.crud.model.entity.LimitOffset
 import core.crud.model.entity.Update
+import core.crud.model.entity.expression.BooleanVariable
+import core.crud.model.entity.expression.Variable
+import core.crud.model.entity.expression.aggregate.Aggregate
 import core.crud.model.entity.expression.aggregate.AggregateExpression
 import core.crud.model.entity.expression.aggregate.AggregateExpression.*
 import core.crud.model.entity.expression.logic.Logic
@@ -75,7 +78,7 @@ abstract class AbstractCRUDRepository<T : Any, ID : Any>(
 
     override suspend fun find(
         sort: Collection<Order>?,
-        predicate: Logic?,
+        predicate: BooleanVariable?,
         limitOffset: LimitOffset?,
     ): Flow<T> = withContext(Dispatchers.IO) {
         val selectFrom = client.selectFrom(table)
@@ -85,18 +88,18 @@ abstract class AbstractCRUDRepository<T : Any, ID : Any>(
     }
 
     override suspend fun find(
-        projections: Collection<Projection>,
+        projections: Collection<Variable>,
         sort: Collection<Order>?,
-        predicate: Logic?,
+        predicate: BooleanVariable?,
         limitOffset: LimitOffset?,
     ): Flow<List<Any?>> = withContext(Dispatchers.IO) {
         val selects = client.selects()
         UserTable.email
-        projections.forEach {
+        projections.filterIsInstance<Projection>().forEach {
             if (it.distinct == true) {
-                selects.selectDistinct(it.property.column())
+                selects.selectDistinct(it.value.column())
             } else {
-                selects.select(it.property.column())
+                selects.select(it.value.column())
             }
         }
 
@@ -107,32 +110,31 @@ abstract class AbstractCRUDRepository<T : Any, ID : Any>(
             .execute(sort, predicate, limitOffset)
     }
 
-    override suspend fun delete(predicate: Logic?): Long = withContext(Dispatchers.IO) {
+    override suspend fun delete(predicate: BooleanVariable?): Long = withContext(Dispatchers.IO) {
         (client deleteFrom table).predicate(predicate).execute()
     }
 
     override suspend fun aggregate(
-        operation: AggregateExpression,
-        projection: Projection?,
-        predicate: Logic?,
+        aggregate: Aggregate,
+        predicate: BooleanVariable?,
     ): Number =
-        when (operation) {
-            COUNT -> (if (projection == null) {
+        when (aggregate.operation) {
+            COUNT -> (if (aggregate.projection == null) {
                 (client selectCountFrom table).predicate(predicate)
             } else {
-                (client selectCount projection.property.column() from table).predicate(predicate)
+                (client selectCount aggregate.projection!!.value.column() from table).predicate(predicate)
             }).fetchOne()
 
-            MAX -> client.selectMax(projection!!.property.column() as MinMaxColumn<*, *>).from(table)
+            MAX -> client.selectMax(aggregate.projection!!.value.column() as MinMaxColumn<*, *>).from(table)
                 .predicate(predicate).fetchOne() as Number
 
-            MIN -> client.selectMin(projection!!.property.column() as MinMaxColumn<*, *>).from(table)
+            MIN -> client.selectMin(aggregate.projection!!.value.column() as MinMaxColumn<*, *>).from(table)
                 .predicate(predicate).fetchOne() as Number
 
-            AVG -> client.selectAvg(projection!!.property.column() as NumericColumn<*, *>).from(table)
+            AVG -> client.selectAvg(aggregate.projection!!.value.column() as NumericColumn<*, *>).from(table)
                 .predicate(predicate).fetchOne()
 
-            SUM -> client.selectSum(projection!!.property.column() as WholeNumberColumn<*, *>).from(table)
+            SUM -> client.selectSum(aggregate.projection!!.value.column() as WholeNumberColumn<*, *>).from(table)
                 .predicate(predicate).fetchOne()
         }!!
 
@@ -154,7 +156,7 @@ abstract class AbstractCRUDRepository<T : Any, ID : Any>(
 
     private fun <R : Any> CoroutinesSqlClientSelect.Wheres<R>.execute(
         sort: Collection<Order>?,
-        predicate: Logic?,
+        predicate: BooleanVariable?,
         limitOffset: LimitOffset?,
     ): Flow<R> {
         val wheres = this.predicate(predicate)
@@ -180,18 +182,18 @@ abstract class AbstractCRUDRepository<T : Any, ID : Any>(
         return (lo ?: ordersBy ?: wheres).fetchAll()
     }
 
-    private fun <R : Any> CoroutinesSqlClientSelect.Wheres<R>.predicate(predicate: Logic?): CoroutinesSqlClientSelect.Wheres<R> {
+    private fun <R : Any> CoroutinesSqlClientSelect.Wheres<R>.predicate(predicate: BooleanVariable?): CoroutinesSqlClientSelect.Wheres<R> {
         this.where(UserTable.email).eq("")
         return this
     }
 
-    private fun CoroutinesSqlClientDeleteOrUpdate.FirstDeleteOrUpdate<T>.predicate(predicate: Logic?): CoroutinesSqlClientDeleteOrUpdate.Return {
+    private fun CoroutinesSqlClientDeleteOrUpdate.FirstDeleteOrUpdate<T>.predicate(predicate: BooleanVariable?): CoroutinesSqlClientDeleteOrUpdate.Return {
         this.where(UserTable.email).eq("")
 
         return this
     }
 
-    private fun <R : Any> CoroutinesSqlClientSelect.FromTable<R, T>.predicate(predicate: Logic?): CoroutinesSqlClientSelect.Return<R> {
+    private fun <R : Any> CoroutinesSqlClientSelect.FromTable<R, T>.predicate(predicate: BooleanVariable?): CoroutinesSqlClientSelect.Return<R> {
         this.where(UserTable.email).eq("")
         return this
     }
