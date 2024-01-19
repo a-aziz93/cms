@@ -19,16 +19,4 @@ interface BooleanVariable : Variable {
         Logic.Companion.xor(this, *values)
 
     fun no() = Logic.Companion.no(this)
-
-    //TODO
-    @Suppress("UNUSED")
-    fun <D : Any> convert(converter: (BooleanVariable) -> D): D {
-        val booleanVariables = mutableListOf<Triple<BooleanVariable, Int, D?>>(Triple(this, 0, null))
-
-        while (booleanVariables.size > 0) {
-
-        }
-
-        return booleanVariables.first().third!!
-    }
 }
