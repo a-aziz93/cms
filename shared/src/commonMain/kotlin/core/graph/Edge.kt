@@ -1,20 +1,24 @@
 package core.graph
 
+import core.crud.CRUD
+import core.crud.model.entity.expression.extension.f
+import core.crud.model.entity.expression.logic.extension.eq
 import core.graph.exception.GraphException
+import kotlinx.coroutines.flow.firstOrNull
 import kotlin.coroutines.cancellation.CancellationException
 
 @Suppress("UNUSED")
-abstract class Edge<ID : Any, E : Edge<ID, E, VID, V>, VID : Any, V : Vertex<VID, V, ID, E>>(
+abstract class Edge<E : Edge<E, ID, V, VID>, ID : Any, V : Vertex<V, VID, E, ID>, VID : Any>(
     id: ID?,
     val fromVertexId: VID,
     val toVertexId: VID,
-    edgeObjects: GraphObjects<ID, E>? = null,
-) : GraphObject<ID, E>(id, edgeObjects) {
+    edgeObjects: CRUD<E, ID>? = null,
+) : GraphObject<E, ID>(id, edgeObjects) {
     protected var startVertexId: VID? = null
-    protected var vertexObjects: GraphObjects<VID, V>? = null
+    protected var vertexObjects: CRUD<V, VID>? = null
     internal fun assignStartVertexResources(
         startVertexId: VID,
-        vertexObjects: GraphObjects<VID, V>
+        vertexObjects: CRUD<V, VID>
     ) {
         this.startVertexId = startVertexId
         this.vertexObjects = vertexObjects
@@ -36,7 +40,7 @@ abstract class Edge<ID : Any, E : Edge<ID, E, VID, V>, VID : Any, V : Vertex<VID
         }
 
         return (vertexObjects ?: throw GraphException("Vertex graph objects is not provided"))
-            .getById(if (isStartVertexFrom()) toVertexId else fromVertexId)
+            .find(predicate = "id".f().eq(if (isStartVertexFrom()) toVertexId else fromVertexId)).firstOrNull()
             ?.apply { assignEdgeResources(graphObjects) }
     }
 }

@@ -1,10 +1,12 @@
 package core.graph
 
+import core.crud.CRUD
+
 @Suppress("UNUSED")
-interface Graph<VID : Any, V : Vertex<VID, V, EID, E>, EID : Any, E : Edge<EID, E, VID, V>> {
-    fun vertices(): GraphObjects<VID, V>
-    fun edges(): GraphObjects<EID, E>
-    suspend fun inTransaction(transaction: suspend (graph: Graph<VID, V, EID, E>) -> Boolean)
+interface Graph<V : Vertex<V, VID, E, EID>, VID : Any, E : Edge<E, EID, V, VID>, EID : Any> {
+    fun vertices(): CRUD<VID, V>
+    fun edges(): CRUD<EID, E>
+    suspend fun inTransaction(transaction: suspend (graph: Graph<V, VID, E, EID>) -> Boolean)
     suspend fun dispose()
 }
 
