@@ -6,7 +6,7 @@ import core.crud.model.entity.LimitOffset
 import core.crud.model.entity.Update
 import core.crud.model.entity.expression.aggregate.AggregateExpression
 import core.crud.model.entity.expression.aggregate.AggregateExpression.*
-import core.crud.model.entity.expression.predicate.Predicate
+import core.crud.model.entity.expression.logic.Logic
 import core.crud.model.entity.expression.projection.Projection
 import digital.sadad.project.auth.entity.UserTable
 import digital.sadad.project.core.crud.model.TableMeta
@@ -75,7 +75,7 @@ abstract class AbstractCRUDRepository<T : Any, ID : Any>(
 
     override suspend fun find(
         sort: Collection<Order>?,
-        predicate: Predicate?,
+        predicate: Logic?,
         limitOffset: LimitOffset?,
     ): Flow<T> = withContext(Dispatchers.IO) {
         val selectFrom = client.selectFrom(table)
@@ -87,7 +87,7 @@ abstract class AbstractCRUDRepository<T : Any, ID : Any>(
     override suspend fun find(
         projections: Collection<Projection>,
         sort: Collection<Order>?,
-        predicate: Predicate?,
+        predicate: Logic?,
         limitOffset: LimitOffset?,
     ): Flow<List<Any?>> = withContext(Dispatchers.IO) {
         val selects = client.selects()
@@ -107,14 +107,14 @@ abstract class AbstractCRUDRepository<T : Any, ID : Any>(
             .execute(sort, predicate, limitOffset)
     }
 
-    override suspend fun delete(predicate: Predicate?): Long = withContext(Dispatchers.IO) {
+    override suspend fun delete(predicate: Logic?): Long = withContext(Dispatchers.IO) {
         (client deleteFrom table).predicate(predicate).execute()
     }
 
     override suspend fun aggregate(
         operation: AggregateExpression,
         projection: Projection?,
-        predicate: Predicate?,
+        predicate: Logic?,
     ): Number =
         when (operation) {
             COUNT -> (if (projection == null) {
@@ -154,7 +154,7 @@ abstract class AbstractCRUDRepository<T : Any, ID : Any>(
 
     private fun <R : Any> CoroutinesSqlClientSelect.Wheres<R>.execute(
         sort: Collection<Order>?,
-        predicate: Predicate?,
+        predicate: Logic?,
         limitOffset: LimitOffset?,
     ): Flow<R> {
         val wheres = this.predicate(predicate)
@@ -180,18 +180,18 @@ abstract class AbstractCRUDRepository<T : Any, ID : Any>(
         return (lo ?: ordersBy ?: wheres).fetchAll()
     }
 
-    private fun <R : Any> CoroutinesSqlClientSelect.Wheres<R>.predicate(predicate: Predicate?): CoroutinesSqlClientSelect.Wheres<R> {
+    private fun <R : Any> CoroutinesSqlClientSelect.Wheres<R>.predicate(predicate: Logic?): CoroutinesSqlClientSelect.Wheres<R> {
         this.where(UserTable.email).eq("")
         return this
     }
 
-    private fun CoroutinesSqlClientDeleteOrUpdate.FirstDeleteOrUpdate<T>.predicate(predicate: Predicate?): CoroutinesSqlClientDeleteOrUpdate.Return {
+    private fun CoroutinesSqlClientDeleteOrUpdate.FirstDeleteOrUpdate<T>.predicate(predicate: Logic?): CoroutinesSqlClientDeleteOrUpdate.Return {
         this.where(UserTable.email).eq("")
 
         return this
     }
 
-    private fun <R : Any> CoroutinesSqlClientSelect.FromTable<R, T>.predicate(predicate: Predicate?): CoroutinesSqlClientSelect.Return<R> {
+    private fun <R : Any> CoroutinesSqlClientSelect.FromTable<R, T>.predicate(predicate: Logic?): CoroutinesSqlClientSelect.Return<R> {
         this.where(UserTable.email).eq("")
         return this
     }
