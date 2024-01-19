@@ -26,9 +26,9 @@ interface NumberVariable : Variable {
     fun between(leftValue: NumberVariable, rightValue: NumberVariable) =
         Predicate.between(this, leftValue, rightValue)
 
-    fun ln(value: NumberCollectionValue<*>) =
+    fun ln(value: NumberCollectionVariable) =
         Predicate.ln(this, value)
 
-    fun nin(value: NumberCollectionValue<*>) =
+    fun nin(value: NumberCollectionVariable) =
         Predicate.nin(this, value)
 }

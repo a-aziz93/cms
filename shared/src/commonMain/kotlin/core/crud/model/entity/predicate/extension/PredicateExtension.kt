@@ -46,7 +46,7 @@ fun Boolean.or(vararg values: BooleanVariable) = this.v().or(*values)
 
 fun Boolean.xor(vararg values: BooleanVariable) = this.v().xor(*values)
 
-fun Boolean.not() = this.v().not()
+fun Boolean.no() = this.v().no()
 
 fun Boolean.eq(value: Boolean) = this.eq(value.v())
 

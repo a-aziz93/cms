@@ -1,10 +1,7 @@
 package core.crud.model.entity.predicate.operation
 
+import core.crud.model.entity.predicate.*
 import core.crud.model.entity.predicate.operation.PredicateOperation.*
-import core.crud.model.entity.predicate.BooleanVariable
-import core.crud.model.entity.predicate.NumberVariable
-import core.crud.model.entity.predicate.Variable
-import core.crud.model.entity.predicate.StringVariable
 import core.crud.model.entity.predicate.value.CollectionValue
 import kotlinx.serialization.Serializable
 
@@ -33,7 +30,7 @@ class Predicate(
 
         fun xor(vararg values: BooleanVariable) = Predicate(PredicateOperation.XOR, *values)
 
-        fun not(value: BooleanVariable) = Predicate(PredicateOperation.NOT, value)
+        fun no(value: BooleanVariable) = Predicate(PredicateOperation.NOT, value)
 
         fun eq(leftValue: Variable, rightValue: Variable) =
             Predicate(EQUALS, leftValue, rightValue)
@@ -59,10 +56,10 @@ class Predicate(
         fun between(value: Variable, leftValue: Variable, rightValue: Variable) =
             Predicate(BETWEEN, value, leftValue, rightValue)
 
-        fun ln(leftValue: Variable, rightValue: CollectionValue<*>) =
+        fun ln(leftValue: Variable, rightValue: CollectionVariable) =
             Predicate(IN, leftValue, rightValue)
 
-        fun nin(leftValue: Variable, rightValue: CollectionValue<*>) =
+        fun nin(leftValue: Variable, rightValue: CollectionVariable) =
             Predicate(NIN, leftValue, rightValue)
     }
 }

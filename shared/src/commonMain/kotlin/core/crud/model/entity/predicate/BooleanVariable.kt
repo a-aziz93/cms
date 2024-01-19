@@ -15,5 +15,5 @@ interface BooleanVariable : Variable {
 
     fun xor(vararg values: BooleanVariable) = Predicate.xor(this, *values)
 
-    fun not() = Predicate.not(this)
+    fun no() = Predicate.no(this)
 }

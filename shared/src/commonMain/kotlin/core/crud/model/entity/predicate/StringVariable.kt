@@ -14,9 +14,9 @@ interface StringVariable : Variable {
     fun like(value: StringVariable) =
         Predicate.like(this, value)
 
-    fun ln(value: StringCollectionValue) =
+    fun ln(value: StringCollectionVariable) =
         Predicate.ln(this, value)
 
-    fun nin(value: StringCollectionValue) =
+    fun nin(value: StringCollectionVariable) =
         Predicate.nin(this, value)
 }

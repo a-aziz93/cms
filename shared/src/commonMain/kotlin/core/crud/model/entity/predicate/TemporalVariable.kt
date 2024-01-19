@@ -25,9 +25,9 @@ interface TemporalVariable : Variable {
     fun between(leftValue: TemporalVariable, rightValue: TemporalVariable) =
         Predicate.between(this, leftValue, rightValue)
 
-    fun ln(value: TemporalCollectionValue<*>) =
+    fun ln(value: TemporalCollectionVariable) =
         Predicate.ln(this, value)
 
-    fun nin(value: TemporalCollectionValue<*>) =
+    fun nin(value: TemporalCollectionVariable) =
         Predicate.nin(this, value)
 }

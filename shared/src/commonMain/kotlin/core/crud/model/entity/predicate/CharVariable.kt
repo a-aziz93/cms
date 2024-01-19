@@ -11,9 +11,9 @@ interface CharVariable : Variable {
     fun neq(value: CharVariable) =
         Predicate.neq(this, value)
 
-    fun ln(value: CharCollectionValue) =
+    fun ln(value: CharCollectionVariable) =
         Predicate.ln(this, value)
 
-    fun nin(value: CharCollectionValue) =
+    fun nin(value: CharCollectionVariable) =
         Predicate.nin(this, value)
 }
