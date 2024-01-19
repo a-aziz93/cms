@@ -1,25 +1,9 @@
 package core.crud.model.entity.expression.logic.extension
 
 import core.crud.model.entity.expression.*
-import core.crud.model.entity.expression.extension.v
+import core.crud.model.entity.expression.value.extension.v
 import core.crud.model.entity.expression.value.*
 import java.time.temporal.Temporal
-
-// VALUE
-private fun Any?.v(): Value<*> =
-    if (this == null) NullValue.nul()
-    else
-        when (this) {
-            is Boolean -> this.v()
-            is Char -> this.v()
-            is Number -> this.v()
-            is Temporal -> this.v()
-            is String -> this.v()
-            else -> throw IllegalAccessException("Not predicate value")
-        }
-
-fun FieldValue.eq(value: Any?) = this.eq(value.v())
-fun FieldValue.neq(value: Any?) = this.eq(value.v())
 
 // BOOLEAN
 fun Boolean.eq(value: BooleanVariable) =

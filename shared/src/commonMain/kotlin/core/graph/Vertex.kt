@@ -2,7 +2,7 @@ package core.graph
 
 import core.crud.CRUD
 import core.crud.model.entity.expression.BooleanVariable
-import core.crud.model.entity.expression.extension.f
+import core.crud.model.entity.expression.value.extension.f
 import core.crud.model.entity.expression.logic.extension.eq
 import core.graph.exception.GraphException
 import kotlinx.coroutines.flow.Flow
