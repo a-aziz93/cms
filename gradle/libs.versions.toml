@@ -121,6 +121,8 @@ ktor-server-content-negotiation = { module = "io.ktor:ktor-server-content-negoti
 ktor-server-request-validation = { module = "io.ktor:ktor-server-request-validation", version.ref = "ktor" }
 # server status pages
 ktor-server-status-pages = { module = "io.ktor:ktor-server-status-pages", version.ref = "ktor" }
+# server rate limit
+ktor-server-rate-limit = { module = "io.ktor:ktor-server-rate-limit", version.ref = "ktor" }
 # openapi swagger ui
 ktor-swagger-ui = { module = "io.github.smiley4:ktor-swagger-ui", version.ref = "ktor-swagger-ui" }
 # Ktor HTTP Client
@@ -334,6 +336,7 @@ ktor-server = [
     "ktor-server-content-negotiation",
     "ktor-server-request-validation",
     "ktor-server-status-pages",
+    "ktor-server-rate-limit",
     "ktor-swagger-ui",
     "ktor-server-freemarker",
 ]

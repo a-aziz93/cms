@@ -24,5 +24,6 @@ fun Application.module() {
     configureStatusPages() // Configure the status pages plugin
     configureCompression() // Configure the compression plugin
     configureCors() // Configure the CORS plugin
+    configureRateLimit() // Configure the RateLimit plugin
     configureSwagger() // Configure the Swagger plugin
 }

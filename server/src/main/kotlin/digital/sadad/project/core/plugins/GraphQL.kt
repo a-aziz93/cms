@@ -9,8 +9,10 @@ fun Application.configureGraphQL() {
     val appConfig: AppConfig by inject()
     val graphqlConfig = appConfig.config.graphql
 
-    install(GraphQL) {
-        playground = graphqlConfig?.playground ?: true
-        endpoint = graphqlConfig?.endpoint ?: "/graphql"
+    if (graphqlConfig != null) {
+        install(GraphQL) {
+            playground = graphqlConfig.playground ?: true
+            endpoint = graphqlConfig.endpoint ?: "/graphql"
+        }
     }
 }
