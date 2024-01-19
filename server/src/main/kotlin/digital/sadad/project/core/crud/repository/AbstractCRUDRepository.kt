@@ -4,25 +4,19 @@ import core.crud.CRUD
 import core.crud.model.entity.Order
 import core.crud.model.entity.LimitOffset
 import core.crud.model.entity.Update
-import core.crud.model.entity.aggregate.AggregateOperation
-import core.crud.model.entity.aggregate.AggregateOperation.*
-import core.crud.model.entity.predicate.operation.Predicate
-import core.crud.model.entity.projection.Projection
+import core.crud.model.entity.expression.aggregate.AggregateExpression
+import core.crud.model.entity.expression.aggregate.AggregateExpression.*
+import core.crud.model.entity.expression.predicate.Predicate
+import core.crud.model.entity.expression.projection.Projection
 import digital.sadad.project.auth.entity.UserTable
-import digital.sadad.project.core.crud.model.ColumnInteraction
-import digital.sadad.project.core.crud.model.ColumnMetadata
+import digital.sadad.project.core.crud.model.TableMeta
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.withContext
-import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
-import kotlinx.datetime.LocalTime
 import org.ufoss.kotysa.*
 import org.ufoss.kotysa.columns.*
-import java.math.BigDecimal
-import java.time.OffsetDateTime
-import java.util.UUID
 import kotlin.reflect.full.*
 
 abstract class AbstractCRUDRepository<T : Any, ID : Any>(
@@ -30,8 +24,10 @@ abstract class AbstractCRUDRepository<T : Any, ID : Any>(
     protected val table: Table<T>,
 ) : CRUD<T, ID> {
 
+    private val tableMeta = TableMeta(table)
+
     override suspend fun save(
-        entities: List<T>,
+        entities: Collection<T>,
         updateIfExists: Boolean,
         byUser: String?
     ): List<T> = client.transactional {
@@ -69,7 +65,7 @@ abstract class AbstractCRUDRepository<T : Any, ID : Any>(
         }
     }!!
 
-    override suspend fun update(updates: List<Update>): List<Long> = client.transactional {
+    override suspend fun update(updates: Collection<Update>): List<Long> = client.transactional {
         withContext(Dispatchers.IO) {
             updates.map {
                 (client update table).execute(it)
@@ -78,7 +74,7 @@ abstract class AbstractCRUDRepository<T : Any, ID : Any>(
     }!!
 
     override suspend fun find(
-        sort: List<Order>?,
+        sort: Collection<Order>?,
         predicate: Predicate?,
         limitOffset: LimitOffset?,
     ): Flow<T> = withContext(Dispatchers.IO) {
@@ -89,8 +85,8 @@ abstract class AbstractCRUDRepository<T : Any, ID : Any>(
     }
 
     override suspend fun find(
-        projections: List<Projection>,
-        sort: List<Order>?,
+        projections: Collection<Projection>,
+        sort: Collection<Order>?,
         predicate: Predicate?,
         limitOffset: LimitOffset?,
     ): Flow<List<Any?>> = withContext(Dispatchers.IO) {
@@ -116,7 +112,7 @@ abstract class AbstractCRUDRepository<T : Any, ID : Any>(
     }
 
     override suspend fun aggregate(
-        operation: AggregateOperation,
+        operation: AggregateExpression,
         projection: Projection?,
         predicate: Predicate?,
     ): Number =
@@ -142,214 +138,10 @@ abstract class AbstractCRUDRepository<T : Any, ID : Any>(
 
     ///////////////////////////////////////////////////HELPER///////////////////////////////////////////////////
 
-    private val columnsMetadata: Map<String, ColumnMetadata<T>> =
-        table::class.declaredMemberProperties.filter { it.returnType.isSubtypeOf(columnKType) }.associate {
-            val column = it.call(table)!!
-            val columnName = (column::class.memberProperties.find { it.name.lowercase() == "columnname" }?.name
-                ?: it.name).lowercase()
-            columnName to ColumnMetadata(
-                column as Column<T, *>,
-                column is UuidDbUuidColumnNotNull<*> ||
-                        column is IntDbIdentityColumnNotNull<*> ||
-                        column is LongDbIdentityColumnNotNull<*>,
-                (column as AbstractDbColumn<T, *>).entityGetter,
-                when (column) {
-                    is BigDecimalColumnNotNull<*> -> ColumnInteraction(
-                        { update, value ->
-                            update.set(column as BigDecimalColumnNotNull<T>).eq(value as BigDecimal)
-                        },
-                    )
 
-                    is BigDecimalColumnNullable<*> -> ColumnInteraction(
-                        { update, value ->
-                            update.set(column as BigDecimalColumnNullable<T>).eq(value as BigDecimal?)
-                        },
-                    )
-
-                    is BooleanColumnNotNull<*> -> ColumnInteraction(
-                        { update, value ->
-                            update.set(column as BooleanColumnNotNull<T>).eq(value as Boolean)
-                        },
-                    )
-
-                    is ByteArrayColumnNotNull<*> -> ColumnInteraction(
-                        { update, value ->
-                            update.set(column as ByteArrayColumnNotNull<T>).eq(value as ByteArray)
-                        },
-                    )
-
-                    is ByteArrayColumnNullable<*> -> ColumnInteraction(
-                        { update, value ->
-                            update.set(column as ByteArrayColumnNullable<T>).eq(value as ByteArray?)
-                        },
-                    )
-
-                    is DoubleColumnNotNull<*> -> ColumnInteraction(
-                        { update, value ->
-                            update.set(column as DoubleColumnNotNull<T>).eq(value as Double)
-                        },
-                    )
-
-                    is DoubleColumnNullable<*> -> ColumnInteraction(
-                        { update, value ->
-                            update.set(column as DoubleColumnNullable<T>).eq(value as Double?)
-                        },
-                    )
-
-                    is FloatColumnNotNull<*> -> ColumnInteraction(
-                        { update, value ->
-                            update.set(column as FloatColumnNotNull<T>).eq(value as Float)
-                        },
-                    )
-
-                    is FloatColumnNullable<*> -> ColumnInteraction(
-                        { update, value ->
-                            update.set(column as FloatColumnNullable<T>).eq(value as Float?)
-                        },
-                    )
-
-                    is IntColumnNotNull<*> -> ColumnInteraction(
-                        { update, value ->
-                            update.set(column as IntColumnNotNull<T>).eq(value as Int)
-                        },
-                    )
-
-                    is IntColumnNullable<*> -> ColumnInteraction(
-                        { update, value ->
-                            update.set(column as IntColumnNullable<T>).eq(value as Int?)
-                        },
-                    )
-
-                    is KotlinxLocalDateColumnNotNull<*> -> ColumnInteraction(
-                        { update, value ->
-                            update.set(column as KotlinxLocalDateColumnNotNull<T>).eq(value as LocalDate)
-                        },
-                    )
-
-                    is KotlinxLocalDateColumnNullable<*> -> ColumnInteraction(
-                        { update, value ->
-                            update.set(column as KotlinxLocalDateColumnNullable<T>).eq(value as LocalDate?)
-                        },
-                    )
-
-                    is KotlinxLocalDateTimeColumnNotNull<*> -> ColumnInteraction(
-                        { update, value ->
-                            update.set(column as KotlinxLocalDateTimeColumnNotNull<T>).eq(value as LocalDateTime)
-                        },
-                    )
-
-                    is KotlinxLocalDateTimeColumnNullable<*> -> ColumnInteraction(
-                        { update, value ->
-                            update.set(column as KotlinxLocalDateTimeColumnNullable<T>).eq(value as LocalDateTime?)
-                        },
-                    )
-
-                    is KotlinxLocalTimeColumnNotNull<*> -> ColumnInteraction(
-                        { update, value ->
-                            update.set(column as KotlinxLocalTimeColumnNotNull<T>).eq(value as LocalTime)
-                        },
-                    )
-
-                    is KotlinxLocalTimeColumnNullable<*> -> ColumnInteraction(
-                        { update, value ->
-                            update.set(column as KotlinxLocalTimeColumnNullable<T>).eq(value as LocalTime?)
-                        },
-                    )
-
-                    is LocalDateColumnNotNull<*> -> ColumnInteraction(
-                        { update, value ->
-                            update.set(column as LocalDateColumnNotNull<T>).eq(value as java.time.LocalDate)
-                        },
-                    )
-
-                    is LocalDateColumnNullable<*> -> ColumnInteraction(
-                        { update, value ->
-                            update.set(column as LocalDateColumnNullable<T>).eq(value as java.time.LocalDate?)
-                        },
-                    )
-
-                    is LocalDateTimeColumnNotNull<*> -> ColumnInteraction(
-                        { update, value ->
-                            update.set(column as LocalDateTimeColumnNotNull<T>).eq(value as java.time.LocalDateTime)
-                        },
-                    )
-
-                    is LocalDateTimeColumnNullable<*> -> ColumnInteraction(
-                        { update, value ->
-                            update.set(column as LocalDateTimeColumnNullable<T>).eq(value as java.time.LocalDateTime?)
-                        },
-                    )
-
-                    is LocalTimeColumnNotNull<*> -> ColumnInteraction(
-                        { update, value ->
-                            update.set(column as LocalTimeColumnNotNull<T>).eq(value as java.time.LocalTime)
-                        },
-                    )
-
-                    is LocalTimeColumnNullable<*> -> ColumnInteraction(
-                        { update, value ->
-                            update.set(column as LocalTimeColumnNullable<T>).eq(value as java.time.LocalTime?)
-                        },
-                    )
-
-                    is LongColumnNotNull<*> -> ColumnInteraction(
-                        { update, value ->
-                            update.set(column as LongColumnNotNull<T>).eq(value as Long)
-                        },
-                    )
-
-                    is LongColumnNullable<*> -> ColumnInteraction(
-                        { update, value ->
-                            update.set(column as LongColumnNullable<T>).eq(value as Long?)
-                        },
-                    )
-
-                    is OffsetDateTimeColumnNotNull<*> -> ColumnInteraction(
-                        { update, value ->
-                            update.set(column as OffsetDateTimeColumnNotNull<T>).eq(value as OffsetDateTime)
-                        },
-                    )
-
-                    is OffsetDateTimeColumnNullable<*> -> ColumnInteraction(
-                        { update, value ->
-                            update.set(column as OffsetDateTimeColumnNullable<T>).eq(value as OffsetDateTime?)
-                        },
-                    )
-
-                    is StringColumnNotNull<*> -> ColumnInteraction(
-                        { update, value ->
-                            update.set(column as StringColumnNotNull<T>).eq(value as String)
-                        },
-                    )
-
-                    is StringColumnNullable<*> -> ColumnInteraction(
-                        { update, value ->
-                            update.set(column as StringColumnNullable<T>).eq(value as String?)
-                        },
-                    )
-
-                    is UuidColumnNotNull<*> -> ColumnInteraction(
-                        { update, value ->
-                            update.set(column as UuidColumnNotNull<T>).eq(value as UUID)
-                        },
-                    )
-
-                    is UuidColumnNullable<*> -> ColumnInteraction(
-                        { update, value ->
-                            update.set(column as UuidColumnNullable<T>).eq(value as UUID?)
-                        },
-                    )
-
-                    else -> throw Exception("No setter defined for column ${columnName}")
-                }
-            )
-        }
-
-    private fun String.column() = columnsMetadata[this.lowercase()]!!.column
-
-    private val identityColumn = columnsMetadata.entries.find { it.value.isIdentity }!!
-
-    private fun String.interaction() = columnsMetadata[this.lowercase()]!!.interaction
+    private fun String.column() = tableMeta.columns[this.lowercase()]!!.column
+    private fun String.columnValueGetter() = tableMeta.columns[this.lowercase()]!!.valueGetter
+    private fun String.columnValueSetter() = tableMeta.columns[this.lowercase()]!!.valueSetter
 
     abstract fun onCreate(entity: T, byUser: String?, dateTime: LocalDateTime): T
 
@@ -357,11 +149,11 @@ abstract class AbstractCRUDRepository<T : Any, ID : Any>(
 
     private suspend fun CoroutinesSqlClientDeleteOrUpdate.Update<T>.execute(update: Update): Long =
         update.properties.entries.fold(this) { sets, (property, value) ->
-            property.interaction().updateSetter(sets, value)
+            property.columnValueSetter()(sets, value)
         }.predicate(update.predicate).execute()
 
     private fun <R : Any> CoroutinesSqlClientSelect.Wheres<R>.execute(
-        sort: List<Order>?,
+        sort: Collection<Order>?,
         predicate: Predicate?,
         limitOffset: LimitOffset?,
     ): Flow<R> {
@@ -404,7 +196,5 @@ abstract class AbstractCRUDRepository<T : Any, ID : Any>(
         return this
     }
 
-    companion object {
-        private val columnKType = Column::class.createType()
-    }
+
 }
