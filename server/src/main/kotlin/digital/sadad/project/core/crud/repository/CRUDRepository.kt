@@ -7,12 +7,10 @@ import core.crud.model.entity.Update
 import core.crud.model.entity.expression.BooleanVariable
 import core.crud.model.entity.expression.Variable
 import core.crud.model.entity.expression.aggregate.Aggregate
-import core.crud.model.entity.expression.aggregate.AggregateExpression
 import core.crud.model.entity.expression.aggregate.AggregateExpression.*
-import core.crud.model.entity.expression.logic.Logic
 import core.crud.model.entity.expression.projection.Projection
 import digital.sadad.project.auth.entity.UserTable
-import digital.sadad.project.core.crud.model.TableMeta
+import digital.sadad.project.core.crud.model.TableMetadata
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
@@ -22,12 +20,12 @@ import org.ufoss.kotysa.*
 import org.ufoss.kotysa.columns.*
 import kotlin.reflect.full.*
 
-abstract class AbstractCRUDRepository<T : Any, ID : Any>(
+abstract class CRUDRepository<T : Any, ID : Any>(
     protected val client: R2dbcSqlClient,
     protected val table: Table<T>,
 ) : CRUD<T, ID> {
 
-    private val tableMeta = TableMeta(table)
+    private val tableMetadata = TableMetadata(table)
 
     override suspend fun save(
         entities: Collection<T>,
@@ -141,9 +139,9 @@ abstract class AbstractCRUDRepository<T : Any, ID : Any>(
     ///////////////////////////////////////////////////HELPER///////////////////////////////////////////////////
 
 
-    private fun String.column() = tableMeta.columns[this.lowercase()]!!.column
-    private fun String.columnValueGetter() = tableMeta.columns[this.lowercase()]!!.valueGetter
-    private fun String.columnValueSetter() = tableMeta.columns[this.lowercase()]!!.valueSetter
+    private fun String.column() = tableMetadata.columnsMetadatas[this.lowercase()]!!.column
+    private fun String.columnValueGetter() = tableMetadata.columnsMetadatas[this.lowercase()]!!.valueGetter
+    private fun String.columnValueSetter() = tableMetadata.columnsMetadatas[this.lowercase()]!!.valueSetter
 
     abstract fun onCreate(entity: T, byUser: String?, dateTime: LocalDateTime): T
 

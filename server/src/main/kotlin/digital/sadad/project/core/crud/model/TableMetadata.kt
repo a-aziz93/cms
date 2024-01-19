@@ -17,14 +17,14 @@ import kotlin.reflect.full.declaredMemberProperties
 import kotlin.reflect.full.isSubtypeOf
 import kotlin.reflect.full.memberProperties
 
-class TableMeta<T : Any>(table: Table<T>) {
-    val columns: Map<String, ColumnMeta<T>> =
+class TableMetadata<T : Any>(table: Table<T>) {
+    val columnsMetadatas: Map<String, ColumnMetadata<T>> =
         table::class.declaredMemberProperties.filter { it.returnType.isSubtypeOf(columnKType) }
             .associate {
                 val column = it.call(table)!!
                 val columnName = (column::class.memberProperties.find { it.name.lowercase() == "columnname" }?.name
                     ?: it.name).lowercase()
-                columnName to ColumnMeta(
+                columnName to ColumnMetadata(
                     column as Column<T, *>,
                     column is UuidDbUuidColumnNotNull<*> ||
                             column is IntDbIdentityColumnNotNull<*> ||
@@ -222,10 +222,10 @@ class TableMeta<T : Any>(table: Table<T>) {
                
             }
 
-    val identityColumn = columns.entries.find { it.value.isIdentity }!!
+    val identityColumnMetadata = columnsMetadatas.entries.find { it.value.isIdentity }!!
 
     companion object {
-        private val columnKType = ColumnMeta::class.createType()
+        private val columnKType = ColumnMetadata::class.createType()
     }
 
 }
