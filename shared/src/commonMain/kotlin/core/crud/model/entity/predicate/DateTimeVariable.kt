@@ -1,3 +1,4 @@
 package core.crud.model.entity.predicate
 
-interface PredicateVariable
+interface DateTimeVariable {
+}

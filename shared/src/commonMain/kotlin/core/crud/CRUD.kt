@@ -10,22 +10,22 @@ import kotlinx.coroutines.flow.Flow
 
 interface CRUD<T : Any, ID : Any> {
     suspend fun save(
-        entities: List<T>,
+        entities: Collection<T>,
         updateIfExists: Boolean = true,
         byUser: String? = null,
     ): List<T>
 
-    suspend fun update(updates: List<Update>): List<Long>
+    suspend fun update(updates: Collection<Update>): List<Long>
 
     suspend fun find(
-        sort: List<Order>? = null,
+        sort: Collection<Order>? = null,
         predicate: Predicate? = null,
         limitOffset: LimitOffset? = null,
     ): Flow<T>
 
     suspend fun find(
-        projections: List<Projection>,
-        sort: List<Order>? = null,
+        projections: Collection<Projection>,
+        sort: Collection<Order>? = null,
         predicate: Predicate? = null,
         limitOffset: LimitOffset? = null,
     ): Flow<List<Any?>>

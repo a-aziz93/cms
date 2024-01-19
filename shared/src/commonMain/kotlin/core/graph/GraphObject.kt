@@ -3,9 +3,9 @@ package core.graph
 import core.graph.exception.GraphException
 import kotlin.coroutines.cancellation.CancellationException
 
-abstract class GraphObject<ID : Any, T : GraphObject<ID, T>>(
+abstract class GraphObject<T : GraphObject<T, ID>, ID : Any>(
     val id: ID? = null,
-    protected val graphObjects: GraphObjects<ID, T>? = null
+    protected val graphObjects: GraphObjects<T, ID>? = null
 ) {
     @Suppress("UNUSED", "UNCHECKED_CAST")
     @Throws(GraphException::class, CancellationException::class)
