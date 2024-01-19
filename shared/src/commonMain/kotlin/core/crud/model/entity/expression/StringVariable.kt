@@ -12,8 +12,8 @@ interface StringVariable : Variable {
     fun like(value: StringVariable) =
         Logic.like(this, value)
 
-    fun ln(value: StringCollectionVariable) =
-        Logic.ln(this, value)
+    fun `in`(value: StringCollectionVariable) =
+        Logic.`in`(this, value)
 
     fun nin(value: StringCollectionVariable) =
         Logic.nin(this, value)

@@ -50,7 +50,7 @@ class Logic(
         fun between(value: Variable, leftValue: Variable, rightValue: Variable) =
             Logic(BETWEEN, value, leftValue, rightValue)
 
-        fun ln(leftValue: Variable, rightValue: CollectionVariable) =
+        fun `in`(leftValue: Variable, rightValue: CollectionVariable) =
             Logic(IN, leftValue, rightValue)
 
         fun nin(leftValue: Variable, rightValue: CollectionVariable) =

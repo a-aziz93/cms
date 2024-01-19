@@ -24,8 +24,8 @@ interface TemporalVariable : Variable {
     fun between(leftValue: TemporalVariable, rightValue: TemporalVariable) =
         Logic.between(this, leftValue, rightValue)
 
-    fun ln(value: TemporalCollectionVariable) =
-        Logic.ln(this, value)
+    fun `in`(value: TemporalCollectionVariable) =
+        Logic.`in`(this, value)
 
     fun nin(value: TemporalCollectionVariable) =
         Logic.nin(this, value)

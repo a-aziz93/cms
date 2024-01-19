@@ -9,8 +9,8 @@ interface CharVariable : Variable {
     fun neq(value: CharVariable) =
         Logic.Companion.neq(this, value)
 
-    fun ln(value: CharCollectionVariable) =
-        Logic.Companion.ln(this, value)
+    fun `in`(value: CharCollectionVariable) =
+        Logic.Companion.`in`(this, value)
 
     fun nin(value: CharCollectionVariable) =
         Logic.Companion.nin(this, value)

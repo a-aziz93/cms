@@ -50,8 +50,8 @@ interface NumberVariable : Variable {
     fun between(leftValue: NumberVariable, rightValue: NumberVariable) =
         Logic.between(this, leftValue, rightValue)
 
-    fun ln(value: NumberCollectionVariable) =
-        Logic.ln(this, value)
+    fun `in`(value: NumberCollectionVariable) =
+        Logic.`in`(this, value)
 
     fun nin(value: NumberCollectionVariable) =
         Logic.nin(this, value)

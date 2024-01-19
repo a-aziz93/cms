@@ -37,8 +37,8 @@ fun Char.eq(value: CharVariable) =
 fun Char.neq(value: CharVariable) =
     this.v().neq(value)
 
-fun Char.ln(value: CharCollectionVariable) =
-    this.v().ln(value)
+fun Char.`in`(value: CharCollectionVariable) =
+    this.v().`in`(value)
 
 fun Char.nin(value: CharCollectionVariable) =
     this.v().nin(value)
@@ -49,8 +49,8 @@ fun Char.eq(value: Char) =
 fun Char.neq(value: Char) =
     this.neq(value.v())
 
-fun Char.ln(value: Collection<Char>) =
-    this.ln(value.v())
+fun Char.`in`(value: Collection<Char>) =
+    this.`in`(value.v())
 
 fun Char.nin(value: Collection<Char>) =
     this.nin(value.v())
@@ -77,8 +77,8 @@ fun Number.lte(value: NumberVariable) =
 fun Number.between(leftValue: NumberVariable, rightValue: NumberVariable) =
     this.v().between(leftValue, rightValue)
 
-fun Number.ln(value: NumberCollectionVariable) =
-    this.v().ln(value)
+fun Number.`in`(value: NumberCollectionVariable) =
+    this.v().`in`(value)
 
 fun Number.nin(value: NumberCollectionVariable) =
     this.v().nin(value)
@@ -104,8 +104,8 @@ fun Number.lte(value: Number) =
 fun Number.between(leftValue: Number, rightValue: Number) =
     this.between(leftValue.v(), rightValue.v())
 
-fun Number.ln(value: Collection<Number>) =
-    this.ln(value.v())
+fun Number.`in`(value: Collection<Number>) =
+    this.`in`(value.v())
 
 fun Number.nin(value: Collection<Number>) =
     this.nin(value.v())
@@ -132,8 +132,8 @@ fun Temporal.lte(value: TemporalVariable) =
 fun Temporal.between(leftValue: TemporalVariable, rightValue: TemporalVariable) =
     this.v().between(leftValue, rightValue)
 
-fun Temporal.ln(value: TemporalCollectionVariable) =
-    this.v().ln(value)
+fun Temporal.`in`(value: TemporalCollectionVariable) =
+    this.v().`in`(value)
 
 fun Temporal.nin(value: TemporalCollectionVariable) =
     this.v().nin(value)
@@ -159,8 +159,8 @@ fun Temporal.lte(value: Temporal) =
 fun Temporal.between(leftValue: Temporal, rightValue: Temporal) =
     this.between(leftValue.v(), rightValue.v())
 
-fun Temporal.ln(value: Collection<Temporal>) =
-    this.ln(value.v())
+fun Temporal.`in`(value: Collection<Temporal>) =
+    this.`in`(value.v())
 
 fun Temporal.nin(value: Collection<Temporal>) =
     this.nin(value.v())
@@ -175,8 +175,8 @@ fun String.neq(value: StringVariable) =
 fun String.like(value: StringVariable) =
     this.v().like(value)
 
-fun String.ln(value: StringCollectionVariable) =
-    this.v().ln(value)
+fun String.`in`(value: StringCollectionVariable) =
+    this.v().`in`(value)
 
 fun String.nin(value: StringCollectionVariable) =
     this.v().nin(value)
@@ -190,8 +190,8 @@ fun String.neq(value: String) =
 fun String.like(value: String) =
     this.like(value.v())
 
-fun String.ln(value: Collection<String>) =
-    this.ln(value.v())
+fun String.`in`(value: Collection<String>) =
+    this.`in`(value.v())
 
 fun String.nin(value: Collection<String>) =
     this.nin(value.v())
