@@ -27,20 +27,27 @@ private fun Any?.v(): Value<*> =
         }
 
 fun FieldValue.eq(value: Any?) = this.eq(value.v())
+
 fun FieldValue.neq(value: Any?) = this.neq(value.v())
 
 fun Boolean.v() = boolean(this)
+
 fun Collection<Boolean>.v() = booleanCollection(this)
 
 fun Char.v() = char(this)
+
 fun Collection<Char>.v() = charCollection(this)
 
 fun Number.v() = number(this)
+
 fun Collection<Number>.v() = numberCollection(this)
 
 fun Temporal.v() = temporal(this)
+
 fun Collection<Temporal>.v() = temporalCollection(this)
 
 fun String.v() = string(this)
+
 fun Collection<String>.v() = stringCollection(this)
+
 fun String.f() = field(this)
