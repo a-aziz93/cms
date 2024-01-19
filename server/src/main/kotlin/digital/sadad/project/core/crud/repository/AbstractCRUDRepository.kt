@@ -152,7 +152,8 @@ abstract class AbstractCRUDRepository<T : Any, ID : Any>(
     private suspend fun CoroutinesSqlClientDeleteOrUpdate.Update<T>.execute(update: Update): Long =
         update.properties.entries.fold(this) { sets, (property, value) ->
             property.columnValueSetter()(sets, value)
-        }.predicate(update.predicate).execute()
+        }.predicate(update.predicate)
+            .execute()
 
     private fun <R : Any> CoroutinesSqlClientSelect.Wheres<R>.execute(
         sort: Collection<Order>?,
