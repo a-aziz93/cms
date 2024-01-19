@@ -1,30 +1,33 @@
 package core.graph
 
+import core.crud.CRUD
+import core.crud.model.entity.expression.extension.f
+import core.crud.model.entity.expression.logic.extension.eq
 import core.graph.exception.GraphException
 import kotlin.coroutines.cancellation.CancellationException
 
 abstract class GraphObject<T : GraphObject<T, ID>, ID : Any>(
     val id: ID? = null,
-    protected val graphObjects: GraphObjects<T, ID>? = null
+    protected val objects: CRUD<T, ID>? = null
 ) {
     @Suppress("UNUSED", "UNCHECKED_CAST")
     @Throws(GraphException::class, CancellationException::class)
     suspend fun save(): T {
-        if (graphObjects == null) {
-            throw GraphException("core.graph.Graph objects is not provided")
+        if (objects == null) {
+            throw GraphException("Graph objects is not provided")
         }
 
-        return graphObjects.save(this as T).first()
+        return objects.save(listOf(this as T)).first()
     }
 
-    @Suppress("UNUSED", "UNCHECKED_CAST")
+    @Suppress("UNUSED")
     @Throws(GraphException::class, CancellationException::class)
-    suspend fun remove(): Boolean {
-        if (graphObjects == null) {
+    suspend fun delete(): Boolean {
+        if (objects == null) {
             throw GraphException("${this::class.simpleName} graph objects is not provided")
         }
 
-        return graphObjects.remove(this as T)
+        return objects.delete("id".f().eq(this.id)) > 0L
     }
 
     override fun equals(other: Any?): Boolean =
