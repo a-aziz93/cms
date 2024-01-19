@@ -1,6 +1,17 @@
 package core.crud.model.entity.expression.value.extension
 
 import core.crud.model.entity.expression.value.*
+import core.crud.model.entity.expression.value.BooleanCollectionValue.Companion.booleanCollection
+import core.crud.model.entity.expression.value.BooleanValue.Companion.boolean
+import core.crud.model.entity.expression.value.CharCollectionValue.Companion.charCollection
+import core.crud.model.entity.expression.value.CharValue.Companion.char
+import core.crud.model.entity.expression.value.FieldValue.Companion.field
+import core.crud.model.entity.expression.value.NumberCollectionValue.Companion.numberCollection
+import core.crud.model.entity.expression.value.NumberValue.Companion.number
+import core.crud.model.entity.expression.value.StringCollectionValue.Companion.stringCollection
+import core.crud.model.entity.expression.value.StringValue.Companion.string
+import core.crud.model.entity.expression.value.TemporalCollectionValue.Companion.temporalCollection
+import core.crud.model.entity.expression.value.TemporalValue.Companion.temporal
 import java.time.temporal.Temporal
 
 private fun Any?.v(): Value<*> =
@@ -18,18 +29,18 @@ private fun Any?.v(): Value<*> =
 fun FieldValue.eq(value: Any?) = this.eq(value.v())
 fun FieldValue.neq(value: Any?) = this.neq(value.v())
 
-fun Boolean.v() = BooleanValue.boolean(this)
-fun Collection<Boolean>.v() = BooleanCollectionValue.booleanCollection(this)
+fun Boolean.v() = boolean(this)
+fun Collection<Boolean>.v() = booleanCollection(this)
 
-fun Char.v() = CharValue.char(this)
-fun Collection<Char>.v() = CharCollectionValue.charCollection(this)
+fun Char.v() = char(this)
+fun Collection<Char>.v() = charCollection(this)
 
-fun Number.v() = NumberValue.number(this)
-fun Collection<Number>.v() = NumberCollectionValue.numberCollection(this)
+fun Number.v() = number(this)
+fun Collection<Number>.v() = numberCollection(this)
 
-fun Temporal.v() = TemporalValue.temporal(this)
-fun Collection<Temporal>.v() = TemporalCollectionValue.temporalCollection(this)
+fun Temporal.v() = temporal(this)
+fun Collection<Temporal>.v() = temporalCollection(this)
 
-fun String.v() = StringValue.string(this)
-fun Collection<String>.v() = StringCollectionValue.stringCollection(this)
-fun String.f() = FieldValue.field(this)
+fun String.v() = string(this)
+fun Collection<String>.v() = stringCollection(this)
+fun String.f() = field(this)
