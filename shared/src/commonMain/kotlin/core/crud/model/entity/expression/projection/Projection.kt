@@ -6,6 +6,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 class Projection private constructor(
     value: String,
+    distinct: Boolean? = null,
 ) : FieldValue(value) {
     companion object {
         fun projection(field: FieldValue, distinct: Boolean? = null) = Projection(field, distinct)

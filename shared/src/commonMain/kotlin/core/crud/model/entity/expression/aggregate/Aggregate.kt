@@ -12,9 +12,9 @@ class Aggregate private constructor(
 ) {
     companion object {
         fun count(projection: Projection? = null) = Aggregate(COUNT, projection)
-        fun max(projection: Projection? = null) = Aggregate(MAX, projection)
-        fun min(projection: Projection? = null) = Aggregate(MIN, projection)
-        fun avg(projection: Projection? = null) = Aggregate(AVG, projection)
-        fun sum(projection: Projection? = null) = Aggregate(SUM, projection)
+        fun max(projection: Projection) = Aggregate(MAX, projection)
+        fun min(projection: Projection) = Aggregate(MIN, projection)
+        fun avg(projection: Projection) = Aggregate(AVG, projection)
+        fun sum(projection: Projection) = Aggregate(SUM, projection)
     }
 }
