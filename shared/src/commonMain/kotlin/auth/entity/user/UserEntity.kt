@@ -1,10 +1,10 @@
-package digital.sadad.project.auth.entity.user
+package auth.entity.user
 
 import java.time.LocalDateTime
 import java.util.*
 
 data class UserEntity(
-    val id: UUID?,
+    val id: Long?,
     val name: String,
     val email: String,
     val username: String,

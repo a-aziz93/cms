@@ -1,4 +1,4 @@
-package auth.dto
+package auth.dto.notification
 
 import core.serializers.LocalDateTimeSerializer
 import kotlinx.serialization.Serializable

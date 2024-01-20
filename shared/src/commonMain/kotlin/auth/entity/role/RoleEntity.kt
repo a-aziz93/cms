@@ -1,10 +1,10 @@
-package digital.sadad.project.auth.entity.role
+package auth.entity.role
 
 import java.time.LocalDateTime
 import java.util.*
 
 data class RoleEntity(
-    val id: UUID?,
+    val id: Long?,
     val label: String,
     val description: String? = null,
     val createdBy: String? = null,

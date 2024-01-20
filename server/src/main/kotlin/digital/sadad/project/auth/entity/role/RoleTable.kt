@@ -1,10 +1,12 @@
 package digital.sadad.project.auth.entity.role
 
+import auth.entity.role.RoleEntity
 import org.ufoss.kotysa.GenericTable
 
 object RoleTable : GenericTable<RoleEntity>("roles") {
     // Primary key
-    val id = uuid(RoleEntity::id)
+    val id = bigInt(RoleEntity::id)
+        .identity()
         .primaryKey("PK_roles")
 
     // Other fields

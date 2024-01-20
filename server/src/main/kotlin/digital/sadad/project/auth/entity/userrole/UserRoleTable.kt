@@ -1,18 +1,21 @@
 package digital.sadad.project.auth.entity.userrole
 
+import auth.entity.userrole.UserRoleEntity
 import digital.sadad.project.auth.entity.role.RoleTable
+import digital.sadad.project.auth.entity.role.RoleTable.identity
 import digital.sadad.project.auth.entity.user.UserTable
 import org.ufoss.kotysa.GenericTable
 
 object UserRoleTable : GenericTable<UserRoleEntity>("user_role") {
     // Primary key
-    val id = uuid(UserRoleEntity::id)
+    val id = bigInt(UserRoleEntity::id)
+        .identity()
         .primaryKey("PK_role_bind")
 
     // Other fields
-    val userId = uuid(UserRoleEntity::userId)
+    val userId = bigInt(UserRoleEntity::userId)
         .foreignKey(UserTable.id, "FK_users")
-    val roleId = uuid(UserRoleEntity::roleId)
+    val roleId = bigInt(UserRoleEntity::roleId)
         .foreignKey(RoleTable.id, "FK_roles")
 
     // metadata

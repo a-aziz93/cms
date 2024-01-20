@@ -1,10 +1,13 @@
 package digital.sadad.project.auth.entity.user
 
+import auth.entity.user.UserEntity
+import digital.sadad.project.auth.entity.role.RoleTable.identity
 import org.ufoss.kotysa.GenericTable
 
 object UserTable : GenericTable<UserEntity>("users") {
     // Primary key
-    val id = uuid(UserEntity::id)
+    val id = bigInt(UserEntity::id)
+        .identity()
         .primaryKey("PK_users")
 
     // Other fields
