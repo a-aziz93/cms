@@ -1,4 +1,4 @@
-package digital.sadad.project.core.config.model.auth
+package digital.sadad.project.core.config.model.security
 
 import kotlin.time.Duration
 

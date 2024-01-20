@@ -1,9 +1,9 @@
-package digital.sadad.project.auth.entity.rolebind
+package digital.sadad.project.auth.entity.userrole
 
 import java.time.LocalDateTime
 import java.util.*
 
-data class RoleBindEntity(
+data class UserRoleEntity(
     val id: UUID?,
     val userId: UUID,
     val roleId: UUID,

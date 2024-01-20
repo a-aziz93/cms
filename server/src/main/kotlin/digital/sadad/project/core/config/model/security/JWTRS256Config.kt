@@ -1,9 +1,9 @@
-package digital.sadad.project.core.config.model.auth
+package digital.sadad.project.core.config.model.security
 
 import kotlin.time.Duration
 
-class JWTHS256Config(
-    val secret: String,
+class JWTRS256Config(
+    val privateKey: String,
     issuer: String,
     audience: String,
     realm: String,

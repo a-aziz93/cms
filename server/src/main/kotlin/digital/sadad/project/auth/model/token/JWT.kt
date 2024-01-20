@@ -3,7 +3,7 @@ package digital.sadad.project.auth.model.token
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import digital.sadad.project.auth.entity.user.UserEntity
-import digital.sadad.project.core.config.model.auth.JWTConfig
+import digital.sadad.project.core.config.model.security.JWTConfig
 import io.ktor.server.auth.*
 import io.ktor.server.auth.jwt.*
 import java.util.*

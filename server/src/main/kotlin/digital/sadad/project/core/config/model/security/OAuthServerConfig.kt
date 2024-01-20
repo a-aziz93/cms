@@ -1,4 +1,4 @@
-package digital.sadad.project.core.config.model.auth
+package digital.sadad.project.core.config.model.security
 
 import io.ktor.http.*
 
