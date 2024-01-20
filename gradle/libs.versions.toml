@@ -264,6 +264,10 @@ ktor-server-freemarker = { module = "io.ktor:ktor-server-freemarker", version.re
 ktor-server-resources = { module = "io.ktor:ktor-server-resources", version.ref = "ktor" }
 # Locations
 ktor-server-locations = { module = "io.ktor:ktor-server-locations", version.ref = "ktor" }
+# Auto head response
+ktor-server-auto-head-response = { module = "io.ktor:ktor-server-auto-head-response", version.ref = "ktor" }
+# XHttpMethodOverride
+ktor-server-method-override = { module = "io.ktor:ktor-server-method-override", version.ref = "ktor" }
 # OAuth2
 keycloak-admin-client = { module = "org.keycloak:keycloak-admin-client", version.ref = "keycloak" }
 
@@ -345,6 +349,8 @@ ktor-server = [
     "ktor-server-freemarker",
     "ktor-server-resources",
     "ktor-server-locations",
+    "ktor-server-auto-head-response",
+    "ktor-server-method-override",
 ]
 sql-delight = [
     "sql-delight-coroutines-extension",

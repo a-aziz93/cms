@@ -13,6 +13,7 @@ import digital.sadad.project.core.config.model.statuspages.StatusPagesConfig
 import digital.sadad.project.core.config.model.storage.StorageConfig
 import digital.sadad.project.core.config.model.swagger.SwaggerConfig
 import digital.sadad.project.core.config.model.websocket.WebSocketsConfig
+import digital.sadad.project.core.config.model.xhttpmethodoverride.XHttpMethodOverrideConfig
 
 data class Config(
     val auth: AuthConfig? = null,
@@ -28,4 +29,5 @@ data class Config(
     val serialization: SerializationConfig? = null,
     val swagger: SwaggerConfig? = null,
     val statusPages: StatusPagesConfig? = null,
+    val xHttpMethodOverride: XHttpMethodOverrideConfig? = null,
 )

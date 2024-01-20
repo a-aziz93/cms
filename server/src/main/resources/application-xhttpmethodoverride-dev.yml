@@ -1,0 +1,2 @@
+xhttpmethodoverride:
+  header-name: X-Http-Method-Override

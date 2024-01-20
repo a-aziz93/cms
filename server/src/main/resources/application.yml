@@ -41,6 +41,7 @@ profiles:
   - compression
   - cors
   - swagger
+  - xhttpmethodoverride
 
 
 

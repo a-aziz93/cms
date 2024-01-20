@@ -28,4 +28,6 @@ fun Application.module() {
     configureSwagger() // Configure the Swagger plugin
     configureResources() // Configure the Resources plugin
     configureLocations() // Configure the Locations plugin
+    configureAutoHeadResponse() // Configure the AutoHeadResponse plugin
+    configureXHttpMethodOverride() // Configure the XHttpMethodOverride plugin
 }
