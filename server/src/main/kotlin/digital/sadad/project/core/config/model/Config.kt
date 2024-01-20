@@ -19,7 +19,7 @@ data class Config(
     val cache: Map<String, CacheConfig>? = null,
     val storage: StorageConfig? = null,
     val databases: Map<String, DatabaseConfig>? = null,
-    val websockets: WebSocketsConfig? = null,
+    val websocket: WebSocketsConfig? = null,
     val graphql: GraphQLConfig? = null,
     val template: Template? = null,
     val rateLimits: RateLimitsConfig? = null,

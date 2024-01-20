@@ -12,4 +12,5 @@ data class WebSocketsConfig(
     val maxFrameSize: Long? = null,
     val masking: Boolean? = null,
     val contentConverter: JsonConfig? = null,
+    val page: WebSocketPageConfig? = null,
 )
