@@ -14,11 +14,11 @@ fun Application.configureFreeMarker() {
     val appConfig: AppConfig by inject()
     appConfig.config.template?.let {
         install(FreeMarker) {
-            val templateLoaders = (it.baseClassPaths?.let {
+            val templateLoaders = (it.classPaths?.let {
                 it.map { ClassTemplateLoader(this::class.java.classLoader, it) }
             } ?: emptyList()) +
-                    (it.baseFilePaths?.let {
-                        it.map { FileTemplateLoader(File("./customer/changeAddress")) }
+                    (it.filePaths?.let {
+                        it.map { FileTemplateLoader(File(it)) }
                     } ?: emptyList())
 
             if (templateLoaders.isNotEmpty()) {
