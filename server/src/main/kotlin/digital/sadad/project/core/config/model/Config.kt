@@ -1,6 +1,6 @@
 package digital.sadad.project.core.config.model
 
-import digital.sadad.project.core.config.Template
+import digital.sadad.project.core.config.model.template.Template
 import digital.sadad.project.core.config.model.security.AuthConfig
 import digital.sadad.project.core.config.model.cache.CacheConfig
 import digital.sadad.project.core.config.model.compression.CompressionConfig

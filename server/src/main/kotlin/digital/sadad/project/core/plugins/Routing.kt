@@ -5,9 +5,11 @@ import digital.sadad.project.auth.network.restful.roleRoutes
 import digital.sadad.project.auth.network.restful.userRoutes
 import io.ktor.http.*
 import io.ktor.server.application.*
+import io.ktor.server.http.content.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.util.pipeline.*
+import java.io.File
 
 /**
  * Define the routing of our application based a DSL
@@ -19,6 +21,7 @@ fun Application.configureRouting() {
         get("/") {
             call.respondText("Hello Reactive API REST!")
         }
+        staticRootFolder = File("static")
     }
     // Add our routes
     roleRoutes() // Role routes

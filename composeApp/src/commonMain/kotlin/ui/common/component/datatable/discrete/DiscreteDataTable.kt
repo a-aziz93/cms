@@ -16,6 +16,7 @@ import compose.icons.EvaIcons
 import compose.icons.evaicons.Outline
 import compose.icons.evaicons.outline.*
 import ui.common.component.datatable.model.TableColumn
+import ui.common.component.datatable.paginator.Paginator
 import kotlin.reflect.full.declaredMemberProperties
 
 @Composable

@@ -1,2 +1,3 @@
 template:
-  base-path: templates
+  base-class-paths:
+    - templates

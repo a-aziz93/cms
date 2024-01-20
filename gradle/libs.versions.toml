@@ -260,6 +260,10 @@ kconmapper-ksp = { module = "com.github.yanneckreiss.kconmapper:ksp", version.re
 compose-material-context-menu = { module = "io.github.dzirbel:compose-material-context-menu", version.ref = "compose-material-context-menu" }
 # Templating
 ktor-server-freemarker = { module = "io.ktor:ktor-server-freemarker", version.ref = "ktor" }
+# Type-safe routing
+ktor-server-resources = { module = "io.ktor:ktor-server-resources", version.ref = "ktor" }
+# Locations
+ktor-server-locations = { module = "io.ktor:ktor-server-locations", version.ref = "ktor" }
 # OAuth2
 keycloak-admin-client = { module = "org.keycloak:keycloak-admin-client", version.ref = "keycloak" }
 
@@ -339,6 +343,8 @@ ktor-server = [
     "ktor-server-rate-limit",
     "ktor-swagger-ui",
     "ktor-server-freemarker",
+    "ktor-server-resources",
+    "ktor-server-locations",
 ]
 sql-delight = [
     "sql-delight-coroutines-extension",

@@ -26,4 +26,6 @@ fun Application.module() {
     configureCors() // Configure the CORS plugin
     configureRateLimit() // Configure the RateLimit plugin
     configureSwagger() // Configure the Swagger plugin
+    configureResources() // Configure the Resources plugin
+    configureLocations() // Configure the Locations plugin
 }
