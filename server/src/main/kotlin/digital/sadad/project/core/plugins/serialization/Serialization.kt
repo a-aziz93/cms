@@ -1,4 +1,4 @@
-package digital.sadad.project.core.plugins
+package digital.sadad.project.core.plugins.serialization
 
 import digital.sadad.project.core.config.AppConfig
 import io.ktor.serialization.kotlinx.json.*

@@ -1,4 +1,4 @@
-package digital.sadad.project.core.plugins
+package digital.sadad.project.core.plugins.graphql
 
 import com.apurebase.kgraphql.GraphQL
 import digital.sadad.project.core.config.AppConfig

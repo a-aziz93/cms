@@ -1,4 +1,4 @@
-package digital.sadad.project.core.plugins
+package digital.sadad.project.core.plugins.websocket
 
 import digital.sadad.project.core.config.AppConfig
 import io.ktor.serialization.kotlinx.*

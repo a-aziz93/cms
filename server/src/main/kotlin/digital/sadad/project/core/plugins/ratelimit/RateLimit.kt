@@ -1,4 +1,4 @@
-package digital.sadad.project.core.plugins
+package digital.sadad.project.core.plugins.ratelimit
 
 import digital.sadad.project.core.config.AppConfig
 import io.ktor.server.application.*

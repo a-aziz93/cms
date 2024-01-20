@@ -1,4 +1,4 @@
-package digital.sadad.project.core.plugins
+package digital.sadad.project.core.plugins.resources
 
 import digital.sadad.project.auth.network.restful.roleRoutes
 import digital.sadad.project.auth.network.restful.userRoutes

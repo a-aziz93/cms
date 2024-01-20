@@ -1,4 +1,4 @@
-package digital.sadad.project.core.plugins
+package digital.sadad.project.core.plugins.security
 
 import digital.sadad.project.auth.service.token.JWTHS256Service
 import digital.sadad.project.auth.service.token.JWTRS256Service
@@ -22,6 +22,7 @@ fun Application.configureSecurity() {
         route("/dashboard") {
             withAnyRole("ADMIN", "SUPER_ADMIN") {
                 get {
+                    val userName = call.principal<UserIdPrincipal>()?.name.toString()
                     call.respondText("Total users: 2443")
                 }
             }

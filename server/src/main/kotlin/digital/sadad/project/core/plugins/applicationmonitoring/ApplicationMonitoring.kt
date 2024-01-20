@@ -1,4 +1,4 @@
-package digital.sadad.project.core.plugins
+package digital.sadad.project.core.plugins.applicationmonitoring
 
 import io.ktor.events.EventDefinition
 import io.ktor.http.*

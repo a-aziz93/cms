@@ -1,4 +1,4 @@
-package digital.sadad.project.core.plugins
+package digital.sadad.project.core.plugins.locations
 
 import io.ktor.server.application.*
 import io.ktor.server.locations.*

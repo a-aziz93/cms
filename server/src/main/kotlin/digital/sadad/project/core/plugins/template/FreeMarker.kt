@@ -1,4 +1,4 @@
-package digital.sadad.project.core.plugins
+package digital.sadad.project.core.plugins.template
 
 import digital.sadad.project.core.config.AppConfig
 import freemarker.cache.ClassTemplateLoader

@@ -1,4 +1,4 @@
-package digital.sadad.project.core.plugins
+package digital.sadad.project.core.plugins.swagger
 
 import digital.sadad.project.core.config.AppConfig
 import io.github.smiley4.ktorswaggerui.SwaggerUI

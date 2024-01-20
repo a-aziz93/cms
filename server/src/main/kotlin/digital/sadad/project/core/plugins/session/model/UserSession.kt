@@ -1,4 +1,4 @@
-package digital.sadad.project.core.plugins.model
+package digital.sadad.project.core.plugins.session.model
 
 import io.ktor.server.auth.*
 

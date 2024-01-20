@@ -1,4 +1,4 @@
-package digital.sadad.project.core.plugins
+package digital.sadad.project.core.plugins.koin
 
 import io.ktor.server.application.*
 import org.koin.ksp.generated.*

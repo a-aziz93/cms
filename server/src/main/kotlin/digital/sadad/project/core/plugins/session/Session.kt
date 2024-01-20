@@ -1,8 +1,8 @@
-package digital.sadad.project.core.plugins
+package digital.sadad.project.core.plugins.session
 
 import digital.sadad.project.core.config.AppConfig
 import digital.sadad.project.core.config.model.session.CookieConfig
-import digital.sadad.project.core.plugins.model.UserSession
+import digital.sadad.project.core.plugins.session.model.UserSession
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.sessions.*

@@ -1,4 +1,4 @@
-package digital.sadad.project.core.plugins
+package digital.sadad.project.core.plugins.statuspages
 
 import io.ktor.http.*
 import io.ktor.server.application.*
