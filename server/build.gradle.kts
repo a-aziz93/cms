@@ -53,7 +53,6 @@ dependencies {
     implementation(libs.kgraphql)
     implementation(libs.kgraphql.ktor)
     implementation(libs.keycloak.admin.client)
-    implementation(libs.ktor.role.based.auth)
 }
 
 ksp {

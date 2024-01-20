@@ -3,8 +3,6 @@ package digital.sadad.project.core.plugins.security
 import digital.sadad.project.auth.service.token.JWTHS256Service
 import digital.sadad.project.auth.service.token.JWTRS256Service
 import digital.sadad.project.core.config.AppConfig
-import io.github.omkartenkale.ktor_role_based_auth.roleBased
-import io.github.omkartenkale.ktor_role_based_auth.withAnyRole
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -60,6 +58,13 @@ fun Application.configureSecurity() {
                         )
                     }
                 }
+                roleBased(name) {
+                    extractRoles { principal ->
+                        //Extract roles from JWT payload
+                        (principal as JWTPrincipal).payload.claims?.get("roles")?.asList(String::class.java)?.toSet()
+                            ?: emptySet()
+                    }
+                }
             }
 
             jwtHS256Service.jwts?.forEach { (name, jwt) ->
@@ -79,6 +84,13 @@ fun Application.configureSecurity() {
 
                     challenge { defaultScheme, realm ->
                         call.respond(HttpStatusCode.Unauthorized, "Token is not valid or has expired")
+                    }
+                }
+                roleBased(name) {
+                    extractRoles { principal ->
+                        //Extract roles from JWT payload
+                        (principal as JWTPrincipal).payload.claims?.get("roles")?.asList(String::class.java)?.toSet()
+                            ?: emptySet()
                     }
                 }
             }
@@ -104,19 +116,21 @@ fun Application.configureSecurity() {
                         call.respond(HttpStatusCode.Unauthorized, "Token is not valid or has expired")
                     }
                 }
-            }
-
-            roleBased {
-                extractRoles { principal ->
-                    //Extract roles from JWT payload
-                    (principal as JWTPrincipal).payload.claims?.get("roles")?.asList(String::class.java)?.toSet() ?: emptySet()
+                roleBased(name) {
+                    extractRoles { principal ->
+                        //Extract roles from JWT payload
+                        (principal as JWTPrincipal).payload.claims?.get("roles")?.asList(String::class.java)?.toSet()
+                            ?: emptySet()
+                    }
                 }
             }
+
+
         }
 
-        it.oauth?.forEach {
+        it.oauth?.forEach { (name, _) ->
             routing {
-                authenticate(it.key) {
+                authenticate(name) {
                     get("login") {
                         // Redirects to 'authorizeUrl' automatically
                     }
@@ -124,9 +138,9 @@ fun Application.configureSecurity() {
             }
         }
 
-        jwtHS256Service.jwts?.forEach {
+        jwtHS256Service.jwts?.forEach { (name, _) ->
             routing {
-                authenticate(it.key) {
+                authenticate(name) {
                     get("login") {
                         // Redirects to 'authorizeUrl' automatically
                     }
@@ -134,9 +148,9 @@ fun Application.configureSecurity() {
             }
         }
 
-        jwtRS256Service.jwts?.forEach {
+        jwtRS256Service.jwts?.forEach { (name, _) ->
             routing {
-                authenticate(it.key) {
+                authenticate(name) {
                     get("login") {
                         // Redirects to 'authorizeUrl' automatically
                     }
