@@ -1,6 +1,7 @@
 package digital.sadad.project.core.plugins
 
 import digital.sadad.project.core.config.AppConfig
+import digital.sadad.project.core.config.model.session.CookieConfig
 import digital.sadad.project.core.plugins.model.UserSession
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -13,42 +14,49 @@ fun Application.configureSession() {
     val appConfig: AppConfig by inject()
     appConfig.config.session?.let {
         install(Sessions) {
-            it.userSessionCookie?.let { userSessionCookie ->
-                val cookieBuilder: CookieSessionBuilder<UserSession>.() -> Unit = {
-                    userSessionCookie.maxAgeInSeconds?.let { cookie.maxAgeInSeconds = it }
-                    userSessionCookie.encoding?.let { cookie.encoding = it }
-                    userSessionCookie.domain?.let { cookie.domain = it }
-                    userSessionCookie.path?.let { cookie.path = it }
-                    userSessionCookie.secure?.let { cookie.secure = it }
-                    userSessionCookie.httpOnly?.let { cookie.httpOnly = it }
-                    userSessionCookie.extensions?.let { cookie.extensions + it }
-                    userSessionCookie.encryption?.let { encryption ->
-                        transform(encryption.encryptionKey?.let {
-                            SessionTransportTransformerEncrypt(
-                                encryptionKey = it.toByteArray(),
-                                signKey = encryption.signKey.toByteArray(),
-                                encryptAlgorithm = encryption.encryptAlgorithm,
-                                signAlgorithm = encryption.signAlgorithm,
-                            )
-                        } ?: SessionTransportTransformerMessageAuthentication(
-                            encryption.signKey.toByteArray(),
-                            encryption.signAlgorithm
-                        ))
-                    }
-                }
-                (userSessionCookie.filePath?.let {
-                    cookie<UserSession>("user_session", directorySessionStorage(File(it)), cookieBuilder)
-                } ?: userSessionCookie.inMemory?.let {
-                    cookie<UserSession>(
-                        "user_session",
-                        SessionStorageMemory(),
-                        cookieBuilder
-                    )
-                } ?: cookie<UserSession>(
-                    "user_session",
-                    cookieBuilder
-                ))
+            it.userSessionCookie?.let {
+                cookie<UserSession>("user_session", it)
             }
         }
     }
+}
+
+inline fun <reified S : Any> SessionsConfig.cookie(
+    name: String,
+    config: CookieConfig,
+) {
+    val cookieBuilder: CookieSessionBuilder<S>.() -> Unit = {
+        config.maxAgeInSeconds?.let { cookie.maxAgeInSeconds = it }
+        config.encoding?.let { cookie.encoding = it }
+        config.domain?.let { cookie.domain = it }
+        config.path?.let { cookie.path = it }
+        config.secure?.let { cookie.secure = it }
+        config.httpOnly?.let { cookie.httpOnly = it }
+        config.extensions?.let { cookie.extensions + it }
+        config.encryption?.let { encryption ->
+            transform(encryption.encryptionKey?.let {
+                SessionTransportTransformerEncrypt(
+                    encryptionKey = it.toByteArray(),
+                    signKey = encryption.signKey.toByteArray(),
+                    encryptAlgorithm = encryption.encryptAlgorithm,
+                    signAlgorithm = encryption.signAlgorithm,
+                )
+            } ?: SessionTransportTransformerMessageAuthentication(
+                encryption.signKey.toByteArray(),
+                encryption.signAlgorithm
+            ))
+        }
+    }
+    (config.filePath?.let {
+        cookie<S>(name, directorySessionStorage(File(it)), cookieBuilder)
+    } ?: config.inMemory?.let {
+        cookie<S>(
+            name,
+            SessionStorageMemory(),
+            cookieBuilder
+        )
+    } ?: cookie<S>(
+        name,
+        cookieBuilder
+    ))
 }
