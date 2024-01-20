@@ -13,38 +13,51 @@ import java.time.Duration
 
 fun Application.configureWebSockets() {
     val appConfig: AppConfig by inject()
-    val webSocketConfig = appConfig.config.websockets
+    appConfig.config.websockets?.let {
+        install(WebSockets) {
+            it.pingPeriod?.let { pingPeriod = Duration.ofSeconds(it.inWholeSeconds) }
+            it.timeout?.inWholeSeconds?.let { timeout = Duration.ofSeconds(it) }
+            it.maxFrameSize?.let { maxFrameSize = it }
+            it.masking?.let { masking = it }
+            // Configure WebSockets
+            // Serializer for WebSockets
+            it.contentConverter?.let {
+                contentConverter = KotlinxWebsocketSerializationConverter(Json {
+                    it.encodeDefaults?.let { encodeDefaults = it }
+                    it.explicitNulls?.let { explicitNulls = it }
+                    it.ignoreUnknownKeys?.let { ignoreUnknownKeys = it }
+                    it.isLenient?.let { isLenient = it }
+                    it.allowStructuredMapKeys?.let { allowStructuredMapKeys = it }
+                    it.prettyPrint?.let { prettyPrint = it }
+                    it.prettyPrintIndent?.let { prettyPrintIndent = it }
+                    it.coerceInputValues?.let { coerceInputValues = it }
+                    it.useArrayPolymorphism?.let { useArrayPolymorphism = it }
+                    it.classDiscriminator?.let { classDiscriminator = it }
+                    it.allowSpecialFloatingPointValues?.let { allowSpecialFloatingPointValues = it }
+                    it.useAlternativeNames?.let { useAlternativeNames = it }
+                    it.decodeEnumsCaseInsensitive?.let { decodeEnumsCaseInsensitive = it }
+                })
+            }
+            // Remember it will close the connection if you don't send a ping in pingPeriod seconds
+            // https://ktor.io/docs/websocket.html#configure
+        }
 
-    install(WebSockets) {
-        pingPeriod = webSocketConfig?.pingPeriod?.let { Duration.ofSeconds(it.inWholeSeconds) }
-        timeout = Duration.ofSeconds(webSocketConfig?.timeout?.inWholeSeconds ?: 15)
-        maxFrameSize = webSocketConfig?.maxFrameSize ?: Long.MAX_VALUE
-        masking = webSocketConfig?.masking ?: false
-        // Configure WebSockets
-        // Serializer for WebSockets
-        contentConverter = KotlinxWebsocketSerializationConverter(Json {
-            prettyPrint = true
-            isLenient = true
-        })
-        // Remember it will close the connection if you don't send a ping in pingPeriod seconds
-        // https://ktor.io/docs/websocket.html#configure
-    }
-
-    routing {
-        get("/websocket") {
-            call.respond(
-                FreeMarkerContent(
-                    "websocket/index.ftl",
-                    mapOf(
-                        "baseAddress" to "${
-                            if (appConfig.baseConfig.keys().contains("ktor.security.ssl")) "wss" else "ws"
-                        }://localhost:${
-                            appConfig.baseConfig.propertyOrNull("ktor.deployment.sslPort")?.getString()
-                                ?.toInt() ?: appConfig.baseConfig.port
-                        }"
+        routing {
+            get("/websocket") {
+                call.respond(
+                    FreeMarkerContent(
+                        "websocket/index.ftl",
+                        mapOf(
+                            "baseAddress" to "${
+                                if (appConfig.baseConfig.keys().contains("ktor.security.ssl")) "wss" else "ws"
+                            }://localhost:${
+                                appConfig.baseConfig.propertyOrNull("ktor.deployment.sslPort")?.getString()
+                                    ?.toInt() ?: appConfig.baseConfig.port
+                            }"
+                        )
                     )
                 )
-            )
+            }
         }
     }
 }

@@ -12,24 +12,26 @@ import org.koin.ktor.ext.inject
  */
 fun Application.configureSerialization() {
     val appConfig: AppConfig by inject()
-    appConfig.config.serialization?.let {
+    appConfig.config.serialization?.let { serialization ->
         install(ContentNegotiation) {
-            it.json?.let {
+            serialization.json?.let {
                 json(Json {
-                    it.encodeDefaults?.let { encodeDefaults = it }
-                    it.explicitNulls?.let { explicitNulls = it }
-                    it.ignoreUnknownKeys?.let { ignoreUnknownKeys = it }
-                    it.isLenient?.let { isLenient = it }
-                    it.allowStructuredMapKeys?.let { allowStructuredMapKeys = it }
-                    it.prettyPrint?.let { prettyPrint = it }
-                    it.prettyPrintIndent?.let { prettyPrintIndent = it }
-                    it.coerceInputValues?.let { coerceInputValues = it }
-                    it.useArrayPolymorphism?.let { useArrayPolymorphism = it }
-                    it.classDiscriminator?.let { classDiscriminator = it }
-                    it.allowSpecialFloatingPointValues?.let { allowSpecialFloatingPointValues = it }
-                    it.useAlternativeNames?.let { useAlternativeNames = it }
-                    it.decodeEnumsCaseInsensitive?.let { decodeEnumsCaseInsensitive = it }
-                }, it.contentType)
+                    it.json?.let {
+                        it.encodeDefaults?.let { encodeDefaults = it }
+                        it.explicitNulls?.let { explicitNulls = it }
+                        it.ignoreUnknownKeys?.let { ignoreUnknownKeys = it }
+                        it.isLenient?.let { isLenient = it }
+                        it.allowStructuredMapKeys?.let { allowStructuredMapKeys = it }
+                        it.prettyPrint?.let { prettyPrint = it }
+                        it.prettyPrintIndent?.let { prettyPrintIndent = it }
+                        it.coerceInputValues?.let { coerceInputValues = it }
+                        it.useArrayPolymorphism?.let { useArrayPolymorphism = it }
+                        it.classDiscriminator?.let { classDiscriminator = it }
+                        it.allowSpecialFloatingPointValues?.let { allowSpecialFloatingPointValues = it }
+                        it.useAlternativeNames?.let { useAlternativeNames = it }
+                        it.decodeEnumsCaseInsensitive?.let { decodeEnumsCaseInsensitive = it }
+                    }
+                }, serialization.json.contentType)
             }
         }
     }

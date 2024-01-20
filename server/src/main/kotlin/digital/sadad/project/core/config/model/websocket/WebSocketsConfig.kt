@@ -1,5 +1,6 @@
 package digital.sadad.project.core.config.model.websocket
 
+import digital.sadad.project.core.config.model.json.JsonConfig
 import kotlin.time.Duration
 import kotlin.time.DurationUnit
 import kotlin.time.toDuration
@@ -7,7 +8,8 @@ import kotlin.time.toDuration
 
 data class WebSocketsConfig(
     val pingPeriod: Duration? = null,
-    val timeout: Duration = 15.toDuration(DurationUnit.SECONDS),
-    val maxFrameSize: Long = Long.MAX_VALUE,
-    val masking: Boolean = false,
+    val timeout: Duration? = null,
+    val maxFrameSize: Long? = null,
+    val masking: Boolean? = null,
+    val contentConverter: JsonConfig? = null,
 )

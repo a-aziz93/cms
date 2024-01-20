@@ -6,6 +6,8 @@ import io.ktor.server.plugins.requestvalidation.*
 import io.ktor.server.plugins.statuspages.*
 import io.ktor.server.response.*
 import digital.sadad.project.auth.error.token.TokenException
+import digital.sadad.project.core.config.AppConfig
+import org.koin.ktor.ext.inject
 
 /**
  * Configure the Status Pages plugin and configure it
@@ -13,27 +15,40 @@ import digital.sadad.project.auth.error.token.TokenException
  * We use status pages to respond with expected exceptions
  */
 fun Application.configureStatusPages() {
-    // Install StatusPages plugin and configure it
-    install(StatusPages) {
+    val appConfig: AppConfig by inject()
+    appConfig.config.statusPage?.let {     // Install StatusPages plugin and configure it
+        install(StatusPages) {
 
-        // This is a custom exception we use to respond with a 400 if a validation fails, Bad Request
-        exception<RequestValidationException> { call, cause ->
-            call.respond(HttpStatusCode.BadRequest, cause.reasons.joinToString())
-        }
+            // This is a custom exception we use to respond with a 400 if a validation fails, Bad Request
+            exception<RequestValidationException> { call, cause ->
+                call.respond(HttpStatusCode.BadRequest, cause.reasons.joinToString())
+            }
 
-        // When we try to convert a string to a number and it fails we respond with a 400 Bad Request
-        exception<NumberFormatException> { call, cause ->
-            call.respond(HttpStatusCode.BadRequest, "${cause.message}. The input param is not a valid number")
-        }
+            // When we try to convert a string to a number and it fails we respond with a 400 Bad Request
+            exception<NumberFormatException> { call, cause ->
+                call.respond(HttpStatusCode.BadRequest, "${cause.message}. The input param is not a valid number")
+            }
 
-        // When try to send a bad request we respond with a 400 Bad Request
-        exception<IllegalArgumentException> { call, cause ->
-            call.respond(HttpStatusCode.BadRequest, "${cause.message}")
-        }
+            // When try to send a bad request we respond with a 400 Bad Request
+            exception<IllegalArgumentException> { call, cause ->
+                call.respond(HttpStatusCode.BadRequest, "${cause.message}")
+            }
 
-        // Token is not valid or expired
-        exception<TokenException.InvalidTokenException> { call, cause ->
-            call.respond(HttpStatusCode.Unauthorized, cause.message.toString())
+            // Token is not valid or expired
+            exception<TokenException.InvalidTokenException> { call, cause ->
+                call.respond(HttpStatusCode.Unauthorized, cause.message.toString())
+            }
+
+            it.status?.forEach {
+                status(*it.codes.toTypedArray()) { call, status ->
+                    call.respondText(text = it.text, status = status)
+                }
+            }
+
+            it.statusFile?.forEach {
+                statusFile(*it.codes.toTypedArray(), filePattern = it.filePattern)
+            }
+
         }
     }
 }
