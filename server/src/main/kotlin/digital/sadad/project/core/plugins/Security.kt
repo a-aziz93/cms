@@ -3,10 +3,13 @@ package digital.sadad.project.core.plugins
 import digital.sadad.project.auth.service.token.JWTHS256Service
 import digital.sadad.project.auth.service.token.JWTRS256Service
 import digital.sadad.project.core.config.AppConfig
+import io.github.omkartenkale.ktor_role_based_auth.roleBased
+import io.github.omkartenkale.ktor_role_based_auth.withAnyRole
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.auth.jwt.*
+import io.ktor.server.locations.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import org.koin.ktor.ext.inject
@@ -15,6 +18,15 @@ import kotlin.collections.set
 // Seguridad en base a JWT
 fun Application.configureSecurity() {
     val appConfig: AppConfig by inject()
+    routing {
+        route("/dashboard") {
+            withAnyRole("ADMIN", "SUPER_ADMIN") {
+                get {
+                    call.respondText("Total users: 2443")
+                }
+            }
+        }
+    }
     appConfig.config.auth?.let {
 
         // Inject the token services
@@ -92,12 +104,19 @@ fun Application.configureSecurity() {
                     }
                 }
             }
+
+            roleBased {
+                extractRoles { principal ->
+                    //Extract roles from JWT payload
+                    (principal as JWTPrincipal).payload.claims?.get("roles")?.asList(String::class.java)?.toSet() ?: emptySet()
+                }
+            }
         }
 
         it.oauth?.forEach {
             routing {
                 authenticate(it.key) {
-                    get("/login") {
+                    get("login") {
                         // Redirects to 'authorizeUrl' automatically
                     }
                 }
@@ -107,7 +126,7 @@ fun Application.configureSecurity() {
         jwtHS256Service.jwts?.forEach {
             routing {
                 authenticate(it.key) {
-                    get("/login") {
+                    get("login") {
                         // Redirects to 'authorizeUrl' automatically
                     }
                 }
@@ -117,7 +136,7 @@ fun Application.configureSecurity() {
         jwtRS256Service.jwts?.forEach {
             routing {
                 authenticate(it.key) {
-                    get("/login") {
+                    get("login") {
                         // Redirects to 'authorizeUrl' automatically
                     }
                 }

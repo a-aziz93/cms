@@ -12,6 +12,7 @@ fun main(args: Array<String>): Unit = EngineMain.main(args)
  */
 @Suppress("unused") // application.conf references the main function. This annotation prevents the IDE from marking it as unused.
 fun Application.module() {
+    configureApplicationMonitoring() // Configure the Application monitoring plugin for templating .ftl files
     configureFreeMarker() // Configure the FreeMarker plugin for templating .ftl files
     configureKoin() // Configure the Koin plugin to inject dependencies
     configureSecurity() // Configure the security plugin with JWT
