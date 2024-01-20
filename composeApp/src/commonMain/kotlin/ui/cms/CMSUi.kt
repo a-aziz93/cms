@@ -5,7 +5,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import ui.common.component.datatable.DiscreteDataTable
+import ui.common.component.datatable.discrete.DiscreteDataTable
 import ui.common.component.datatable.model.TableColumn
 
 @Composable

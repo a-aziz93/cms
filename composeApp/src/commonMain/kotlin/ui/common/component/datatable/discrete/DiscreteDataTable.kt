@@ -1,4 +1,4 @@
-package ui.common.component.datatable
+package ui.common.component.datatable.discrete
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*

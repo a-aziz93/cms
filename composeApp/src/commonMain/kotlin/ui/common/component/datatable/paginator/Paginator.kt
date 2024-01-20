@@ -1,4 +1,4 @@
-package ui.common.component.datatable
+package ui.common.component.datatable.paginator
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
