@@ -9,6 +9,7 @@ import digital.sadad.project.core.config.model.database.DatabaseConfig
 import digital.sadad.project.core.config.model.graphql.GraphQLConfig
 import digital.sadad.project.core.config.model.ratelimit.RateLimitsConfig
 import digital.sadad.project.core.config.model.serialization.SerializationConfig
+import digital.sadad.project.core.config.model.session.SessionConfig
 import digital.sadad.project.core.config.model.statuspages.StatusPagesConfig
 import digital.sadad.project.core.config.model.storage.StorageConfig
 import digital.sadad.project.core.config.model.swagger.SwaggerConfig
@@ -30,4 +31,5 @@ data class Config(
     val swagger: SwaggerConfig? = null,
     val statusPages: StatusPagesConfig? = null,
     val xHttpMethodOverride: XHttpMethodOverrideConfig? = null,
+    val session: SessionConfig? = null,
 )
