@@ -10,6 +10,7 @@ import digital.sadad.project.core.config.model.graphql.GraphQLConfig
 import digital.sadad.project.core.config.model.ratelimit.RateLimitsConfig
 import digital.sadad.project.core.config.model.serialization.SerializationConfig
 import digital.sadad.project.core.config.model.storage.StorageConfig
+import digital.sadad.project.core.config.model.swagger.SwaggerConfig
 import digital.sadad.project.core.config.model.websocket.WebSocketsConfig
 
 data class Config(
@@ -24,4 +25,5 @@ data class Config(
     val compression: CompressionConfig? = null,
     val cors: CORSConfig? = null,
     val serialization: SerializationConfig? = null,
+    val swagger: SwaggerConfig? = null,
 )

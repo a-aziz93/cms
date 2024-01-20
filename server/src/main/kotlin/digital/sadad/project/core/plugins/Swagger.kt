@@ -1,45 +1,58 @@
 package digital.sadad.project.core.plugins
 
+import digital.sadad.project.core.config.AppConfig
 import io.github.smiley4.ktorswaggerui.SwaggerUI
+import io.github.smiley4.ktorswaggerui.data.AuthKeyLocation
 import io.github.smiley4.ktorswaggerui.data.AuthScheme
 import io.github.smiley4.ktorswaggerui.data.AuthType
 import io.ktor.server.application.*
+import org.koin.ktor.ext.inject
 
 fun Application.configureSwagger() {
-    // https://github.com/SMILEY4/ktor-swagger-ui/wiki/Configuration
-    // http://xxx/swagger/
-    install(SwaggerUI) {
-        swagger {
-            swaggerUrl = "swagger"
-            forwardRoot = false
-        }
-        info {
-            title = "Ktor Reactive API REST"
-            version = "latest"
-            description = "Ktor API REST using Kotlin and Ktor"
-            contact {
-                name = "Atoev Aziz"
-                url = "https://github.com/aaziz93"
+    val appConfig: AppConfig by inject()
+    appConfig.config.swagger?.let {
+        // https://github.com/SMILEY4/ktor-swagger-ui/wiki/Configuration
+        // http://xxx/swagger/
+        install(SwaggerUI) {
+            swagger {
+                it.forwardRoot?.let { forwardRoot = it }
+                it.swaggerUrl?.let { swaggerUrl = it }
+                it.rootHostPath?.let { rootHostPath = it }
+                it.authentication?.let { authentication = it }
             }
-            license {
-                name = "Creative Commons Attribution-ShareAlike 4.0 International License"
-                url = "https://joseluisgs.dev/docs/license/"
+            it.info?.let {
+                info {
+                    it.title?.let { title = it }
+                    it.version?.let { version = it }
+                    it.description?.let { description = it }
+                    it.termsOfService?.let { termsOfService = it }
+                    it.contact?.let {
+                        contact {
+                            it.name?.let { name = it }
+                            it.url?.let { url = it }
+                            it.email?.let { email = it }
+                        }
+                    }
+                    it.license?.let {
+                        license {
+                            it.name?.let { name = it }
+                            it.url?.let { url = it }
+                        }
+                    }
+                }
             }
-        }
-
-        // We can filter paths and methods
-        pathFilter = { method, url ->
-            true
-//            url.contains("users")
-            //(method == HttpMethod.Get && url.firstOrNull() == "api")
-            // || url.contains("test")
-        }
-
-        // We can add security
-        securityScheme("JWT-Auth") {
-            type = AuthType.HTTP
-            scheme = AuthScheme.BEARER
-            bearerFormat = "jwt"
+            it.securityScheme?.forEach {
+                // We can add security
+                securityScheme(it.key) {
+                    it.value.type?.let { type = it }
+                    it.value.name?.let { name = it }
+                    it.value.location?.let { location = it }
+                    it.value.scheme?.let { scheme = it }
+                    it.value.bearerFormat?.let { bearerFormat = it }
+                    it.value.openIdConnectUrl?.let { openIdConnectUrl = it }
+                    it.value.description?.let { description = it }
+                }
+            }
         }
     }
 }
