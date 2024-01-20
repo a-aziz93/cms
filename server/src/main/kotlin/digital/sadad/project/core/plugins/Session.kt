@@ -7,13 +7,14 @@ import io.ktor.server.application.*
 import io.ktor.server.sessions.*
 import io.ktor.util.*
 import org.koin.ktor.ext.inject
+import java.io.File
 
 fun Application.configureSession() {
     val appConfig: AppConfig by inject()
     appConfig.config.session?.let {
         install(Sessions) {
             it.userSessionCookie?.let { userSessionCookie ->
-                cookie<UserSession>("user_session") {
+                val cookieBuilder: CookieSessionBuilder<UserSession>.() -> Unit = {
                     userSessionCookie.maxAgeInSeconds?.let { cookie.maxAgeInSeconds = it }
                     userSessionCookie.encoding?.let { cookie.encoding = it }
                     userSessionCookie.domain?.let { cookie.domain = it }
@@ -35,6 +36,18 @@ fun Application.configureSession() {
                         ))
                     }
                 }
+                (userSessionCookie.filePath?.let {
+                    cookie<UserSession>("user_session", directorySessionStorage(File(it)), cookieBuilder)
+                } ?: userSessionCookie.inMemory?.let {
+                    cookie<UserSession>(
+                        "user_session",
+                        SessionStorageMemory(),
+                        cookieBuilder
+                    )
+                } ?: cookie<UserSession>(
+                    "user_session",
+                    cookieBuilder
+                ))
             }
         }
     }

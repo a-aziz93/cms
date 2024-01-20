@@ -4,6 +4,8 @@ import io.ktor.http.*
 import io.ktor.server.sessions.*
 
 data class CookieConfig(
+    val inMemory: Boolean? = null,
+    val filePath: String? = null,
     val maxAgeInSeconds: Long? = null,
     val encoding: CookieEncoding? = null,
     val domain: String? = null,
