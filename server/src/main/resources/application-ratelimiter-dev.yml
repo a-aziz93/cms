@@ -1,6 +1,0 @@
-rate-limiters:
-  global:
-    limit: 5
-    refill-period: 60s
-    initial-size: ${rate-limiters.global.limit}
-    is-global: true

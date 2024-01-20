@@ -1,7 +1,7 @@
 package digital.sadad.project.auth.service.role
 
-import digital.sadad.project.auth.entity.UserEntity
-import digital.sadad.project.auth.repository.RoleRepository
+import digital.sadad.project.auth.entity.user.UserEntity
+import digital.sadad.project.auth.repository.role.RoleRepository
 import digital.sadad.project.core.config.AppConfig
 import io.github.reactivecircus.cache4k.Cache
 import mu.two.KotlinLogging

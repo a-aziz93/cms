@@ -1,6 +1,16 @@
 package digital.sadad.project.core.config.model
 
 import digital.sadad.project.core.config.Template
+import digital.sadad.project.core.config.model.auth.AuthConfig
+import digital.sadad.project.core.config.model.cache.CacheConfig
+import digital.sadad.project.core.config.model.compression.CompressionConfig
+import digital.sadad.project.core.config.model.cors.CORSConfig
+import digital.sadad.project.core.config.model.database.DatabaseConfig
+import digital.sadad.project.core.config.model.graphql.GraphQLConfig
+import digital.sadad.project.core.config.model.ratelimit.RateLimitsConfig
+import digital.sadad.project.core.config.model.serialization.SerializationConfig
+import digital.sadad.project.core.config.model.storage.StorageConfig
+import digital.sadad.project.core.config.model.websocket.WebSocketsConfig
 
 data class Config(
     val auth: AuthConfig? = null,
@@ -9,6 +19,9 @@ data class Config(
     val databases: Map<String, DatabaseConfig>? = null,
     val websockets: WebSocketsConfig? = null,
     val graphql: GraphQLConfig? = null,
-    val rateLimiters: Map<String, RateLimitConfig>? = null,
     val template: Template? = null,
+    val rateLimits: RateLimitsConfig? = null,
+    val compression: CompressionConfig? = null,
+    val cors: CORSConfig? = null,
+    val serialization: SerializationConfig? = null,
 )

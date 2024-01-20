@@ -37,7 +37,9 @@ profiles:
   - database
   - websockets
   - graphql
-  - ratelimiter
+  - ratelimit
+  - compression
+  - cors
 
 
 

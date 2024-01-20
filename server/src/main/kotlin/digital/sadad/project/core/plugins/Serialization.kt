@@ -1,14 +1,36 @@
 package digital.sadad.project.core.plugins
 
+import digital.sadad.project.core.config.AppConfig
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.application.*
 import io.ktor.server.plugins.contentnegotiation.*
+import kotlinx.serialization.json.Json
+import org.koin.ktor.ext.inject
 
 /**
  * Configure the serialization of our application based on JSON
  */
 fun Application.configureSerialization() {
-    install(ContentNegotiation) {
-        json()
+    val appConfig: AppConfig by inject()
+    appConfig.config.serialization?.let {
+        install(ContentNegotiation) {
+            it.json?.let {
+                json(Json {
+                    it.encodeDefaults?.let { encodeDefaults = it }
+                    it.explicitNulls?.let { explicitNulls = it }
+                    it.ignoreUnknownKeys?.let { ignoreUnknownKeys = it }
+                    it.isLenient?.let { isLenient = it }
+                    it.allowStructuredMapKeys?.let { allowStructuredMapKeys = it }
+                    it.prettyPrint?.let { prettyPrint = it }
+                    it.prettyPrintIndent?.let { prettyPrintIndent = it }
+                    it.coerceInputValues?.let { coerceInputValues = it }
+                    it.useArrayPolymorphism?.let { useArrayPolymorphism = it }
+                    it.classDiscriminator?.let { classDiscriminator = it }
+                    it.allowSpecialFloatingPointValues?.let { allowSpecialFloatingPointValues = it }
+                    it.useAlternativeNames?.let { useAlternativeNames = it }
+                    it.decodeEnumsCaseInsensitive?.let { decodeEnumsCaseInsensitive = it }
+                }, it.contentType)
+            }
+        }
     }
 }

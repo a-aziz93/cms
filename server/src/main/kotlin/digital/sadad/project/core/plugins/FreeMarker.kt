@@ -8,11 +8,9 @@ import org.koin.ktor.ext.inject
 
 fun Application.configureFreeMarker() {
     val appConfig: AppConfig by inject()
-    val templateConfig = appConfig.config.template
-
-    if (templateConfig != null) {
+    appConfig.config.template?.let {
         install(FreeMarker) {
-            templateLoader = ClassTemplateLoader(this::class.java.classLoader, templateConfig.basePath ?: "templates")
+            templateLoader = ClassTemplateLoader(this::class.java.classLoader, it.basePath)
         }
     }
 }

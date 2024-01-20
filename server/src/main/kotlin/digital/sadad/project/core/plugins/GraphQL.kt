@@ -7,12 +7,10 @@ import org.koin.ktor.ext.inject
 
 fun Application.configureGraphQL() {
     val appConfig: AppConfig by inject()
-    val graphqlConfig = appConfig.config.graphql
-
-    if (graphqlConfig != null) {
+    appConfig.config.graphql?.let {
         install(GraphQL) {
-            playground = graphqlConfig.playground ?: true
-            endpoint = graphqlConfig.endpoint ?: "/graphql"
+            it.playground?.let { playground = it }
+            it.endpoint?.let { endpoint = it }
         }
     }
 }

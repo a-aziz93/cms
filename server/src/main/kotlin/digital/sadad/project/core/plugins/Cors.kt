@@ -1,18 +1,25 @@
 package digital.sadad.project.core.plugins
 
-import io.ktor.http.*
+import digital.sadad.project.core.config.AppConfig
 import io.ktor.server.application.*
 import io.ktor.server.plugins.cors.routing.*
+import org.koin.ktor.ext.inject
 
 fun Application.configureCors() {
-    install(CORS) {
-        anyHost() // Allow from any host
-        allowHeader(HttpHeaders.ContentType) // Allow Content-Type header
-        allowHeader(HttpHeaders.Authorization)
-        allowHost("client-host") // Allow requests from client-host
+    val appConfig: AppConfig by inject()
+    appConfig.config.cors?.let {
+        install(CORS) {
+            it.hosts?.let { it.forEach { allowHost(it.host, it.schemes, it.subDomains) } }
+            it.headers?.let { it.forEach { allowHeader(it) } }
+            it.methods?.let { it.forEach { allowMethod(it) } }
+            it.exposedHeaders?.let { it.forEach { exposeHeader(it) } }
+            it.allowCredentials?.let { allowCredentials = it }
+            it.maxAgeInSeconds?.let { maxAgeInSeconds = it }
+            it.allowSameOrigin?.let { allowSameOrigin = it }
+            it.allowNonSimpleContentTypes?.let { allowNonSimpleContentTypes = it }
 
-        // We can also specify options
-        /*allowHost("client-host") // Allow requests from client-host
+            // We can also specify options
+            /*allowHost("client-host") // Allow requests from client-host
         allowHost("client-host:8081") // Allow requests from client-host on port 8081
         allowHost(
             "client-host",
@@ -23,5 +30,6 @@ fun Application.configureCors() {
         // or methods
         allowMethod(HttpMethod.Put) // Allow PUT method
         allowMethod(HttpMethod.Delete)  // Allow DELETE method*/
+        }
     }
 }

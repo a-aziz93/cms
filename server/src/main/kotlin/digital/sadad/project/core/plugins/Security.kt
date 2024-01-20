@@ -13,21 +13,17 @@ import kotlin.collections.set
 
 // Seguridad en base a JWT
 fun Application.configureSecurity() {
-
     val appConfig: AppConfig by inject()
-
-    val authConfig = appConfig.config.auth
-
-    if (authConfig != null) {
+    appConfig.config.auth?.let {
 
         // Inject the token services
         val jwtHS256Service: JWTHS256Service by inject()
         val jwtRS256Service: JWTRS256Service by inject()
 
         authentication {
-            if (authConfig.oauth != null) {
+            if (it.oauth != null) {
                 val redirects = mutableMapOf<String, String>()
-                authConfig.oauth.entries.forEach { (name, oauthConfig) ->
+                it.oauth.entries.forEach { (name, oauthConfig) ->
                     oauth(name) {
                         // Configure oauth authentication
                         urlProvider = { oauthConfig.urlProvider.redirectUrl }
@@ -53,7 +49,7 @@ fun Application.configureSecurity() {
                     }
                 }
 
-                jwtHS256Service.jwts.forEach { (name, jwt) ->
+                jwtHS256Service.jwts?.forEach { (name, jwt) ->
                     jwt(name) {
                         // With realm, we can get the token from the request
                         realm = jwt.config.realm
@@ -74,7 +70,7 @@ fun Application.configureSecurity() {
                     }
                 }
 
-                jwtRS256Service.jwts.forEach { (name, jwt) ->
+                jwtRS256Service.jwts?.forEach { (name, jwt) ->
                     jwt(name) {
                         // With realm, we can get the token from the request
                         realm = jwt.config.realm

@@ -1,8 +1,8 @@
 package digital.sadad.project.auth.service.user
 
 import com.github.michaelbull.result.Result
-import digital.sadad.project.auth.entity.RoleEntity
-import digital.sadad.project.auth.entity.UserEntity
+import digital.sadad.project.auth.entity.role.RoleEntity
+import digital.sadad.project.auth.entity.user.UserEntity
 import core.error.Error
 
 interface UserService {

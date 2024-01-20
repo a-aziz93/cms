@@ -19,13 +19,6 @@ fun Application.configureRouting() {
         get("/") {
             call.respondText("Hello Reactive API REST!")
         }
-
-        // Example of SSE
-//        val broadcastEventBus = BroadcastEventBus<SseEvent>()
-//
-//        get("/sse") {
-//            call.respondSse(broadcastEventBus)
-//        }
     }
     // Add our routes
     roleRoutes() // Role routes

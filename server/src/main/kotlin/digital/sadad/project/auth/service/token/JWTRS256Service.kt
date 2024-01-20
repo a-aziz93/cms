@@ -10,7 +10,7 @@ private val logger = KotlinLogging.logger {}
 @Single
 class JWTRS256Service(
     appConfig: AppConfig,
-    val jwts: Map<String, JWTRS256> = (appConfig.config.auth?.jwtRS256 ?: emptyMap()).map {
+    val jwts: Map<String, JWTRS256>? = appConfig.config.auth?.jwtRS256?.entries?.associate {
         it.key to JWTRS256(it.value)
-    }.toMap()
+    }
 )

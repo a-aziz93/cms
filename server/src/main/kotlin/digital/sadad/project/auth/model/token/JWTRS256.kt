@@ -3,8 +3,8 @@ package digital.sadad.project.auth.model.token
 import com.auth0.jwk.JwkProvider
 import com.auth0.jwk.JwkProviderBuilder
 import com.auth0.jwt.algorithms.Algorithm
-import digital.sadad.project.auth.entity.UserEntity
-import digital.sadad.project.core.config.model.JWTRS256Config
+import digital.sadad.project.auth.entity.user.UserEntity
+import digital.sadad.project.core.config.model.auth.JWTRS256Config
 import java.security.KeyFactory
 import java.security.interfaces.RSAPrivateKey
 import java.security.interfaces.RSAPublicKey

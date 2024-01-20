@@ -1,8 +1,8 @@
 package digital.sadad.project.core.database.service
 
 import digital.sadad.project.core.config.AppConfig
-import digital.sadad.project.core.config.model.DatabaseConfig
-import digital.sadad.project.core.config.model.DatabaseInitConfig
+import digital.sadad.project.core.config.model.database.DatabaseConfig
+import digital.sadad.project.core.config.model.database.DatabaseInitConfig
 import io.r2dbc.spi.ConnectionFactories
 import io.r2dbc.spi.ConnectionFactory
 import io.r2dbc.spi.ConnectionFactoryOptions

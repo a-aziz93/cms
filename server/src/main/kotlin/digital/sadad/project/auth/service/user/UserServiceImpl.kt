@@ -2,8 +2,8 @@ package digital.sadad.project.auth.service.user
 
 import com.github.michaelbull.result.*
 import digital.sadad.project.auth.error.UserError
-import digital.sadad.project.auth.entity.UserEntity
-import digital.sadad.project.auth.repository.UserRepository
+import digital.sadad.project.auth.entity.user.UserEntity
+import digital.sadad.project.auth.repository.user.UserRepository
 import digital.sadad.project.core.config.AppConfig
 import io.github.reactivecircus.cache4k.Cache
 import mu.two.KotlinLogging
