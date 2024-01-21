@@ -1,7 +1,6 @@
 package core.crud.model.entity.expression.aggregate
 
 import core.crud.model.entity.expression.projection.Projection
-import core.crud.model.entity.expression.value.FieldValue
 import core.crud.model.entity.expression.aggregate.AggregateExpression.*
 import kotlinx.serialization.Serializable
 

@@ -23,7 +23,7 @@ class Logic(
         fun xor(vararg values: BooleanVariable) =
             Logic(XOR, *values)
 
-        fun no(value: BooleanVariable) =
+        fun negate(value: BooleanVariable) =
             Logic(NOT, value)
 
         fun eq(leftValue: Variable, rightValue: Variable) =
