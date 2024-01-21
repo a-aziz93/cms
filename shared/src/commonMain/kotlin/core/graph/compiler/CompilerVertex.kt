@@ -1,12 +1,12 @@
-package graph.compiler
+package core.graph.compiler
 
-import core.graph.compiler.CompilerEdge
-import core.graph.GraphObjects
+import core.crud.CRUD
 import core.graph.Vertex
+import graph.compiler.CompilerVertexType
 
 class CompilerVertex<ID : Any, EID : Any>(
     id: ID? = null,
     val type: CompilerVertexType,
     val payload: Any? = null,
-    vertexObjects: GraphObjects<ID, CompilerVertex<ID, EID>>? = null,
-) : Vertex<ID, CompilerVertex<ID, EID>, EID, CompilerEdge<EID, ID>>(id, vertexObjects)
+    vertexObjects: CRUD< CompilerVertex<ID, EID>,ID>? = null,
+) : Vertex<CompilerVertex<ID, EID>,ID, CompilerEdge<EID, ID>,  EID>(id, vertexObjects)

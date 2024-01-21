@@ -1,9 +1,8 @@
 package core.graph.compiler
 
+import core.crud.CRUD
 import core.graph.Edge
-import core.graph.GraphObjects
 import graph.compiler.CompilerEdgeType
-import graph.compiler.CompilerVertex
 
 class CompilerEdge<ID : Any, VID : Any>(
     id: ID?,
@@ -11,8 +10,8 @@ class CompilerEdge<ID : Any, VID : Any>(
     toVertexId: VID,
     val type: CompilerEdgeType,
     val payload: Any,
-    edgeObjects: GraphObjects<ID, CompilerEdge<ID, VID>>? = null,
-) : Edge<ID, CompilerEdge<ID, VID>, VID, CompilerVertex<VID, ID>>(
+    edgeObjects: CRUD<CompilerEdge<ID, VID>, ID>? = null,
+) : Edge<CompilerEdge<ID, VID>, ID, CompilerVertex<VID, ID>, VID>(
     id,
     fromVertexId,
     toVertexId,
