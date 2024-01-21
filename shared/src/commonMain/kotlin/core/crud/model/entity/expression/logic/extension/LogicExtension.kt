@@ -1,8 +1,7 @@
 package core.crud.model.entity.expression.logic.extension
 
-import core.crud.model.entity.expression.*
-import core.crud.model.entity.expression.value.extension.v
-import core.crud.model.entity.expression.value.*
+import core.crud.model.entity.expression.variable.extension.v
+import core.crud.model.entity.expression.variable.*
 import java.time.temporal.Temporal
 
 // BOOLEAN

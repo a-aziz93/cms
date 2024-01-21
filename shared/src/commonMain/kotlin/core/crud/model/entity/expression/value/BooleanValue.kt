@@ -1,6 +1,6 @@
 package core.crud.model.entity.expression.value
 
-import core.crud.model.entity.expression.BooleanVariable
+import core.crud.model.entity.expression.variable.BooleanVariable
 import kotlinx.serialization.Serializable
 
 @Serializable

@@ -3,9 +3,9 @@ package core.crud.model.entity.expression.projection
 import core.crud.model.entity.expression.value.FieldValue
 import kotlinx.serialization.Serializable
 
+@Serializable
 class Projection private constructor(
-    value: String,
-    @Serializable
+    override val value: String,
     val distinct: Boolean? = null,
 ) : FieldValue(value) {
 

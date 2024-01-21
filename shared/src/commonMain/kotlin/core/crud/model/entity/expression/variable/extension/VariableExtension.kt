@@ -1,4 +1,4 @@
-package core.crud.model.entity.expression.value.extension
+package core.crud.model.entity.expression.variable.extension
 
 import core.crud.model.entity.expression.value.*
 import core.crud.model.entity.expression.value.BooleanCollectionValue.Companion.booleanCollection
@@ -12,6 +12,7 @@ import core.crud.model.entity.expression.value.StringCollectionValue.Companion.s
 import core.crud.model.entity.expression.value.StringValue.Companion.string
 import core.crud.model.entity.expression.value.TemporalCollectionValue.Companion.temporalCollection
 import core.crud.model.entity.expression.value.TemporalValue.Companion.temporal
+import core.crud.model.entity.expression.variable.FieldVariable
 import java.time.temporal.Temporal
 
 private fun Any?.v(): Value<*> =
@@ -26,9 +27,9 @@ private fun Any?.v(): Value<*> =
             else -> throw IllegalAccessException("Not predicate value")
         }
 
-fun FieldValue.eq(value: Any?) = this.eq(value.v())
+fun FieldVariable.eq(value: Any?) = this.eq(value.v())
 
-fun FieldValue.neq(value: Any?) = this.neq(value.v())
+fun FieldVariable.neq(value: Any?) = this.neq(value.v())
 
 fun Boolean.v() = boolean(this)
 

@@ -1,10 +1,10 @@
 package core.crud.model.entity.expression.logic
 
 import core.crud.model.entity.expression.logic.LogicExpression.*
-import core.crud.model.entity.expression.BooleanVariable
-import core.crud.model.entity.expression.CollectionVariable
-import core.crud.model.entity.expression.StringVariable
-import core.crud.model.entity.expression.Variable
+import core.crud.model.entity.expression.variable.BooleanVariable
+import core.crud.model.entity.expression.variable.CollectionVariable
+import core.crud.model.entity.expression.variable.StringVariable
+import core.crud.model.entity.expression.variable.Variable
 import kotlinx.serialization.Serializable
 
 @Serializable

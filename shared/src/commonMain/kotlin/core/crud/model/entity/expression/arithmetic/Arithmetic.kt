@@ -1,6 +1,6 @@
 package core.crud.model.entity.expression.arithmetic
 
-import core.crud.model.entity.expression.NumberVariable
+import core.crud.model.entity.expression.variable.NumberVariable
 import core.crud.model.entity.expression.arithmetic.ArithmeticExpression.*
 import kotlinx.serialization.Serializable
 

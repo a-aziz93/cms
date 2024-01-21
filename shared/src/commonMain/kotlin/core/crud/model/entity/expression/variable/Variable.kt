@@ -1,4 +1,4 @@
-package core.crud.model.entity.expression
+package core.crud.model.entity.expression.variable
 
 import core.crud.model.entity.expression.logic.Logic
 import core.crud.model.entity.expression.value.Value

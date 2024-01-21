@@ -1,3 +1,3 @@
-package core.crud.model.entity.expression
+package core.crud.model.entity.expression.variable
 
 interface NumberCollectionVariable : CollectionVariable

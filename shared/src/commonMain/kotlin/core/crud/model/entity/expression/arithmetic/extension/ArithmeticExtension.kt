@@ -1,7 +1,7 @@
 package core.crud.model.entity.expression.arithmetic.extension
 
-import core.crud.model.entity.expression.NumberVariable
-import core.crud.model.entity.expression.value.extension.v
+import core.crud.model.entity.expression.variable.NumberVariable
+import core.crud.model.entity.expression.variable.extension.v
 
 fun Number.add(vararg values: NumberVariable) = this.v().add(*values)
 

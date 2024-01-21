@@ -3,8 +3,8 @@ package core.crud
 import core.crud.model.entity.Order
 import core.crud.model.entity.LimitOffset
 import core.crud.model.entity.Update
-import core.crud.model.entity.expression.BooleanVariable
-import core.crud.model.entity.expression.Variable
+import core.crud.model.entity.expression.variable.BooleanVariable
+import core.crud.model.entity.expression.variable.Variable
 import core.crud.model.entity.expression.aggregate.Aggregate
 import kotlinx.coroutines.flow.Flow
 

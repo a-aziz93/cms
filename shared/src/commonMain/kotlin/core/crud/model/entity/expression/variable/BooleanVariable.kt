@@ -1,8 +1,9 @@
-package core.crud.model.entity.expression
+package core.crud.model.entity.expression.variable
 
 import core.crud.model.entity.expression.logic.Logic
 
 interface BooleanVariable : Variable {
+
     fun eq(value: BooleanVariable) =
         Logic.eq(this, value)
 

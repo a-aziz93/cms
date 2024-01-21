@@ -1,7 +1,7 @@
 package core.graph
 
 import core.crud.CRUD
-import core.crud.model.entity.expression.value.extension.f
+import core.crud.model.entity.expression.variable.extension.f
 import core.crud.model.entity.expression.logic.extension.eq
 import core.graph.exception.GraphException
 import kotlin.coroutines.cancellation.CancellationException
