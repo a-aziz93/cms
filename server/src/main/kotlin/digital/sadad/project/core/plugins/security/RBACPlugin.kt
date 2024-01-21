@@ -39,7 +39,7 @@ class RoleBasedAuthPluginConfiguration {
 }
 
 private lateinit var pluginGlobalConfig: Map<String, RoleBasedAuthPluginConfiguration>
-fun AuthenticationConfig.roleBased(name: String = "", config: RoleBasedAuthPluginConfiguration.() -> Unit) {
+fun AuthenticationConfig.rbac(name: String = "", config: RoleBasedAuthPluginConfiguration.() -> Unit) {
     pluginGlobalConfig += name to RoleBasedAuthPluginConfiguration().apply(config)
 }
 
@@ -50,7 +50,7 @@ private fun Route.buildAuthorizedRoute(
     build: Route.() -> Unit
 ): Route {
     val authorizedRoute = createChild(AuthorizedRouteSelector(requiredRoles.joinToString(",")))
-    authorizedRoute.install(RoleBasedAuthPlugin) {
+    authorizedRoute.install(RBACPlugin) {
         this.requiredRoles = requiredRoles
         this.authType = authType
         this.name = name
@@ -59,20 +59,20 @@ private fun Route.buildAuthorizedRoute(
     return authorizedRoute
 }
 
-fun Route.withRole(role: Role, name: String = "", build: Route.() -> Unit) =
+fun Route.role(role: Role, name: String = "", build: Route.() -> Unit) =
     buildAuthorizedRoute(requiredRoles = setOf(role), authType = AuthType.ALL, name, build = build)
 
-fun Route.withRoles(name: String = "", vararg roles: Role, build: Route.() -> Unit) =
+fun Route.roles(name: String = "", vararg roles: Role, build: Route.() -> Unit) =
     buildAuthorizedRoute(requiredRoles = roles.toSet(), authType = AuthType.ALL, name, build = build)
 
-fun Route.withAnyRole(name: String = "", vararg roles: Role, build: Route.() -> Unit) =
+fun Route.anyRole(name: String = "", vararg roles: Role, build: Route.() -> Unit) =
     buildAuthorizedRoute(requiredRoles = roles.toSet(), authType = AuthType.ANY, name, build = build)
 
 fun Route.withoutRoles(name: String = "", vararg roles: Role, build: Route.() -> Unit) =
     buildAuthorizedRoute(requiredRoles = roles.toSet(), authType = AuthType.NONE, name, build = build)
 
 
-val RoleBasedAuthPlugin =
+val RBACPlugin =
     createRouteScopedPlugin(name = "RoleBasedAuthorization", createConfiguration = ::RoleBasedAuthConfiguration) {
         if (::pluginGlobalConfig.isInitialized.not() || !pluginGlobalConfig.contains(pluginConfig.name)) {
             error("RoleBasedAuthPlugin not initialized. Setup plugin by calling AuthenticationConfig#roleBased in authenticate block")

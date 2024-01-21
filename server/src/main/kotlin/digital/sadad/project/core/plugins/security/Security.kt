@@ -1,8 +1,11 @@
 package digital.sadad.project.core.plugins.security
 
-import digital.sadad.project.auth.service.token.JWTHS256Service
-import digital.sadad.project.auth.service.token.JWTRS256Service
+import digital.sadad.project.auth.service.basic.BasicAuthService
+import digital.sadad.project.auth.service.digest.DigestAuthService
+import digital.sadad.project.auth.service.jwt.JWTHS256Service
+import digital.sadad.project.auth.service.jwt.JWTRS256Service
 import digital.sadad.project.core.config.AppConfig
+import digital.sadad.project.core.plugins.session.model.UserSession
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -10,63 +13,89 @@ import io.ktor.server.auth.jwt.*
 import io.ktor.server.locations.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import io.ktor.server.sessions.*
 import org.koin.ktor.ext.inject
+import java.nio.charset.Charset
 import kotlin.collections.set
 
 // Seguridad en base a JWT
 fun Application.configureSecurity() {
     val appConfig: AppConfig by inject()
-    routing {
-        route("/dashboard") {
-            withAnyRole("ADMIN", "SUPER_ADMIN") {
-                get {
-                    val userName = call.principal<UserIdPrincipal>()?.name.toString()
-                    call.respondText("Total users: 2443")
-                }
-            }
-        }
-    }
+
     appConfig.config.auth?.let {
 
-        // Inject the token services
+        // BASIC
+        val basicAuthService: BasicAuthService by inject()
+        // BASIC
+        val digestAuthService: DigestAuthService by inject()
+        // JWT
         val jwtHS256Service: JWTHS256Service by inject()
         val jwtRS256Service: JWTRS256Service by inject()
 
         authentication {
-            it.oauth?.forEach { (name, oauthConfig) ->
-                val redirects = mutableMapOf<String, String>()
-                oauth(name) {
-                    // Configure oauth authentication
-                    urlProvider = { oauthConfig.urlProvider.redirectUrl }
-                    providerLookup = {
-                        OAuthServerSettings.OAuth2ServerSettings(
-                            name = oauthConfig.serverProvider.name,
-                            authorizeUrl = oauthConfig.serverProvider.authorizeUrl,
-                            accessTokenUrl = oauthConfig.serverProvider.accessTokenUrl,
-                            clientId = oauthConfig.serverProvider.clientId,
-                            clientSecret = oauthConfig.serverProvider.clientSecret,
-                            accessTokenRequiresBasicAuth = false,
-                            requestMethod = oauthConfig.serverProvider.requestMethod,
-                            defaultScopes = oauthConfig.serverProvider.defaultScopes,
-                            extraAuthParameters = oauthConfig.serverProvider.extraAuthParameters,
-                            onStateCreated = { call, state ->
-                                //saves new state with redirect url value
-                                call.request.queryParameters["redirectUrl"]?.let {
-                                    redirects[state] = it
-                                }
-                            }
-                        )
+            // BASIC
+            it.basic?.forEach { (name, config) ->
+                basic(name) {
+                    config.realm?.let { realm = it }
+                    config.charset?.let { charset = Charset.forName(it) }
+                    validate { credential ->
+                        basicAuthService.validate(credential)
                     }
-                }
-                roleBased(name) {
-                    extractRoles { principal ->
-                        //Extract roles from JWT payload
-                        (principal as JWTPrincipal).payload.claims?.get("roles")?.asList(String::class.java)?.toSet()
-                            ?: emptySet()
-                    }
+                    skipWhen { call -> call.sessions.get<UserSession>() != null }
                 }
             }
 
+            // DIGEST
+            it.digest?.forEach { (name, config) ->
+                digest(name) {
+                    config.realm?.let { realm = it }
+                    config.algorithmName?.let { algorithmName = it }
+                    digestProvider { userName, realm ->
+
+                    }
+                    validate { credential ->
+                        digestAuthService.validate(credential)
+                    }
+                    skipWhen { call -> call.sessions.get<UserSession>() != null }
+                }
+                rbac(name) {
+                    extractRoles { principal ->
+                        //Extract roles from JWT payload
+                        (principal as UserIdPrincipal).payload.claims?.get("roles")?.asList(String::class.java)?.toSet()
+                            ?: emptySet()
+                    }
+                }
+                UserIdPrincipal
+            }
+
+            // BEARER
+            it.bearer?.forEach { (name, config) ->
+                bearer(name) {
+                }
+            }
+
+            // FORM
+            it.form?.forEach { (name, config) ->
+                form(name) {
+
+                }
+                UserIdPrincipal
+            }
+
+            // SESSION
+            it.session?.forEach { (name, config) ->
+                session(name) {
+
+                }
+            }
+
+            // LDAP
+            it.ldap?.forEach { (name, config) ->
+                digest(name) {
+                }
+            }
+
+            // JWTHS256
             jwtHS256Service.jwts?.forEach { (name, jwt) ->
                 jwt(name) {
                     // With realm, we can get the token from the request
@@ -86,7 +115,7 @@ fun Application.configureSecurity() {
                         call.respond(HttpStatusCode.Unauthorized, "Token is not valid or has expired")
                     }
                 }
-                roleBased(name) {
+                rbac(name) {
                     extractRoles { principal ->
                         //Extract roles from JWT payload
                         (principal as JWTPrincipal).payload.claims?.get("roles")?.asList(String::class.java)?.toSet()
@@ -95,6 +124,7 @@ fun Application.configureSecurity() {
                 }
             }
 
+            // JWTRS256
             jwtRS256Service.jwts?.forEach { (name, jwt) ->
                 jwt(name) {
                     // With realm, we can get the token from the request
@@ -116,7 +146,7 @@ fun Application.configureSecurity() {
                         call.respond(HttpStatusCode.Unauthorized, "Token is not valid or has expired")
                     }
                 }
-                roleBased(name) {
+                rbac(name) {
                     extractRoles { principal ->
                         //Extract roles from JWT payload
                         (principal as JWTPrincipal).payload.claims?.get("roles")?.asList(String::class.java)?.toSet()
@@ -126,16 +156,41 @@ fun Application.configureSecurity() {
             }
 
 
-        }
-
-        it.oauth?.forEach { (name, _) ->
-            routing {
-                authenticate(name) {
-                    get("login") {
-                        // Redirects to 'authorizeUrl' automatically
+            // OAUTH
+            it.oauth?.forEach { (name, config) ->
+                val redirects = mutableMapOf<String, String>()
+                oauth(name) {
+                    // Configure oauth authentication
+                    urlProvider = { config.urlProvider.redirectUrl }
+                    providerLookup = {
+                        OAuthServerSettings.OAuth2ServerSettings(
+                            name = config.serverProvider.name,
+                            authorizeUrl = config.serverProvider.authorizeUrl,
+                            accessTokenUrl = config.serverProvider.accessTokenUrl,
+                            clientId = config.serverProvider.clientId,
+                            clientSecret = config.serverProvider.clientSecret,
+                            accessTokenRequiresBasicAuth = false,
+                            requestMethod = config.serverProvider.requestMethod,
+                            defaultScopes = config.serverProvider.defaultScopes,
+                            extraAuthParameters = config.serverProvider.extraAuthParameters,
+                            onStateCreated = { call, state ->
+                                //saves new state with redirect url value
+                                call.request.queryParameters["redirectUrl"]?.let {
+                                    redirects[state] = it
+                                }
+                            }
+                        )
+                    }
+                }
+                rbac(name) {
+                    extractRoles { principal ->
+                        //Extract roles from JWT payload
+                        (principal as JWTPrincipal).payload.claims?.get("roles")?.asList(String::class.java)?.toSet()
+                            ?: emptySet()
                     }
                 }
             }
+
         }
 
         jwtHS256Service.jwts?.forEach { (name, _) ->
@@ -149,6 +204,17 @@ fun Application.configureSecurity() {
         }
 
         jwtRS256Service.jwts?.forEach { (name, _) ->
+            routing {
+                authenticate(name) {
+                    get("login") {
+                        // Redirects to 'authorizeUrl' automatically
+                    }
+                }
+            }
+        }
+
+
+        it.oauth?.forEach { (name, _) ->
             routing {
                 authenticate(name) {
                     get("login") {

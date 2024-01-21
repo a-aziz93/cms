@@ -1,9 +1,9 @@
-package digital.sadad.project.auth.model.token
+package digital.sadad.project.auth.model.jwt
 
+import auth.entity.user.UserEntity
 import com.auth0.jwk.JwkProvider
 import com.auth0.jwk.JwkProviderBuilder
 import com.auth0.jwt.algorithms.Algorithm
-import digital.sadad.project.auth.entity.user.UserEntity
 import digital.sadad.project.core.config.model.security.JWTRS256Config
 import java.security.KeyFactory
 import java.security.interfaces.RSAPrivateKey
@@ -23,11 +23,14 @@ class JWTRS256(
             .build()
     }
 
-    fun create(userEntity: UserEntity): String {
+    fun create(
+        userEntity: UserEntity,
+        roles: List<String>? = null,
+    ): String {
         val publicKey = jwkProvider.get("6f8856ed-9189-488f-9011-0ff4b6c08edc").publicKey
         val keySpecPKCS8 = PKCS8EncodedKeySpec(Base64.getDecoder().decode(config.privateKey))
         val privateKey = KeyFactory.getInstance("RSA").generatePrivate(keySpecPKCS8)
 
-        return create(userEntity, Algorithm.RSA256(publicKey as RSAPublicKey, privateKey as RSAPrivateKey))
+        return create(userEntity, roles, Algorithm.RSA256(publicKey as RSAPublicKey, privateKey as RSAPrivateKey))
     }
 }

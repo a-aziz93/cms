@@ -1,6 +1,6 @@
-package digital.sadad.project.auth.service.token
+package digital.sadad.project.auth.service.jwt
 
-import digital.sadad.project.auth.model.token.JWTRS256
+import digital.sadad.project.auth.model.jwt.JWTRS256
 import digital.sadad.project.core.config.AppConfig
 import mu.two.KotlinLogging
 import org.koin.core.annotation.Single

@@ -1,8 +1,8 @@
-package digital.sadad.project.auth.model.token
+package digital.sadad.project.auth.model.jwt
 
+import auth.entity.user.UserEntity
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
-import digital.sadad.project.auth.entity.user.UserEntity
 import digital.sadad.project.core.config.model.security.JWTConfig
 import io.ktor.server.auth.*
 import io.ktor.server.auth.jwt.*
@@ -10,7 +10,11 @@ import java.util.*
 import kotlin.time.DurationUnit
 
 open class JWT(private val config: JWTConfig) {
-    protected fun create(userEntity: UserEntity, algorithm: Algorithm): String {
+    protected fun create(
+        userEntity: UserEntity,
+        roles: List<String>?,
+        algorithm: Algorithm
+    ): String {
         var jwt = JWT.create()
             .withAudience(config.audience)
             .withIssuer(config.issuer)
@@ -19,6 +23,9 @@ open class JWT(private val config: JWTConfig) {
             .withClaim(USER_ID_CLAIM, userEntity.id.toString())
             .withClaim(USERNAME_CLAIM, userEntity.username)
             .withClaim(USER_EMAIL_CLAIM, userEntity.email)
+        if (roles != null) {
+            jwt = jwt.withClaim(USER_ROLES_CLAIM, roles)
+        }
         if (config.expiration != null) {
             // expiration time from currentTimeMillis + (times in milliseconds)
             jwt =
@@ -40,10 +47,9 @@ open class JWT(private val config: JWTConfig) {
 
     companion object {
         const val SUBJECT = "Authentication"
-
-        // user claims and other data to store
+        const val USER_ID_CLAIM = "userId"
         const val USERNAME_CLAIM = "username"
         const val USER_EMAIL_CLAIM = "userEmail"
-        const val USER_ID_CLAIM = "userId"
+        const val USER_ROLES_CLAIM = "roles"
     }
 }
