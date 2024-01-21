@@ -1,13 +1,13 @@
 package core.crud.model.entity.expression.projection
 
-import core.crud.model.entity.expression.value.FieldValue
+import core.crud.model.entity.expression.variable.Variable
 import kotlinx.serialization.Serializable
 
 @Serializable
 class Projection private constructor(
-    override val value: String,
+    val value: String,
     val distinct: Boolean? = null,
-) : FieldValue(value) {
+) : Variable {
 
     companion object {
         fun projection(value: String, distinct: Boolean? = null) = Projection(value, distinct)

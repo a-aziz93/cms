@@ -1,5 +1,6 @@
 package core.crud.model.entity.expression.variable.extension
 
+import core.crud.model.entity.expression.logic.Logic
 import core.crud.model.entity.expression.value.*
 import core.crud.model.entity.expression.value.BooleanCollectionValue.Companion.booleanCollection
 import core.crud.model.entity.expression.value.BooleanValue.Companion.boolean
@@ -27,9 +28,9 @@ private fun Any?.v(): Value<*> =
             else -> throw IllegalAccessException("Not predicate value")
         }
 
-fun FieldVariable.eq(value: Any?) = this.eq(value.v())
+fun FieldVariable.eq(value: Any?) = Logic.eq(this, value.v())
 
-fun FieldVariable.neq(value: Any?) = this.neq(value.v())
+fun FieldVariable.neq(value: Any?) = Logic.neq(this, value.v())
 
 fun Boolean.v() = boolean(this)
 
