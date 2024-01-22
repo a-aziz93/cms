@@ -1,24 +1,16 @@
-package digital.sadad.project.core.plugins.koin
+package digital.sadad.project.core.plugins.di.module.database
 
-import digital.sadad.project.auth.service.security.basic.BasicAuthService
-import digital.sadad.project.auth.service.security.digest.DigestAuthService
-import digital.sadad.project.core.config.AppConfig
-import digital.sadad.project.core.config.model.Config
 import digital.sadad.project.core.config.model.database.DatabaseConfig
-import digital.sadad.project.core.config.model.security.AuthConfig
-import digital.sadad.project.core.database.service.DatabaseService
-import digital.sadad.project.core.database.service.Companion.getConnectionFactory
-import io.ktor.server.application.*
+import digital.sadad.project.core.config.model.database.DatabaseInitConfig
 import io.r2dbc.spi.ConnectionFactories
 import io.r2dbc.spi.ConnectionFactory
 import io.r2dbc.spi.ConnectionFactoryOptions
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
-import org.koin.ksp.generated.*
-import org.koin.ktor.ext.inject
-import org.koin.ktor.plugin.Koin
-import org.koin.logger.slf4jLogger
 import org.reflections.Reflections
 import org.ufoss.kotysa.*
 import org.ufoss.kotysa.h2.IH2Table
@@ -30,18 +22,7 @@ import org.ufoss.kotysa.postgresql.PostgresqlTable
 import org.ufoss.kotysa.r2dbc.coSqlClient
 import kotlin.reflect.KClass
 
-fun Application.configureKoin() {
-    val appConfig: AppConfig by inject()
-
-    install(Koin) {
-        slf4jLogger() // Logger
-        defaultModule() // Default module with Annotations
-        appConfig.config.databases?.let { databaseClients(it) }
-        appConfig.config.auth?.let { authServices(it) } // Auth services
-    }
-}
-
-fun databaseClients(config: Map<String, DatabaseConfig>) = module {
+fun databaseModule(config: Map<String, DatabaseConfig>) = module {
     config.forEach {
         var createTables: Set<Table<*>>? = null
         val client = when (it.value.type) {
@@ -96,18 +77,29 @@ fun databaseClients(config: Map<String, DatabaseConfig>) = module {
             }
         }
 
-        it.key to client
+        single<R2dbcSqlClient>(named(it.key)) { client }
     }
 }
 
-fun authServices(config: AuthConfig) = module {
-    config.basic?.keys?.forEach { name ->
-        single<BasicAuthService>(named(name)) { BasicAuthService(get(named(name))) }
+private suspend fun initDatabase(client: R2dbcSqlClient, tables: Set<Table<*>>, config: DatabaseInitConfig) =
+    withContext(Dispatchers.IO) {
+        launch {
+            if (config.ifNotExists) {
+                for (table in tables) {
+                    client createTableIfNotExists table
+                }
+            } else {
+                if (config.clearBefore) {
+                    for (table in tables) {
+                        client deleteAllFrom table
+                    }
+                }
+                for (table in tables) {
+                    client createTable table
+                }
+            }
+        }
     }
-    config.digest?.keys?.forEach { name ->
-        single<DigestAuthService>(named(name)) { DigestAuthService(get(named(name))) }
-    }
-}
 
 private fun DatabaseConfig.getConnectionFactory(): ConnectionFactory {
     val connectionBuilder = ConnectionFactoryOptions.builder()

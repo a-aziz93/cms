@@ -1,4 +1,4 @@
-auth:
+security:
   oauth:
     keycloak:
       server-provider:

@@ -1,13 +1,15 @@
 package digital.sadad.project.auth.service.security.bearer
 
+import digital.sadad.project.auth.model.security.UserIdPrincipalMetadata
 import digital.sadad.project.auth.service.security.RBACAuthService
 import digital.sadad.project.auth.service.security.SkipableAuthService
+import digital.sadad.project.core.config.model.security.basic.BasicAuthConfig
+import digital.sadad.project.core.config.model.security.bearer.BearerAuthConfig
 import io.ktor.server.auth.*
 import org.koin.core.annotation.Single
 
-@Single
 class BearerAuthService(
-
+    val config: BearerAuthConfig,
 ) : SkipableAuthService, RBACAuthService {
 
     suspend fun validate(credential: BearerTokenCredential): Principal? =
@@ -17,4 +19,5 @@ class BearerAuthService(
             null
         }
 
+    override fun roles(principal: Principal): Set<String> = (principal as UserIdPrincipalMetadata).roles ?: emptySet()
 }

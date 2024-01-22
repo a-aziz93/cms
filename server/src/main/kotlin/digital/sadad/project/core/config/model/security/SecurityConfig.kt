@@ -10,7 +10,7 @@ import digital.sadad.project.core.config.model.security.ldap.LDAPAuthConfig
 import digital.sadad.project.core.config.model.security.oauth.OAuthProviderConfig
 import digital.sadad.project.core.config.model.security.session.SessionAuthConfig
 
-data class AuthConfig(
+data class SecurityConfig(
     val basic: Map<String, BasicAuthConfig>? = null,
     val digest: Map<String, DigestAuthConfig>? = null,
     val bearer: Map<String, BearerAuthConfig>? = null,

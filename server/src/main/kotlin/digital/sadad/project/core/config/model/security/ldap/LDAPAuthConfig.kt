@@ -8,5 +8,5 @@ class LDAPAuthConfig(
     realm: String? = null,
     charset: String? = null,
     val ldapServerURL: String,
-    val userDNFormat: String
+    val userDNFormat: String,
 ) : BasicAuthConfig(realm, charset)

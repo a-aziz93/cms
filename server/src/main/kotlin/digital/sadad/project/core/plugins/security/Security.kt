@@ -1,6 +1,7 @@
 package digital.sadad.project.core.plugins.security
 
-import digital.sadad.project.auth.model.security.UserIDPrincipal
+import core.koin.getAll
+import digital.sadad.project.auth.model.security.UserIdPrincipalMetadata
 import digital.sadad.project.auth.service.security.basic.BasicAuthService
 import digital.sadad.project.auth.service.security.bearer.BearerAuthService
 import digital.sadad.project.auth.service.security.digest.DigestAuthService
@@ -20,7 +21,6 @@ import io.ktor.server.auth.jwt.*
 import io.ktor.server.plugins.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import org.koin.core.qualifier.named
 import org.koin.ktor.ext.inject
 import java.nio.charset.Charset
 import kotlin.collections.set
@@ -28,228 +28,242 @@ import kotlin.collections.set
 fun Application.configureSecurity() {
     val appConfig: AppConfig by inject()
 
-    appConfig.config.auth?.let {
+    appConfig.config.security?.let {
 
         // BASIC
-        val basicAuthService: Map<String, Lazy<BasicAuthService>>? = it.basic?.keys?.associate {
-            it to inject<BasicAuthService>(named(it))
-        }
+        val basicAuthServices = getAll<BasicAuthService>()
         // DIGEST
-        val digestAuthService: DigestAuthService by inject()
+        val digestAuthServices = getAll<DigestAuthService>()
         // BEARER
-        val bearerAuthService: BearerAuthService by inject()
+        val bearerAuthServices = getAll<BearerAuthService>()
         // FORM
-        val formAuthService: FormAuthService by inject()
+        val formAuthServices = getAll<FormAuthService>()
         // SESSION
-        val sessionAuthService: SessionAuthService by inject()
+        val sessionAuthServices = getAll<SessionAuthService>()
         // SESSION
-        val ldapAuthService: LDAPAuthService by inject()
-        // JWT
-        val jwtHS256Service: JWTHS256Service by inject()
-        val jwtRS256Service: JWTRS256Service by inject()
+        val ldapAuthServices = getAll<LDAPAuthService>()
+        // JWTHS256
+        val jwtHS256Services = getAll<JWTHS256Service>()
+        // JWTRS256
+        val jwtRS256Services = getAll<JWTRS256Service>()
         //OAUTH
-        val oauthService: OAuthService by inject()
+        val oauthServices = getAll<OAuthService>()
 
         authentication {
             // BASIC
-            it.basic?.forEach { (name, config) ->
+            basicAuthServices.forEach { (name, service) ->
                 basic(name) {
-                    config.realm?.let { realm = it }
+                    service.config.realm?.let { realm = it }
 
-                    config.charset?.let { charset = Charset.forName(it) }
+                    service.config.charset?.let { charset = Charset.forName(it) }
 
                     validate {
-                        basicAuthService.validate(it)
+                        service.validate(it)
                     }
 
                     skipWhen {
-                        basicAuthService.skip(it)
+                        service.skip(it)
                     }
                 }
                 rbac(name) {
                     extractRoles {
                         // From UserIdPrincipal
-                        basicAuthService.roles(it)
+                        service.roles(it)
                     }
                 }
             }
 
             // DIGEST
-            it.digest?.forEach { (name, config) ->
+            digestAuthServices.forEach { (name, service) ->
                 digest(name) {
-                    config.realm?.let { realm = it }
+                    service.config.realm?.let { realm = it }
 
-                    config.algorithmName?.let { algorithmName = it }
+                    service.config.algorithmName?.let { algorithmName = it }
 
                     validate {
-                        digestAuthService.validate(it)
+                        service.validate(it)
                     }
 
                     digestProvider { userName, realm ->
-                        digestAuthService.provider(userName, realm)
+                        service.provider(userName, realm)
                     }
 
-                    skipWhen { digestAuthService.skip(it) }
+                    skipWhen { service.skip(it) }
                 }
                 rbac(name) {
                     extractRoles {
                         // From UserIdPrincipal
-                        digestAuthService.roles(it)
+                        service.roles(it)
                     }
                 }
             }
 
             // BEARER
-            it.bearer?.forEach { (name, config) ->
+            bearerAuthServices.forEach { (name, service) ->
                 bearer(name) {
-                    config.realm?.let { realm = it }
+                    service.config.realm?.let { realm = it }
 
                     authenticate {
-                        bearerAuthService.validate(it)
+                        service.validate(it)
                     }
 
-                    config.authHeader?.let { header ->
+                    service.config.authHeader?.let { header ->
                         authHeader {
                             it.authHeader(header)
                         }
                     }
 
-                    config.authSchemes?.let { authSchemes(it.defaultScheme, *it.additionalSchemes.toTypedArray()) }
+                    service.config.authSchemes?.let {
+                        authSchemes(
+                            it.defaultScheme,
+                            *it.additionalSchemes.toTypedArray()
+                        )
+                    }
 
-                    skipWhen { bearerAuthService.skip(it) }
+                    skipWhen { service.skip(it) }
                 }
                 rbac(name) {
                     extractRoles {
                         // From UserIdPrincipal
-                        bearerAuthService.roles(it)
+                        service.roles(it)
                     }
                 }
             }
 
             // FORM
-            it.form?.forEach { (name, config) ->
+            formAuthServices.forEach { (name, service) ->
                 form(name) {
-                    config.userParamName?.let { userParamName = it }
+                    service.config.userParamName?.let { userParamName = it }
 
-                    config.passwordParamName?.let { passwordParamName = it }
+                    service.config.passwordParamName?.let { passwordParamName = it }
 
                     challenge {
-                        formAuthService.challenge(call)
+                        service.challenge(call)
                     }
 
                     validate {
-                        formAuthService.validate(it)
+                        service.validate(it)
                     }
 
-                    skipWhen { formAuthService.skip(it) }
+                    skipWhen { service.skip(it) }
                 }
                 rbac(name) {
                     extractRoles {
                         // From UserIdPrincipal
-                        formAuthService.roles(it)
+                        service.roles(it)
                     }
                 }
             }
 
             // SESSION
-            it.session?.forEach { (name, config) ->
-                session<UserIDPrincipal>(name) {
+            sessionAuthServices.forEach { (name, service) ->
+                session<UserIdPrincipalMetadata>(name) {
 
                     challenge {
-                        sessionAuthService.challenge(call)
+                        service.challenge(call)
                     }
 
                     validate {
-                        sessionAuthService.validate(it)
+                        service.validate(it)
                     }
 
-                    skipWhen { sessionAuthService.skip(it) }
+                    skipWhen { service.skip(it) }
                 }
                 rbac(name) {
                     extractRoles {
                         // From UserIdPrincipal
-                        sessionAuthService.roles(it)
+                        service.roles(it)
                     }
                 }
             }
 
             // LDAP
-            it.ldap?.forEach { (name, config) ->
+            ldapAuthServices.forEach { (name, service) ->
                 basic(name) {
 
-                    config.realm?.let { realm = it }
+                    service.config.realm?.let { realm = it }
 
-                    config.charset?.let { charset = Charset.forName(it) }
+                    service.config.charset?.let { charset = Charset.forName(it) }
 
                     validate {
-                        ldapAuthService.validate(it, "ldap://0.0.0.0:389", "cn=%s,dc=ktor,dc=io")
+                        service.validate(it, service.config.ldapServerURL, service.config.userDNFormat)
                     }
 
-                    skipWhen { ldapAuthService.skip(it) }
+                    skipWhen { service.skip(it) }
                 }
                 rbac(name) {
                     extractRoles {
                         // From UserIdPrincipal
-                        ldapAuthService.roles(it)
+                        service.roles(it)
                     }
                 }
             }
 
             // JWTHS256
-            jwtHS256Service.jwts?.forEach { (name, jwt) ->
+            jwtHS256Services.forEach { (name, service) ->
                 jwt(name) {
                     // With realm, we can get the token from the request
-                    jwt.config.realm?.let { realm = it }
+                    service.config.realm?.let { realm = it }
 
-                    jwt.config.authHeader?.let { header ->
+                    service.config.authHeader?.let { header ->
                         authHeader {
                             it.authHeader(header)
                         }
                     }
 
-                    jwt.config.authSchemes?.let { authSchemes(it.defaultScheme, *it.additionalSchemes.toTypedArray()) }
+                    service.config.authSchemes?.let {
+                        authSchemes(
+                            it.defaultScheme,
+                            *it.additionalSchemes.toTypedArray()
+                        )
+                    }
 
                     // Load the token verification config
-                    verifier(jwt.verifyJWT())
+                    verifier(service.verify())
 
                     validate {
                         // If the token is valid, it also has the indicated audience,
                         // and has the user's field to compare it with the one we want
                         // return the JWTPrincipal, otherwise return null
-                        jwt.validate(it)
+                        service.validate(it)
                     }
 
                     challenge { defaultScheme, realm ->
-                        call.respond(HttpStatusCode.Unauthorized, "Token is not valid or has expired")
+                        service.challenge(call, defaultScheme, realm)
                     }
 
-                    skipWhen { jwtHS256Service.skip(it) }
+                    skipWhen { service.skip(it) }
 
                 }
                 rbac(name) {
                     extractRoles {
                         //Extract JWTPrincipal
-                        jwtHS256Service.roles(it)
+                        service.roles(it)
                     }
                 }
             }
 
             // JWTRS256
-            jwtRS256Service.jwts?.forEach { (name, jwt) ->
+            jwtRS256Services.forEach { (name, service) ->
                 jwt(name) {
                     // With realm, we can get the token from the request
-                    jwt.config.realm?.let { realm = it }
+                    service.config.realm?.let { realm = it }
 
-                    jwt.config.authHeader?.let { header ->
+                    service.config.authHeader?.let { header ->
                         authHeader {
                             it.authHeader(header)
                         }
                     }
 
-                    jwt.config.authSchemes?.let { authSchemes(it.defaultScheme, *it.additionalSchemes.toTypedArray()) }
+                    service.config.authSchemes?.let {
+                        authSchemes(
+                            it.defaultScheme,
+                            *it.additionalSchemes.toTypedArray()
+                        )
+                    }
 
                     // Load the token verification config
-                    verifier(jwt.jwkProvider, jwt.config.issuer) {
+                    verifier(service.jwkProvider, service.config.issuer) {
                         acceptLeeway(3)
                     }
 
@@ -257,42 +271,42 @@ fun Application.configureSecurity() {
                         // If the token is valid, it also has the indicated audience,
                         // and has the user's field to compare it with the one we want
                         // return the JWTPrincipal, otherwise return null
-                        jwt.validate(it)
+                        service.validate(it)
                     }
 
                     challenge { defaultScheme, realm ->
-                        call.respond(HttpStatusCode.Unauthorized, "Token is not valid or has expired")
+                        service.challenge(call, defaultScheme, realm)
                     }
 
-                    skipWhen { jwtRS256Service.skip(it) }
+                    skipWhen { service.skip(it) }
 
                 }
                 rbac(name) {
                     extractRoles {
                         //Extract JWTPrincipal
-                        jwtRS256Service.roles(it)
+                        service.roles(it)
                     }
                 }
             }
 
 
             // OAUTH
-            it.oauth?.forEach { (name, config) ->
+            oauthServices.forEach { (name, service) ->
                 val redirects = mutableMapOf<String, String>()
                 oauth(name) {
                     // Configure oauth authentication
-                    urlProvider = { config.urlProvider.redirectUrl }
+                    urlProvider = { service.config.urlProvider.redirectUrl }
                     providerLookup = {
                         OAuthServerSettings.OAuth2ServerSettings(
-                            name = config.serverProvider.name,
-                            authorizeUrl = config.serverProvider.authorizeUrl,
-                            accessTokenUrl = config.serverProvider.accessTokenUrl,
-                            clientId = config.serverProvider.clientId,
-                            clientSecret = config.serverProvider.clientSecret,
+                            name = service.config.serverProvider.name,
+                            authorizeUrl = service.config.serverProvider.authorizeUrl,
+                            accessTokenUrl = service.config.serverProvider.accessTokenUrl,
+                            clientId = service.config.serverProvider.clientId,
+                            clientSecret = service.config.serverProvider.clientSecret,
                             accessTokenRequiresBasicAuth = false,
-                            requestMethod = config.serverProvider.requestMethod,
-                            defaultScopes = config.serverProvider.defaultScopes,
-                            extraAuthParameters = config.serverProvider.extraAuthParameters,
+                            requestMethod = service.config.serverProvider.requestMethod,
+                            defaultScopes = service.config.serverProvider.defaultScopes,
+                            extraAuthParameters = service.config.serverProvider.extraAuthParameters,
                             onStateCreated = { call, state ->
                                 //saves new state with redirect url value
                                 call.request.queryParameters["redirectUrl"]?.let {
@@ -302,32 +316,32 @@ fun Application.configureSecurity() {
                         )
                     }
 
-                    skipWhen { oauthService.skip(it) }
+                    skipWhen { service.skip(it) }
 
                 }
                 rbac(name) {
                     extractRoles {
                         // From
-                        oauthService.roles(it)
+                        service.roles(it)
                     }
                 }
             }
         }
 
-        jwtHS256Service.jwts?.forEach { (name, _) ->
+        jwtHS256Services.forEach { (name, _) ->
             routing {
                 authenticate(name) {
-                    get("login") {
+                    get("/login") {
                         // Redirects to 'authorizeUrl' automatically
                     }
                 }
             }
         }
 
-        jwtRS256Service.jwts?.forEach { (name, _) ->
+        jwtRS256Services.forEach { (name, _) ->
             routing {
                 authenticate(name) {
-                    get("login") {
+                    get("/login") {
                         // Redirects to 'authorizeUrl' automatically
                     }
                 }
@@ -335,10 +349,10 @@ fun Application.configureSecurity() {
         }
 
 
-        it.oauth?.forEach { (name, _) ->
+        oauthServices.forEach { (name, _) ->
             routing {
                 authenticate(name) {
-                    get("login") {
+                    get("/login") {
                         // Redirects to 'authorizeUrl' automatically
                     }
                 }

@@ -1,7 +1,7 @@
 package digital.sadad.project.core.config.model
 
 import digital.sadad.project.core.config.model.template.Template
-import digital.sadad.project.core.config.model.security.AuthConfig
+import digital.sadad.project.core.config.model.security.SecurityConfig
 import digital.sadad.project.core.config.model.cache.CacheConfig
 import digital.sadad.project.core.config.model.compression.CompressionConfig
 import digital.sadad.project.core.config.model.cors.CORSConfig
@@ -17,7 +17,7 @@ import digital.sadad.project.core.config.model.websocket.WebSocketsConfig
 import digital.sadad.project.core.config.model.xhttpmethodoverride.XHttpMethodOverrideConfig
 
 data class Config(
-    val auth: AuthConfig? = null,
+    val security: SecurityConfig? = null,
     val cache: Map<String, CacheConfig>? = null,
     val storage: StorageConfig? = null,
     val databases: Map<String, DatabaseConfig>? = null,

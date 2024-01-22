@@ -2,11 +2,10 @@ package digital.sadad.project.auth.service.security.oauth
 
 import digital.sadad.project.auth.service.security.RBACAuthService
 import digital.sadad.project.auth.service.security.SkipableAuthService
-import org.koin.core.annotation.Single
+import digital.sadad.project.core.config.model.security.oauth.OAuthProviderConfig
 
-@Single
 class OAuthService(
-
+    val config: OAuthProviderConfig,
 ) : SkipableAuthService, RBACAuthService {
 
 }
