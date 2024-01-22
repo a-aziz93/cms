@@ -72,7 +72,7 @@ fun Application.configureSecurity() {
                     }
                 }
             }
-            
+
             // DIGEST
             digestAuthServices.forEach { (name, service) ->
                 digest(name) {
@@ -347,7 +347,6 @@ fun Application.configureSecurity() {
                 }
             }
         }
-
 
         oauthServices.forEach { (name, _) ->
             routing {
