@@ -1,6 +1,25 @@
 package digital.sadad.project
 
 import digital.sadad.project.core.plugins.*
+import digital.sadad.project.core.plugins.applicationmonitoring.configureApplicationMonitoring
+import digital.sadad.project.core.plugins.authheadresponse.configureAutoHeadResponse
+import digital.sadad.project.core.plugins.compression.configureCompression
+import digital.sadad.project.core.plugins.cors.configureCors
+import digital.sadad.project.core.plugins.di.configureKoin
+import digital.sadad.project.core.plugins.graphql.configureGraphQL
+import digital.sadad.project.core.plugins.locations.configureLocations
+import digital.sadad.project.core.plugins.ratelimit.configureRateLimit
+import digital.sadad.project.core.plugins.resources.configureResources
+import digital.sadad.project.core.plugins.routing.configureRouting
+import digital.sadad.project.core.plugins.security.configureSecurity
+import digital.sadad.project.core.plugins.serialization.configureSerialization
+import digital.sadad.project.core.plugins.session.configureSession
+import digital.sadad.project.core.plugins.statuspages.configureStatusPages
+import digital.sadad.project.core.plugins.swagger.configureSwagger
+import digital.sadad.project.core.plugins.template.configureFreeMarker
+import digital.sadad.project.core.plugins.validation.configureValidation
+import digital.sadad.project.core.plugins.websocket.configureWebSockets
+import digital.sadad.project.core.plugins.xhttpmethodoverride.configureXHttpMethodOverride
 import io.ktor.server.application.*
 import io.ktor.server.netty.*
 
