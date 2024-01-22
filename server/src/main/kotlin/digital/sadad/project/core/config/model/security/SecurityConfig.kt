@@ -7,7 +7,7 @@ import digital.sadad.project.core.config.model.security.form.FormAuthConfig
 import digital.sadad.project.core.config.model.security.jwt.JWTHS256Config
 import digital.sadad.project.core.config.model.security.jwt.JWTRS256Config
 import digital.sadad.project.core.config.model.security.ldap.LDAPAuthConfig
-import digital.sadad.project.core.config.model.security.oauth.OAuthProviderConfig
+import digital.sadad.project.core.config.model.security.oauth.OAuthConfig
 import digital.sadad.project.core.config.model.security.session.SessionAuthConfig
 
 data class SecurityConfig(
@@ -19,5 +19,5 @@ data class SecurityConfig(
     val ldap: Map<String, LDAPAuthConfig>? = null,
     val jwtHS256: Map<String, JWTHS256Config>? = null,
     val jwtRS256: Map<String, JWTRS256Config>? = null,
-    val oauth: Map<String, OAuthProviderConfig>? = null,
+    val oauth: Map<String, OAuthConfig>? = null,
 )

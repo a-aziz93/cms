@@ -13,8 +13,8 @@ fun Application.configureSession() {
     appConfig.config.session?.let {
         install(Sessions) {
             appConfig.config.security?.let {
-                it.basic?.forEach {
-                    cookie<UserIdPrincipalMetadata>("user_session", it)
+                it.basic?.forEach { (name, config) ->
+                    config.sessionCookie?.let { cookie<UserIdPrincipalMetadata>(name, it) }
                 }
             }
         }
