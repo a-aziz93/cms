@@ -72,7 +72,7 @@ fun Application.configureSecurity() {
                     }
                 }
             }
-
+            
             // DIGEST
             digestAuthServices.forEach { (name, service) ->
                 digest(name) {

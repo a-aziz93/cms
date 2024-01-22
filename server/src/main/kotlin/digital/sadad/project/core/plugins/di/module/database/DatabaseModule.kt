@@ -23,61 +23,61 @@ import org.ufoss.kotysa.r2dbc.coSqlClient
 import kotlin.reflect.KClass
 
 fun databaseModule(config: Map<String, DatabaseConfig>) = module {
-    config.forEach {
+    config.forEach { (name, config) ->
         var createTables: Set<Table<*>>? = null
-        val client = when (it.value.type) {
+        val client = when (config.type) {
             DbType.H2 -> {
-                val tables = getH2TablesInPackage(it.value.packages)
+                val tables = getH2TablesInPackage(config.packages)
                 createTables = tables.allTables.keys
-                it.value.getConnectionFactory()
+                config.getConnectionFactory()
                     .coSqlClient(tables)
             }
 
             DbType.MARIADB -> {
-                val tables = getMariadbTablesInPackage(it.value.packages)
+                val tables = getMariadbTablesInPackage(config.packages)
                 createTables = tables.allTables.keys
-                it.value.getConnectionFactory()
+                config.getConnectionFactory()
                     .coSqlClient(tables)
             }
 
             DbType.MYSQL -> {
-                val tables = getMysqlTablesInPackage(it.value.packages)
+                val tables = getMysqlTablesInPackage(config.packages)
                 createTables = tables.allTables.keys
-                it.value.getConnectionFactory()
+                config.getConnectionFactory()
                     .coSqlClient(tables)
             }
 
             DbType.MSSQL -> {
-                val tables = getMssqlTablesInPackage(it.value.packages)
+                val tables = getMssqlTablesInPackage(config.packages)
                 createTables = tables.allTables.keys
-                it.value.getConnectionFactory()
+                config.getConnectionFactory()
                     .coSqlClient(tables)
             }
 
             DbType.POSTGRESQL -> {
-                val tables = getPostgresqlTablesInPackage(it.value.packages)
+                val tables = getPostgresqlTablesInPackage(config.packages)
                 createTables = tables.allTables.keys
-                it.value.getConnectionFactory()
+                config.getConnectionFactory()
                     .coSqlClient(tables)
             }
 
             DbType.ORACLE -> {
-                val tables = getOracleTablesInPackage(it.value.packages)
+                val tables = getOracleTablesInPackage(config.packages)
                 createTables = tables.allTables.keys
-                it.value.getConnectionFactory()
+                config.getConnectionFactory()
                     .coSqlClient(tables)
             }
 
             DbType.SQLITE -> throw UnsupportedOperationException("SQLite is not supported")
         }
 
-        if (it.value.init != null) {
+        if (config.init != null) {
             runBlocking {
-                initDatabase(client, createTables, it.value.init!!)
+                initDatabase(client, createTables, config.init!!)
             }
         }
 
-        single<R2dbcSqlClient>(named(it.key)) { client }
+        single<R2dbcSqlClient>(named(name)) { client }
     }
 }
 

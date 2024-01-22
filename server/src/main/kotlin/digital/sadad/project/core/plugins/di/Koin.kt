@@ -2,6 +2,7 @@ package digital.sadad.project.core.plugins.di
 
 import digital.sadad.project.core.config.AppConfig
 import digital.sadad.project.core.plugins.di.module.database.databaseModule
+import digital.sadad.project.core.plugins.di.module.keycloak.keycloakModule
 import digital.sadad.project.core.plugins.di.module.security.securityModule
 import io.ktor.server.application.*
 import org.koin.ksp.generated.*
@@ -14,11 +15,23 @@ fun Application.configureKoin() {
     val appConfig: AppConfig by inject()
 
     install(Koin) {
-        slf4jLogger() // Logger
-        defaultModule() // Default module with Annotations
-        appConfig.config.databases?.let { databaseModule(it) } // Database module with clients
-        appConfig.config.security?.let { securityModule(it) } // Security module
-//        appConfig.config.security?.let { keycloakModule(it) } // Keycloak module with clients
+        // Logger
+        slf4jLogger()
+
+        // Default module with Annotations
+        defaultModule()
+
+        // Database module with clients
+        appConfig.config.databases?.let { databaseModule(it) }
+
+        // Security module
+        appConfig.config.security?.let { securityModule(it) }
+
+        // Keycloak module with clients
+        appConfig.config.security?.oauth?.let {
+            keycloakModule(it.entries.filter { it.value.serverProvider.name == "keycloak" && it.value.client != null }
+                .associate { it.key to it.value.client!! })
+        }
     }
 }
 
