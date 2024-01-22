@@ -12,7 +12,7 @@ class SessionAuthService(
 
 ) : ChallengeableAuthService, SkipableAuthService, RBACAuthService {
 
-    fun validate(principal: UserPrincipal): Principal? =
+    suspend fun validate(principal: UserPrincipal): Principal? =
         if (principal.username.startsWith("jet")) {
             principal
         } else {

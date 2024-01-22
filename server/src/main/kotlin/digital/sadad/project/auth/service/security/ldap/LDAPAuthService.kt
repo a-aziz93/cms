@@ -14,7 +14,7 @@ class LDAPAuthService(
 
 ) : SkipableAuthService, RBACAuthService {
 
-    fun validate(
+    suspend fun validate(
         credential: UserPasswordCredential,
         ldapServerURL: String,
         userDNFormat: String

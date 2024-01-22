@@ -23,7 +23,7 @@ class BasicAuthService(
         digester = digestFunction
     )
 
-    fun validate(credential: UserPasswordCredential): Principal? =
+    suspend fun validate(credential: UserPasswordCredential): Principal? =
         hashedUserTable.authenticate(credential)
 
 }

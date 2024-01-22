@@ -13,7 +13,7 @@ class BearerAuthService(
 
 ) : SkipableAuthService, RBACAuthService {
 
-    fun validate(credential: BearerTokenCredential): Principal? =
+    suspend fun validate(credential: BearerTokenCredential): Principal? =
         if (credential.token == "abc123") {
             UserIdPrincipal("jetbrains")
         } else {

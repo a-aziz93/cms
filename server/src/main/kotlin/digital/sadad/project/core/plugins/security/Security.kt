@@ -1,16 +1,16 @@
 package digital.sadad.project.core.plugins.security
 
+import digital.sadad.project.auth.model.security.UserPrincipal
 import digital.sadad.project.auth.service.security.basic.BasicAuthService
+import digital.sadad.project.auth.service.security.bearer.BearerAuthService
 import digital.sadad.project.auth.service.security.digest.DigestAuthService
+import digital.sadad.project.auth.service.security.form.FormAuthService
 import digital.sadad.project.auth.service.security.jwt.JWTHS256Service
 import digital.sadad.project.auth.service.security.jwt.JWTRS256Service
-import digital.sadad.project.core.config.AppConfig
-import digital.sadad.project.auth.model.security.UserPrincipal
-import digital.sadad.project.auth.service.security.bearer.BearerAuthService
-import digital.sadad.project.auth.service.security.form.FormAuthService
 import digital.sadad.project.auth.service.security.ldap.LDAPAuthService
 import digital.sadad.project.auth.service.security.oauth.OAuthService
 import digital.sadad.project.auth.service.security.session.SessionAuthService
+import digital.sadad.project.core.config.AppConfig
 import io.ktor.http.*
 import io.ktor.http.auth.*
 import io.ktor.http.parsing.*
@@ -20,18 +20,20 @@ import io.ktor.server.auth.jwt.*
 import io.ktor.server.plugins.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import org.koin.core.qualifier.named
 import org.koin.ktor.ext.inject
 import java.nio.charset.Charset
 import kotlin.collections.set
 
-// Seguridad en base a JWT
 fun Application.configureSecurity() {
     val appConfig: AppConfig by inject()
 
     appConfig.config.auth?.let {
 
         // BASIC
-        val basicAuthService: BasicAuthService by inject()
+        val basicAuthService: Map<String, Lazy<BasicAuthService>>? = it.basic?.keys?.associate {
+            it to inject<BasicAuthService>(named(it))
+        }
         // DIGEST
         val digestAuthService: DigestAuthService by inject()
         // BEARER
@@ -63,7 +65,6 @@ fun Application.configureSecurity() {
                     skipWhen {
                         basicAuthService.skip(it)
                     }
-
                 }
                 rbac(name) {
                     extractRoles {

@@ -36,7 +36,7 @@ open class JWT(private val config: JWTConfig) {
             .sign(algorithm)
     }
 
-    fun validate(credential: JWTCredential): Principal? =
+    suspend fun validate(credential: JWTCredential): Principal? =
         if (credential.payload.audience.contains(config.audience) &&
             credential.payload.getClaim(USERNAME_CLAIM).asString().isNotEmpty()
         ) {

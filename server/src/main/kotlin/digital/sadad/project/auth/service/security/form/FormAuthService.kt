@@ -14,7 +14,7 @@ class FormAuthService(
 
 ) : ChallengeableAuthService, SkipableAuthService, RBACAuthService {
 
-    fun validate(credential: UserPasswordCredential): Principal? =
+    suspend fun validate(credential: UserPasswordCredential): Principal? =
         if (credential.name == "jetbrains" && credential.password == "foobar") {
             UserIdPrincipal(credential.name)
         } else {

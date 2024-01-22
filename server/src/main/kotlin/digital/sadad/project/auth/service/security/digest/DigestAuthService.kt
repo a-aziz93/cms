@@ -25,7 +25,7 @@ class DigestAuthService(
 
     fun provider(username: String, realm: String): ByteArray? = userTable[username]
 
-    fun validate(credential: DigestCredential): Principal? =
+    suspend fun validate(credential: DigestCredential): Principal? =
         if (credential.userName.isNotEmpty()) {
             CustomPrincipal(credential.userName, credential.realm)
         } else {
