@@ -1,6 +1,6 @@
 package digital.sadad.project.core.plugins.security
 
-import digital.sadad.project.auth.model.security.UserPrincipal
+import digital.sadad.project.auth.model.security.UserIDPrincipal
 import digital.sadad.project.auth.service.security.basic.BasicAuthService
 import digital.sadad.project.auth.service.security.bearer.BearerAuthService
 import digital.sadad.project.auth.service.security.digest.DigestAuthService
@@ -153,7 +153,7 @@ fun Application.configureSecurity() {
 
             // SESSION
             it.session?.forEach { (name, config) ->
-                session<UserPrincipal>(name) {
+                session<UserIDPrincipal>(name) {
 
                     challenge {
                         sessionAuthService.challenge(call)

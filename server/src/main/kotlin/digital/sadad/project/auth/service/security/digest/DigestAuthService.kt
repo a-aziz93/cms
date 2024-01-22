@@ -1,18 +1,16 @@
 package digital.sadad.project.auth.service.security.digest
 
-import digital.sadad.project.auth.model.security.jwt.JWTHS256
+import digital.sadad.project.auth.repository.user.UserRepository
 import digital.sadad.project.auth.service.security.RBACAuthService
 import digital.sadad.project.auth.service.security.SkipableAuthService
-import digital.sadad.project.core.config.AppConfig
 import io.ktor.server.auth.*
-import io.ktor.util.*
 import org.koin.core.annotation.Single
 import java.security.MessageDigest
 import kotlin.text.Charsets.UTF_8
 
 @Single
 class DigestAuthService(
-
+    val userRepository: UserRepository,
 ) : SkipableAuthService, RBACAuthService {
 
     fun getMd5Digest(str: String): ByteArray = MessageDigest.getInstance("MD5").digest(str.toByteArray(UTF_8))

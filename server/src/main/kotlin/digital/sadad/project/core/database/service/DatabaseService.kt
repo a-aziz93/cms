@@ -24,64 +24,7 @@ class DatabaseService(
     appConfig: AppConfig,
     private val config: Map<String, DatabaseConfig>? = appConfig.config.databases
 ) {
-    val clients: Map<String, R2dbcSqlClient> =
-        config?.mapNotNull {
-            var createTables: Set<Table<*>>? = null
-            val client = when (it.value.type) {
-                DbType.H2 -> {
-                    val tables = getH2TablesInPackage(it.value.packages)
-                    createTables = tables.allTables.keys
-                    it.value.getConnectionFactory()
-                        .coSqlClient(tables)
-                }
 
-                DbType.MARIADB -> {
-                    val tables = getMariadbTablesInPackage(it.value.packages)
-                    createTables = tables.allTables.keys
-                    it.value.getConnectionFactory()
-                        .coSqlClient(tables)
-                }
-
-                DbType.MYSQL -> {
-                    val tables = getMysqlTablesInPackage(it.value.packages)
-                    createTables = tables.allTables.keys
-                    it.value.getConnectionFactory()
-                        .coSqlClient(tables)
-                }
-
-                DbType.MSSQL -> {
-                    val tables = getMssqlTablesInPackage(it.value.packages)
-                    createTables = tables.allTables.keys
-                    it.value.getConnectionFactory()
-                        .coSqlClient(tables)
-                }
-
-                DbType.POSTGRESQL -> {
-                    val tables = getPostgresqlTablesInPackage(it.value.packages)
-                    createTables = tables.allTables.keys
-                    it.value.getConnectionFactory()
-                        .coSqlClient(tables)
-                }
-
-                DbType.ORACLE -> {
-                    val tables = getOracleTablesInPackage(it.value.packages)
-                    createTables = tables.allTables.keys
-                    it.value.getConnectionFactory()
-                        .coSqlClient(tables)
-                }
-
-                DbType.SQLITE -> throw UnsupportedOperationException("SQLite is not supported")
-            }
-
-            if (it.value.init != null) {
-                runBlocking {
-                    initDatabase(client, createTables, it.value.init!!)
-                }
-            }
-
-            it.key to client
-        }?.toMap()
-            ?: emptyMap()
 
     // Init data
     private suspend fun initDatabase(client: R2dbcSqlClient, tables: Set<Table<*>>, config: DatabaseInitConfig) =
@@ -105,92 +48,7 @@ class DatabaseService(
         }
 
     companion object {
-        private fun DatabaseConfig.getConnectionFactory(): ConnectionFactory {
-            val connectionBuilder = ConnectionFactoryOptions.builder()
-                .option(
-                    ConnectionFactoryOptions.DRIVER,
-                    driver
-                )
-                .option(
-                    ConnectionFactoryOptions.USER,
-                    user
-                )
-                .option(
-                    ConnectionFactoryOptions.PASSWORD,
-                    password
-                )
-                .option(
-                    ConnectionFactoryOptions.DATABASE,
-                    this.database
-                )
-            if (protocol != null) {
-                connectionBuilder
-                    .option(
-                        ConnectionFactoryOptions.PROTOCOL,
-                        protocol
-                    )
-            }
-            if (host != null) {
-                connectionBuilder
-                    .option(
-                        ConnectionFactoryOptions.HOST,
-                        host
-                    )
-            }
-            if (port != null) {
-                connectionBuilder
-                    .option(
-                        ConnectionFactoryOptions.PORT,
-                        port
-                    )
-            }
-            return ConnectionFactories.get(
-                connectionBuilder.build()
-            )
-        }
 
-        private fun <T : Table<*>> getTablesInPackage(
-            packages: List<String>,
-            type: KClass<T>
-        ): List<T> = packages.flatMap { it ->
-            val reflections = Reflections(it)
-            reflections.getSubTypesOf(type::class.java).map {
-                it.genericInterfaces[0] as T
-            }
-        }
-
-        private fun getH2TablesInPackage(packages: List<String>): H2Tables =
-            tables().h2(
-                *(getTablesInPackage(packages, IH2Table::class) + getTablesInPackage(
-                    packages,
-                    GenericTable::class
-                )).toTypedArray()
-            )
-
-        private fun getMariadbTablesInPackage(packages: List<String>): MariadbTables =
-            tables().mariadb(*getTablesInPackage(packages, MariadbTable::class).toTypedArray())
-
-        private fun getMysqlTablesInPackage(packages: List<String>): MysqlTables =
-            tables().mysql(*getTablesInPackage(packages, MysqlTable::class).toTypedArray())
-
-        private fun getMssqlTablesInPackage(packages: List<String>): MssqlTables =
-            tables().mssql(
-                *(getTablesInPackage(packages, MssqlTable::class) + getTablesInPackage(
-                    packages,
-                    GenericTable::class
-                )).toTypedArray()
-            )
-
-        private fun getPostgresqlTablesInPackage(packages: List<String>): PostgresqlTables =
-            tables().postgresql(
-                *(getTablesInPackage(packages, PostgresqlTable::class) + getTablesInPackage(
-                    packages,
-                    GenericTable::class
-                )).toTypedArray()
-            )
-
-        private fun getOracleTablesInPackage(packages: List<String>): OracleTables =
-            tables().oracle(*getTablesInPackage(packages, OracleTable::class).toTypedArray())
 
 
     }

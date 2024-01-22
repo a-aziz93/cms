@@ -1,8 +1,6 @@
 package digital.sadad.project.auth.service.security.jwt
 
 import digital.sadad.project.auth.model.security.jwt.JWTRS256
-import digital.sadad.project.auth.service.security.RBACAuthService
-import digital.sadad.project.auth.service.security.SkipableAuthService
 import digital.sadad.project.core.config.AppConfig
 import mu.two.KotlinLogging
 import org.koin.core.annotation.Single
