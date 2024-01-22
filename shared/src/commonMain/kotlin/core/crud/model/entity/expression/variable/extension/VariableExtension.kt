@@ -33,7 +33,7 @@ private fun Any?.eqV(): Value<*> =
             else -> throw IllegalAccessException("Not equatable value")
         }
 
-private fun Any?.checkEquality(value: Any?, equator: (Variable, Variable) -> BooleanVariable): BooleanVariable {
+private fun <T:Any?> T.checkEquality(value: T, equator: (Variable, Variable) -> BooleanVariable): BooleanVariable {
     val leftValue = if (this is FieldValue) this else this.eqV()
     val rightValue = if (value is FieldValue) value else value.eqV()
     if (leftValue::class == rightValue::class || leftValue is FieldValue || leftValue is NullValue || rightValue is FieldValue || rightValue is NullValue) {
@@ -43,9 +43,9 @@ private fun Any?.checkEquality(value: Any?, equator: (Variable, Variable) -> Boo
     }
 }
 
-fun Any?.eq(value: Any?): BooleanVariable = this.checkEquality(value, Logic::eq)
+fun <T:Any?> T.eq(value: T): BooleanVariable = this.checkEquality(value, Logic::eq)
 
-fun Any?.neq(value: Any?): BooleanVariable = this.checkEquality(value, Logic::neq)
+fun <T:Any?> T.neq(value: T): BooleanVariable = this.checkEquality(value, Logic::neq)
 
 private fun Any.compV(): Value<*> =
     when (this) {

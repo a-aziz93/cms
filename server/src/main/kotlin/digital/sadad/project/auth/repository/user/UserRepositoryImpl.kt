@@ -3,9 +3,9 @@ package digital.sadad.project.auth.repository.user
 import de.nycode.bcrypt.hash
 import de.nycode.bcrypt.verify
 import digital.sadad.project.auth.entity.role.RoleEntity
-import digital.sadad.project.auth.entity.role.RoleTable
+import digital.sadad.project.auth.model.entity.role.RoleTable
 import digital.sadad.project.auth.entity.user.UserEntity
-import digital.sadad.project.auth.entity.user.UserTable
+import digital.sadad.project.auth.model.entity.user.UserTable
 import digital.sadad.project.core.config.model.database.DatabaseConfig
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

@@ -3,7 +3,7 @@ package digital.sadad.project.core.plugins.routing
 import core.error.HttpError
 import digital.sadad.project.auth.network.restful.roleRoutes
 import digital.sadad.project.auth.network.restful.userRoutes
-import digital.sadad.project.core.plugins.session.model.UserSession
+import digital.sadad.project.auth.model.security.UserPrincipal
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.http.content.*
@@ -27,7 +27,7 @@ fun Application.configureRouting() {
         }
 
         get("/logout") {
-            call.sessions.clear<UserSession>()
+            call.sessions.clear<UserPrincipal>()
         }
     }
     // Add our routes

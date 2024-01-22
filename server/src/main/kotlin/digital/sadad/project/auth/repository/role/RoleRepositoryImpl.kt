@@ -1,7 +1,7 @@
 package digital.sadad.project.auth.repository.role
 
 import digital.sadad.project.auth.entity.role.RoleEntity
-import digital.sadad.project.auth.entity.role.RoleTable
+import digital.sadad.project.auth.model.entity.role.RoleTable
 import digital.sadad.project.core.database.service.DatabaseService
 import org.ufoss.kotysa.CoroutinesSqlClientDeleteOrUpdate
 import org.ufoss.kotysa.CoroutinesSqlClientSelect

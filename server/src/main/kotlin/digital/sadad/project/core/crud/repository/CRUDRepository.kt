@@ -9,7 +9,7 @@ import core.crud.model.entity.expression.variable.Variable
 import core.crud.model.entity.expression.aggregate.Aggregate
 import core.crud.model.entity.expression.aggregate.AggregateExpression.*
 import core.crud.model.entity.expression.projection.Projection
-import digital.sadad.project.auth.entity.user.UserTable
+import digital.sadad.project.auth.model.entity.user.UserTable
 import digital.sadad.project.core.crud.model.TableMetadata
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow

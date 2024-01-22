@@ -2,11 +2,9 @@ package digital.sadad.project.core.plugins.session
 
 import digital.sadad.project.core.config.AppConfig
 import digital.sadad.project.core.config.model.session.CookieConfig
-import digital.sadad.project.core.plugins.session.model.UserSession
-import io.ktor.http.*
+import digital.sadad.project.auth.model.security.UserPrincipal
 import io.ktor.server.application.*
 import io.ktor.server.sessions.*
-import io.ktor.util.*
 import org.koin.ktor.ext.inject
 import java.io.File
 
@@ -15,7 +13,7 @@ fun Application.configureSession() {
     appConfig.config.session?.let {
         install(Sessions) {
             it.userSessionCookie?.let {
-                cookie<UserSession>("user_session", it)
+                cookie<UserPrincipal>("user_session", it)
             }
         }
     }
