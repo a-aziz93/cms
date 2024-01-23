@@ -6,7 +6,7 @@ import com.auth0.jwt.algorithms.Algorithm
 import digital.sadad.project.auth.service.security.ChallengeableAuthService
 import digital.sadad.project.auth.service.security.RBACAuthService
 import digital.sadad.project.auth.service.security.SkipableAuthService
-import digital.sadad.project.core.config.model.security.jwt.JWTConfig
+import digital.sadad.project.core.config.model.plugin.security.jwt.JWTConfig
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -15,7 +15,7 @@ import io.ktor.server.response.*
 import java.util.*
 import kotlin.time.DurationUnit
 
-abstract class JWTAuthService(private val config: JWTConfig) : ChallengeableAuthService, SkipableAuthService,
+abstract class JWTAuthService(private val config: digital.sadad.project.core.config.model.plugin.security.jwt.JWTConfig) : ChallengeableAuthService, SkipableAuthService,
     RBACAuthService {
     override fun roles(principal: Principal): Set<String> =
         (principal as JWTPrincipal).payload.claims?.get(USER_ROLES_CLAIM)?.asList(String::class.java)?.toSet()

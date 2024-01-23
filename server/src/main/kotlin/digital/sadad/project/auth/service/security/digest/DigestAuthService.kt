@@ -4,15 +4,15 @@ import digital.sadad.project.auth.model.security.UserIdPrincipalMetadata
 import digital.sadad.project.auth.repository.user.UserRepository
 import digital.sadad.project.auth.service.security.RBACAuthService
 import digital.sadad.project.auth.service.security.SkipableAuthService
-import digital.sadad.project.core.config.model.security.basic.BasicAuthConfig
-import digital.sadad.project.core.config.model.security.digest.DigestAuthConfig
+import digital.sadad.project.core.config.model.plugin.security.basic.BasicAuthConfig
+import digital.sadad.project.core.config.model.plugin.security.digest.DigestAuthConfig
 import io.ktor.server.auth.*
 import org.koin.core.annotation.Single
 import java.security.MessageDigest
 import kotlin.text.Charsets.UTF_8
 
 class DigestAuthService(
-    val config: DigestAuthConfig,
+    val config: digital.sadad.project.core.config.model.plugin.security.digest.DigestAuthConfig,
     val userRepository: UserRepository,
 ) : SkipableAuthService, RBACAuthService {
 

@@ -4,7 +4,7 @@ import auth.entity.user.UserEntity
 import com.auth0.jwk.JwkProvider
 import com.auth0.jwk.JwkProviderBuilder
 import com.auth0.jwt.algorithms.Algorithm
-import digital.sadad.project.core.config.model.security.jwt.JWTRS256Config
+import digital.sadad.project.core.config.model.plugin.security.jwt.JWTRS256Config
 import java.security.KeyFactory
 import java.security.interfaces.RSAPrivateKey
 import java.security.interfaces.RSAPublicKey
@@ -13,7 +13,7 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 
 class JWTRS256Service(
-    val config: JWTRS256Config,
+    val config: digital.sadad.project.core.config.model.plugin.security.jwt.JWTRS256Config,
 ) : JWTAuthService(config) {
     val jwkProvider: JwkProvider by lazy {
         JwkProviderBuilder(config.issuer)

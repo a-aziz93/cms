@@ -4,13 +4,13 @@ import digital.sadad.project.auth.model.security.UserIdPrincipalMetadata
 import digital.sadad.project.auth.repository.user.UserRepository
 import digital.sadad.project.auth.service.security.RBACAuthService
 import digital.sadad.project.auth.service.security.SkipableAuthService
-import digital.sadad.project.core.config.model.security.basic.BasicAuthConfig
+import digital.sadad.project.core.config.model.plugin.security.basic.BasicAuthConfig
 import io.ktor.server.auth.*
 import io.ktor.util.*
 import org.koin.core.annotation.Single
 
 class BasicAuthService(
-    val config: BasicAuthConfig,
+    val config: digital.sadad.project.core.config.model.plugin.security.basic.BasicAuthConfig,
     val userRepository: UserRepository,
 ) : SkipableAuthService, RBACAuthService {
 

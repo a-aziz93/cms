@@ -1,4 +1,4 @@
-databases:
+database:
   - h2-database:
       type: H2
       driver: h2
