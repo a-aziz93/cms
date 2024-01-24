@@ -1,4 +1,4 @@
-package digital.sadad.project.core.model.entity.userrole
+package digital.sadad.project.core.crud.entity.userrole
 
 import auth.entity.userrole.UserRoleEntity
 import digital.sadad.project.auth.model.entity.role.RoleTable

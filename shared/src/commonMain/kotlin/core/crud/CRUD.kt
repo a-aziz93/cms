@@ -8,7 +8,7 @@ import core.crud.model.entity.expression.variable.Variable
 import core.crud.model.entity.expression.aggregate.Aggregate
 import kotlinx.coroutines.flow.Flow
 
-interface CRUD<T : Any, ID : Any> {
+interface CRUD<T : Any> {
     suspend fun save(
         entities: Collection<T>,
         updateIfExists: Boolean = true,

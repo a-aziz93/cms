@@ -4,8 +4,7 @@ import auth.entity.user.UserEntity
 import com.auth0.jwt.JWT
 import com.auth0.jwt.JWTVerifier
 import com.auth0.jwt.algorithms.Algorithm
-import digital.sadad.project.core.error.token.TokenException
-import digital.sadad.project.core.config.model.plugin.security.jwt.JWTHS256Config
+import digital.sadad.project.core.exception.token.TokenException
 
 class JWTHS256Service(
     val config: digital.sadad.project.core.config.model.plugin.security.jwt.JWTHS256Config,

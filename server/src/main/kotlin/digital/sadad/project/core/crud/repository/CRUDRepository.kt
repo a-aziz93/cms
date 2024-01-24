@@ -9,7 +9,6 @@ import core.crud.model.entity.expression.variable.Variable
 import core.crud.model.entity.expression.aggregate.Aggregate
 import core.crud.model.entity.expression.aggregate.AggregateExpression.*
 import core.crud.model.entity.expression.projection.Projection
-import digital.sadad.project.auth.model.entity.user.UserTable
 import digital.sadad.project.core.crud.model.TableMetadata
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -23,7 +22,7 @@ import kotlin.reflect.full.*
 abstract class CRUDRepository<T : Any, ID : Any>(
     protected val client: R2dbcSqlClient,
     protected val table: Table<T>,
-) : CRUD<T, ID> {
+) : CRUD<T> {
 
     private val tableMetadata = TableMetadata(table)
 

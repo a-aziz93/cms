@@ -1,6 +1,6 @@
 package digital.sadad.project.core.plugin.statuspages
 
-import digital.sadad.project.core.error.token.TokenException
+import digital.sadad.project.core.exception.token.TokenException
 import digital.sadad.project.core.config.model.plugin.statuspages.StatusPagesConfig
 import io.ktor.http.*
 import io.ktor.server.application.*
