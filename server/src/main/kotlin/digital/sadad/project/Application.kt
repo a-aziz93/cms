@@ -3,10 +3,18 @@ package digital.sadad.project
 import digital.sadad.project.core.config.AppConfig
 import digital.sadad.project.core.plugin.applicationmonitoring.configureApplicationMonitoring
 import digital.sadad.project.core.plugin.authheadresponse.configureAutoHeadResponse
+import digital.sadad.project.core.plugin.cachingheaders.configureCachingHeaders
+import digital.sadad.project.core.plugin.cachingheaders.configureConditionalHeaders
 import digital.sadad.project.core.plugin.compression.configureCompression
 import digital.sadad.project.core.plugin.cors.configureCors
+import digital.sadad.project.core.plugin.dataconversion.configureDataConversion
+import digital.sadad.project.core.plugin.defaultheaders.configureDefaultHeaders
 import digital.sadad.project.core.plugin.di.configureKoin
+import digital.sadad.project.core.plugin.forwardedheaders.configureForwardedHeaders
 import digital.sadad.project.core.plugin.graphql.configureGraphQL
+import digital.sadad.project.core.plugin.hsts.configureHSTS
+import digital.sadad.project.core.plugin.hsts.configureHttpsRedirect
+import digital.sadad.project.core.plugin.hsts.configurePartialContent
 import digital.sadad.project.core.plugin.locations.configureLocations
 import digital.sadad.project.core.plugin.ratelimit.configureRateLimit
 import digital.sadad.project.core.plugin.resources.configureResources
@@ -41,19 +49,20 @@ fun Application.module() {
         appConfig.config.security
     )
 
-    // Configure the serialization plugin
+    // Configure the Serialization plugin
     appConfig.config.serialization?.let { configureSerialization(it) }
 
-    // Configure the routing plugin
+    // Configure the HttpsRedirect plugin
+    appConfig.config.httpsRedirect?.let { configureHttpsRedirect(it) }
+
+    // Configure the Routing plugin
     appConfig.config.routing?.let { configureRouting(it) }
 
     // Configure the websockets plugin
     appConfig.config.websockets?.let {
         configureWebSockets(
             it,
-            appConfig.baseConfig.keys().contains("ktor.security.ssl"),
-            appConfig.baseConfig.propertyOrNull("ktor.deployment.sslPort")?.getString()
-                ?.toInt() ?: appConfig.baseConfig.port
+            if (appConfig.sslPort == null) "ws://${appConfig.baseConfig.host}:${appConfig.baseConfig.port}" else "wss://${appConfig.baseConfig.host}:${appConfig.sslPort}"
         )
     }
 
@@ -69,6 +78,12 @@ fun Application.module() {
     // Configure the compression plugin
     appConfig.config.compression?.let { configureCompression(it) }
 
+    // Configure the PartialContent plugin
+    appConfig.config.partialContent?.let { configurePartialContent(it) }
+
+    // Configure the HttpsRedirect plugin
+    appConfig.config.dataConversion?.let { configureDataConversion(it) }
+
     // Configure the validation plugin
     appConfig.config.validation?.let { configureValidation(it) }
 
@@ -81,6 +96,21 @@ fun Application.module() {
     // Configure the status pages plugin
     appConfig.config.statusPages?.let { configureStatusPages(it) }
 
+    // Configure the DefaultHeaders plugin
+    appConfig.config.defaultHeaders?.let { configureDefaultHeaders(it) }
+
+    // Configure the CachingHeaders plugin
+    appConfig.config.cachingHeaders?.let { configureCachingHeaders(it) }
+
+    // Configure the ConditionalHeaders plugin
+    appConfig.config.conditionalHeaders?.let { configureConditionalHeaders(it) }
+
+    // Configure the ForwardedHeaders plugin
+    appConfig.config.forwardedHeaders?.let { configureForwardedHeaders(it) }
+
+    // Configure the HSTS plugin
+    appConfig.config.hsts?.let { configureHSTS(it) }
+
     // Configure the AutoHeadResponse plugin
     appConfig.config.autoHeadResponse?.let { configureAutoHeadResponse(it) }
 
@@ -91,7 +121,12 @@ fun Application.module() {
     appConfig.config.session?.let { configureSession(it, appConfig.config.security) }
 
     // Configure the security plugin with JWT
-    appConfig.config.security?.let { configureSecurity(it) }
+    appConfig.config.security?.let {
+        configureSecurity(
+            it,
+            if (appConfig.sslPort == null) "http://${appConfig.baseConfig.host}:${appConfig.baseConfig.port}" else "https://${appConfig.baseConfig.host}:${appConfig.sslPort}"
+        )
+    }
 
     // Configure the FreeMarker plugin for templating .ftl files
     appConfig.config.freeMarker?.let { configureFreeMarker(it) }

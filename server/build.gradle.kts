@@ -29,6 +29,13 @@ dependencies {
     implementation(libs.logback)
     implementation(libs.bundles.ktor.common)
     implementation(libs.bundles.ktor.server)
+    implementation("io.ktor:ktor-server-caching-headers-jvm:2.3.6")
+    implementation("io.ktor:ktor-server-default-headers-jvm:2.3.6")
+    implementation("io.ktor:ktor-server-conditional-headers-jvm:2.3.6")
+    implementation("io.ktor:ktor-server-forwarded-header-jvm:2.3.6")
+    implementation("io.ktor:ktor-server-hsts-jvm:2.3.6")
+    implementation("io.ktor:ktor-server-http-redirect-jvm:2.3.6")
+    implementation("io.ktor:ktor-server-partial-content-jvm:2.3.6")
     testImplementation(libs.kotlin.test.junit)
     // Added
     implementation(libs.ktor.swagger.ui)

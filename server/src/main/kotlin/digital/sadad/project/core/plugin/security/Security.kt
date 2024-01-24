@@ -23,13 +23,14 @@ import io.ktor.server.plugins.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import io.ktor.server.sessions.*
 import java.nio.charset.Charset
 import java.util.*
 import kotlin.collections.set
 
 fun Application.configureSecurity(
     config: SecurityConfig,
-    appURL: String,
+    oauthRedirectURL: String,
 ) {
     if (config.enable == true) {
 
@@ -298,7 +299,7 @@ fun Application.configureSecurity(
                 val redirects = mutableMapOf<String, String>()
                 oauth(name) {
                     // Configure oauth authentication
-                    urlProvider = { "$appUrl/callback" }
+                    urlProvider = { "$oauthRedirectURL/callback" }
                     providerLookup = {
                         OAuthServerSettings.OAuth2ServerSettings(
                             name = service.config.server.name,

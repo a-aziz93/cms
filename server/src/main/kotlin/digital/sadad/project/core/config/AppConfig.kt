@@ -16,6 +16,8 @@ class AppConfig {
 
     val env = baseConfig.propertyOrNull("ktor.environment") ?: ""
 
+    val sslPort = baseConfig.propertyOrNull("ktor.deployment.sslPort")?.getString()?.toInt()
+
     val config = ConfigLoader().loadConfigOrThrow<Config>(
         // Environment profiles configuration
         (baseConfig.propertyOrNull("profiles")?.getList() ?: emptyList()).map {

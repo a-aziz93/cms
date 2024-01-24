@@ -12,8 +12,7 @@ import java.time.Duration
 
 fun Application.configureWebSockets(
     config: WebSocketsConfig,
-    isHttps: Boolean,
-    port: Int,
+    websocketPageUrl: String,
 ) {
     if (config.enable == true) {
         install(WebSockets) {
@@ -52,9 +51,7 @@ fun Application.configureWebSockets(
                         FreeMarkerContent(
                             page.filePath ?: "websocket/index.ftl",
                             mapOf(
-                                "baseAddress" to "${
-                                    if (isHttps) "wss" else "ws"
-                                }://localhost:$port"
+                                "baseAddress" to websocketPageUrl
                             )
                         )
                     )

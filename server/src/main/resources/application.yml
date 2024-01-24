@@ -36,16 +36,24 @@ profiles:
   - database
   - di
   - serialization
+  - httpsredirect
   - routing
   - websockets
   - graphql
   - ratelimit
   - cors
   - compression
+  - partialcontent
+  - dataconversion
   - validation
   - resources
   - locations
   - statuspages
+  - defaultheaders
+  - cachingheaders
+  - conditionalheaders
+  - forwardedheaders
+  - hsts
   - autoheadresponse
   - xhttpmethodoverride
   - session
