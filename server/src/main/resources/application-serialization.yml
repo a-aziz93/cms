@@ -7,3 +7,6 @@ serialization:
     allow-structured-map-keys: true
     pretty-print: false
     use-array-polymorphism: false
+  xml:
+  cbor:
+  protobuf:
