@@ -54,7 +54,6 @@ dependencies {
     implementation(libs.kgraphql.ktor)
     implementation(libs.keycloak.admin.client)
     implementation(libs.swagger.codegen.generators)
-    implementation(libs.swagger.ui)
 }
 
 ksp {
