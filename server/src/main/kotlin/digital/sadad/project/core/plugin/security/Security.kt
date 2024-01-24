@@ -1,30 +1,36 @@
 package digital.sadad.project.core.plugin.security
 
+import auth.dto.user.UserDto
+import com.auth0.jwt.JWT
+import com.auth0.jwt.algorithms.Algorithm
 import core.koin.getAll
-import digital.sadad.project.auth.model.security.UserIdPrincipalMetadata
-import digital.sadad.project.auth.service.security.basic.BasicAuthService
-import digital.sadad.project.auth.service.security.bearer.BearerAuthService
-import digital.sadad.project.auth.service.security.digest.DigestAuthService
-import digital.sadad.project.auth.service.security.form.FormAuthService
-import digital.sadad.project.auth.service.security.jwt.JWTHS256Service
-import digital.sadad.project.auth.service.security.jwt.JWTRS256Service
-import digital.sadad.project.auth.service.security.ldap.LDAPAuthService
-import digital.sadad.project.auth.service.security.oauth.OAuthService
-import digital.sadad.project.auth.service.security.session.SessionAuthService
-import digital.sadad.project.core.config.AppConfig
 import digital.sadad.project.core.config.model.plugin.security.SecurityConfig
+import digital.sadad.project.core.service.security.basic.BasicAuthService
+import digital.sadad.project.core.service.security.bearer.BearerAuthService
+import digital.sadad.project.core.service.security.digest.DigestAuthService
+import digital.sadad.project.core.service.security.form.FormAuthService
+import digital.sadad.project.core.service.security.jwt.JWTHS256Service
+import digital.sadad.project.core.service.security.jwt.JWTRS256Service
+import digital.sadad.project.core.service.security.ldap.LDAPAuthService
+import digital.sadad.project.core.service.security.oauth.OAuthService
+import digital.sadad.project.core.service.security.session.SessionAuthService
 import io.ktor.http.auth.*
 import io.ktor.http.parsing.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.auth.jwt.*
 import io.ktor.server.plugins.*
+import io.ktor.server.request.*
+import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import org.koin.ktor.ext.inject
 import java.nio.charset.Charset
+import java.util.*
 import kotlin.collections.set
 
-fun Application.configureSecurity(config: SecurityConfig) {
+fun Application.configureSecurity(
+    config: SecurityConfig,
+    appURL: String,
+) {
     if (config.enable == true) {
 
         // BASIC
@@ -292,18 +298,18 @@ fun Application.configureSecurity(config: SecurityConfig) {
                 val redirects = mutableMapOf<String, String>()
                 oauth(name) {
                     // Configure oauth authentication
-                    urlProvider = { service.config.urlProvider.redirectUrl }
+                    urlProvider = { "$appUrl/callback" }
                     providerLookup = {
                         OAuthServerSettings.OAuth2ServerSettings(
-                            name = service.config.serverProvider.name,
-                            authorizeUrl = service.config.serverProvider.authorizeUrl,
-                            accessTokenUrl = service.config.serverProvider.accessTokenUrl,
-                            clientId = service.config.serverProvider.clientId,
-                            clientSecret = service.config.serverProvider.clientSecret,
+                            name = service.config.server.name,
+                            authorizeUrl = service.config.server.authorizeUrl,
+                            accessTokenUrl = service.config.server.accessTokenUrl,
+                            clientId = service.config.server.clientId,
+                            clientSecret = service.config.server.clientSecret,
                             accessTokenRequiresBasicAuth = false,
-                            requestMethod = service.config.serverProvider.requestMethod,
-                            defaultScopes = service.config.serverProvider.defaultScopes,
-                            extraAuthParameters = service.config.serverProvider.extraAuthParameters,
+                            requestMethod = service.config.server.requestMethod,
+                            defaultScopes = service.config.server.defaultScopes,
+                            extraAuthParameters = service.config.server.extraAuthParameters,
                             onStateCreated = { call, state ->
                                 //saves new state with redirect url value
                                 call.request.queryParameters["redirectUrl"]?.let {
@@ -325,11 +331,17 @@ fun Application.configureSecurity(config: SecurityConfig) {
             }
         }
 
-        jwtHS256Services.forEach { (name, _) ->
+
+        // LOGIN ROUTE
+
+        jwtHS256Services.forEach { (name, service) ->
             routing {
                 authenticate(name) {
-                    get("/login") {
-                        // Redirects to 'authorizeUrl' automatically
+                    post("/login") {
+                        val user = call.receive<UserDto>()
+                        // Check username and password
+                        service.create(UserDto.toEntity)
+                        call.respond(hashMapOf("token" to token))
                     }
                 }
             }
@@ -338,8 +350,11 @@ fun Application.configureSecurity(config: SecurityConfig) {
         jwtRS256Services.forEach { (name, _) ->
             routing {
                 authenticate(name) {
-                    get("/login") {
-                        // Redirects to 'authorizeUrl' automatically
+                    post("/login") {
+                        val user = call.receive<UserDto>()
+                        // Check username and password
+                        service.create(UserDto.toEntity)
+                        call.respond(hashMapOf("token" to token))
                     }
                 }
             }
@@ -350,6 +365,20 @@ fun Application.configureSecurity(config: SecurityConfig) {
                 authenticate(name) {
                     get("/login") {
                         // Redirects to 'authorizeUrl' automatically
+                    }
+                    get("/callback") {
+                        val currentPrincipal: OAuthAccessTokenResponse.OAuth2? = call.principal()
+                        // redirects home if the url is not found before authorization
+                        currentPrincipal?.let { principal ->
+                            principal.state?.let { state ->
+                                call.sessions.set(UserSession(state, principal.accessToken))
+                                redirects[state]?.let { redirect ->
+                                    call.respondRedirect(redirect)
+                                    return@get
+                                }
+                            }
+                        }
+                        call.respondRedirect("/home")
                     }
                 }
             }
