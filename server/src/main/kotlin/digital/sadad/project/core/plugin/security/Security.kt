@@ -162,7 +162,6 @@ fun Application.configureSecurity(
             // SESSION
             sessionAuthServices.forEach { (name, service) ->
                 session<UserIdPrincipalMetadata>(name) {
-
                     challenge {
                         service.challenge(call)
                     }

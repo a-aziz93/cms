@@ -1,4 +1,4 @@
-package digital.sadad.project.core.model.security.session
+package digital.sadad.project.core.service.security.session.model
 
 import kotlinx.serialization.Serializable
 
