@@ -1,4 +1,5 @@
 swagger:
+  enable: true
   swagger-url: swagger
   forward-root: false
   info:

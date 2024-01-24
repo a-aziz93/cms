@@ -19,7 +19,7 @@ class AppConfig {
     val config = ConfigLoader().loadConfigOrThrow<Config>(
         // Environment profiles configuration
         (baseConfig.propertyOrNull("profiles")?.getList() ?: emptyList()).map {
-            "/application-$it-$env.yml"
+            "$env/application-$it.yml"
         } +
                 // Common profiles configuration
                 (baseConfig.propertyOrNull("profiles")?.getList() ?: emptyList()).map {

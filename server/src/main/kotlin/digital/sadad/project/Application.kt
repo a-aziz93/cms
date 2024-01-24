@@ -1,5 +1,6 @@
 package digital.sadad.project
 
+import digital.sadad.project.core.config.AppConfig
 import digital.sadad.project.core.plugin.applicationmonitoring.configureApplicationMonitoring
 import digital.sadad.project.core.plugin.authheadresponse.configureAutoHeadResponse
 import digital.sadad.project.core.plugin.compression.configureCompression
@@ -17,10 +18,11 @@ import digital.sadad.project.core.plugin.statuspages.configureStatusPages
 import digital.sadad.project.core.plugin.swagger.configureSwagger
 import digital.sadad.project.core.plugin.template.configureFreeMarker
 import digital.sadad.project.core.plugin.validation.configureValidation
-import digital.sadad.project.core.plugin.websocket.configureWebSockets
+import digital.sadad.project.core.plugin.websockets.configureWebSockets
 import digital.sadad.project.core.plugin.xhttpmethodoverride.configureXHttpMethodOverride
 import io.ktor.server.application.*
 import io.ktor.server.netty.*
+import org.koin.ktor.ext.inject
 
 
 fun main(args: Array<String>): Unit = EngineMain.main(args)
@@ -30,23 +32,24 @@ fun main(args: Array<String>): Unit = EngineMain.main(args)
  */
 @Suppress("unused") // application.conf references the main function. This annotation prevents the IDE from marking it as unused.
 fun Application.module() {
-    configureApplicationMonitoring() // Configure the Application monitoring plugin for templating .ftl files
-    configureFreeMarker() // Configure the FreeMarker plugin for templating .ftl files
-    configureKoin() // Configure the Koin plugin to inject dependencies
-    configureSecurity() // Configure the security plugin with JWT
-    configureSession() // Configure session with cookies
-    configureWebSockets() // Configure the websockets plugin
-    configureGraphQL() // Configure the graphql plugin
-    configureSerialization() // Configure the serialization plugin
-    configureRouting() // Configure the routing plugin
-    configureValidation() // Configure the validation plugin
-    configureStatusPages() // Configure the status pages plugin
-    configureCompression() // Configure the compression plugin
-    configureCors() // Configure the CORS plugin
-    configureRateLimit() // Configure the RateLimit plugin
-    configureSwagger() // Configure the Swagger plugin
-    configureResources() // Configure the Resources plugin
-    configureLocations() // Configure the Locations plugin
-    configureAutoHeadResponse() // Configure the AutoHeadResponse plugin
-    configureXHttpMethodOverride() // Configure the XHttpMethodOverride plugin
+    val appConfig: AppConfig by inject()
+    configureKoin(appConfig) // Configure the Koin plugin to inject dependencies
+    configureSerialization(appConfig.config.serialization) // Configure the serialization plugin
+    appConfig.config.routing?.let { configureRouting(it)} // Configure the routing plugin
+    appConfig.config.websockets?.let { configureWebSockets(it) } // Configure the websockets plugin
+    appConfig.config.graphql?.let { configureGraphQL(it) } // Configure the graphql plugin
+    appConfig.config.rateLimit?.let { configureRateLimit(it) } // Configure the RateLimit plugin
+    appConfig.config.cors?.let { configureCors(it) } // Configure the CORS plugin
+    appConfig.config.compression?.let { configureCompression(it) } // Configure the compression plugin
+    appConfig.config.validation?.let { configureValidation(it) } // Configure the validation plugin
+    appConfig.config.resources?.let { configureResources(it) } // Configure the Resources plugin
+    appConfig.config.locations?.let { configureLocations(it) } // Configure the Locations plugin
+    appConfig.config.statusPages?.let { configureStatusPages(it) } // Configure the status pages plugin
+    appConfig.config.autoHeadResponse?.let { configureAutoHeadResponse(it) } // Configure the AutoHeadResponse plugin
+    appConfig.config.xHttpMethodOverride?.let { configureXHttpMethodOverride(it) } // Configure the XHttpMethodOverride plugin
+    appConfig.config.session?.let { configureSession(it) } // Configure session with cookies
+    appConfig.config.security?.let { configureSecurity(it) }// Configure the security plugin with JWT
+    appConfig.config.freeMarker?.let { configureFreeMarker(it) } // Configure the FreeMarker plugin for templating .ftl files
+    appConfig.config.swagger?.let { configureSwagger(it) } // Configure the Swagger plugin
+    appConfig.config.applicationMonitoring?.let { configureApplicationMonitoring(it) } // Configure the Application monitoring plugin for templating .ftl files
 }

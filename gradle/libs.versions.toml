@@ -269,6 +269,8 @@ ktor-server-locations = { module = "io.ktor:ktor-server-locations", version.ref 
 ktor-server-auto-head-response = { module = "io.ktor:ktor-server-auto-head-response", version.ref = "ktor" }
 # XHttpMethodOverride
 ktor-server-method-override = { module = "io.ktor:ktor-server-method-override", version.ref = "ktor" }
+# Caching headers
+ktor-server-caching-headers = { module = "io.ktor:ktor-server-caching-headers", version.ref = "ktor" }
 # OAuth2
 keycloak-admin-client = { module = "org.keycloak:keycloak-admin-client", version.ref = "keycloak" }
 
@@ -353,6 +355,7 @@ ktor-server = [
     "ktor-server-locations",
     "ktor-server-auto-head-response",
     "ktor-server-method-override",
+    "ktor-server-caching-headers",
 ]
 sql-delight = [
     "sql-delight-coroutines-extension",

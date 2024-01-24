@@ -1,4 +1,5 @@
 websocket:
+  enable: true
   ping-period: 15s
   timeout: 15s
   max-frame-size: 9223372036854775807

@@ -12,6 +12,7 @@ import digital.sadad.project.auth.service.security.ldap.LDAPAuthService
 import digital.sadad.project.auth.service.security.oauth.OAuthService
 import digital.sadad.project.auth.service.security.session.SessionAuthService
 import digital.sadad.project.core.config.AppConfig
+import digital.sadad.project.core.config.model.plugin.security.SecurityConfig
 import io.ktor.http.auth.*
 import io.ktor.http.parsing.*
 import io.ktor.server.application.*
@@ -23,10 +24,8 @@ import org.koin.ktor.ext.inject
 import java.nio.charset.Charset
 import kotlin.collections.set
 
-fun Application.configureSecurity() {
-    val appConfig: AppConfig by inject()
-
-    appConfig.config.security?.let {
+fun Application.configureSecurity(config: SecurityConfig) {
+    if (config.enable == true) {
 
         // BASIC
         val basicAuthServices = getAll<BasicAuthService>()

@@ -1,5 +1,6 @@
 package digital.sadad.project.core.plugin.applicationmonitoring
 
+import digital.sadad.project.core.config.model.plugin.applicationmonitoring.ApplicationMonitoringConfig
 import io.ktor.events.EventDefinition
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -24,8 +25,10 @@ val ApplicationMonitoringPlugin = createApplicationPlugin(name = "ApplicationMon
 
 val NotFoundEvent: EventDefinition<ApplicationCall> = EventDefinition()
 
-fun Application.configureApplicationMonitoring() {
-    install(ApplicationMonitoringPlugin) {
+fun Application.configureApplicationMonitoring(config: ApplicationMonitoringConfig) {
+    if (config.enable == true) {
+        install(ApplicationMonitoringPlugin) {
 
+        }
     }
 }

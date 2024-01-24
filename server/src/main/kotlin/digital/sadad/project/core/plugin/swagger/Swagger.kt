@@ -1,23 +1,21 @@
 package digital.sadad.project.core.plugin.swagger
 
-import digital.sadad.project.core.config.AppConfig
+import digital.sadad.project.core.config.model.plugin.swagger.SwaggerConfig
 import io.github.smiley4.ktorswaggerui.SwaggerUI
 import io.ktor.server.application.*
-import org.koin.ktor.ext.inject
 
-fun Application.configureSwagger() {
-    val appConfig: AppConfig by inject()
-    appConfig.config.swagger?.let {
+fun Application.configureSwagger(config: SwaggerConfig) {
+    if (config.enable == true) {
         // https://github.com/SMILEY4/ktor-swagger-ui/wiki/Configuration
         // http://xxx/swagger/
         install(SwaggerUI) {
             swagger {
-                it.forwardRoot?.let { forwardRoot = it }
-                it.swaggerUrl?.let { swaggerUrl = it }
-                it.rootHostPath?.let { rootHostPath = it }
-                it.authentication?.let { authentication = it }
+                config.forwardRoot?.let { forwardRoot = it }
+                config.swaggerUrl?.let { swaggerUrl = it }
+                config.rootHostPath?.let { rootHostPath = it }
+                config.authentication?.let { authentication = it }
             }
-            it.info?.let {
+            config.info?.let {
                 info {
                     it.title?.let { title = it }
                     it.version?.let { version = it }
@@ -38,7 +36,7 @@ fun Application.configureSwagger() {
                     }
                 }
             }
-            it.securityScheme?.forEach {
+            config.securityScheme?.forEach {
                 // We can add security
                 securityScheme(it.key) {
                     it.value.type?.let { type = it }

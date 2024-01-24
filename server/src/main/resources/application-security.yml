@@ -1,4 +1,5 @@
 security:
+  enable: true
   oauth:
     provider:
       keycloak:

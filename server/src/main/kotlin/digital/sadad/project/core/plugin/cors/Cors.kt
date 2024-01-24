@@ -1,22 +1,20 @@
 package digital.sadad.project.core.plugin.cors
 
-import digital.sadad.project.core.config.AppConfig
+import digital.sadad.project.core.config.model.plugin.cors.CORSConfig
 import io.ktor.server.application.*
 import io.ktor.server.plugins.cors.routing.*
-import org.koin.ktor.ext.inject
 
-fun Application.configureCors() {
-    val appConfig: AppConfig by inject()
-    appConfig.config.cors?.let {
+fun Application.configureCors(config: CORSConfig) {
+    if (config.enable == true) {
         install(CORS) {
-            it.hosts?.let { it.forEach { allowHost(it.host, it.schemes, it.subDomains) } }
-            it.headers?.let { it.forEach { allowHeader(it) } }
-            it.methods?.let { it.forEach { allowMethod(it) } }
-            it.exposedHeaders?.let { it.forEach { exposeHeader(it) } }
-            it.allowCredentials?.let { allowCredentials = it }
-            it.maxAgeInSeconds?.let { maxAgeInSeconds = it }
-            it.allowSameOrigin?.let { allowSameOrigin = it }
-            it.allowNonSimpleContentTypes?.let { allowNonSimpleContentTypes = it }
+            config.hosts?.let { it.forEach { allowHost(it.host, it.schemes, it.subDomains) } }
+            config.headers?.let { it.forEach { allowHeader(it) } }
+            config.methods?.let { it.forEach { allowMethod(it) } }
+            config.exposedHeaders?.let { it.forEach { exposeHeader(it) } }
+            config.allowCredentials?.let { allowCredentials = it }
+            config.maxAgeInSeconds?.let { maxAgeInSeconds = it }
+            config.allowSameOrigin?.let { allowSameOrigin = it }
+            config.allowNonSimpleContentTypes?.let { allowNonSimpleContentTypes = it }
 
             // We can also specify options
             /*allowHost("client-host") // Allow requests from client-host

@@ -1,4 +1,4 @@
-package digital.sadad.project.core.config.model.plugin.websocket
+package digital.sadad.project.core.config.model.plugin.websockets
 
 data class WebSocketPageConfig(
     val uri: String? = null,

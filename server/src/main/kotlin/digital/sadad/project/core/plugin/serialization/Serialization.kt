@@ -1,20 +1,20 @@
 package digital.sadad.project.core.plugin.serialization
 
-import digital.sadad.project.core.config.AppConfig
+import digital.sadad.project.core.config.model.plugin.serialization.SerializationConfig
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.application.*
 import io.ktor.server.plugins.contentnegotiation.*
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
-import org.koin.ktor.ext.inject
 
 /**
  * Configure the serialization of our application based on JSON
  */
-fun Application.configureSerialization() {
-    val appConfig: AppConfig by inject()
-    appConfig.config.serialization?.let { serialization ->
-        install(ContentNegotiation) {
-            serialization.json?.let {
+@OptIn(ExperimentalSerializationApi::class)
+fun Application.configureSerialization(config: SerializationConfig?) {
+    install(ContentNegotiation) {
+        config?.let {
+            it.json?.let {
                 json(Json {
                     it.json?.let {
                         it.encodeDefaults?.let { encodeDefaults = it }
@@ -31,7 +31,7 @@ fun Application.configureSerialization() {
                         it.useAlternativeNames?.let { useAlternativeNames = it }
                         it.decodeEnumsCaseInsensitive?.let { decodeEnumsCaseInsensitive = it }
                     }
-                }, serialization.json.contentType)
+                }, it.contentType)
             }
         }
     }

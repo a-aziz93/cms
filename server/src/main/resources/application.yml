@@ -31,17 +31,29 @@ ktor:
       privateKeyPassword: "1234567"
 
 profiles:
-  - security
   - cache
   - storage
   - database
-  - websocket
+  - di
+  - serialization
+  - routing
+  - websockets
   - graphql
   - ratelimit
-  - compression
   - cors
-  - swagger
+  - compression
+  - validation
+  - resources
+  - locations
+  - statuspages
+  - autoheadresponse
   - xhttpmethodoverride
+  - session
+  - security
+  - template
+  - swagger
+  - applicationmonitoring
+
 
 
 

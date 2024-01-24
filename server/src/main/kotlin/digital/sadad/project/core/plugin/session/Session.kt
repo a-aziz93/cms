@@ -1,16 +1,15 @@
 package digital.sadad.project.core.plugin.session
 
-import digital.sadad.project.core.config.AppConfig
-import digital.sadad.project.core.config.model.plugin.session.CookieConfig
 import digital.sadad.project.auth.model.security.UserIdPrincipalMetadata
+import digital.sadad.project.core.config.AppConfig
+import digital.sadad.project.core.config.model.plugin.session.SessionConfig
 import io.ktor.server.application.*
 import io.ktor.server.sessions.*
-import org.koin.ktor.ext.inject
 import java.io.File
 
-fun Application.configureSession() {
-    val appConfig: AppConfig by inject()
-    appConfig.config.session?.let {
+fun Application.configureSession(appConfig: AppConfig) {
+    val config = appConfig.config.session
+    if (config.enable == true) {
         install(Sessions) {
             appConfig.config.security?.let {
                 it.basic?.forEach { (name, config) ->

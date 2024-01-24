@@ -1,18 +1,16 @@
 package digital.sadad.project.core.plugin.compression
 
-import digital.sadad.project.core.config.AppConfig
+import digital.sadad.project.core.config.model.plugin.compression.CompressionConfig
 import io.ktor.server.application.*
 import io.ktor.server.plugins.compression.*
-import org.koin.ktor.ext.inject
 
 
-fun Application.configureCompression() {
-    val appConfig: AppConfig by inject()
-    appConfig.config.compression?.let {
+fun Application.configureCompression(config: CompressionConfig) {
+    if (config.enable == true) {
         // We can configure compression here
         install(Compression) {
             //GZIP
-            it.gzip?.let {
+            config.gzip?.let {
                 gzip {
                     it.priority?.let {
                         priority = it
@@ -34,7 +32,7 @@ fun Application.configureCompression() {
             }
 
             // DEFLATE
-            it.deflate?.let {
+            config.deflate?.let {
                 deflate {
                     it.priority?.let {
                         priority = it
@@ -56,7 +54,7 @@ fun Application.configureCompression() {
             }
 
             // IDENTITY
-            it.identity?.let {
+            config.identity?.let {
                 identity {
                     // The minimum size of a response that will be compressed
                     it.priority?.let {
