@@ -16,7 +16,7 @@ import digital.sadad.project.core.plugin.serialization.configureSerialization
 import digital.sadad.project.core.plugin.session.configureSession
 import digital.sadad.project.core.plugin.statuspages.configureStatusPages
 import digital.sadad.project.core.plugin.swagger.configureSwagger
-import digital.sadad.project.core.plugin.template.configureFreeMarker
+import digital.sadad.project.core.plugin.templating.configureFreeMarker
 import digital.sadad.project.core.plugin.validation.configureValidation
 import digital.sadad.project.core.plugin.websockets.configureWebSockets
 import digital.sadad.project.core.plugin.xhttpmethodoverride.configureXHttpMethodOverride
@@ -38,7 +38,7 @@ fun Application.module() {
         appConfig.config.database,
         appConfig.config.security
     ) // Configure the Koin plugin to inject dependencies
-    configureSerialization(appConfig.config.serialization) // Configure the serialization plugin
+    appConfig.config.serialization?.let { configureSerialization(it) } // Configure the serialization plugin
     appConfig.config.routing?.let { configureRouting(it) } // Configure the routing plugin
     appConfig.config.websockets?.let {
         configureWebSockets(

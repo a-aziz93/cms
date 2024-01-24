@@ -1,9 +1,8 @@
 package digital.sadad.project.core.config.model.plugin.serialization
 
-import digital.sadad.project.core.config.model.json.JsonConfig
 import io.ktor.http.*
 
-data class SerializationJsonConfig(
-    val json: JsonConfig? = null,
+data class SerializationTypeConfig<T : Any>(
+    val config: T? = null,
     val contentType: ContentType = ContentType.Application.Json,
 )

@@ -1,13 +1,11 @@
-package digital.sadad.project.core.plugin.template
+package digital.sadad.project.core.plugin.templating
 
-import digital.sadad.project.core.config.AppConfig
-import digital.sadad.project.core.config.model.plugin.template.FreeMarkerConfig
+import digital.sadad.project.core.config.model.plugin.templating.FreeMarkerConfig
 import freemarker.cache.ClassTemplateLoader
 import freemarker.cache.FileTemplateLoader
 import freemarker.cache.MultiTemplateLoader
 import io.ktor.server.application.*
 import io.ktor.server.freemarker.*
-import org.koin.ktor.ext.inject
 import java.io.File
 
 fun Application.configureFreeMarker(config: FreeMarkerConfig) {

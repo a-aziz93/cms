@@ -1,6 +1,6 @@
 package digital.sadad.project.core.config.model
 
-import digital.sadad.project.core.config.model.plugin.template.FreeMarkerConfig
+import digital.sadad.project.core.config.model.plugin.templating.FreeMarkerConfig
 import digital.sadad.project.core.config.model.plugin.security.SecurityConfig
 import digital.sadad.project.core.config.model.cache.CacheConfig
 import digital.sadad.project.core.config.model.plugin.compression.CompressionConfig

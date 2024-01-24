@@ -50,7 +50,7 @@ profiles:
   - xhttpmethodoverride
   - session
   - security
-  - template
+  - templating
   - swagger
   - applicationmonitoring
 

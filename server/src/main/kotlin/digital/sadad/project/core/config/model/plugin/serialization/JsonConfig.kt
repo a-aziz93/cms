@@ -1,4 +1,4 @@
-package digital.sadad.project.core.config.model.json
+package digital.sadad.project.core.config.model.plugin.serialization
 
 import io.ktor.http.*
 

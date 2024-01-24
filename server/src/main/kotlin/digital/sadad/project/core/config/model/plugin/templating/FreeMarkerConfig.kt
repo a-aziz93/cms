@@ -1,4 +1,4 @@
-package digital.sadad.project.core.config.model.plugin.template
+package digital.sadad.project.core.config.model.plugin.templating
 
 import digital.sadad.project.core.config.model.plugin.PluginConfig
 
