@@ -14,7 +14,7 @@ import digital.sadad.project.core.plugin.forwardedheaders.configureForwardedHead
 import digital.sadad.project.core.plugin.graphql.configureGraphQL
 import digital.sadad.project.core.plugin.hsts.configureHSTS
 import digital.sadad.project.core.plugin.httpsredirect.configureHttpsRedirect
-import digital.sadad.project.core.plugin.hsts.configurePartialContent
+import digital.sadad.project.core.plugin.partialcontent.configurePartialContent
 import digital.sadad.project.core.plugin.locations.configureLocations
 import digital.sadad.project.core.plugin.ratelimit.configureRateLimit
 import digital.sadad.project.core.plugin.resources.configureResources
