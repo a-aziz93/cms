@@ -13,7 +13,7 @@ import digital.sadad.project.core.plugin.di.configureKoin
 import digital.sadad.project.core.plugin.forwardedheaders.configureForwardedHeaders
 import digital.sadad.project.core.plugin.graphql.configureGraphQL
 import digital.sadad.project.core.plugin.hsts.configureHSTS
-import digital.sadad.project.core.plugin.hsts.configureHttpsRedirect
+import digital.sadad.project.core.plugin.httpsredirect.configureHttpsRedirect
 import digital.sadad.project.core.plugin.hsts.configurePartialContent
 import digital.sadad.project.core.plugin.locations.configureLocations
 import digital.sadad.project.core.plugin.ratelimit.configureRateLimit
@@ -53,7 +53,7 @@ fun Application.module() {
     appConfig.config.serialization?.let { configureSerialization(it) }
 
     // Configure the HttpsRedirect plugin
-    appConfig.config.httpsRedirect?.let { configureHttpsRedirect(it) }
+    appConfig.config.httpsRedirect?.let { configureHttpsRedirect(it, appConfig.sslPort) }
 
     // Configure the Routing plugin
     appConfig.config.routing?.let { configureRouting(it) }
