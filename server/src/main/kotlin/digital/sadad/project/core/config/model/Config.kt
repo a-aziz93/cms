@@ -13,7 +13,7 @@ import digital.sadad.project.core.config.model.plugin.defaultheaders.Conditional
 import digital.sadad.project.core.config.model.plugin.defaultheaders.DefaultHeadersConfig
 import digital.sadad.project.core.config.model.plugin.forwardedheaders.ForwardedHeadersConfig
 import digital.sadad.project.core.config.model.plugin.graphql.GraphQLConfig
-import digital.sadad.project.core.config.model.plugin.hsts.HSTSConfig
+import digital.sadad.project.core.config.model.plugin.hsts.HSTSHostConfig
 import digital.sadad.project.core.config.model.plugin.httpsredirect.HTTPSRedirectConfig
 import digital.sadad.project.core.config.model.plugin.partialcontent.PartialContentConfig
 import digital.sadad.project.core.config.model.plugin.ratelimit.RateLimitsConfig
@@ -53,7 +53,7 @@ data class Config(
     val cachingHeaders: CachingHeadersConfig? = null,
     val conditionalHeaders: ConditionalHeadersConfig? = null,
     val forwardedHeaders: ForwardedHeadersConfig? = null,
-    val hsts: HSTSConfig? = null,
+    val hsts: HSTSHostConfig? = null,
     val autoHeadResponse: AutoHeadResponseConfig? = null,
     val xHttpMethodOverride: XHttpMethodOverrideConfig? = null,
     val session: SessionConfig? = null,
