@@ -7,6 +7,7 @@ import digital.sadad.project.auth.model.security.UserIdPrincipalMetadata
 import digital.sadad.project.core.config.model.plugin.cachingheaders.CacheControlType
 import digital.sadad.project.core.config.model.plugin.cachingheaders.CacheControlType.*
 import digital.sadad.project.core.config.model.plugin.routing.RoutingConfig
+import digital.sadad.project.core.plugin.cachingheaders.extension.cacheControl
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.http.content.*
@@ -44,17 +45,7 @@ fun Application.configureRouting(config: RoutingConfig) {
                         cacheControl { file ->
                             (it[file.name]?.let {
                                 it.map {
-                                    when (it.type) {
-                                        NO_CACHE -> CacheControl.NoCache(it.visibility)
-                                        NO_STORE -> CacheControl.NoStore(it.visibility)
-                                        MAX_AGE -> CacheControl.MaxAge(
-                                            it.maxAgeSeconds,
-                                            it.proxyMaxAgeSeconds,
-                                            it.mustRevalidate,
-                                            it.proxyRevalidate,
-                                            it.visibility
-                                        )
-                                    }
+                                    it.cacheControl()
                                 }
                             } ?: emptyList())
                         }
@@ -86,17 +77,7 @@ fun Application.configureRouting(config: RoutingConfig) {
                         cacheControl { url ->
                             (it[url.file]?.let {
                                 it.map {
-                                    when (it.type) {
-                                        NO_CACHE -> CacheControl.NoCache(it.visibility)
-                                        NO_STORE -> CacheControl.NoStore(it.visibility)
-                                        MAX_AGE -> CacheControl.MaxAge(
-                                            it.maxAgeSeconds,
-                                            it.proxyMaxAgeSeconds,
-                                            it.mustRevalidate,
-                                            it.proxyRevalidate,
-                                            it.visibility
-                                        )
-                                    }
+                                    it.cacheControl()
                                 }
                             } ?: emptyList())
                         }
