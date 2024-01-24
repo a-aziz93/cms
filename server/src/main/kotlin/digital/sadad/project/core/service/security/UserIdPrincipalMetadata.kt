@@ -1,4 +1,4 @@
-package digital.sadad.project.core.service.security.session.model.security
+package digital.sadad.project.core.service.security
 
 import io.ktor.server.auth.*
 import kotlinx.serialization.Serializable
