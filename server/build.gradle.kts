@@ -31,6 +31,7 @@ dependencies {
     implementation(libs.bundles.ktor.server)
     testImplementation(libs.kotlin.test.junit)
     // Added
+    implementation(libs.ktor.swagger.ui)
     implementation(libs.kotlin.logging.jvm)
     implementation(libs.koin.ktor)
     implementation(libs.cache4k)
@@ -53,7 +54,6 @@ dependencies {
     implementation(libs.kgraphql)
     implementation(libs.kgraphql.ktor)
     implementation(libs.keycloak.admin.client)
-    implementation(libs.swagger.codegen.generators)
 }
 
 ksp {
