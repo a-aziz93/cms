@@ -1,6 +1,5 @@
 package digital.sadad.project.core.plugin.websockets
 
-import digital.sadad.project.core.config.AppConfig
 import digital.sadad.project.core.config.model.plugin.websockets.WebSocketsConfig
 import io.ktor.serialization.kotlinx.*
 import io.ktor.server.application.*
@@ -9,10 +8,13 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.server.websocket.*
 import kotlinx.serialization.json.Json
-import org.koin.ktor.ext.inject
 import java.time.Duration
 
-fun Application.configureWebSockets(config: WebSocketsConfig) {
+fun Application.configureWebSockets(
+    config: WebSocketsConfig,
+    isHttps: Boolean,
+    port: Int,
+) {
     if (config.enable == true) {
         install(WebSockets) {
             config.pingPeriod?.let { pingPeriod = Duration.ofSeconds(it.inWholeSeconds) }
@@ -42,6 +44,7 @@ fun Application.configureWebSockets(config: WebSocketsConfig) {
             // https://ktor.io/docs/websocket.html#configure
         }
 
+        // Websocket page for testing
         config.page?.let { page ->
             routing {
                 get(page.uri ?: "/websocket") {
@@ -50,11 +53,8 @@ fun Application.configureWebSockets(config: WebSocketsConfig) {
                             page.filePath ?: "websocket/index.ftl",
                             mapOf(
                                 "baseAddress" to "${
-                                    if (appConfig.baseConfig.keys().contains("ktor.security.ssl")) "wss" else "ws"
-                                }://localhost:${
-                                    appConfig.baseConfig.propertyOrNull("ktor.deployment.sslPort")?.getString()
-                                        ?.toInt() ?: appConfig.baseConfig.port
-                                }"
+                                    if (isHttps) "wss" else "ws"
+                                }://localhost:$port"
                             )
                         )
                     )

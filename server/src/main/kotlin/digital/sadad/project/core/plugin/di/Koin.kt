@@ -1,8 +1,9 @@
 package digital.sadad.project.core.plugin.di
 
-import digital.sadad.project.core.config.AppConfig
+import digital.sadad.project.core.config.model.database.DatabaseConfig
+import digital.sadad.project.core.config.model.plugin.routing.KoinConfig
+import digital.sadad.project.core.config.model.plugin.security.SecurityConfig
 import digital.sadad.project.core.plugin.di.module.database.databaseModule
-import digital.sadad.project.core.plugin.di.module.keycloak.keycloakModule
 import digital.sadad.project.core.plugin.di.module.security.securityModule
 import io.ktor.server.application.*
 import org.koin.core.logger.Level
@@ -11,26 +12,23 @@ import org.koin.ktor.plugin.Koin
 import org.koin.logger.slf4jLogger
 import org.ufoss.kotysa.*
 
-fun Application.configureKoin(appConfig: AppConfig) {
-    val koinConfig = appConfig.config.koin
+fun Application.configureKoin(
+    config: KoinConfig?,
+    databaseConfig: Map<String, DatabaseConfig>?,
+    securityConfig: SecurityConfig?,
+) {
     install(Koin) {
         // Logger
-        slf4jLogger(koinConfig?.logConfig?.level?.let { Level.valueOf(it) } ?: Level.INFO)
+        config?.logConfig?.level?.let { slf4jLogger(Level.valueOf(it)) } ?: slf4jLogger()
 
         // Default module with Annotations
         defaultModule()
 
         // Database module with clients
-        appConfig.config.database?.let { databaseModule(it) }
+        databaseConfig?.let { databaseModule(it) }
 
         // Security module
-        appConfig.config.security?.let { securityModule(it) }
-
-        // Keycloak module with clients
-        appConfig.config.security?.oauth?.let {
-            keycloakModule(it.entries.filter { it.value.provider.name == "keycloak" && it.value.client != null }
-                .associate { it.key to it.value.client!! })
-        }
+        securityConfig?.let { securityModule(it) }
     }
 }
 

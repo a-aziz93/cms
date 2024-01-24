@@ -46,5 +46,4 @@ data class Config(
     val freeMarker: FreeMarkerConfig? = null,
     val swagger: SwaggerConfig? = null,
     val applicationMonitoring: ApplicationMonitoringConfig? = null,
-
-    )
+)

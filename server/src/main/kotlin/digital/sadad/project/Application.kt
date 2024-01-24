@@ -33,10 +33,21 @@ fun main(args: Array<String>): Unit = EngineMain.main(args)
 @Suppress("unused") // application.conf references the main function. This annotation prevents the IDE from marking it as unused.
 fun Application.module() {
     val appConfig: AppConfig by inject()
-    configureKoin(appConfig) // Configure the Koin plugin to inject dependencies
+    configureKoin(
+        appConfig.config.koin,
+        appConfig.config.database,
+        appConfig.config.security
+    ) // Configure the Koin plugin to inject dependencies
     configureSerialization(appConfig.config.serialization) // Configure the serialization plugin
-    appConfig.config.routing?.let { configureRouting(it)} // Configure the routing plugin
-    appConfig.config.websockets?.let { configureWebSockets(it) } // Configure the websockets plugin
+    appConfig.config.routing?.let { configureRouting(it) } // Configure the routing plugin
+    appConfig.config.websockets?.let {
+        configureWebSockets(
+            it,
+            appConfig.baseConfig.keys().contains("ktor.security.ssl"),
+            appConfig.baseConfig.propertyOrNull("ktor.deployment.sslPort")?.getString()
+                ?.toInt() ?: appConfig.baseConfig.port
+        )
+    } // Configure the websockets plugin
     appConfig.config.graphql?.let { configureGraphQL(it) } // Configure the graphql plugin
     appConfig.config.rateLimit?.let { configureRateLimit(it) } // Configure the RateLimit plugin
     appConfig.config.cors?.let { configureCors(it) } // Configure the CORS plugin
@@ -47,7 +58,7 @@ fun Application.module() {
     appConfig.config.statusPages?.let { configureStatusPages(it) } // Configure the status pages plugin
     appConfig.config.autoHeadResponse?.let { configureAutoHeadResponse(it) } // Configure the AutoHeadResponse plugin
     appConfig.config.xHttpMethodOverride?.let { configureXHttpMethodOverride(it) } // Configure the XHttpMethodOverride plugin
-    appConfig.config.session?.let { configureSession(it) } // Configure session with cookies
+    appConfig.config.session?.let { configureSession(it, appConfig.config.security) } // Configure session with cookies
     appConfig.config.security?.let { configureSecurity(it) }// Configure the security plugin with JWT
     appConfig.config.freeMarker?.let { configureFreeMarker(it) } // Configure the FreeMarker plugin for templating .ftl files
     appConfig.config.swagger?.let { configureSwagger(it) } // Configure the Swagger plugin

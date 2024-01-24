@@ -2,18 +2,21 @@ package digital.sadad.project.core.plugin.session
 
 import digital.sadad.project.auth.model.security.UserIdPrincipalMetadata
 import digital.sadad.project.core.config.AppConfig
+import digital.sadad.project.core.config.model.plugin.security.SecurityConfig
 import digital.sadad.project.core.config.model.plugin.session.SessionConfig
 import io.ktor.server.application.*
 import io.ktor.server.sessions.*
 import java.io.File
 
-fun Application.configureSession(appConfig: AppConfig) {
-    val config = appConfig.config.session
+fun Application.configureSession(
+    config: SessionConfig,
+    securityConfig: SecurityConfig?,
+) {
     if (config.enable == true) {
         install(Sessions) {
-            appConfig.config.security?.let {
+            securityConfig?.let {
                 it.basic?.forEach { (name, config) ->
-                    config.sessionCookie?.let { cookie<UserIdPrincipalMetadata>(name, it) }
+                    config.session?.let { cookie<UserIdPrincipalMetadata>(name, it) }
                 }
             }
         }

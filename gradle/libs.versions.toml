@@ -71,6 +71,7 @@ worldwind = "1.3.7"
 gov-worldwind = "2.1.0.180"
 compose-material-context-menu = "0.2.0"
 keycloak = "23.0.4"
+swagger-codegen-generators="1.0.45"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -271,8 +272,27 @@ ktor-server-auto-head-response = { module = "io.ktor:ktor-server-auto-head-respo
 ktor-server-method-override = { module = "io.ktor:ktor-server-method-override", version.ref = "ktor" }
 # Caching headers
 ktor-server-caching-headers = { module = "io.ktor:ktor-server-caching-headers", version.ref = "ktor" }
+# Default headers
+ktor-server-default-headers = { module = "io.ktor:ktor-server-default-headers", version.ref = "ktor" }
+# Conditional headers
+ktor-server-conditional-headers = { module = "io.ktor:ktor-server-conditional-headers", version.ref = "ktor" }
+# Forwarded headers
+ktor-server-forwarded-header = { module = "io.ktor:ktor-server-forwarded-header", version.ref = "ktor" }
+# HSTS (HTTP Strict Transport Security)
+ktor-server-hsts = { module = "io.ktor:ktor-server-hsts", version.ref = "ktor" }
+# Https redirect
+ktor-server-http-redirect = { module = "io.ktor:ktor-server-http-redirect", version.ref = "ktor" }
+# Partial content
+ktor-server-partial-content = { module = "io.ktor:ktor-server-partial-content", version.ref = "ktor" }
+# Data conversion
+ktor-server-data-conversion = { module = "io.ktor:ktor-server-data-conversion", version.ref = "ktor" }
+# OpenAPI
+ktor-server-openapi = { module = "io.ktor:ktor-server-openapi", version.ref = "ktor" }
 # OAuth2
 keycloak-admin-client = { module = "org.keycloak:keycloak-admin-client", version.ref = "keycloak" }
+# Swagger codegen generators
+swagger-codegen-generators = { module = "io.swagger.codegen.v3:swagger-codegen-generators", version.ref = "swagger-codegen-generators" }
+
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
@@ -349,13 +369,20 @@ ktor-server = [
     "ktor-server-request-validation",
     "ktor-server-status-pages",
     "ktor-server-rate-limit",
-    "ktor-swagger-ui",
     "ktor-server-freemarker",
     "ktor-server-resources",
     "ktor-server-locations",
     "ktor-server-auto-head-response",
     "ktor-server-method-override",
     "ktor-server-caching-headers",
+    "ktor-server-default-headers",
+    "ktor-server-conditional-headers",
+    "ktor-server-forwarded-header",
+    "ktor-server-hsts",
+    "ktor-server-http-redirect",
+    "ktor-server-partial-content",
+    "ktor-server-data-conversion",
+    "ktor-server-openapi",
 ]
 sql-delight = [
     "sql-delight-coroutines-extension",
