@@ -43,6 +43,7 @@ kotlin {
             implementation(libs.bundles.kotlinx.serialization)
             implementation(libs.bundles.ktor.common)
             implementation(libs.bundles.slf4j)
+            implementation(libs.kconmapper.annotations)
         }
     }
 }
@@ -56,7 +57,15 @@ android {
 }
 
 dependencies {
-    ksp(libs.koin.ksp.compiler) // Koin KSP Compiler for KSP
+    // Koin KSP Compiler for KSP
+    ksp(libs.koin.ksp.compiler)
+
+    // DTO Mapper
+    ksp(libs.kconmapper.ksp)
+}
+
+ksp {
+    arg("kconmapper.suppressMappingMismatchWarnings", "true")
 }
 
 allOpen {

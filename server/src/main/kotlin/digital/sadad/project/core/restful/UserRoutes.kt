@@ -19,8 +19,8 @@ import auth.dto.UserCreateDto
 import auth.dto.UserLoginDto
 import auth.dto.UserUpdateDto
 import auth.dto.UserWithTokenDto
-import digital.sadad.project.core.mapper.toDto
-import digital.sadad.project.core.mapper.toModel
+import core.crud.model.user.mapper.toDto
+import core.crud.model.user.mapper.toModel
 import digital.sadad.project.core.storage.service.StorageService
 import digital.sadad.project.auth.service.user.UserService
 import kotlinx.coroutines.flow.toList

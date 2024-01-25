@@ -1,7 +1,7 @@
 package digital.sadad.project.core.repository.role
 
 import digital.sadad.project.auth.entity.role.RoleEntity
-import digital.sadad.project.core.crud.repository.CRUDRepository
+import digital.sadad.project.core.crud.repository.KotysaCRUDRepository
 
-class RoleRepository: CRUDRepository<RoleEntity, Long> {
+class RoleRepository: KotysaCRUDRepository<RoleEntity, Long> {
 }

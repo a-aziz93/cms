@@ -1,9 +1,8 @@
 package core.graph
 
-import core.crud.CRUD
-import core.crud.model.entity.expression.variable.extension.f
-import core.crud.model.entity.expression.logic.extension.eq
-import core.crud.model.entity.expression.variable.extension.eq
+import core.crud.repository.CRUDRepository
+import core.crud.repository.model.expression.variable.extension.f
+import core.crud.repository.model.expression.variable.extension.eq
 import core.graph.exception.GraphException
 import kotlinx.coroutines.flow.firstOrNull
 import kotlin.coroutines.cancellation.CancellationException
@@ -13,13 +12,13 @@ abstract class Edge<E : Edge<E, ID, V, VID>, ID : Any, V : Vertex<V, VID, E, ID>
     id: ID?,
     val fromVertexId: VID,
     val toVertexId: VID,
-    edgeObjects: CRUD<E, ID>? = null,
+    edgeObjects: CRUDRepository<E, ID>? = null,
 ) : GraphObject<E, ID>(id, edgeObjects) {
     protected var startVertexId: VID? = null
-    protected var vertexObjects: CRUD<V, VID>? = null
+    protected var vertexObjects: CRUDRepository<V, VID>? = null
     internal fun assignStartVertexResources(
         startVertexId: VID,
-        vertexObjects: CRUD<V, VID>
+        vertexObjects: CRUDRepository<V, VID>
     ) {
         this.startVertexId = startVertexId
         this.vertexObjects = vertexObjects

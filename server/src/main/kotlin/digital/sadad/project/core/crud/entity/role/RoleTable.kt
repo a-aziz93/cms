@@ -1,6 +1,6 @@
 package digital.sadad.project.core.crud.entity.role
 
-import auth.entity.role.RoleEntity
+import core.crud.model.role.entity.RoleEntity
 import org.ufoss.kotysa.GenericTable
 
 object RoleTable : GenericTable<RoleEntity>("roles") {

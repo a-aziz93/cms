@@ -1,7 +1,6 @@
 package digital.sadad.project.core.crud.entity.user
 
-import auth.entity.user.UserEntity
-import digital.sadad.project.auth.model.entity.role.RoleTable.identity
+import core.crud.model.user.entity.UserEntity
 import org.ufoss.kotysa.GenericTable
 
 object UserTable : GenericTable<UserEntity>("users") {

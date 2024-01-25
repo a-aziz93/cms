@@ -1,6 +1,6 @@
 package digital.sadad.project.core.service.security.keycloak
 
-import auth.entity.user.UserEntity
+import core.crud.model.user.entity.UserEntity
 import jakarta.ws.rs.core.Response
 import org.keycloak.admin.client.Keycloak
 import org.keycloak.representations.idm.CredentialRepresentation

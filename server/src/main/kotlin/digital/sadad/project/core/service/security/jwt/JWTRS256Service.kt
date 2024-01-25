@@ -1,10 +1,9 @@
 package digital.sadad.project.core.service.security.jwt
 
-import auth.entity.user.UserEntity
+import core.crud.model.user.entity.UserEntity
 import com.auth0.jwk.JwkProvider
 import com.auth0.jwk.JwkProviderBuilder
 import com.auth0.jwt.algorithms.Algorithm
-import digital.sadad.project.core.config.model.plugin.security.jwt.JWTRS256Config
 import java.security.KeyFactory
 import java.security.interfaces.RSAPrivateKey
 import java.security.interfaces.RSAPublicKey

@@ -1,9 +1,9 @@
 package core.graph
 
-import core.crud.CRUD
-import core.crud.model.entity.expression.variable.BooleanVariable
-import core.crud.model.entity.expression.variable.extension.eq
-import core.crud.model.entity.expression.variable.extension.f
+import core.crud.repository.CRUDRepository
+import core.crud.repository.model.expression.variable.BooleanVariable
+import core.crud.repository.model.expression.variable.extension.eq
+import core.crud.repository.model.expression.variable.extension.f
 import core.graph.exception.GraphException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.onEach
@@ -11,11 +11,11 @@ import kotlinx.coroutines.flow.onEach
 @Suppress("UNUSED")
 abstract class Vertex<V : Vertex<V, ID, E, EID>, ID : Any, E : Edge<E, EID, V, ID>, EID : Any>(
     id: ID? = null,
-    vertexObjects: CRUD<V, ID>? = null,
+    vertexObjects: CRUDRepository<V, ID>? = null,
 ) : GraphObject<V, ID>(id, vertexObjects) {
-    protected var edgeObjects: CRUD<E, EID>? = null
+    protected var edgeObjects: CRUDRepository<E, EID>? = null
 
-    internal fun assignEdgeResources(edgeObjects: CRUD<E, EID>) {
+    internal fun assignEdgeResources(edgeObjects: CRUDRepository<E, EID>) {
         this.edgeObjects = edgeObjects
     }
 

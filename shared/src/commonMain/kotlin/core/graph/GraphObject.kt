@@ -1,15 +1,14 @@
 package core.graph
 
-import core.crud.CRUD
-import core.crud.model.entity.expression.variable.extension.f
-import core.crud.model.entity.expression.logic.extension.eq
-import core.crud.model.entity.expression.variable.extension.eq
+import core.crud.repository.CRUDRepository
+import core.crud.repository.model.expression.variable.extension.f
+import core.crud.repository.model.expression.variable.extension.eq
 import core.graph.exception.GraphException
 import kotlin.coroutines.cancellation.CancellationException
 
 abstract class GraphObject<T : GraphObject<T, ID>, ID : Any>(
     val id: ID? = null,
-    protected val graphObjects: CRUD<T, ID>? = null
+    protected val graphObjects: CRUDRepository<T, ID>? = null
 ) {
     @Suppress("UNUSED", "UNCHECKED_CAST")
     @Throws(GraphException::class, CancellationException::class)

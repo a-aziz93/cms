@@ -1,9 +1,7 @@
 package digital.sadad.project.core.plugin.security
 
-import auth.dto.user.UserDto
-import com.auth0.jwt.JWT
-import com.auth0.jwt.algorithms.Algorithm
-import core.koin.getAll
+import core.crud.model.user.dto.UserDto
+import core.di.getAll
 import digital.sadad.project.core.config.model.plugin.security.SecurityConfig
 import digital.sadad.project.core.service.security.basic.BasicAuthService
 import digital.sadad.project.core.service.security.bearer.BearerAuthService
@@ -340,7 +338,7 @@ fun Application.configureSecurity(
                     post("/login") {
                         val user = call.receive<UserDto>()
                         // Check username and password
-                        service.create(UserDto.toEntity)
+                        service.create(UserDto.toUserEntity())
                         call.respond(hashMapOf("token" to token))
                     }
                 }
@@ -353,7 +351,7 @@ fun Application.configureSecurity(
                     post("/login") {
                         val user = call.receive<UserDto>()
                         // Check username and password
-                        service.create(UserDto.toEntity)
+                        service.create(UserDto.toUserEntity())
                         call.respond(hashMapOf("token" to token))
                     }
                 }

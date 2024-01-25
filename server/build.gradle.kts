@@ -4,6 +4,7 @@ plugins {
     application
     alias(libs.plugins.ksp)
     alias(libs.plugins.kotlinSerialization)
+    alias(libs.plugins.sqlDelight)
     alias(libs.plugins.dokka)
     alias(libs.plugins.allopen)
     alias(libs.plugins.noarg)
@@ -61,11 +62,23 @@ dependencies {
     implementation(libs.kgraphql)
     implementation(libs.kgraphql.ktor)
     implementation(libs.keycloak.admin.client)
+    implementation(libs.sql.delight.sqlite.driver)
 }
 
 ksp {
     // Compile Safety - check your Koin config at compile time (since 1.3.0)
     arg("KOIN_CONFIG_CHECK", "true")
+}
+
+
+sqldelight {
+    databases {
+        create("SharedDatabase") {
+            srcDirs.setFrom("src/main/sqldelight")
+            packageName.set("digital.sadad.project.common")
+            generateAsync.set(true)
+        }
+    }
 }
 
 // To generate Docker Image with JRE 17

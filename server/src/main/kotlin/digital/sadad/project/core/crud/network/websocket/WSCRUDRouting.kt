@@ -1,6 +1,6 @@
 package digital.sadad.project.core.crud.network.websocket
 
-import core.crud.network.websocket.model.WSConnection
+import core.network.websocket.model.WSConnection
 import io.ktor.server.application.*
 import io.ktor.server.routing.*
 import io.ktor.server.websocket.*

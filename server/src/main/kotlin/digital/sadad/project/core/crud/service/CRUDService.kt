@@ -1,20 +1,20 @@
 package digital.sadad.project.core.crud.service
 
-import core.crud.CRUD
-import core.crud.model.entity.Order
-import core.crud.model.entity.LimitOffset
-import core.crud.model.entity.PageResult
-import core.crud.model.entity.Update
+import core.crud.repository.CRUDRepository
+import core.crud.repository.model.io.Order
+import core.crud.repository.model.io.LimitOffset
+import core.crud.repository.model.io.PageResult
+import core.crud.repository.model.transaction.UpdateTransaction
 import core.crud.model.predicate.operation.Predicate
-import digital.sadad.project.core.crud.repository.CRUDRepository
+import digital.sadad.project.core.crud.repository.KotysaCRUDRepository
 import kotlinx.coroutines.flow.Flow
 
 abstract class CRUDService<T : Any, ID : Any>(
-    protected val repository: CRUDRepository<T, ID>
-) : CRUD<T, ID> {
+    protected val repository: KotysaCRUDRepository<T, ID>
+) : CRUDRepository<T, ID> {
     override suspend fun save(
         entities: List<T>,
-        update: Update?,
+        update: UpdateTransaction?,
         byUser: String?
     ): List<T> =
         repository.save(entities, update, byUser)
