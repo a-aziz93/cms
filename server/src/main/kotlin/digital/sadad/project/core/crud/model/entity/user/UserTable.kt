@@ -1,4 +1,4 @@
-package digital.sadad.project.core.crud.entity.user
+package digital.sadad.project.core.crud.model.entity.user
 
 import core.crud.model.user.entity.UserEntity
 import org.ufoss.kotysa.GenericTable

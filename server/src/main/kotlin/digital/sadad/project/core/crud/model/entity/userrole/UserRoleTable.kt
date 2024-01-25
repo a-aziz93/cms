@@ -1,21 +1,23 @@
-package digital.sadad.project.core.crud.entity.userrole
+package digital.sadad.project.core.crud.model.entity.userrole
 
+import core.crud.model.routerole.entity.RouteRoleEntity
 import core.crud.model.userrole.entity.UserRoleEntity
-import digital.sadad.project.core.crud.entity.role.RoleTable
-import digital.sadad.project.core.crud.entity.user.UserTable
+import digital.sadad.project.core.crud.model.entity.role.RoleTable
+import digital.sadad.project.core.crud.model.entity.user.UserTable
+import org.h2.engine.User
 import org.ufoss.kotysa.GenericTable
 
-object UserRoleTable : GenericTable<UserRoleEntity>("user_role") {
+object UserRoleTable : GenericTable<UserRoleEntity>("user_roles") {
     // Primary key
     val id = bigInt(UserRoleEntity::id)
         .identity()
-        .primaryKey("PK_role_bind")
+        .primaryKey("PK_user_role_bind")
 
     // Other fields
     val userId = bigInt(UserRoleEntity::userId)
         .foreignKey(UserTable.id, "FK_users")
     val roleId = bigInt(UserRoleEntity::roleId)
-        .foreignKey(RoleTable.id, "FK_roles")
+        .foreignKey(RoleTable.id, "FK_user_roles")
 
     // metadata
     val createdBy = varchar(UserRoleEntity::createdBy, "created_by")

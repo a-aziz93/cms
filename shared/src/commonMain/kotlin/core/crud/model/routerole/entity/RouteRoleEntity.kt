@@ -1,10 +1,9 @@
-package core.crud.model.userrole.entity
+package core.crud.model.routerole.entity
 
 import core.crud.model.routerole.RouteRole
-import core.crud.model.userrole.UserRole
 import java.time.LocalDateTime
 
-class UserRoleEntity(
+class RouteRoleEntity(
     val id: Long?,
     userId: Long,
     roleId: Long,
@@ -12,7 +11,7 @@ class UserRoleEntity(
     val createdAt: LocalDateTime? = null,
     val updatedBy: String? = null,
     val updatedAt: LocalDateTime? = null
-) : UserRole(
+) : RouteRole(
     userId,
     roleId,
 )

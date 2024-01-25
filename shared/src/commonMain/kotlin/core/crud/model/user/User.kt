@@ -10,8 +10,4 @@ open class User(
     val password: String,
     val avatar: String? = null,
     val active: Boolean = false,
-    val createdBy: String? = null,
-    val createdAt: LocalDateTime? = null,
-    val updatedBy: String? = null,
-    val updatedAt: LocalDateTime? = null
 )

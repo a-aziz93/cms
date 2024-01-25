@@ -21,10 +21,10 @@ class UserEntity(
     password: String,
     avatar: String? = null,
     active: Boolean = false,
-    createdBy: String? = null,
-    createdAt: LocalDateTime? = null,
-    updatedBy: String? = null,
-    updatedAt: LocalDateTime? = null
+    val createdBy: String? = null,
+    val createdAt: LocalDateTime? = null,
+    val updatedBy: String? = null,
+    val updatedAt: LocalDateTime? = null
 ) : User(
     name,
     email,
@@ -32,8 +32,4 @@ class UserEntity(
     password,
     avatar,
     active,
-    createdBy,
-    createdAt,
-    updatedBy,
-    updatedAt,
 )

@@ -1,4 +1,4 @@
-package digital.sadad.project.core.crud.entity.role
+package digital.sadad.project.core.crud.model.entity.role
 
 import core.crud.model.role.entity.RoleEntity
 import org.ufoss.kotysa.GenericTable
