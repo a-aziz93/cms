@@ -42,7 +42,7 @@ interface CRUDService<T : Any> {
     suspend fun remove(predicate: BooleanVariable? = null): Result<Long, Error> = Ok(crudRepository.delete(predicate))
 
     suspend fun aggregate(
-        aggregate: core.expression.aggregate.Aggregate,
+        aggregate: core.expression.aggregate.AggregateExpression,
         predicate: BooleanVariable? = null,
     ): Result<Number, Error> = Ok(crudRepository.aggregate(aggregate, predicate))
 }

@@ -1,13 +1,19 @@
 package core.expression.aggregate
 
+import core.expression.aggregate.AggregateExpressionType.*
+import core.expression.projection.Projection
 import kotlinx.serialization.Serializable
 
-// An aggregate function ignores NULL values when it performs the calculation, except for the count function.
 @Serializable
-enum class AggregateExpression {
-    COUNT,
-    MAX,
-    MIN,
-    AVG,
-    SUM,
+class AggregateExpression private constructor(
+    val type: AggregateExpressionType,
+    val projection: Projection? = null,
+) {
+    companion object {
+        fun count(projection: Projection? = null) = AggregateExpression(COUNT, projection)
+        fun max(projection: Projection) = AggregateExpression(MAX, projection)
+        fun min(projection: Projection) = AggregateExpression(MIN, projection)
+        fun avg(projection: Projection) = AggregateExpression(AVG, projection)
+        fun sum(projection: Projection) = AggregateExpression(SUM, projection)
+    }
 }

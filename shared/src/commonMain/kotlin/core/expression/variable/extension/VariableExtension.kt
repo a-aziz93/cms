@@ -1,6 +1,6 @@
 package core.expression.variable.extension
 
-import core.expression.logic.Logic
+import core.expression.logic.LogicExpression
 import core.expression.value.BooleanCollectionValue.Companion.booleanCollection
 import core.expression.value.BooleanValue.Companion.boolean
 import core.expression.value.CharCollectionValue.Companion.charCollection
@@ -8,7 +8,6 @@ import core.expression.value.CharValue.Companion.char
 import core.expression.value.FieldValue
 import core.expression.value.FieldValue.Companion.field
 import core.expression.value.NullValue
-import core.expression.value.NullValue.Companion.nul
 import core.expression.value.NumberCollectionValue.Companion.numberCollection
 import core.expression.value.NumberValue.Companion.number
 import core.expression.value.StringCollectionValue.Companion.stringCollection
@@ -43,9 +42,9 @@ private fun <T : Any?> T.checkEquality(value: T, equator: (Variable, Variable) -
     }
 }
 
-fun <T : Any?> T.eq(value: T): BooleanVariable = this.checkEquality(value, Logic::eq)
+fun <T : Any?> T.eq(value: T): BooleanVariable = this.checkEquality(value, LogicExpression::eq)
 
-fun <T : Any?> T.neq(value: T): BooleanVariable = this.checkEquality(value, Logic::neq)
+fun <T : Any?> T.neq(value: T): BooleanVariable = this.checkEquality(value, LogicExpression::neq)
 
 private fun Any.compV(): Value<*> =
     when (this) {
@@ -64,15 +63,15 @@ private fun Any.compare(value: Any, comparator: (Variable, Variable) -> BooleanV
     }
 }
 
-fun Any.gt(value: Any): BooleanVariable = this.compare(value, Logic::gt)
+fun <T : Any> T.gt(value: T): BooleanVariable = this.compare(value, LogicExpression::gt)
 
-fun Any.gte(value: Any): BooleanVariable = this.compare(value, Logic::gte)
+fun <T : Any?> T.gte(value: T): BooleanVariable = this.compare(value, LogicExpression::gte)
 
-fun Any.lt(value: Any): BooleanVariable = this.compare(value, Logic::lt)
+fun <T : Any?> T.lt(value: T): BooleanVariable = this.compare(value, LogicExpression::lt)
 
-fun Any.lte(value: Any): BooleanVariable = this.compare(value, Logic::lte)
+fun <T : Any?> T.lte(value: T): BooleanVariable = this.compare(value, LogicExpression::lte)
 
-fun Any.between(leftValue: Any, rightValue: Any): BooleanVariable {
+fun <T : Any?> T.between(leftValue: T, rightValue: T): BooleanVariable {
     val values = listOf(
         if (this is FieldValue) this else this.compV(),
         if (leftValue is FieldValue) leftValue else this.compV(),
@@ -80,7 +79,7 @@ fun Any.between(leftValue: Any, rightValue: Any): BooleanVariable {
     )
     val nonFieldValues = values.filter { it !is FieldValue }
     if (nonFieldValues.isEmpty() || nonFieldValues.drop(1).all { it::class == nonFieldValues.first() }) {
-        return Logic.between(values[0], values[1], values[2])
+        return LogicExpression.between(values[0], values[1], values[2])
     } else {
         throw IllegalArgumentException("Arguments has different types")
     }
@@ -98,16 +97,14 @@ private fun Any.inV(): Value<*> =
 fun Any.checkIsIn(value: Any, equator: (Variable, CollectionVariable) -> BooleanVariable): BooleanVariable {
     val leftValue = if (this is FieldValue) this else this.eqV()
     when (leftValue) {
-        is FieldValue ->
+
 
     }
-
-    10.v().eq(nul())
 }
 
-fun Any.`in`(value: Any): BooleanVariable = checkIsIn(value, Logic::`in`)
-
-fun Any.nin(value: Any): BooleanVariable = checkIsIn(value, Logic::nin)
+//fun Any.`in`(value: Any): BooleanVariable = checkIsIn(value, Logic::`in`)
+//
+//fun Any.nin(value: Any): BooleanVariable = checkIsIn(value, Logic::nin)
 
 fun Boolean.v() = boolean(this)
 

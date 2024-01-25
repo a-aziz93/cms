@@ -1,33 +1,32 @@
 package core.expression.variable
 
-import core.expression.arithmetic.Arithmetic
 import core.crud.repository.model.expression.logic.Logic
 
 interface NumberVariable : Variable {
     fun add(vararg values: NumberVariable) =
-        core.expression.arithmetic.Arithmetic.add(this, *values)
+        core.expression.arithmetic.ArithmeticExpression.add(this, *values)
 
     fun subtract(vararg values: NumberVariable) =
-        core.expression.arithmetic.Arithmetic.subtract(this, *values)
+        core.expression.arithmetic.ArithmeticExpression.subtract(this, *values)
 
     fun multiply(vararg values: NumberVariable) =
-        core.expression.arithmetic.Arithmetic.multiply(this, *values)
+        core.expression.arithmetic.ArithmeticExpression.multiply(this, *values)
 
     fun divide(vararg values: NumberVariable) =
-        core.expression.arithmetic.Arithmetic.divide(this, *values)
+        core.expression.arithmetic.ArithmeticExpression.divide(this, *values)
 
     fun mod(
         value: NumberVariable,
     ) =
-        core.expression.arithmetic.Arithmetic.mod(this, value)
+        core.expression.arithmetic.ArithmeticExpression.mod(this, value)
 
     fun power(
         value: NumberVariable,
     ) =
-        core.expression.arithmetic.Arithmetic.power(this, value)
+        core.expression.arithmetic.ArithmeticExpression.power(this, value)
 
     fun square() =
-        core.expression.arithmetic.Arithmetic.square(this)
+        core.expression.arithmetic.ArithmeticExpression.square(this)
 
     fun eq(value: NumberVariable) =
         Logic.eq(this, value)

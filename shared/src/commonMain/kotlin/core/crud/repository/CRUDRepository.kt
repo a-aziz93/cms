@@ -4,7 +4,7 @@ import core.crud.repository.model.io.Order
 import core.crud.repository.model.io.LimitOffset
 import core.crud.repository.model.transaction.Transaction
 import core.crud.repository.model.transaction.Transaction.*
-import core.expression.aggregate.Aggregate
+import core.expression.aggregate.AggregateExpression
 import core.expression.variable.BooleanVariable
 import core.expression.variable.Variable
 import kotlinx.coroutines.Dispatchers
@@ -56,7 +56,7 @@ interface CRUDRepository<T : Any> {
     suspend fun delete(predicate: BooleanVariable? = null): Long
 
     suspend fun aggregate(
-        aggregate: Aggregate,
+        aggregate: AggregateExpression,
         predicate: BooleanVariable? = null,
     ): Number
 }
