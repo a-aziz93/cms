@@ -1,24 +1,24 @@
 package core.expression.variable.extension
 
-import core.crud.repository.model.expression.logic.Logic
-import core.crud.repository.model.expression.value.BooleanCollectionValue.Companion.booleanCollection
-import core.crud.repository.model.expression.value.BooleanValue.Companion.boolean
-import core.crud.repository.model.expression.value.CharCollectionValue.Companion.charCollection
-import core.crud.repository.model.expression.value.CharValue.Companion.char
-import core.crud.repository.model.expression.value.FieldValue.Companion.field
-import core.crud.repository.model.expression.value.NullValue.Companion.nul
-import core.crud.repository.model.expression.value.NumberCollectionValue.Companion.numberCollection
-import core.crud.repository.model.expression.value.NumberValue.Companion.number
-import core.crud.repository.model.expression.value.StringCollectionValue.Companion.stringCollection
-import core.crud.repository.model.expression.value.StringValue.Companion.string
-import core.crud.repository.model.expression.value.TemporalCollectionValue.Companion.temporalCollection
-import core.crud.repository.model.expression.value.TemporalValue.Companion.temporal
-import core.crud.repository.model.expression.variable.BooleanVariable
-import core.crud.repository.model.expression.variable.CollectionVariable
-import core.crud.repository.model.expression.value.FieldValue
-import core.crud.repository.model.expression.value.NullValue
-import core.crud.repository.model.expression.variable.Variable
-import core.crud.repository.model.expression.value.Value
+import core.expression.logic.Logic
+import core.expression.value.BooleanCollectionValue.Companion.booleanCollection
+import core.expression.value.BooleanValue.Companion.boolean
+import core.expression.value.CharCollectionValue.Companion.charCollection
+import core.expression.value.CharValue.Companion.char
+import core.expression.value.FieldValue
+import core.expression.value.FieldValue.Companion.field
+import core.expression.value.NullValue
+import core.expression.value.NullValue.Companion.nul
+import core.expression.value.NumberCollectionValue.Companion.numberCollection
+import core.expression.value.NumberValue.Companion.number
+import core.expression.value.StringCollectionValue.Companion.stringCollection
+import core.expression.value.StringValue.Companion.string
+import core.expression.value.TemporalCollectionValue.Companion.temporalCollection
+import core.expression.value.TemporalValue.Companion.temporal
+import core.expression.value.Value
+import core.expression.variable.BooleanVariable
+import core.expression.variable.CollectionVariable
+import core.expression.variable.Variable
 import java.time.temporal.Temporal
 
 private fun Any?.eqV(): Value<*> =
@@ -33,7 +33,7 @@ private fun Any?.eqV(): Value<*> =
             else -> throw IllegalAccessException("Not equatable value")
         }
 
-private fun <T:Any?> T.checkEquality(value: T, equator: (Variable, Variable) -> BooleanVariable): BooleanVariable {
+private fun <T : Any?> T.checkEquality(value: T, equator: (Variable, Variable) -> BooleanVariable): BooleanVariable {
     val leftValue = if (this is FieldValue) this else this.eqV()
     val rightValue = if (value is FieldValue) value else value.eqV()
     if (leftValue::class == rightValue::class || leftValue is FieldValue || leftValue is NullValue || rightValue is FieldValue || rightValue is NullValue) {
@@ -43,9 +43,9 @@ private fun <T:Any?> T.checkEquality(value: T, equator: (Variable, Variable) -> 
     }
 }
 
-fun <T:Any?> T.eq(value: T): BooleanVariable = this.checkEquality(value, Logic::eq)
+fun <T : Any?> T.eq(value: T): BooleanVariable = this.checkEquality(value, Logic::eq)
 
-fun <T:Any?> T.neq(value: T): BooleanVariable = this.checkEquality(value, Logic::neq)
+fun <T : Any?> T.neq(value: T): BooleanVariable = this.checkEquality(value, Logic::neq)
 
 private fun Any.compV(): Value<*> =
     when (this) {
@@ -129,4 +129,5 @@ fun String.v() = string(this)
 
 fun Collection<String>.v() = stringCollection(this)
 
-fun String.f() = field(this)
+fun String.f() = field(listOf(this))
+fun Collection<String>.f() = field(this)

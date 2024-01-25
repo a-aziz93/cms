@@ -1,13 +1,13 @@
 package core.expression.value
 
-import core.crud.repository.model.expression.variable.*
+import core.expression.variable.*
 import kotlinx.serialization.Serializable
 
 @Serializable
-open class FieldValue(override val value: String) : Value<String>,
+open class FieldValue(override val value: Collection<String>) : Value<Collection<String>>,
     BooleanVariable, NumberVariable, StringVariable, TemporalVariable, CollectionVariable {
 
     companion object {
-        fun field(name: String) = FieldValue(name)
+        fun field(value: Collection<String>) = FieldValue(value)
     }
 }
