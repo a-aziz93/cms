@@ -11,6 +11,7 @@ object RouteTable : GenericTable<RouteEntity>("routes") {
 
     // Other fields
     val uri = varchar(RouteEntity::uri)
+    val authenticate = varchar(RouteEntity::authenticate)
 
     // Metadata
     val createdBy = varchar(RouteEntity::createdBy, "created_by")
