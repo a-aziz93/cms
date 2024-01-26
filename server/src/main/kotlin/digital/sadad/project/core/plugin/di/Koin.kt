@@ -19,7 +19,9 @@ fun Application.configureKoin(
 ) {
     install(Koin) {
         // Logger
-        config?.logConfig?.level?.let { slf4jLogger(Level.valueOf(it)) } ?: slf4jLogger()
+        config?.logging?.let {
+            it.level?.let { slf4jLogger(Level.valueOf(it)) } ?: slf4jLogger()
+        }
 
         // Default module with Annotations
         defaultModule()
