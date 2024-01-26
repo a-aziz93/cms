@@ -10,5 +10,5 @@ class LDAPAuthConfig(
     charset: String? = null,
     val ldapServerURL: String,
     val userDNFormat: String,
-    session: digital.sadad.project.core.config.model.plugin.security.session.SessionAuthConfig? = null,
-) : digital.sadad.project.core.config.model.plugin.security.basic.BasicAuthConfig(realm, charset, session)
+    session: SessionAuthConfig? = null,
+) : BasicAuthConfig(realm, charset, session)

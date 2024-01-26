@@ -6,5 +6,5 @@ import digital.sadad.project.core.config.model.plugin.security.session.SessionAu
 open class BasicAuthConfig(
     val realm: String? = null,
     val charset: String? = null,
-    session: digital.sadad.project.core.config.model.plugin.security.session.SessionAuthConfig? = null,
-): digital.sadad.project.core.config.model.plugin.security.AuthConfig(session)
+    session: SessionAuthConfig? = null,
+): AuthConfig(session)

@@ -4,18 +4,22 @@ import digital.sadad.project.core.config.AppConfig
 import digital.sadad.project.core.plugin.applicationmonitoring.configureApplicationMonitoring
 import digital.sadad.project.core.plugin.authheadresponse.configureAutoHeadResponse
 import digital.sadad.project.core.plugin.cachingheaders.configureCachingHeaders
-import digital.sadad.project.core.plugin.cachingheaders.configureConditionalHeaders
+import digital.sadad.project.core.plugin.callid.configureCallId
+import digital.sadad.project.core.plugin.calllogging.configureCallLogging
+import digital.sadad.project.core.plugin.conditionalheaders.configureConditionalHeaders
 import digital.sadad.project.core.plugin.compression.configureCompression
 import digital.sadad.project.core.plugin.cors.configureCors
 import digital.sadad.project.core.plugin.dataconversion.configureDataConversion
 import digital.sadad.project.core.plugin.defaultheaders.configureDefaultHeaders
 import digital.sadad.project.core.plugin.di.configureKoin
+import digital.sadad.project.core.plugin.dropwizardmetrics.configureDropwizardMetrics
 import digital.sadad.project.core.plugin.forwardedheaders.configureForwardedHeaders
 import digital.sadad.project.core.plugin.graphql.configureGraphQL
 import digital.sadad.project.core.plugin.hsts.configureHSTS
 import digital.sadad.project.core.plugin.httpsredirect.configureHttpsRedirect
 import digital.sadad.project.core.plugin.partialcontent.configurePartialContent
 import digital.sadad.project.core.plugin.locations.configureLocations
+import digital.sadad.project.core.plugin.micrometermetrics.configureMicrometerMetrics
 import digital.sadad.project.core.plugin.ratelimit.configureRateLimit
 import digital.sadad.project.core.plugin.resources.configureResources
 import digital.sadad.project.core.plugin.routing.configureRouting
@@ -58,7 +62,7 @@ fun Application.module() {
     // Configure the Routing plugin
     appConfig.config.routing?.let { configureRouting(it) }
 
-    // Configure the websockets plugin
+    // Configure the Websockets plugin
     appConfig.config.websockets?.let {
         configureWebSockets(
             it,
@@ -66,8 +70,14 @@ fun Application.module() {
         )
     }
 
-    // Configure the graphql plugin
+    // Configure the Graphql plugin
     appConfig.config.graphql?.let { configureGraphQL(it) }
+
+    // Configure the CallLogging plugin
+    appConfig.config.callLogging?.let { configureCallLogging(it) }
+
+    // Configure the CallLogging plugin
+    appConfig.config.callId?.let { configureCallId(it) }
 
     // Configure the RateLimit plugin
     appConfig.config.rateLimit?.let { configureRateLimit(it) }
@@ -136,4 +146,10 @@ fun Application.module() {
 
     // Configure the Application monitoring plugin for templating .ftl files
     appConfig.config.applicationMonitoring?.let { configureApplicationMonitoring(it) }
+
+    // Configure the MicrometerMetrics plugin for templating .ftl files
+    appConfig.config.micrometerMetrics?.let { configureMicrometerMetrics(it) }
+
+    // Configure the DropwizardMetrics plugin for templating .ftl files
+    appConfig.config.dropwizardMetrics?.let { configureDropwizardMetrics(it) }
 }

@@ -12,32 +12,32 @@ class ArithmeticExpression(
 
     companion object {
         fun add(vararg values: NumberVariable) =
-            core.expression.arithmetic.ArithmeticExpression(ADD, *values)
+            ArithmeticExpression(ADD, *values)
 
         fun subtract(vararg values: NumberVariable) =
-            core.expression.arithmetic.ArithmeticExpression(SUBTRACT, *values)
+            ArithmeticExpression(SUBTRACT, *values)
 
         fun multiply(vararg values: NumberVariable) =
-            core.expression.arithmetic.ArithmeticExpression(MULTIPLY, *values)
+            ArithmeticExpression(MULTIPLY, *values)
 
         fun divide(vararg values: NumberVariable) =
-            core.expression.arithmetic.ArithmeticExpression(DIVIDE, *values)
+            ArithmeticExpression(DIVIDE, *values)
 
         fun mod(
             leftValue: NumberVariable,
             rightValue: NumberVariable,
         ) =
-            core.expression.arithmetic.ArithmeticExpression(MOD, leftValue, rightValue)
+            ArithmeticExpression(MOD, leftValue, rightValue)
 
         fun power(
             leftValue: NumberVariable,
             rightValue: NumberVariable,
         ) =
-            core.expression.arithmetic.ArithmeticExpression(POWER, leftValue, rightValue)
+            ArithmeticExpression(POWER, leftValue, rightValue)
 
         fun square(
             value: NumberVariable,
         ) =
-            core.expression.arithmetic.ArithmeticExpression(SQUARE, value)
+            ArithmeticExpression(SQUARE, value)
     }
 }

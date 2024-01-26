@@ -50,7 +50,7 @@ class DefaultRootComponent(
             is Config.Main -> Main(DefaultMainComponent(componentContext, storeFactory))
         }
 
-    private fun onLandingNavigate(config: RootComponent.Config): Unit = navigation.bringToFront(config)
+    private fun onLandingNavigate(config: Config): Unit = navigation.bringToFront(config)
 
     init {
         webHistoryController?.attach(

@@ -1,5 +1,22 @@
 package core.expression.text
 
 enum class TextExpressionType {
-    CONCAT
+    ASCII,
+    LENGTH,
+    LOWER,
+    UPPER,
+    SUBSTR,
+    REPLACE,
+    REVERSE,
+    TRIM,
+    RTRIM,
+    LTRIM,
+    LPAD,
+    RPAD,
+    RIGHT,
+    LEFT,
+    REPLICATE,
+    INDEXOF,
+    SPACE,
+    SPLIT,
 }

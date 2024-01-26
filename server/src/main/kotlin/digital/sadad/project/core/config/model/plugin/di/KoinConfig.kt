@@ -1,4 +1,4 @@
-package digital.sadad.project.core.config.model.plugin.routing
+package digital.sadad.project.core.config.model.plugin.di
 
 import digital.sadad.project.core.config.model.log.LogConfig
 

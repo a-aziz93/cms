@@ -1,16 +1,34 @@
 package core.expression.logic.extension
 
-import core.crud.repository.model.expression.variable.extension.v
-import core.crud.repository.model.expression.variable.*
+import core.expression.value.NullValue.Companion.nul
+import core.expression.variable.*
+import core.expression.variable.extension.f
+import core.expression.variable.extension.v
 import java.time.temporal.Temporal
 
+private fun Any?.v() = when (this) {
+    null -> nul()
+    is Boolean -> this.v()
+    is Char -> this.v()
+    is Number -> this.v()
+    is Temporal -> this.v()
+    is String -> this.v()
+    else -> throw IllegalArgumentException("Can't convert variable")
+}
+
+
+fun <T : Any?> T.eq(value: T) =
+    this.v().eq(value.v())
+
+fun <T : Any?> T.neq(value: T) =
+    this.v().neq(value.v())
+
+
+fun test(){
+    10.eq(10)
+}
+
 // BOOLEAN
-fun Boolean.eq(value: BooleanVariable) =
-    this.v().eq(value)
-
-fun Boolean.neq(value: BooleanVariable) =
-    this.v().neq(value)
-
 fun Boolean.and(vararg values: BooleanVariable) = this.v().and(*values)
 
 fun Boolean.or(vararg values: BooleanVariable) = this.v().or(*values)
@@ -19,15 +37,15 @@ fun Boolean.xor(vararg values: BooleanVariable) = this.v().xor(*values)
 
 fun Boolean.negate() = this.v().negate()
 
-fun Boolean.eq(value: Boolean) = this.eq(value.v())
-
-fun Boolean.neq(value: Boolean) = this.neq(value.v())
 
 fun Boolean.and(vararg values: Boolean) = this.and(*values.map { it.v() }.toTypedArray())
 
 fun Boolean.or(vararg values: Boolean) = this.or(*values.map { it.v() }.toTypedArray())
 
 fun Boolean.xor(vararg values: Boolean) = this.xor(*values.map { it.v() }.toTypedArray())
+
+// COMPARABLE
+
 
 // CHAR
 fun Char.eq(value: CharVariable) =

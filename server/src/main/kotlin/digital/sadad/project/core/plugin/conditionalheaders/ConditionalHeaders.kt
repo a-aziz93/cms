@@ -1,10 +1,9 @@
-package digital.sadad.project.core.plugin.cachingheaders
+package digital.sadad.project.core.plugin.conditionalheaders
 
-import digital.sadad.project.core.config.model.plugin.defaultheaders.ConditionalHeadersConfig
+import digital.sadad.project.core.config.model.plugin.conditionalheaders.ConditionalHeadersConfig
 import io.ktor.http.*
 import io.ktor.http.content.*
 import io.ktor.server.application.*
-import io.ktor.server.plugins.cachingheaders.*
 import io.ktor.server.plugins.conditionalheaders.*
 import java.io.File
 import java.util.*

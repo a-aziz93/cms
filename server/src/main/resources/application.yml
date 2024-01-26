@@ -40,6 +40,8 @@ profiles:
   - routing
   - websockets
   - graphql
+  - calllogging
+  - callid
   - ratelimit
   - cors
   - compression
@@ -61,6 +63,8 @@ profiles:
   - templating
   - swagger
   - applicationmonitoring
+  - micrometermetrics
+  - dropwizardmetrics
 
 
 

@@ -8,5 +8,5 @@ import kotlin.text.Charsets
 class DigestAuthConfig(
     val realm: String? = null,
     val algorithmName: String? = null,
-    session: digital.sadad.project.core.config.model.plugin.security.session.SessionAuthConfig? = null,
-): digital.sadad.project.core.config.model.plugin.security.AuthConfig(session)
+    session: SessionAuthConfig? = null,
+): AuthConfig(session)

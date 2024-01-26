@@ -37,6 +37,8 @@ dependencies {
     implementation("io.ktor:ktor-server-hsts-jvm:2.3.6")
     implementation("io.ktor:ktor-server-http-redirect-jvm:2.3.6")
     implementation("io.ktor:ktor-server-partial-content-jvm:2.3.6")
+    implementation("io.ktor:ktor-server-call-logging-jvm:2.3.6")
+    implementation("io.ktor:ktor-server-call-id-jvm:2.3.6")
     testImplementation(libs.kotlin.test.junit)
     // Added
     implementation(libs.ktor.swagger.ui)
@@ -63,6 +65,8 @@ dependencies {
     implementation(libs.kgraphql.ktor)
     implementation(libs.keycloak.admin.client)
     implementation(libs.sql.delight.sqlite.driver)
+    implementation(libs.micrometer.registry.prometheus)
+    implementation(libs.metrics.jmx)
 }
 
 ksp {

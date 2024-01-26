@@ -1,57 +1,49 @@
 package core.expression.variable
 
-import core.crud.repository.model.expression.logic.Logic
+import core.expression.arithmetic.ArithmeticExpression
+import core.expression.logic.LogicExpression
+import core.expression.arithmetic.ArithmeticExpression.Companion.mod
+import core.expression.arithmetic.ArithmeticExpression.Companion.power
+import core.expression.arithmetic.ArithmeticExpression.Companion.square
+import core.expression.logic.LogicExpression.Companion.eq
+import core.expression.logic.LogicExpression.Companion.neq
+import core.expression.logic.LogicExpression.Companion.gt
+import core.expression.logic.LogicExpression.Companion.gte
+import core.expression.logic.LogicExpression.Companion.lt
+import core.expression.logic.LogicExpression.Companion.lte
+import core.expression.logic.LogicExpression.Companion.between
+import core.expression.logic.LogicExpression.Companion.`in`
+import core.expression.logic.LogicExpression.Companion.nin
 
-interface NumberVariable : Variable {
+interface NumberVariable : ComparableVariable {
     fun add(vararg values: NumberVariable) =
-        core.expression.arithmetic.ArithmeticExpression.add(this, *values)
+        ArithmeticExpression.add(this, *values)
 
     fun subtract(vararg values: NumberVariable) =
-        core.expression.arithmetic.ArithmeticExpression.subtract(this, *values)
+        ArithmeticExpression.subtract(this, *values)
 
     fun multiply(vararg values: NumberVariable) =
-        core.expression.arithmetic.ArithmeticExpression.multiply(this, *values)
+        ArithmeticExpression.multiply(this, *values)
 
     fun divide(vararg values: NumberVariable) =
-        core.expression.arithmetic.ArithmeticExpression.divide(this, *values)
+        ArithmeticExpression.divide(this, *values)
 
     fun mod(
         value: NumberVariable,
     ) =
-        core.expression.arithmetic.ArithmeticExpression.mod(this, value)
+        mod(this, value)
 
     fun power(
         value: NumberVariable,
     ) =
-        core.expression.arithmetic.ArithmeticExpression.power(this, value)
+        power(this, value)
 
     fun square() =
-        core.expression.arithmetic.ArithmeticExpression.square(this)
-
-    fun eq(value: NumberVariable) =
-        Logic.eq(this, value)
-
-    fun neq(value: NumberVariable) =
-        Logic.neq(this, value)
-
-    fun gt(value: NumberVariable) =
-        Logic.gt(this, value)
-
-    fun gte(value: NumberVariable) =
-        Logic.gte(this, value)
-
-    fun lt(value: NumberVariable) =
-        Logic.lt(this, value)
-
-    fun lte(value: NumberVariable) =
-        Logic.lte(this, value)
-
-    fun between(leftValue: NumberVariable, rightValue: NumberVariable) =
-        Logic.between(this, leftValue, rightValue)
+        square(this)
 
     fun `in`(value: NumberCollectionVariable) =
-        Logic.`in`(this, value)
+        `in`(this, value)
 
     fun nin(value: NumberCollectionVariable) =
-        Logic.nin(this, value)
+        nin(this, value)
 }

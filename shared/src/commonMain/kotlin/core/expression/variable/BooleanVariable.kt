@@ -1,23 +1,16 @@
 package core.expression.variable
 
-import core.crud.repository.model.expression.logic.Logic
+import core.expression.logic.LogicExpression
 
 interface BooleanVariable : Variable {
-
-    fun eq(value: BooleanVariable) =
-        Logic.eq(this, value)
-
-    fun neq(value: BooleanVariable) =
-        Logic.neq(this, value)
-
     fun and(vararg values: BooleanVariable) =
-        Logic.and(this, *values)
+        LogicExpression.and(this, *values)
 
     fun or(vararg values: BooleanVariable) =
-        Logic.or(this, *values)
+        LogicExpression.or(this, *values)
 
     fun xor(vararg values: BooleanVariable) =
-        Logic.xor(this, *values)
+        LogicExpression.xor(this, *values)
 
-    fun negate() = Logic.negate(this)
+    fun negate() = LogicExpression.negate(this)
 }

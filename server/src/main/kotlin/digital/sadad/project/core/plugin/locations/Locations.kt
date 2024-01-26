@@ -1,6 +1,6 @@
 package digital.sadad.project.core.plugin.locations
 
-import digital.sadad.project.core.config.model.plugin.validation.LocationsConfig
+import digital.sadad.project.core.config.model.plugin.locations.LocationsConfig
 import io.ktor.server.application.*
 import io.ktor.server.locations.*
 

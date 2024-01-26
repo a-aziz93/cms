@@ -9,6 +9,6 @@ import kotlin.text.Charsets
 class BearerAuthConfig(
     val realm: String? = null,
     val authHeader: String? = null,
-    val authSchemes: digital.sadad.project.core.config.model.plugin.security.AuthSchemesConfig? = null,
-    session: digital.sadad.project.core.config.model.plugin.security.session.SessionAuthConfig? = null,
-): digital.sadad.project.core.config.model.plugin.security.AuthConfig(session)
+    val authSchemes: AuthSchemesConfig? = null,
+    session: SessionAuthConfig? = null,
+): AuthConfig(session)

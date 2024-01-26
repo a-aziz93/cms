@@ -1,4 +1,4 @@
-package helper
+package ui.helper
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.compositionLocalOf

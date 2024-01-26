@@ -1,4 +1,4 @@
-package digital.sadad.project.core.config.model.plugin.autoheadresponse
+package digital.sadad.project.core.config.model.plugin.resources
 
 import digital.sadad.project.core.config.model.plugin.PluginConfig
 

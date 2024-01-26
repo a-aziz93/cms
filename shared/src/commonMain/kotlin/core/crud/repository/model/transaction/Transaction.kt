@@ -24,7 +24,7 @@ sealed class Transaction {
 
     @Serializable
     data class FindTransaction(
-        val projections: Collection<Variable>,
+        val projections: Collection<Variable>? = null,
         val sort: Collection<Order>? = null,
         val predicate: BooleanVariable? = null,
         val limitOffset: LimitOffset? = null,

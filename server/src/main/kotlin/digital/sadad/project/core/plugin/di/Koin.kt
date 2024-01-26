@@ -1,7 +1,7 @@
 package digital.sadad.project.core.plugin.di
 
 import digital.sadad.project.core.config.model.database.DatabaseConfig
-import digital.sadad.project.core.config.model.plugin.routing.KoinConfig
+import digital.sadad.project.core.config.model.plugin.di.KoinConfig
 import digital.sadad.project.core.config.model.plugin.security.SecurityConfig
 import digital.sadad.project.core.plugin.di.module.database.databaseModule
 import digital.sadad.project.core.plugin.di.module.security.securityModule

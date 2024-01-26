@@ -7,7 +7,7 @@ import org.keycloak.admin.client.KeycloakBuilder
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
-fun keycloakModule(config: Map<String, digital.sadad.project.core.config.model.plugin.security.oauth.OAuthClientConfig>) = module {
+fun keycloakModule(config: Map<String, OAuthClientConfig>) = module {
     config
         .forEach { (name, config) ->
             val clientBuilder = KeycloakBuilder.builder()

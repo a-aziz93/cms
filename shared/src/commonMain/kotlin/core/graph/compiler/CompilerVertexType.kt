@@ -1,4 +1,4 @@
-package graph.compiler
+package core.graph.compiler
 
 enum class CompilerVertexType {
     ENTRY_POINT,

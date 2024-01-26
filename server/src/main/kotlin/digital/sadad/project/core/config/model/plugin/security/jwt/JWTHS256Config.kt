@@ -8,7 +8,7 @@ class JWTHS256Config(
     audience: String,
     realm: String,
     expiration: Duration? = null,
-) : digital.sadad.project.core.config.model.plugin.security.jwt.JWTConfig(
+) : JWTConfig(
     issuer,
     audience,
     realm,

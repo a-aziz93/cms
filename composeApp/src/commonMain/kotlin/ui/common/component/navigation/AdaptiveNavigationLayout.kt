@@ -1,3 +1,5 @@
+@file:Suppress("unused", "unused", "unused", "unused")
+
 package ui.common.component.navigation
 
 import androidx.compose.foundation.*

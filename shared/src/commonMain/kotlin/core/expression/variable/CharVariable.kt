@@ -1,17 +1,15 @@
 package core.expression.variable
 
-import core.crud.repository.model.expression.logic.Logic
+import core.expression.logic.LogicExpression
+import core.expression.logic.LogicExpression.Companion.eq
+import core.expression.logic.LogicExpression.Companion.neq
+import core.expression.logic.LogicExpression.Companion.`in`
+import core.expression.logic.LogicExpression.Companion.nin
 
 interface CharVariable : Variable {
-    fun eq(value: CharVariable) =
-        Logic.Companion.eq(this, value)
-
-    fun neq(value: CharVariable) =
-        Logic.Companion.neq(this, value)
-
     fun `in`(value: CharCollectionVariable) =
-        Logic.Companion.`in`(this, value)
+        `in`(this, value)
 
     fun nin(value: CharCollectionVariable) =
-        Logic.Companion.nin(this, value)
+        nin(this, value)
 }

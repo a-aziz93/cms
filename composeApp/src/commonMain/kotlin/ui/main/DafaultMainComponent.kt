@@ -107,7 +107,7 @@ class DefaultMainComponent(
         MainComponent.Event.NAVIGATE_BACK -> navigation.pop()
     }
 
-    private fun onSignInNavigate(config: MainComponent.Config): Unit = navigation.bringToFront(config)
+    private fun onSignInNavigate(config: Config): Unit = navigation.bringToFront(config)
 
     private companion object {
         private fun getInitialStack(webHistoryPaths: List<String>?, deepLink: DeepLink): List<Config> =

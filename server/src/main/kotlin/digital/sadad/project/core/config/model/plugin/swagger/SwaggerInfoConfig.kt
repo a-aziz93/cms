@@ -5,6 +5,6 @@ data class SwaggerInfoConfig(
     val version: String? = null,
     val description: String? = null,
     val termsOfService: String? = null,
-    val contact: digital.sadad.project.core.config.model.plugin.swagger.SwaggerContactConfig? = null,
-    val license: digital.sadad.project.core.config.model.plugin.swagger.SwaggerLicenseConfig? = null,
+    val contact: SwaggerContactConfig? = null,
+    val license: SwaggerLicenseConfig? = null,
 )

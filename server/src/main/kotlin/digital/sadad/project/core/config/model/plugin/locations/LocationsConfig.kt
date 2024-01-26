@@ -1,4 +1,4 @@
-package digital.sadad.project.core.config.model.plugin.validation
+package digital.sadad.project.core.config.model.plugin.locations
 
 import digital.sadad.project.core.config.model.plugin.PluginConfig
 

@@ -1,6 +1,6 @@
 package digital.sadad.project.core.plugin.resources
 
-import digital.sadad.project.core.config.model.plugin.autoheadresponse.ResourcesConfig
+import digital.sadad.project.core.config.model.plugin.resources.ResourcesConfig
 import io.ktor.server.application.*
 import io.ktor.server.resources.*
 

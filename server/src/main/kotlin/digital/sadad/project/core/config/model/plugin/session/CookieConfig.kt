@@ -13,5 +13,5 @@ data class CookieConfig(
     val secure: Boolean? = null,
     val httpOnly: Boolean? = null,
     val extensions: MutableMap<String, String?>? = null,
-    val encryption: digital.sadad.project.core.config.model.plugin.session.SessionEncryptConfig? = null,
+    val encryption: SessionEncryptConfig? = null,
 )

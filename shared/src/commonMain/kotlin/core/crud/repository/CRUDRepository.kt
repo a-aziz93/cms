@@ -14,19 +14,26 @@ import kotlinx.serialization.Contextual
 
 interface CRUDRepository<T : Any> {
 
-    suspend fun transactional(byUser: String? = null, block: suspend CRUDRepository<T>.() -> Any?)
+    suspend fun <R> transactional(byUser: String? = null, block: suspend CRUDRepository<T>.() -> R): R
 
-    suspend fun transactional(byUser: String? = null, transactions: Collection<Transaction>) = transactional {
-        withContext(Dispatchers.IO) {
-            transactions.map {
-                when (it) {
-                    is SaveTransaction<*> -> save(it.entities as Collection<T>, it.updateIfExists, byUser)
-                    is UpdateTransaction -> update(it.fieldValues, it.predicate, byUser)
-                    is DeleteTransaction -> delete(it.predicate)
+    suspend fun transactional(byUser: String? = null, transactions: Collection<Transaction>) =
+        transactional {
+            withContext(Dispatchers.IO) {
+                transactions.map {
+                    when (it) {
+                        is SaveTransaction<*> -> save(it.entities as Collection<T>, it.updateIfExists, byUser)
+                        is UpdateTransaction -> update(it.fieldValues, it.predicate, byUser)
+                        is FindTransaction -> {
+                            if (it.projections == null) find(it.sort, it.predicate, it.limitOffset)
+                            else find(it.projections, it.sort, it.predicate, it.limitOffset)
+                        }
+
+                        is DeleteTransaction -> delete(it.predicate)
+                        is AggregateTransaction -> aggregate(it.aggregate, it.predicate)
+                    }
                 }
             }
         }
-    }
 
     suspend fun save(
         entities: Collection<T>,

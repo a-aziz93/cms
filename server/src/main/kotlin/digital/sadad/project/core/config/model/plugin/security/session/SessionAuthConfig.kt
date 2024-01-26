@@ -4,6 +4,6 @@ import digital.sadad.project.core.config.model.plugin.session.CookieConfig
 
 data class SessionAuthConfig(
     val name: String? = null,
-    val cookie: digital.sadad.project.core.config.model.plugin.session.CookieConfig? = null,
+    val cookie: CookieConfig? = null,
     val skipIfExists: Boolean? = null,
 )

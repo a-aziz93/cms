@@ -1,6 +1,6 @@
 package core.expression.value
 
-import core.crud.repository.model.expression.variable.NumberCollectionVariable
+import core.expression.variable.NumberCollectionVariable
 import kotlinx.serialization.Serializable
 
 @Serializable

@@ -1,6 +1,6 @@
 package core.expression.value
 
-import core.crud.repository.model.expression.variable.TemporalVariable
+import core.expression.variable.TemporalVariable
 import kotlinx.serialization.Serializable
 import java.time.temporal.Temporal
 

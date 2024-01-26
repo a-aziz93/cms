@@ -1,4 +1,4 @@
-package digital.sadad.project.core.config.model.plugin.defaultheaders
+package digital.sadad.project.core.config.model.plugin.conditionalheaders
 
 import digital.sadad.project.core.config.model.plugin.PluginConfig
 

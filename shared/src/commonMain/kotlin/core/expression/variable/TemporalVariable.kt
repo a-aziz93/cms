@@ -1,32 +1,29 @@
 package core.expression.variable
 
-import core.crud.repository.model.expression.logic.Logic
+import core.expression.logic.LogicExpression
+import core.expression.temporal.TemporalExpression
+import core.expression.temporal.TemporalExpressionType
+import core.expression.temporal.TemporalExpression.Companion.time
+import core.expression.temporal.TemporalExpression.Companion.date
+import core.expression.temporal.TemporalExpression.Companion.datetime
+import core.expression.temporal.TemporalExpression.Companion.datetimeOffset
+import core.expression.temporal.TemporalExpression.Companion.format
 
-interface TemporalVariable : Variable {
-    fun eq(value: TemporalVariable) =
-        Logic.eq(this, value)
+interface TemporalVariable : ComparableVariable {
 
-    fun neq(value: TemporalVariable) =
-        Logic.neq(this, value)
+    fun time() = time(this)
 
-    fun gt(value: TemporalVariable) =
-        Logic.gt(this, value)
+    fun date() = date(this)
 
-    fun gte(value: TemporalVariable) =
-        Logic.gte(this, value)
+    fun datetime() = datetime(this)
 
-    fun lt(value: TemporalVariable) =
-        Logic.lt(this, value)
+    fun datetimeOffset() = datetime(this)
 
-    fun lte(value: TemporalVariable) =
-        Logic.lte(this, value)
-
-    fun between(leftValue: TemporalVariable, rightValue: TemporalVariable) =
-        Logic.between(this, leftValue, rightValue)
+    fun format(format: StringVariable) = format(this, format)
 
     fun `in`(value: TemporalCollectionVariable) =
-        Logic.`in`(this, value)
+        LogicExpression.`in`(this, value)
 
     fun nin(value: TemporalCollectionVariable) =
-        Logic.nin(this, value)
+        LogicExpression.nin(this, value)
 }
