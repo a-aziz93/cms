@@ -1,2 +1,2 @@
-micrometer-metrics:
+dropwizard-metrics:
   enable: true
