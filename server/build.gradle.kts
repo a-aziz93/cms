@@ -67,8 +67,7 @@ dependencies {
     implementation(libs.kgraphql.ktor)
     implementation(libs.keycloak.admin.client)
     implementation(libs.sql.delight.sqlite.driver)
-    implementation(libs.micrometer.registry.prometheus)
-    implementation(libs.metrics.jmx)
+    implementation(libs.bundles.metrics)
 }
 
 ksp {
