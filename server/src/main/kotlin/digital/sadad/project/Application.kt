@@ -26,6 +26,7 @@ import digital.sadad.project.core.plugin.routing.configureRouting
 import digital.sadad.project.core.plugin.security.configureSecurity
 import digital.sadad.project.core.plugin.serialization.configureSerialization
 import digital.sadad.project.core.plugin.session.configureSession
+import digital.sadad.project.core.plugin.shutdown.configureShutdown
 import digital.sadad.project.core.plugin.statuspages.configureStatusPages
 import digital.sadad.project.core.plugin.swagger.configureSwagger
 import digital.sadad.project.core.plugin.templating.configureFreeMarker
@@ -144,12 +145,15 @@ fun Application.module() {
     // Configure the Swagger plugin
     appConfig.config.swagger?.let { configureSwagger(it) }
 
-    // Configure the Application monitoring plugin for templating .ftl files
+    // Configure the Application monitoring plugin
     appConfig.config.applicationMonitoring?.let { configureApplicationMonitoring(it) }
 
-    // Configure the MicrometerMetrics plugin for templating .ftl files
+    // Configure the MicrometerMetrics plugin
     appConfig.config.micrometerMetrics?.let { configureMicrometerMetrics(it) }
 
-    // Configure the DropwizardMetrics plugin for templating .ftl files
+    // Configure the DropwizardMetrics plugin
     appConfig.config.dropwizardMetrics?.let { configureDropwizardMetrics(it) }
+
+    // Configure the Shutdown plugin
+    appConfig.config.shutdown?.let { configureShutdown(it) }
 }

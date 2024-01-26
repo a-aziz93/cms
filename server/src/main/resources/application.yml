@@ -65,6 +65,7 @@ profiles:
   - applicationmonitoring
   - micrometermetrics
   - dropwizardmetrics
+  - shutdown
 
 
 

@@ -30,6 +30,7 @@ import digital.sadad.project.core.config.model.plugin.swagger.SwaggerConfig
 import digital.sadad.project.core.config.model.plugin.templating.FreeMarkerConfig
 import digital.sadad.project.core.config.model.plugin.locations.LocationsConfig
 import digital.sadad.project.core.config.model.plugin.micrometermetrics.MicrometerMetricsConfig
+import digital.sadad.project.core.config.model.plugin.shutdown.ShutDownConfig
 import digital.sadad.project.core.config.model.plugin.validation.ValidationConfig
 import digital.sadad.project.core.config.model.plugin.websockets.WebSocketsConfig
 import digital.sadad.project.core.config.model.plugin.xhttpmethodoverride.XHttpMethodOverrideConfig
@@ -69,4 +70,5 @@ data class Config(
     val applicationMonitoring: ApplicationMonitoringConfig? = null,
     val micrometerMetrics: MicrometerMetricsConfig? = null,
     val dropwizardMetrics: DropwizardMetricsConfig? = null,
+    val shutdown: ShutDownConfig? = null,
 )
