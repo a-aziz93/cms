@@ -1,8 +1,8 @@
-package digital.sadad.project.core.storage.service
+package digital.sadad.project.core.service.storage
 
 import com.github.michaelbull.result.Result
-import digital.sadad.project.core.storage.error.NotFoundError
-import digital.sadad.project.core.storage.error.SaveError
+import digital.sadad.project.core.service.storage.error.NotFoundError
+import digital.sadad.project.core.service.storage.error.SaveError
 import java.io.File
 
 interface StorageService {

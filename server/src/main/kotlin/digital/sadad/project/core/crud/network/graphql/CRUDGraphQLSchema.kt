@@ -1,9 +1,9 @@
 package digital.sadad.project.core.crud.network.graphql
 
 import com.apurebase.kgraphql.GraphQL
-import core.crud.model.predicate.operation.Predicate
+import core.crud.service.CRUDService
 
-inline fun <reified T : Any> GraphQL.Configuration.crudSchema() {
+inline fun <reified T : Any> GraphQL.Configuration.crudGraphQL(crudService: CRUDService<T>) {
     schema {
         type<T>()
         query()

@@ -1,4 +1,4 @@
-package digital.sadad.project.core.storage.error
+package digital.sadad.project.core.service.storage.error
 
 import core.error.Error
 

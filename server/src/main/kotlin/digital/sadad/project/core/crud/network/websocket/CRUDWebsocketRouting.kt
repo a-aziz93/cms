@@ -1,5 +1,6 @@
 package digital.sadad.project.core.crud.network.websocket
 
+import core.crud.service.CRUDService
 import core.network.websocket.model.WSConnection
 import io.ktor.server.application.*
 import io.ktor.server.routing.*
@@ -8,7 +9,7 @@ import io.ktor.websocket.*
 import java.util.*
 import kotlin.collections.LinkedHashSet
 
-fun Application.crudRoute(path: String) {
+inline fun <reified T : Any> Application.crudWebsocket(path: String, crudService: CRUDService<T>) {
     routing {
         val connections = Collections.synchronizedSet<WSConnection?>(LinkedHashSet())
         webSocket(path) {
