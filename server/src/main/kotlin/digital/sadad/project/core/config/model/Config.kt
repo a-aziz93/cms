@@ -39,7 +39,7 @@ import digital.sadad.project.core.config.model.storage.StorageConfig
 data class Config(
     val cache: Map<String, CacheConfig>? = null,
     val storage: StorageConfig? = null,
-    val database: Map<String, DatabaseConfig>? = null,
+    val database: Map<String?, DatabaseConfig>? = null,
     val koin: KoinConfig? = null,
     val serialization: SerializationConfig? = null,
     val httpsRedirect: HTTPSRedirectConfig? = null,

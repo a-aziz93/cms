@@ -41,6 +41,7 @@ fun AdaptiveNavigationLayout(
     compactLayoutType: NavigationLayoutType = NavigationLayoutType.DRAWER,
     mediumLayoutType: NavigationLayoutType = NavigationLayoutType.DRAWER,
     expandedLayoutType: NavigationLayoutType = NavigationLayoutType.DRAWER,
+    permanentIfExpanded: Boolean = false,
     hasTopAppBar: Boolean = true,
     topAppBarColors: TopAppBarColors = TopAppBarDefaults.topAppBarColors(),
     tabRowType: TabRowType = TabRowType.TAB_ROW,
@@ -104,6 +105,7 @@ fun AdaptiveNavigationLayout(
 
         AdaptiveDrawerNavigationLayout(
             layoutType = layoutType,
+            permanentIfExpanded,
             drawerState = drawerState,
             head = {
                 avatar?.let {
@@ -484,6 +486,7 @@ private fun isBottomBarLayout(
 @Composable
 private fun AdaptiveDrawerNavigationLayout(
     layoutType: WindowWidthSizeClass = WindowWidthSizeClass.Compact,
+    permanentIfExpanded: Boolean = false,
     modifier: Modifier = Modifier,
     drawerState: DrawerState = rememberDrawerState(DrawerValue.Closed),
     head: (@Composable () -> Unit)? = null,
@@ -514,7 +517,14 @@ private fun AdaptiveDrawerNavigationLayout(
             content
         )
 
-        WindowWidthSizeClass.Expanded -> DismissibleDrawerLayout(
+        WindowWidthSizeClass.Expanded -> if (permanentIfExpanded) PermanentDrawerLayout(
+            modifier,
+            head ?: {},
+            items,
+            selectedItemIndex,
+            onItemClick,
+            content
+        ) else DismissibleDrawerLayout(
             modifier,
             drawerState,
             head ?: {},

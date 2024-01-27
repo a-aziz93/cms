@@ -1,10 +1,12 @@
 package digital.sadad.project.core.service.security.basic
 
+import core.expression.variable.extension.f
 import digital.sadad.project.core.repository.user.UserRepository
 import digital.sadad.project.core.service.security.RBACAuthService
 import digital.sadad.project.core.service.security.SkipableAuthService
 import io.ktor.server.auth.*
 import io.ktor.util.*
+import kotlinx.coroutines.flow.single
 
 class BasicAuthService(
     val config: digital.sadad.project.core.config.model.plugin.security.basic.BasicAuthConfig,
@@ -21,8 +23,13 @@ class BasicAuthService(
         digester = digestFunction
     )
 
-    suspend fun validate(credential: UserPasswordCredential): Principal? =
-        hashedUserTable.authenticate(credential)
+    suspend fun validate(credential: UserPasswordCredential): Principal? {
+        val user = userRepository.find(predicate = "username".f().eq(credential.name)).single()
+
+        if (user != null && digestFunction(credential.password) contentEquals digestFunction(user.password)) {
+            return UserIdPrincipal(credential.name)
+        }
+    }
 
     override fun roles(principal: Principal): Set<String> = (principal as UserIdPrincipalMetadata).roles ?: emptySet()
 

@@ -12,6 +12,8 @@ import digital.sadad.project.core.service.security.jwt.JWTRS256Service
 import digital.sadad.project.core.service.security.ldap.LDAPAuthService
 import digital.sadad.project.core.service.security.oauth.OAuthService
 import digital.sadad.project.core.service.security.session.SessionAuthService
+import digital.sadad.project.core.service.security.session.model.UserSession
+import digital.sadad.project.core.service.security.session.model.UserTokenSession
 import io.ktor.http.auth.*
 import io.ktor.http.parsing.*
 import io.ktor.server.application.*
@@ -159,7 +161,7 @@ fun Application.configureSecurity(
 
             // SESSION
             sessionAuthServices.forEach { (name, service) ->
-                session<UserIdPrincipalMetadata>(name) {
+                session<UserSession>(name) {
                     challenge {
                         service.challenge(call)
                     }
@@ -369,7 +371,7 @@ fun Application.configureSecurity(
                         // redirects home if the url is not found before authorization
                         currentPrincipal?.let { principal ->
                             principal.state?.let { state ->
-                                call.sessions.set(UserSession(state, principal.accessToken))
+                                call.sessions.set(UserTokenSession(principal.accessToken))
                                 redirects[state]?.let { redirect ->
                                     call.respondRedirect(redirect)
                                     return@get
