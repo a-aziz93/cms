@@ -1,6 +1,8 @@
 package digital.sadad.project.core.service.security.keycloak
 
+import core.crud.model.user.User
 import core.crud.model.user.entity.UserEntity
+import core.crud.service.CRUDService
 import jakarta.ws.rs.core.Response
 import org.keycloak.admin.client.Keycloak
 import org.keycloak.representations.idm.CredentialRepresentation
@@ -10,7 +12,7 @@ import org.keycloak.representations.idm.UserRepresentation
 class KeycloakUserService(
     val client: Keycloak,
     val realm: String,
-) {
+) : CRUDService<User> {
     fun findAll(): List<UserRepresentation> =
         client
             .realm(realm)

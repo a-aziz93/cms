@@ -6,9 +6,10 @@ import java.time.LocalDateTime
 class RouteEntity(
     val id: Long?,
     uri: String,
-    authenticate: String? = null,
+    authName: String? = null,
+    rbacAuthType: String? = null,
     val createdBy: String? = null,
     val createdAt: LocalDateTime? = null,
     val updatedBy: String? = null,
     val updatedAt: LocalDateTime? = null
-) : Route(uri, authenticate)
+) : Route(uri, authName, rbacAuthType)

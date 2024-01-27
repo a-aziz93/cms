@@ -1,12 +1,14 @@
 package digital.sadad.project.core.service.security.keycloak
 
+import core.crud.model.role.Role
+import core.crud.service.CRUDService
 import org.keycloak.admin.client.Keycloak
 import org.keycloak.representations.idm.RoleRepresentation
 
 class KeycloakRoleService(
     val client: Keycloak,
     val realm: String,
-) {
+) : CRUDService<Role> {
     fun create(name: String) {
         val role = RoleRepresentation()
         role.name = name
