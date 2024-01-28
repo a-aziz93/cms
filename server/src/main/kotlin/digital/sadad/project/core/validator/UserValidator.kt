@@ -1,8 +1,7 @@
 package digital.sadad.project.core.validator
 
-import core.crud.model.user.dto.UserCreateDto
-import core.crud.model.user.dto.UserLoginDto
-import core.crud.model.user.dto.UserUpdateDto
+import core.user.model.dto.UserCreateDto
+import core.user.model.dto.UserLoginDto
 import io.ktor.server.plugins.requestvalidation.*
 
 fun RequestValidationConfig.userValidation() {

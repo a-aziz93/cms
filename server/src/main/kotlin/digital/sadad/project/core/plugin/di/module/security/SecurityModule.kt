@@ -2,7 +2,7 @@ package digital.sadad.project.core.plugin.di.module.security
 
 import digital.sadad.project.core.config.model.plugin.security.SecurityConfig
 import digital.sadad.project.core.plugin.di.module.keycloak.keycloakModule
-import digital.sadad.project.core.service.security.basic.BasicAuthService
+import digital.sadad.project.core.security.service.basic.BasicAuthService
 import digital.sadad.project.core.service.security.digest.DigestAuthService
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
@@ -10,7 +10,12 @@ import org.koin.dsl.module
 fun securityModule(config: SecurityConfig) = module {
     // BASIC
     config.basic?.forEach { (name, config) ->
-        single<BasicAuthService>(named(name)) { BasicAuthService(config, get(named(name))) }
+        single<BasicAuthService>(named(name)) {
+            BasicAuthService(
+                config,
+                get(named(name))
+            )
+        }
     }
 
     // DIGEST

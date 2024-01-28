@@ -8,7 +8,7 @@ import core.crud.repository.model.expression.variable.BooleanVariable
 import core.crud.repository.model.expression.variable.Variable
 import core.expression.aggregate.AggregateExpressionType.*
 import core.crud.repository.model.expression.projection.Projection
-import digital.sadad.project.core.crud.model.TableMetadata
+import digital.sadad.project.core.crud.repository.model.TableMetadata
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull

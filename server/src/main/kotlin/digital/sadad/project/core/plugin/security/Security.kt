@@ -1,9 +1,9 @@
 package digital.sadad.project.core.plugin.security
 
-import core.crud.model.user.dto.UserDto
+import core.user.model.dto.UserDto
 import core.di.getAll
 import digital.sadad.project.core.config.model.plugin.security.SecurityConfig
-import digital.sadad.project.core.service.security.basic.BasicAuthService
+import digital.sadad.project.core.security.service.basic.BasicAuthService
 import digital.sadad.project.core.service.security.bearer.BearerAuthService
 import digital.sadad.project.core.service.security.digest.DigestAuthService
 import digital.sadad.project.core.service.security.form.FormAuthService
