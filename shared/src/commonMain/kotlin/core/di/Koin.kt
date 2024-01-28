@@ -7,7 +7,7 @@ import org.koin.java.KoinJavaComponent
 import kotlin.reflect.full.isSubclassOf
 
 @OptIn(KoinInternalApi::class)
-inline fun <reified T : Any> getAll(): Map<String, T> = KoinJavaComponent.getKoin().instanceRegistry
+inline fun <reified T : Any> getAll(): Map<String?, T> = KoinJavaComponent.getKoin().instanceRegistry
     .instances.entries
     .filter { it.value.beanDefinition.kind == Kind.Singleton }
     .filter { it.value.beanDefinition.primaryType.isSubclassOf(T::class) }

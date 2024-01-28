@@ -1,6 +1,12 @@
 package digital.sadad.project.core.role.repository
 
 import core.role.model.entity.RoleEntity
-import core.crud.repository.CRUDRepository
+import digital.sadad.project.core.crud.repository.KotysaCRUDRepository
+import kotlinx.datetime.LocalDateTime
+import org.ufoss.kotysa.R2dbcSqlClient
+import org.ufoss.kotysa.Table
 
-interface RoleRepository: CRUDRepository<RoleEntity>
+class RoleRepository(
+    client: R2dbcSqlClient,
+    table: Table<RoleEntity>,
+) : KotysaCRUDRepository<RoleEntity, Long>(client, table)

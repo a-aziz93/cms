@@ -14,7 +14,7 @@ import org.ufoss.kotysa.*
 
 fun Application.configureKoin(
     config: KoinConfig?,
-    databaseConfig: Map<String, DatabaseConfig>?,
+    databaseConfig: Map<String?, DatabaseConfig>?,
     securityConfig: SecurityConfig?,
 ) {
     install(Koin) {

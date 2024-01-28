@@ -3,17 +3,16 @@ package digital.sadad.project.core.crud.repository
 import core.crud.repository.CRUDRepository
 import core.crud.repository.model.io.Order
 import core.crud.repository.model.io.LimitOffset
-import core.crud.repository.model.transaction.UpdateTransaction
-import core.crud.repository.model.expression.variable.BooleanVariable
-import core.crud.repository.model.expression.variable.Variable
 import core.expression.aggregate.AggregateExpressionType.*
-import core.crud.repository.model.expression.projection.Projection
+import core.expression.variable.BooleanVariable
 import digital.sadad.project.core.crud.repository.model.TableMetadata
+import digital.sadad.project.core.user.repository.UserRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.withContext
 import kotlinx.datetime.LocalDateTime
+import kotlinx.serialization.Contextual
 import org.ufoss.kotysa.*
 import org.ufoss.kotysa.columns.*
 import kotlin.reflect.full.*
@@ -21,15 +20,20 @@ import kotlin.reflect.full.*
 abstract class KotysaCRUDRepository<T : Any, ID : Any>(
     protected val client: R2dbcSqlClient,
     protected val table: Table<T>,
+    protected val createdByFieldName: String = "createdBy",
+    protected val createdAtFieldName: String = "createdAt",
+    protected val updatedByFieldName: String = "updatedBy",
+    protected val updatedAtFieldName: String = "updatedAt",
 ) : CRUDRepository<T> {
 
     private val tableMetadata = TableMetadata(table)
 
-    override suspend fun transactional(byUser: String?, block: suspend CRUDRepository<T>.() -> Any?) {
+    override suspend fun <R> transactional(byUser: String? = null, block: suspend CRUDRepository<T>.() -> R): R {
         client.transactional {
             block()
         }
     }
+
 
     override suspend fun save(
         entities: Collection<T>,
@@ -70,7 +74,11 @@ abstract class KotysaCRUDRepository<T : Any, ID : Any>(
         }
     }!!
 
-    override suspend fun update(updates: Collection<UpdateTransaction>): List<Long> = client.transactional {
+    override suspend fun update(
+        fieldValues: Map<String, @Contextual Any?>,
+        predicate: BooleanVariable?,
+        byUser: String?,
+    ): List<Long> = client.transactional {
         withContext(Dispatchers.IO) {
             updates.map {
                 (client update table).execute(it)
@@ -147,9 +155,9 @@ abstract class KotysaCRUDRepository<T : Any, ID : Any>(
     private fun String.columnValueGetter() = tableMetadata.columnsMetadatas[this.lowercase()]!!.valueGetter
     private fun String.columnValueSetter() = tableMetadata.columnsMetadatas[this.lowercase()]!!.valueSetter
 
-    abstract fun onCreate(entity: T, byUser: String?, dateTime: LocalDateTime): T
+    private fun onCreate(entity: T, byUser: String?, dateTime: LocalDateTime): T {}
 
-    abstract fun onUpdate(entity: T, byUser: String?, dateTime: LocalDateTime): T
+    private fun onUpdate(entity: T, byUser: String?, dateTime: LocalDateTime): T {}
 
     private suspend fun CoroutinesSqlClientDeleteOrUpdate.Update<T>.execute(update: UpdateTransaction): Long =
         update.properties.entries.fold(this) { sets, (property, value) ->

@@ -5,5 +5,5 @@ import digital.sadad.project.map.marker.repository.MarkerRepository
 
 class MarkerServiceImpl(
     override val crudRepository: MarkerRepository,
-) : ScanService {
+) : MarkerService {
 }
