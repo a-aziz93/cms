@@ -10,7 +10,24 @@ object ScanMapperTable : GenericTable<ScanMapperEntity>("scan_mappers") {
         .primaryKey("PK_scan_mappers")
 
     // Other fields
-
+    val customsCode = varchar(ScanMapperEntity::customsCode)
+    val officerName = varchar(ScanMapperEntity::officerName)
+    val driveName = varchar(ScanMapperEntity::driveName)
+    val driverLicense = varchar(ScanMapperEntity::driverLicense)
+    val carModel = varchar(ScanMapperEntity::carModel)
+    val carСertificate = varchar(ScanMapperEntity::carСertificate)
+    val carLicensePlate = varchar(ScanMapperEntity::carLicensePlate)
+    val carLicansePlateImage = varchar(ScanMapperEntity::carLicansePlateImage)
+    val trailerLicensePlate = varchar(ScanMapperEntity::trailerLicensePlate)
+    val smr = varchar(ScanMapperEntity::smr)
+    val consignerName = varchar(ScanMapperEntity::consignerName)
+    val countryDispatch = varchar(ScanMapperEntity::countryDispatch)
+    val goodWeight = varchar(ScanMapperEntity::goodWeight)
+    val truckWeight = varchar(ScanMapperEntity::truckWeight)
+    val totalWeight = varchar(ScanMapperEntity::totalWeight)
+    val controlType = varchar(ScanMapperEntity::controlType)
+    val controlDescription = varchar(ScanMapperEntity::controlDescription)
+    val xrayImage = varchar(ScanMapperEntity::xrayImage)
 
     // metadata
     val createdBy = varchar(ScanMapperEntity::createdBy, "created_by")

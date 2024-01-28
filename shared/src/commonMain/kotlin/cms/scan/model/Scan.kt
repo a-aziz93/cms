@@ -1,26 +1,25 @@
 package cms.scan.model
 
-import kotlinx.datetime.LocalDateTime
+import java.time.LocalDateTime
 
 open class Scan(
-    val dateTime: LocalDateTime,
-    val officerName: String,
-    val plateNamber: String,
-    val trailerNumber: String? = null,
-    val driveName: String,
-    val sacanImage: ByteArray,
-    val countryDispatch: String,
-    val consignerName: String,
-    val controlType: String,
-    val controlDescription: String,
-    val docNumber: String,// ????
-    val content: String,// ????
-    val carLicense: ByteArray? = null,
-    val driverLicense: ByteArray,
-    val smr: ByteArray,
     val customsCode: String,
+    val officerName: String,
+    val driveName: String,
+    val driverLicenseImage: ByteArray,
     val carModel: String,
+    val carСertificateImage: ByteArray? = null,
+    val carLicensePlate: String,
+    val carLicansePlateImage: ByteArray,
+    val trailerLicensePlate: String? = null,
+    val smrImage: ByteArray,
+    val consignerName: String,
+    val countryDispatch: String,
     val goodWeight: Double,
     val truckWeight: Double,
     val totalWeight: Double,
+    val controlType: String,
+    val controlDescription: String,
+    val xrayImage: ByteArray,
+    val dateTime: LocalDateTime,
 )
