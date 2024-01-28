@@ -38,8 +38,8 @@ class RoleBasedAuthPluginConfiguration {
     var throwErrorOnUnauthorizedResponse = false
 }
 
-private lateinit var pluginGlobalConfig: Map<String, RoleBasedAuthPluginConfiguration>
-fun AuthenticationConfig.rbac(name: String = "", config: RoleBasedAuthPluginConfiguration.() -> Unit) {
+private lateinit var pluginGlobalConfig: Map<String?, RoleBasedAuthPluginConfiguration>
+fun AuthenticationConfig.rbac(name: String? = null, config: RoleBasedAuthPluginConfiguration.() -> Unit) {
     pluginGlobalConfig += name to RoleBasedAuthPluginConfiguration().apply(config)
 }
 
