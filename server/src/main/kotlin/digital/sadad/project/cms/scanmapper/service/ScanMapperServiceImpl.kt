@@ -5,7 +5,6 @@ import digital.sadad.project.cms.scansource.repository.ScanSourceCRUDRepository
 
 class ScanMapperServiceImpl(
     override val crudRepository: ScanMapperCRUDRepository,
-    val scanSourceCrudRepository: ScanSourceCRUDRepository,
 ) : ScanMapperService {
 
 }

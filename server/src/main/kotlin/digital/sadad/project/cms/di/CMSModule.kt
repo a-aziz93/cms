@@ -10,6 +10,8 @@ import digital.sadad.project.cms.scanmapper.service.ScanMapperService
 import digital.sadad.project.cms.scanmapper.service.ScanMapperServiceImpl
 import digital.sadad.project.cms.scansource.model.entity.ScanSourceTable
 import digital.sadad.project.cms.scansource.repository.ScanSourceCRUDRepository
+import digital.sadad.project.cms.scansource.service.ScanSourceService
+import digital.sadad.project.cms.scansource.service.ScanSourceServiceImpl
 import org.koin.core.module.Module
 import org.koin.core.qualifier.named
 import org.ufoss.kotysa.R2dbcSqlClient
@@ -19,11 +21,17 @@ fun Module.cmsModule(client: R2dbcSqlClient, name: String?) {
     single<ScanCRUDRepository>(name?.let { named(it) }) { ScanCRUDRepository(client, ScanTable) }
     single<ScanService>(name?.let { named(it) }) { ScanServiceImpl(get(name?.let { named(it) })) }
 
-    // SCANSOURCE
-    single<ScanSourceCRUDRepository>(name?.let { named(it) }) { ScanSourceCRUDRepository(client, ScanSourceTable) }
-    single<ScanService>(name?.let { named(it) }) { ScanServiceImpl(get(name?.let { named(it) })) }
-
-    // SCANSOURCE
+    // SCANMAPPER
     single<ScanMapperCRUDRepository>(name?.let { named(it) }) { ScanMapperCRUDRepository(client, ScanMapperTable) }
     single<ScanMapperService>(name?.let { named(it) }) { ScanMapperServiceImpl(get(name?.let { named(it) })) }
+
+    // SCANSOURCE
+    single<ScanSourceCRUDRepository>(name?.let { named(it) }) { ScanSourceCRUDRepository(client, ScanSourceTable) }
+    single<ScanSourceService>(name?.let { named(it) }) {
+        ScanSourceServiceImpl(
+            get(name?.let { named(it) }),
+            get(name?.let { named(it) }),
+            get(name?.let { named(it) }),
+        )
+    }
 }
