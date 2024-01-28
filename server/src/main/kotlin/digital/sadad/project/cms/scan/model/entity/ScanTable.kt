@@ -11,6 +11,7 @@ object ScanTable : GenericTable<ScanEntity>("scans") {
         .primaryKey("PK_scans")
 
     // Other fields
+    val docNumber = varchar(ScanEntity::docNumber)
     val customsCode = varchar(ScanEntity::customsCode)
     val officerName = varchar(ScanEntity::officerName)
     val driveName = varchar(ScanEntity::driveName)

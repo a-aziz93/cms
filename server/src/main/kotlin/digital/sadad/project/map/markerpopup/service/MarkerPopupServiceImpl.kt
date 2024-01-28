@@ -1,8 +1,8 @@
 package digital.sadad.project.map.markerpopup.service
 
-import digital.sadad.project.map.markerpopup.repository.MarkerPopupRepository
+import digital.sadad.project.map.markerpopup.repository.MarkerPopupCRUDRepository
 
 class MarkerPopupServiceImpl(
-    override val crudRepository: MarkerPopupRepository,
+    override val crudRepository: MarkerPopupCRUDRepository,
 ) : MarkerPopupService {
 }

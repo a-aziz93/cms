@@ -11,8 +11,21 @@ object ScanSourceTable : GenericTable<ScanSourceEntity>("scan_sources") {
         .primaryKey("PK_scan_sources")
 
     // Other fields
-    val url = varchar(ScanSourceEntity::url)
+    val licensePlateHostname = varchar(ScanSourceEntity::licensePlateHostname)
         .unique()
+    val licensePlateUser = varchar(ScanSourceEntity::licensePlateUser)
+    val licensePlatePassword = varchar(ScanSourceEntity::licensePlatePassword)
+    val licensePlateDirPath = varchar(ScanSourceEntity::licensePlateDirPath)
+    val xrayHostname = varchar(ScanSourceEntity::xrayHostname)
+        .unique()
+    val xrayUser = varchar(ScanSourceEntity::xrayUser)
+    val xrayPassword = varchar(ScanSourceEntity::xrayPassword)
+    val xrayDirPath = varchar(ScanSourceEntity::xrayDirPath)
+    val scalesHostname = varchar(ScanSourceEntity::scalesHostname)
+        .unique()
+    val scalesUser = varchar(ScanSourceEntity::scalesUser)
+    val scalesPassword = varchar(ScanSourceEntity::scalesPassword)
+    val scalesDirPath = varchar(ScanSourceEntity::scalesDirPath)
     val mapperId = bigInt(ScanSourceEntity::mapperId)
         .foreignKey(ScanMapperTable.id, "FK_source_mappers")
 

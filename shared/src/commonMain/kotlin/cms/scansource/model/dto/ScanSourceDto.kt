@@ -7,7 +7,18 @@ import java.time.LocalDateTime
 @Serializable
 data class ScanSourceDto(
     val id: Long? = null,
-    val url: String,
+    val licensePlateHostname: String,
+    val licensePlateUser: String,
+    val licensePlatePassword: String,
+    val licensePlateDirPath: String,
+    val xrayHostname: String,
+    val xrayUser: String,
+    val xrayPassword: String,
+    val xrayDirPath: String,
+    val scalesHostname: String,
+    val scalesUser: String,
+    val scalesPassword: String,
+    val scalesDirPath: String,
     val mapperId: Long,
     val createdBy: String? = null,
     @Serializable(with = LocalDateTimeSerializer::class)

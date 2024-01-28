@@ -71,8 +71,10 @@ worldwind = "1.3.7"
 gov-worldwind = "2.1.0.180"
 compose-material-context-menu = "0.2.0"
 keycloak = "23.0.4"
-prometheus-version = "1.12.2"
-dropwizard-version = "4.2.25"
+prometheus = "1.12.2"
+dropwizard = "4.2.25"
+commons-net = "3.10.0"
+stax-api = "1.0-2"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -298,9 +300,13 @@ ktor-server-metrics = { module = "io.ktor:ktor-server-metrics", version.ref = "k
 # OAuth2
 keycloak-admin-client = { module = "org.keycloak:keycloak-admin-client", version.ref = "keycloak" }
 # Prometheus Metrics
-micrometer-registry-prometheus = { module = "io.micrometer:micrometer-registry-prometheus", version.ref = "prometheus-version" }
+micrometer-registry-prometheus = { module = "io.micrometer:micrometer-registry-prometheus", version.ref = "prometheus" }
 # Dropwizard Metrics
-metrics-jmx = { module = "io.dropwizard.metrics:metrics-jmx", version.ref = "dropwizard-version" }
+metrics-jmx = { module = "io.dropwizard.metrics:metrics-jmx", version.ref = "dropwizard" }
+# Apache Common Net
+commons-net = { module = "commons-net:commons-net", version.ref = "commons-net" }
+# XML Parser
+stax-api = { module = "javax.xml.stream:stax-api", version.ref = "stax-api" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

@@ -1,8 +1,8 @@
 package digital.sadad.project.core.userrole.service
 
-import digital.sadad.project.core.userrole.repository.UserRoleRepository
+import digital.sadad.project.core.userrole.repository.UserRoleCRUDRepository
 
 class UserRoleServiceImpl(
-    override val crudRepository: UserRoleRepository,
+    override val crudRepository: UserRoleCRUDRepository,
 ) : UserRoleService {
 }

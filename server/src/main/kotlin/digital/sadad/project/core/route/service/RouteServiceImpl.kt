@@ -1,8 +1,8 @@
 package digital.sadad.project.core.route.service
 
-import digital.sadad.project.core.route.repository.RouteRepository
+import digital.sadad.project.core.route.repository.RouteCRUDRepository
 
 class RouteServiceImpl(
-    override val crudRepository: RouteRepository,
+    override val crudRepository: RouteCRUDRepository,
 ) : RouteService {
 }

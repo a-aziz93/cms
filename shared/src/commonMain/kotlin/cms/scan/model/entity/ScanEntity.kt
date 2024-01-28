@@ -11,6 +11,7 @@ import java.time.LocalDateTime
 )
 class ScanEntity(
     val id: Long?,
+    docNumber: String,
     customsCode: String,
     officerName: String,
     driveName: String,
@@ -35,6 +36,7 @@ class ScanEntity(
     val updatedBy: String? = null,
     val updatedAt: LocalDateTime? = null,
 ) : Scan(
+    docNumber,
     customsCode,
     officerName,
     driveName,

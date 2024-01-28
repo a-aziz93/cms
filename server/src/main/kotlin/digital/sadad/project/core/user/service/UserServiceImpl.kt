@@ -1,8 +1,8 @@
 package digital.sadad.project.core.user.service
 
-import digital.sadad.project.core.user.repository.UserRepository
+import digital.sadad.project.core.user.repository.UserCRUDRepository
 
 class UserServiceImpl(
-    override val crudRepository: UserRepository,
+    override val crudRepository: UserCRUDRepository,
 ) : UserService {
 }

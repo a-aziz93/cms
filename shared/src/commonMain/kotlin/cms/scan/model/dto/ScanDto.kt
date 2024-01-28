@@ -7,6 +7,7 @@ import java.time.LocalDateTime
 @Serializable
 data class ScanDto(
     val id: Long,
+    val docNumber: String,
     val customsCode: String,
     val officerName: String,
     val driveName: String,

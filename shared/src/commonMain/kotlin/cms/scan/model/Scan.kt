@@ -3,6 +3,7 @@ package cms.scan.model
 import java.time.LocalDateTime
 
 open class Scan(
+    val docNumber: String,
     val customsCode: String,
     val officerName: String,
     val driveName: String,

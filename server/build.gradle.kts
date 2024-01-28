@@ -68,6 +68,8 @@ dependencies {
     implementation(libs.keycloak.admin.client)
     implementation(libs.sql.delight.sqlite.driver)
     implementation(libs.bundles.metrics)
+    implementation(libs.commons.net)
+    implementation(libs.stax.api)
 }
 
 ksp {
