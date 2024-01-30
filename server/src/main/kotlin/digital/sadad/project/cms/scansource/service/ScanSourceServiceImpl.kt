@@ -327,13 +327,15 @@ class ScanSourceServiceImpl(
                     acc + ftpClient.retrieveFileStream(name).xmlProperties(properties)
                 }
 
+                val parent = it[0].replaceAfterLast("\\", "")
+
                 map + mapOf(
                     dateTimeProperty to LocalDateTime.parse(
                         map[dateTimeProperty].toString(),
                         dateTimeFormatter
                     )
                 ) + imageProperties.associate {
-                    it to IOUtils.toByteArray(ftpClient.retrieveFileStream(map[it].toString()))
+                    it to IOUtils.toByteArray(ftpClient.retrieveFileStream("$parent\\${map[it]}"))
                 }
             }
         }
