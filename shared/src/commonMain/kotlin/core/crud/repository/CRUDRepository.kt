@@ -62,8 +62,8 @@ interface CRUDRepository<T : Any> {
 
     suspend fun delete(predicate: BooleanVariable? = null): Long
 
-    suspend fun aggregate(
+    suspend fun <T> aggregate(
         aggregate: AggregateExpression,
         predicate: BooleanVariable? = null,
-    ): Number
+    ): T
 }

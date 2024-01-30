@@ -2,13 +2,12 @@ package core.route.model.entity
 
 import com.github.yanneckreiss.kconmapper.annotations.KConMapper
 import core.route.model.Route
-import core.route.model.dto.RouteCreateDto
 import core.route.model.dto.RouteDto
 import java.time.LocalDateTime
 
 @KConMapper(
-    toClasses = [RouteCreateDto::class, RouteDto::class],
-    fromClasses = [RouteCreateDto::class, RouteDto::class],
+    toClasses = [Route::class, RouteDto::class],
+    fromClasses = [Route::class, RouteDto::class],
 )
 class RouteEntity(
     val id: Long?,

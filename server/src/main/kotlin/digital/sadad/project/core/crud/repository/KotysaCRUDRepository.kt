@@ -3,9 +3,11 @@ package digital.sadad.project.core.crud.repository
 import core.crud.repository.CRUDRepository
 import core.crud.repository.model.io.Order
 import core.crud.repository.model.io.LimitOffset
+import core.expression.aggregate.AggregateExpression
 import core.expression.aggregate.AggregateExpressionType.*
 import core.expression.variable.BooleanVariable
 import digital.sadad.project.core.crud.repository.model.TableMetadata
+import digital.sadad.project.core.user.model.entity.UserTable
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
@@ -123,11 +125,11 @@ abstract class KotysaCRUDRepository<T : Any, ID : Any>(
         (client deleteFrom table).predicate(predicate).execute()
     }
 
-    override suspend fun aggregate(
-        aggregate: core.expression.aggregate.AggregateExpression,
+    override suspend fun <T> aggregate(
+        aggregate: AggregateExpression,
         predicate: BooleanVariable?,
-    ): Number =
-        when (aggregate.operation) {
+    ): T =
+        when (aggregate.type) {
             COUNT -> (if (aggregate.projection == null) {
                 (client selectCountFrom table).predicate(predicate)
             } else {

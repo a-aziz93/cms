@@ -2,13 +2,12 @@ package map.marker.model.entity
 
 import com.github.yanneckreiss.kconmapper.annotations.KConMapper
 import map.marker.model.Marker
-import map.marker.model.dto.MarkerCreateDto
 import map.marker.model.dto.MarkerDto
 import java.time.LocalDateTime
 
 @KConMapper(
-    toClasses = [MarkerCreateDto::class, MarkerDto::class],
-    fromClasses = [MarkerCreateDto::class, MarkerDto::class],
+    toClasses = [Marker::class, MarkerDto::class],
+    fromClasses = [Marker::class, MarkerDto::class],
 )
 class MarkerEntity(
     val id: Long? = null,

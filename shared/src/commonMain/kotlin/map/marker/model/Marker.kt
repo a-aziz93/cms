@@ -1,5 +1,8 @@
 package map.marker.model
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 open class Marker(
     val longitude: Double,
     val latitude: Double,

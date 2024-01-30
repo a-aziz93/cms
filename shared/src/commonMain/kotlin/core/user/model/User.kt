@@ -1,8 +1,10 @@
 package core.user.model
 
+import kotlinx.serialization.Serializable
 import java.time.LocalDateTime
 import java.util.*
 
+@Serializable
 open class User(
     val name: String,
     val email: String,

@@ -1,5 +1,8 @@
 package cms.scanmapper.model
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 open class ScanMapper(
     val customsCode: String,
     val officerName: String,

@@ -2,7 +2,6 @@ package core.role.model.entity
 
 import com.github.yanneckreiss.kconmapper.annotations.KConMapper
 import core.role.model.Role
-import core.role.model.dto.RoleCreateDto
 import core.role.model.dto.RoleDto
 import java.time.LocalDateTime
 

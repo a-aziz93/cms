@@ -11,21 +11,33 @@ object ScanSourceTable : GenericTable<ScanSourceEntity>("scan_sources") {
         .primaryKey("PK_scan_sources")
 
     // Other fields
-    val licensePlateHostname = varchar(ScanSourceEntity::licensePlateHostname)
+    val licensePlateServer = varchar(ScanSourceEntity::licensePlateServer)
         .unique()
+    val licensePlatePort = integer(ScanSourceEntity::licensePlatePort)
     val licensePlateUser = varchar(ScanSourceEntity::licensePlateUser)
     val licensePlatePassword = varchar(ScanSourceEntity::licensePlatePassword)
     val licensePlateDirPath = varchar(ScanSourceEntity::licensePlateDirPath)
-    val xrayHostname = varchar(ScanSourceEntity::xrayHostname)
+    val licensePlateTemporalFormat = varchar(ScanSourceEntity::licensePlateTemporalFormat)
+    val licensePlateInDirectories = boolean(ScanSourceEntity::licensePlateInDirectories)
+
+    val xrayServer = varchar(ScanSourceEntity::xrayServer)
         .unique()
+    val xrayPort = integer(ScanSourceEntity::xrayPort)
     val xrayUser = varchar(ScanSourceEntity::xrayUser)
     val xrayPassword = varchar(ScanSourceEntity::xrayPassword)
     val xrayDirPath = varchar(ScanSourceEntity::xrayDirPath)
-    val scalesHostname = varchar(ScanSourceEntity::scalesHostname)
+    val xrayTemporalFormat = varchar(ScanSourceEntity::xrayTemporalFormat)
+    val xrayInDirectories = boolean(ScanSourceEntity::xrayInDirectories)
+
+    val scalesServer = varchar(ScanSourceEntity::scalesServer)
         .unique()
+    val scalesPort = integer(ScanSourceEntity::scalesPort)
     val scalesUser = varchar(ScanSourceEntity::scalesUser)
     val scalesPassword = varchar(ScanSourceEntity::scalesPassword)
     val scalesDirPath = varchar(ScanSourceEntity::scalesDirPath)
+    val scalesTemporalFormat = varchar(ScanSourceEntity::scalesTemporalFormat)
+    val scalesInDirectories = boolean(ScanSourceEntity::scalesInDirectories)
+
     val mapperId = bigInt(ScanSourceEntity::mapperId)
         .foreignKey(ScanMapperTable.id, "FK_source_mappers")
 

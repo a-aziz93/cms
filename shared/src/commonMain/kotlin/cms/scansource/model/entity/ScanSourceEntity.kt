@@ -1,46 +1,69 @@
 package cms.scansource.model.entity
 
 import cms.scansource.model.ScanSource
-import cms.scansource.model.dto.ScanSourceCreateDto
 import cms.scansource.model.dto.ScanSourceDto
 import com.github.yanneckreiss.kconmapper.annotations.KConMapper
 import java.time.LocalDateTime
 
 @KConMapper(
-    toClasses = [ScanSourceCreateDto::class, ScanSourceDto::class],
-    fromClasses = [ScanSourceCreateDto::class, ScanSourceDto::class],
+    toClasses = [ScanSource::class, ScanSourceDto::class],
+    fromClasses = [ScanSource::class, ScanSourceDto::class],
 )
 class ScanSourceEntity(
     val id: Long? = null,
-    licensePlateHostname: String,
+    licensePlateServer: String,
+    licensePlatePort: Int,
     licensePlateUser: String,
     licensePlatePassword: String,
     licensePlateDirPath: String,
-    xrayHostname: String,
+    licensePlateTemporalFormat: String,
+    licensePlateInDirectories: Boolean = true,
+    licensePlateFileNamePattern: String? = null,
+    xrayServer: String,
+    xrayPort: Int,
     xrayUser: String,
     xrayPassword: String,
     xrayDirPath: String,
-    scalesHostname: String,
+    xrayTemporalFormat: String,
+    xrayInDirectories: Boolean = true,
+    xrayFileNamePattern: String? = null,
+    scalesServer: String,
+    scalesPort: Int,
     scalesUser: String,
     scalesPassword: String,
     scalesDirPath: String,
+    scalesTemporalFormat: String,
+    scalesInDirectories: Boolean = true,
+    scalesFileNamePattern: String? = null,
     mapperId: Long,
     val createdBy: String? = null,
     val createdAt: LocalDateTime? = null,
     val updatedBy: String? = null,
     val updatedAt: LocalDateTime? = null,
 ) : ScanSource(
-    licensePlateHostname,
+    licensePlateServer,
+    licensePlatePort,
     licensePlateUser,
     licensePlatePassword,
     licensePlateDirPath,
-    xrayHostname,
+    licensePlateTemporalFormat,
+    licensePlateInDirectories,
+    licensePlateFileNamePattern,
+    xrayServer,
+    xrayPort,
     xrayUser,
     xrayPassword,
     xrayDirPath,
-    scalesHostname,
+    xrayTemporalFormat,
+    xrayInDirectories,
+    xrayFileNamePattern,
+    scalesServer,
+    scalesPort,
     scalesUser,
     scalesPassword,
     scalesDirPath,
+    scalesTemporalFormat,
+    scalesInDirectories,
+    scalesFileNamePattern,
     mapperId
 )

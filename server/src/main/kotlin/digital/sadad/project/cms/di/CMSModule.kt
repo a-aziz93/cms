@@ -23,13 +23,17 @@ fun Module.cmsModule(client: R2dbcSqlClient, name: String?) {
 
     // SCANMAPPER
     single<ScanMapperCRUDRepository>(name?.let { named(it) }) { ScanMapperCRUDRepository(client, ScanMapperTable) }
-    single<ScanMapperService>(name?.let { named(it) }) { ScanMapperServiceImpl(get(name?.let { named(it) })) }
+    single<ScanMapperService>(name?.let { named(it) }) {
+        ScanMapperServiceImpl(
+            get(name?.let { named(it) }),
+            get(name?.let { named(it) }),
+        )
+    }
 
     // SCANSOURCE
     single<ScanSourceCRUDRepository>(name?.let { named(it) }) { ScanSourceCRUDRepository(client, ScanSourceTable) }
     single<ScanSourceService>(name?.let { named(it) }) {
         ScanSourceServiceImpl(
-            get(name?.let { named(it) }),
             get(name?.let { named(it) }),
             get(name?.let { named(it) }),
         )

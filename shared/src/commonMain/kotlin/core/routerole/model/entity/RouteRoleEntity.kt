@@ -2,13 +2,12 @@ package core.routerole.model.entity
 
 import com.github.yanneckreiss.kconmapper.annotations.KConMapper
 import core.routerole.model.RouteRole
-import core.routerole.model.dto.RouteRoleCreateDto
 import core.routerole.model.dto.RouteRoleDto
 import java.time.LocalDateTime
 
 @KConMapper(
-    toClasses = [RouteRoleCreateDto::class, RouteRoleDto::class],
-    fromClasses = [RouteRoleCreateDto::class, RouteRoleDto::class],
+    toClasses = [RouteRole::class, RouteRoleDto::class],
+    fromClasses = [RouteRole::class, RouteRoleDto::class],
 )
 class RouteRoleEntity(
     val id: Long?=null,

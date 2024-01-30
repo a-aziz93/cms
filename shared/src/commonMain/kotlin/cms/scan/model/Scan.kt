@@ -1,7 +1,10 @@
 package cms.scan.model
 
+import core.serializers.LocalDateTimeSerializer
+import kotlinx.serialization.Serializable
 import java.time.LocalDateTime
 
+@Serializable
 open class Scan(
     val docNumber: String,
     val customsCode: String,
@@ -22,5 +25,6 @@ open class Scan(
     val controlType: String,
     val controlDescription: String,
     val xrayImage: ByteArray,
+    @Serializable(with = LocalDateTimeSerializer::class)
     val dateTime: LocalDateTime,
 )
