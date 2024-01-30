@@ -1,25 +1,33 @@
 package cms.scanmapper.model
 
+import core.serializers.LocalDateTimeSerializer
 import kotlinx.serialization.Serializable
+import java.time.LocalDateTime
 
 @Serializable
 open class ScanMapper(
-    val customsCode: String,
-    val officerName: String,
-    val driveName: String,
-    val driverLicense: String,
-    val carModel: String,
-    val carСertificate: String,
-    val carLicensePlate: String,
-    val carLicansePlateImage: String,
-    val trailerLicensePlate: String,
-    val smr: String,
-    val consignerName: String,
-    val countryDispatch: String,
-    val goodWeight: String,
-    val truckWeight: String,
-    val totalWeight: String,
-    val controlType: String,
-    val controlDescription: String,
+    val cameraVehicleLicensePlate: String,
+    val cameraVehicleLicensePlateImage: String,
+    val cameraTrailerLicensePlate: String? = null,
+    val cameraTrailerLicensePlateImage: String? = null,
+    val cameraDateTime: String,
+    val xrayVehicleLicensePlate: String,
+    val xrayCustomsCode: String,
+    val xrayOfficerName: String,
+    val xrayDriveName: String,
+    val xrayDriverLicenseImage: String,
+    val xrayVehicleModel: String,
+    val xrayVehicleСertificateImage: String? = null,
+    val xraySMRImage: String? = null,
+    val xrayConsignerName: String,
+    val xrayCountryDispatch: String,
+    val xrayControlType: String,
+    val xrayControlDescription: String,
     val xrayImage: String,
+    val xrayDateTime: String,
+    val scalesVehicleLicensePlate: String,
+    val scalesGoodWeight: String,
+    val scalesTruckWeight: String,
+    val scalesTotalWeight: String,
+    val scalesDateTime: String,
 )

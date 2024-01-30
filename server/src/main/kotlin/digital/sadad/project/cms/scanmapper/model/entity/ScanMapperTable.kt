@@ -1,7 +1,10 @@
 package digital.sadad.project.cms.scanmapper.model.entity
 
 import cms.scanmapper.model.entity.ScanMapperEntity
+import core.serializers.LocalDateTimeSerializer
+import kotlinx.serialization.Serializable
 import org.ufoss.kotysa.GenericTable
+import java.time.LocalDateTime
 
 object ScanMapperTable : GenericTable<ScanMapperEntity>("scan_mappers") {
     // Primary key
@@ -10,24 +13,30 @@ object ScanMapperTable : GenericTable<ScanMapperEntity>("scan_mappers") {
         .primaryKey("PK_scan_mappers")
 
     // Other fields
-    val customsCode = varchar(ScanMapperEntity::customsCode)
-    val officerName = varchar(ScanMapperEntity::officerName)
-    val driveName = varchar(ScanMapperEntity::driveName)
-    val driverLicense = varchar(ScanMapperEntity::driverLicense)
-    val carModel = varchar(ScanMapperEntity::carModel)
-    val carСertificate = varchar(ScanMapperEntity::carСertificate)
-    val carLicensePlate = varchar(ScanMapperEntity::carLicensePlate)
-    val carLicansePlateImage = varchar(ScanMapperEntity::carLicansePlateImage)
-    val trailerLicensePlate = varchar(ScanMapperEntity::trailerLicensePlate)
-    val smr = varchar(ScanMapperEntity::smr)
-    val consignerName = varchar(ScanMapperEntity::consignerName)
-    val countryDispatch = varchar(ScanMapperEntity::countryDispatch)
-    val goodWeight = varchar(ScanMapperEntity::goodWeight)
-    val truckWeight = varchar(ScanMapperEntity::truckWeight)
-    val totalWeight = varchar(ScanMapperEntity::totalWeight)
-    val controlType = varchar(ScanMapperEntity::controlType)
-    val controlDescription = varchar(ScanMapperEntity::controlDescription)
+    val cameraVehicleLicensePlate = varchar(ScanMapperEntity::cameraVehicleLicensePlate)
+    val cameraVehicleLicensePlateImage = varchar(ScanMapperEntity::cameraVehicleLicensePlateImage)
+    val cameraTrailerLicensePlate = varchar(ScanMapperEntity::cameraTrailerLicensePlate)
+    val cameraTrailerLicensePlateImage = varchar(ScanMapperEntity::cameraTrailerLicensePlateImage)
+    val cameraDateTime = varchar(ScanMapperEntity::cameraDateTime)
+    val xrayVehicleLicensePlate = varchar(ScanMapperEntity::xrayVehicleLicensePlate)
+    val xrayCustomsCode = varchar(ScanMapperEntity::xrayCustomsCode)
+    val xrayOfficerName = varchar(ScanMapperEntity::xrayOfficerName)
+    val xrayDriveName = varchar(ScanMapperEntity::xrayDriveName)
+    val xrayDriverLicenseImage = varchar(ScanMapperEntity::xrayDriverLicenseImage)
+    val xrayVehicleModel = varchar(ScanMapperEntity::xrayVehicleModel)
+    val xrayVehicleСertificateImage = varchar(ScanMapperEntity::xrayVehicleСertificateImage)
+    val xraySMRImage = varchar(ScanMapperEntity::xraySMRImage)
+    val xrayConsignerName = varchar(ScanMapperEntity::xrayConsignerName)
+    val xrayCountryDispatch = varchar(ScanMapperEntity::xrayCountryDispatch)
+    val xrayControlType = varchar(ScanMapperEntity::xrayControlType)
+    val xrayControlDescription = varchar(ScanMapperEntity::xrayControlDescription)
     val xrayImage = varchar(ScanMapperEntity::xrayImage)
+    val xrayDateTime = varchar(ScanMapperEntity::xrayDateTime)
+    val scalesVehicleLicensePlate = varchar(ScanMapperEntity::scalesVehicleLicensePlate)
+    val scalesGoodWeight = varchar(ScanMapperEntity::scalesGoodWeight)
+    val scalesTruckWeight = varchar(ScanMapperEntity::scalesTruckWeight)
+    val scalesTotalWeight = varchar(ScanMapperEntity::scalesTotalWeight)
+    val scalesDateTime = varchar(ScanMapperEntity::scalesDateTime)
 
     // metadata
     val createdBy = varchar(ScanMapperEntity::createdBy, "created_by")

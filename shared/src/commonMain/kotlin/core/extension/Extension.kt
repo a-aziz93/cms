@@ -7,6 +7,7 @@ import kotlinx.coroutines.withContext
 import java.io.InputStream
 import java.lang.IllegalArgumentException
 import javax.xml.stream.XMLInputFactory
+import kotlin.reflect.KClass
 import kotlin.reflect.KType
 import kotlin.time.Duration
 
@@ -20,15 +21,15 @@ suspend fun Duration.repeat(task: suspend () -> Unit): Job {
     }
 }
 
-suspend fun InputStream.xmlProperties(vararg properties: Pair<String, KType>): Map<String, Any?> {
+fun InputStream.xmlProperties(properties: Map<String, KClass<*>>): Map<String, Any?> {
 
     val xmlInputFactory = XMLInputFactory.newInstance()
 
-    return properties.associate {
+    return properties.entries.associate {
         val reader = xmlInputFactory.createXMLEventReader(this)
 
         var i = 0
-        val propertySplit = it.first.split(".")
+        val propertySplit = it.key.split(".")
 
         var value: Any? = null
 
@@ -38,25 +39,21 @@ suspend fun InputStream.xmlProperties(vararg properties: Pair<String, KType>): M
             if (nextEvent.isStartElement) {
                 val startElement = nextEvent.asStartElement()
 
-                if (startElement.name.localPart == propertySplit[i++] && i >= propertySplit.size) {
-                    nextEvent = reader.nextEvent()
-                    value = nextEvent.asCharacters().data.to(it.second)
-                }
-            }
-
-            if (nextEvent.isEndElement) {
-                val endElement = nextEvent.asEndElement()
-                if (endElement.name.localPart == propertySplit[--i] && i < 1) {
-                    break
+                if (startElement.name.localPart == propertySplit[i]) {
+                    if (++i >= propertySplit.size) {
+                        nextEvent = reader.nextEvent()
+                        value = nextEvent.asCharacters().data.convert(it.value)
+                        break
+                    }
                 }
             }
         }
 
-        it.first to value
+        it.key to value
     }
 }
 
-fun String?.to(type: KType): Any? =
+fun String?.convert(type: KClass<*>): Any? =
     if (this == null) {
         null
     } else when (type) {

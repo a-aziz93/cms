@@ -1,12 +1,13 @@
 package digital.sadad.project.cms.scansource.service
 
 import cms.scan.model.entity.ScanEntity
-import com.github.michaelbull.result.Ok
-import com.github.michaelbull.result.Result
+import core.expression.aggregate.AggregateExpression
 import core.expression.logic.extension.eq
 import core.expression.projection.extension.p
+import core.expression.variable.extension.f
 import core.extension.repeat
 import core.extension.xmlProperties
+import core.serializers.LocalDateTimeSerializer
 import digital.sadad.project.cms.scan.repository.ScanCRUDRepository
 import digital.sadad.project.cms.scan.service.ScanService
 import digital.sadad.project.cms.scanmapper.repository.ScanMapperCRUDRepository
@@ -15,6 +16,8 @@ import digital.sadad.project.cms.scansource.repository.ScanSourceCRUDRepository
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.single
+import kotlinx.serialization.Serializable
+import org.apache.commons.io.IOUtils
 import org.apache.commons.net.ftp.FTPClient
 import org.apache.commons.net.ftp.FTPFile
 import java.io.IOException
@@ -23,6 +26,9 @@ import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 import javax.xml.stream.XMLInputFactory
 import javax.xml.stream.XMLStreamConstants
+import kotlin.reflect.KClass
+import kotlin.reflect.KType
+import kotlin.reflect.full.createType
 import kotlin.time.Duration
 import kotlin.time.DurationUnit
 import kotlin.time.toDuration
@@ -30,24 +36,30 @@ import kotlin.time.toDuration
 
 class ScanSourceServiceImpl(
     override val crudRepository: ScanSourceCRUDRepository,
-    val scanMapperService: ScanMapperService,
+    val scanMapperCRUDRepository: ScanMapperCRUDRepository,
+    val scanCRUDRepository: ScanCRUDRepository,
 ) : ScanSourceService {
-    suspend fun fetchFtpXml() = transactional<Unit> {
-        5.toDuration(DurationUnit.MINUTES)
+    suspend fun fetchFtpXml(
+        duration: Duration,
+        fromCameraDateTime: LocalDateTime,
+        fromXrayDateTime: LocalDateTime,
+        fromScalesDateTime: LocalDateTime,
+    ) = transactional<Unit> {
+        duration
             .repeat {
 
                 crudRepository.find().onEach { source ->
 
-                    val licensePlateFtpClient = FTPClient()
+                    val cameraFtpClient = FTPClient()
                     val xrayFtpClient = FTPClient()
                     val scalesFtpClient = FTPClient()
 
 
                     try {
-                        licensePlateFtpClient.connect(source.licensePlateServer, source.licensePlatePort)
-                        licensePlateFtpClient.login(source.licensePlateUser, source.licensePlatePassword)
-                        licensePlateFtpClient.enterLocalPassiveMode()
-                        licensePlateFtpClient.changeWorkingDirectory(source.scalesDirPath)
+                        cameraFtpClient.connect(source.cameraServer, source.cameraPort)
+                        cameraFtpClient.login(source.cameraUser, source.cameraPassword)
+                        cameraFtpClient.enterLocalPassiveMode()
+                        cameraFtpClient.changeWorkingDirectory(source.scalesDirPath)
 
                         xrayFtpClient.connect(source.xrayServer, source.xrayPort)
                         xrayFtpClient.login(source.xrayUser, source.xrayPassword)
@@ -61,25 +73,73 @@ class ScanSourceServiceImpl(
 
 
 
-                        if (licensePlateFtpClient.isConnected && xrayFtpClient.isConnected && scalesFtpClient.isConnected) {
+                        if (cameraFtpClient.isConnected && xrayFtpClient.isConnected && scalesFtpClient.isConnected) {
+                            val mapper =
+                                scanMapperCRUDRepository.find(predicate = "id".f().eq(source.mapperId)).single()
 
-                            val licensePlateTemporalFormater =
-                                DateTimeFormatter.ofPattern(source.licensePlateTemporalFormat)
-                            val xrayTemporalFormater = DateTimeFormatter.ofPattern(source.xrayTemporalFormat)
-                            val scalesTemporalFormater = DateTimeFormatter.ofPattern(source.scalesTemporalFormat)
+                            val temporalFormater = DateTimeFormatter.ofPattern("yyyy-MM-dd")
 
-                            val lastDateTime: LocalDateTime = scanCRUDRepository.aggregate("datetime".p().max())
+                            val cameraTemporalFormater =
+                                DateTimeFormatter.ofPattern(source.cameraDirTemporalFormat)
+                            val xrayTemporalFormater = DateTimeFormatter.ofPattern(source.xrayDirTemporalFormat)
+                            val scalesTemporalFormater = DateTimeFormatter.ofPattern(source.scalesDirTemporalFormat)
 
-                            for (i in 1..<ChronoUnit.DAYS.between(lastDateTime, LocalDateTime.now())) {
-                                val dateTime = lastDateTime.plusDays(i)
+                            val hasEntities = scanCRUDRepository.aggregate(AggregateExpression.count()) as Long == 0L
 
-                                licensePlateFtpClient.changeWorkingDirectory(
-                                    "${source.licensePlateDirPath}/${
+
+                            val cameraLastDateTime: LocalDateTime =
+                                if (hasEntities) fromCameraDateTime else scanCRUDRepository.aggregate(
+                                    "cameradatetime".p().max()
+                                )
+
+
+                            val cameraXMLProperties = (1..<ChronoUnit.DAYS.between(
+                                cameraLastDateTime,
+                                LocalDateTime.now()
+                            )).fold(emptyList<Map<String, Any?>>()) { acc, day ->
+
+                                val dateTime = cameraLastDateTime.plusDays(day)
+
+                                cameraFtpClient.changeWorkingDirectory(
+                                    "${source.cameraDirPath}/${
                                         dateTime.format(
-                                            licensePlateTemporalFormater
+                                            cameraTemporalFormater
                                         )
                                     }"
                                 )
+
+
+                                acc + ftpXMLFileProperties(
+                                    cameraFtpClient,
+                                    source.cameraInDirectories,
+                                    source.cameraFileNamePattern,
+                                    mapOf(
+                                        mapper.cameraVehicleLicensePlate to String::class,
+                                        mapper.cameraTrailerLicensePlate to String::class,
+                                    ).filterKeys { it != null } as Map<String, KClass<*>>,
+                                    setOfNotNull(
+                                        mapper.cameraVehicleLicensePlateImage,
+                                        mapper.cameraTrailerLicensePlateImage,
+                                    ),
+                                    dateTimeProperty = mapper.cameraDateTime,
+                                    dateTimeFormatter = DateTimeFormatter.ISO_DATE_TIME,
+                                )
+
+                            }
+
+
+                            val xrayLastDateTime: LocalDateTime =
+                                if (hasEntities) fromXrayDateTime else scanCRUDRepository.aggregate(
+                                    "xrayadatetime".p().max()
+                                )
+
+
+                            val xrayXMLProperties = (1..<ChronoUnit.DAYS.between(
+                                xrayLastDateTime,
+                                LocalDateTime.now()
+                            )).fold(emptyList<Map<String, Any?>>()) { acc, day ->
+
+                                val dateTime = xrayLastDateTime.plusDays(day)
 
                                 xrayFtpClient.changeWorkingDirectory(
                                     "${source.xrayDirPath}/${
@@ -88,6 +148,48 @@ class ScanSourceServiceImpl(
                                         )
                                     }"
                                 )
+
+
+                                acc + ftpXMLFileProperties(
+                                    xrayFtpClient,
+                                    source.xrayInDirectories,
+                                    source.xrayFileNamePattern,
+                                    mapOf(
+                                        mapper.xrayVehicleLicensePlate to String::class,
+                                        mapper.xrayCustomsCode to String::class,
+                                        mapper.xrayOfficerName to String::class,
+                                        mapper.xrayDriveName to String::class,
+                                        mapper.xrayVehicleModel to String::class,
+                                        mapper.xrayConsignerName to String::class,
+                                        mapper.xrayCountryDispatch to String::class,
+                                        mapper.xrayControlType to String::class,
+                                        mapper.xrayControlDescription to String::class,
+                                    ),
+                                    setOfNotNull(
+                                        mapper.xrayDriverLicenseImage,
+                                        mapper.xrayVehicleСertificateImage,
+                                        mapper.xraySMRImage,
+                                        mapper.xrayImage,
+                                    ),
+                                    dateTimeProperty = mapper.xrayDateTime,
+                                    dateTimeFormatter = DateTimeFormatter.ISO_DATE_TIME,
+                                )
+                            }
+
+
+                            val scalesLastDateTime: LocalDateTime =
+                                if (hasEntities) fromScalesDateTime else scanCRUDRepository.aggregate(
+                                    "scalesadatetime".p().max()
+                                )
+
+
+                            val scalesXMLProperties = (1..<ChronoUnit.DAYS.between(
+                                scalesLastDateTime,
+                                LocalDateTime.now()
+                            )).fold(emptyList<Map<String, Any?>>()) { acc, day ->
+
+                                val dateTime = scalesLastDateTime.plusDays(day)
+
                                 scalesFtpClient.changeWorkingDirectory(
                                     "${source.scalesDirPath}/${
                                         dateTime.format(
@@ -96,49 +198,66 @@ class ScanSourceServiceImpl(
                                     }"
                                 )
 
-                                val licensePlates =
-                                    if (source.licensePlateInDirectories)
-                                        licensePlateFtpClient.listDirectories().map {
-                                            licensePlateFtpClient.listFiles(it.name)
-                                                .filter { it.type == FTPFile.FILE_TYPE && it.name.endsWith(".xml") }
-                                                .map { licensePlateFtpClient.retrieveFileStream(it.name) }
-                                        }
-                                    else
-                                        licensePlateFtpClient.listFiles()
-                                            .filter { it.type == FTPFile.FILE_TYPE && it.name.endsWith(".xml") }
-                                            .map { licensePlateFtpClient.retrieveFileStream(it.name) }.groupBy {
-                                                it.xmlProperties()
-                                            }
-
-                                if (source.xrayInDirectories) {
-                                    xrayFtpClient.listDirectories()
-                                        .map { licensePlateFtpClient.retrieveFileStream(it.name) }
-                                }
-                                if (source.scalesInDirectories) {
-                                    scalesFtpClient.listDirectories()
-                                }
-//                                scanCRUDRepository.save(
-//                                    listOf(scanMapperService.xmlToScanEntity(
-//                                        it.mapperId,
-//                                        licensePlateFtpClient.listFiles()
-//                                            .filter { it.type == FTPFile.FILE_TYPE && it.name.endsWith(".xml") }
-//                                            .map { licensePlateFtpClient.retrieveFileStream(it.name) },
-//                                        xrayFtpClient.listFiles()
-//                                            .filter { it.type == FTPFile.FILE_TYPE && it.name.endsWith(".xml") }
-//                                            .map { xrayFtpClient.retrieveFileStream(it.name) },
-//                                        scalesFtpClient.listFiles()
-//                                            .filter { it.type == FTPFile.FILE_TYPE && it.name.endsWith(".xml") }
-//                                            .map { scalesFtpClient.retrieveFileStream(it.name) },
-//                                    )
-//                                    ),
-//                                    true,
-//                                )
+                                acc + ftpXMLFileProperties(
+                                    scalesFtpClient,
+                                    source.scalesInDirectories,
+                                    source.scalesFileNamePattern,
+                                    mapOf(
+                                        mapper.scalesVehicleLicensePlate to String::class,
+                                        mapper.scalesGoodWeight to Double::class,
+                                        mapper.scalesTruckWeight to Double::class,
+                                        mapper.scalesTotalWeight to Double::class,
+                                    ),
+                                    dateTimeProperty = mapper.scalesDateTime,
+                                    dateTimeFormatter = DateTimeFormatter.ISO_DATE_TIME,
+                                )
                             }
+
+                            val scanXMLProperties = cameraXMLProperties.map {
+                                val licensePlate = it[mapper.cameraVehicleLicensePlate]
+                                it + xrayXMLProperties.find { it[mapper.xrayVehicleLicensePlate] == licensePlate }!! +
+                                        scalesXMLProperties.find { it[mapper.xrayVehicleLicensePlate] == licensePlate }!!
+                            }
+
+                            scanCRUDRepository.save(
+                                scanXMLProperties.map {
+                                    ScanEntity(
+                                        docNumber = "${it[mapper.xrayCustomsCode]}/${
+                                            temporalFormater.format(
+                                                it[mapper.cameraDateTime] as LocalDateTime
+                                            )
+                                        }",
+                                        vehicleLicensePlate = it[mapper.cameraVehicleLicensePlate].toString(),
+                                        cameraVehicleLicensePlateImage = it[mapper.cameraVehicleLicensePlateImage] as ByteArray,
+                                        cameraTrailerLicensePlate = it[mapper.cameraTrailerLicensePlate]?.let { it.toString() },
+                                        cameraTrailerLicensePlateImage = it[mapper.cameraTrailerLicensePlateImage]?.let { it as ByteArray },
+                                        cameraDateTime = it[mapper.cameraDateTime] as LocalDateTime,
+                                        xrayCustomsCode = it[mapper.xrayCustomsCode].toString(),
+                                        xrayOfficerName = it[mapper.xrayOfficerName].toString(),
+                                        xrayDriveName = it[mapper.xrayDriveName].toString(),
+                                        xrayDriverLicenseImage = it[mapper.xrayDriverLicenseImage] as ByteArray,
+                                        xrayVehicleModel = it[mapper.xrayVehicleModel].toString(),
+                                        xrayVehicleСertificateImage = it[mapper.xrayVehicleСertificateImage]?.let { it as ByteArray },
+                                        xraySMRImage = it[mapper.xraySMRImage]?.let { it as ByteArray },
+                                        xrayConsignerName = it[mapper.xrayConsignerName].toString(),
+                                        xrayCountryDispatch = it[mapper.xrayCountryDispatch].toString(),
+                                        xrayControlType = it[mapper.xrayControlType].toString(),
+                                        xrayControlDescription = it[mapper.xrayControlDescription].toString(),
+                                        xrayImage = it[mapper.xrayImage] as ByteArray,
+                                        xrayDateTime = it[mapper.xrayDateTime] as LocalDateTime,
+                                        scalesGoodWeight = it[mapper.scalesGoodWeight] as Double,
+                                        scalesTruckWeight = it[mapper.scalesTruckWeight] as Double,
+                                        scalesTotalWeight = it[mapper.scalesTotalWeight] as Double,
+                                        scalesDateTime = it[mapper.scalesDateTime] as LocalDateTime,
+                                    )
+                                },
+                                true,
+                            )
                         }
 
                         // Close the FTP connection
-                        licensePlateFtpClient.logout()
-                        licensePlateFtpClient.disconnect()
+                        cameraFtpClient.logout()
+                        cameraFtpClient.disconnect()
                         xrayFtpClient.logout()
                         xrayFtpClient.disconnect()
                         scalesFtpClient.logout()
@@ -147,7 +266,7 @@ class ScanSourceServiceImpl(
                         e.printStackTrace()
                     } finally {
                         try {
-                            licensePlateFtpClient.disconnect()
+                            cameraFtpClient.disconnect()
                         } catch (e: IOException) {
                             e.printStackTrace()
                         }
@@ -164,5 +283,77 @@ class ScanSourceServiceImpl(
                     }
                 }
             }
+    }
+
+    companion object {
+        private fun ftpXMLFileProperties(
+            ftpClient: FTPClient,
+            inDirectories: Boolean,
+            fileNamePattern: String?,
+            properties: Map<String, KClass<*>>,
+            imageProperties: Set<String> = emptySet(),
+            dateTimeProperty: String,
+            dateTimeFormatter: DateTimeFormatter,
+        ): List<Map<String, Any?>> {
+            val fileNameRegex = fileNamePattern?.let { Regex(it) }
+
+            return if (inDirectories) {
+                ftpClient.listDirectories().map { dir ->
+                    var fileList = ftpClient.listFiles(dir.name)
+                        .filter { it.type == FTPFile.FILE_TYPE && it.name.endsWith(".xml") }
+
+                    fileNameRegex?.let {
+                        fileList =
+                            fileList.filter { !(fileNameRegex.find(it.name)?.groupValues?.get(1)?.isEmpty() ?: true) }
+                    }
+
+                    val map = fileList.map { ftpClient.retrieveFileStream(it.name) }
+                        .fold(emptyMap<String, Any?>()) { acc, inputStream ->
+                            acc + inputStream.xmlProperties(
+                                properties + imageProperties.associate { it to String::class } + mapOf(
+                                    dateTimeProperty to String::class
+                                )
+                            )
+                        }
+
+                    map + mapOf(
+                        dateTimeProperty to LocalDateTime.parse(
+                            map[dateTimeProperty].toString(),
+                            dateTimeFormatter
+                        )
+                    ) +
+                            imageProperties.associate {
+                                it to IOUtils.toByteArray(ftpClient.retrieveFileStream("${dir.name}/${map[it]}"))
+                            }
+                }
+            } else {
+                val fileList = ftpClient.listFiles()
+                    .filter { it.type == FTPFile.FILE_TYPE && it.name.endsWith(".xml") }
+
+                (fileNameRegex?.let {
+                    fileList
+                        .groupBy {
+                            fileNameRegex.find(it.name)?.groupValues?.get(1)
+                        }
+                        .filter { it.key != null }
+                        .map { it.value.map { ftpClient.retrieveFileStream(it.name) } }
+                } ?: fileList.map { listOf(ftpClient.retrieveFileStream(it.name)) })
+                    .map {
+                        val map = it.fold(emptyMap<String, Any?>()) { acc, inputStream ->
+                            acc + inputStream.xmlProperties(properties + imageProperties.associate { it to String::class })
+                        }
+
+                        map + mapOf(
+                            dateTimeProperty to LocalDateTime.parse(
+                                map[dateTimeProperty].toString(),
+                                dateTimeFormatter
+                            )
+                        ) +
+                                imageProperties.associate {
+                                    it to IOUtils.toByteArray(ftpClient.retrieveFileStream("${map[it]}"))
+                                }
+                    }
+            }
+        }
     }
 }
