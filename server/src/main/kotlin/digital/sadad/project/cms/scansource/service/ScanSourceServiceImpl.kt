@@ -300,35 +300,18 @@ class ScanSourceServiceImpl(
             return if (inDirectories) {
                 ftpClient.listDirectories().map { dir ->
                     var fileList = ftpClient.listFiles(dir.name)
-                        .filter { it.type == FTPFile.FILE_TYPE && it.name.endsWith(".xml") }
+                        .filter { it.isFile && it.name.endsWith(".xml") }
 
                     fileNameRegex?.let {
                         fileList =
                             fileList.filter { !(fileNameRegex.find(it.name)?.groupValues?.get(1)?.isEmpty() ?: true) }
                     }
 
-                    val map = fileList.map { ftpClient.retrieveFileStream(it.name) }
-                        .fold(emptyMap<String, Any?>()) { acc, inputStream ->
-                            acc + inputStream.xmlProperties(
-                                properties + imageProperties.associate { it to String::class } + mapOf(
-                                    dateTimeProperty to String::class
-                                )
-                            )
-                        }
-
-                    map + mapOf(
-                        dateTimeProperty to LocalDateTime.parse(
-                            map[dateTimeProperty].toString(),
-                            dateTimeFormatter
-                        )
-                    ) +
-                            imageProperties.associate {
-                                it to IOUtils.toByteArray(ftpClient.retrieveFileStream("${dir.name}/${map[it]}"))
-                            }
+                    fileList.map { it.name }
                 }
             } else {
                 val fileList = ftpClient.listFiles()
-                    .filter { it.type == FTPFile.FILE_TYPE && it.name.endsWith(".xml") }
+                    .filter { it.isFile && it.name.endsWith(".xml") }
 
                 (fileNameRegex?.let {
                     fileList
@@ -336,23 +319,22 @@ class ScanSourceServiceImpl(
                             fileNameRegex.find(it.name)?.groupValues?.get(1)
                         }
                         .filter { it.key != null }
-                        .map { it.value.map { ftpClient.retrieveFileStream(it.name) } }
-                } ?: fileList.map { listOf(ftpClient.retrieveFileStream(it.name)) })
-                    .map {
-                        val map = it.fold(emptyMap<String, Any?>()) { acc, inputStream ->
-                            acc + inputStream.xmlProperties(properties + imageProperties.associate { it to String::class })
-                        }
+                        .map { it.value.map { it.name } }
+                } ?: fileList.map { listOf(it.name) })
 
-                        map + mapOf(
-                            dateTimeProperty to LocalDateTime.parse(
-                                map[dateTimeProperty].toString(),
-                                dateTimeFormatter
-                            )
-                        ) +
-                                imageProperties.associate {
-                                    it to IOUtils.toByteArray(ftpClient.retrieveFileStream("${map[it]}"))
-                                }
-                    }
+            }.map {
+                val map = it.fold(emptyMap<String, Any?>()) { acc, name ->
+                    acc + ftpClient.retrieveFileStream(name).xmlProperties(properties)
+                }
+
+                map + mapOf(
+                    dateTimeProperty to LocalDateTime.parse(
+                        map[dateTimeProperty].toString(),
+                        dateTimeFormatter
+                    )
+                ) + imageProperties.associate {
+                    it to IOUtils.toByteArray(ftpClient.retrieveFileStream(map[it].toString()))
+                }
             }
         }
     }
