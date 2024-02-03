@@ -6,9 +6,16 @@ import io.ktor.utils.io.charsets.*
 import kotlin.text.Charsets
 
 class LDAPAuthConfig(
+    name: String? = null,
     realm: String? = null,
     charset: String? = null,
     val ldapServerURL: String,
     val userDNFormat: String,
     session: SessionAuthConfig? = null,
-) : BasicAuthConfig(realm, charset, session)
+) : BasicAuthConfig(
+    name,
+    realm,
+    charset,
+    null,
+    session,
+)

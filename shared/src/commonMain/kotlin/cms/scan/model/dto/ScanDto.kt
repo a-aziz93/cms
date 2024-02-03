@@ -1,5 +1,6 @@
 package cms.scan.model.dto
 
+import core.serializers.LocalDateTimeJson
 import core.serializers.LocalDateTimeSerializer
 import kotlinx.serialization.Serializable
 import java.time.LocalDateTime
@@ -11,8 +12,7 @@ data class ScanDto(
     val cameraVehicleLicensePlateImage: ByteArray,
     val cameraTrailerLicensePlate: String? = null,
     val cameraTrailerLicensePlateImage: ByteArray? = null,
-    @Serializable(with = LocalDateTimeSerializer::class)
-    val cameraDateTime: LocalDateTime,
+    val cameraDateTime: LocalDateTimeJson,
     val xrayCustomsCode: String,
     val xrayOfficerName: String,
     val xrayDriveName: String,
@@ -25,11 +25,9 @@ data class ScanDto(
     val xrayControlType: String,
     val xrayControlDescription: String,
     val xrayImage: ByteArray,
-    @Serializable(with = LocalDateTimeSerializer::class)
-    val xrayDateTime: LocalDateTime,
+    val xrayDateTime: LocalDateTimeJson,
     val scalesGoodWeight: Double,
     val scalesTruckWeight: Double,
     val scalesTotalWeight: Double,
-    @Serializable(with = LocalDateTimeSerializer::class)
-    val scalesDateTime: LocalDateTime,
+    val scalesDateTime: LocalDateTimeJson,
 )

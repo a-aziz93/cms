@@ -13,13 +13,13 @@ import digital.sadad.project.core.config.model.plugin.security.session.SessionAu
 
 class SecurityConfig(
     enable: Boolean? = null,
-    val basic: Map<String?, BasicAuthConfig>? = null,
-    val digest: Map<String?, DigestAuthConfig>? = null,
-    val bearer: Map<String?, BearerAuthConfig>? = null,
-    val form: Map<String?, FormAuthConfig>? = null,
-    val session: Map<String?, SessionAuthConfig>? = null,
-    val ldap: Map<String?, LDAPAuthConfig>? = null,
-    val jwtHS256: Map<String?, JWTHS256Config>? = null,
-    val jwtRS256: Map<String?, JWTRS256Config>? = null,
-    val oauth: Map<String?, OAuthConfig>? = null,
+    val basic: Set<BasicAuthConfig>? = null,
+    val digest: Set<DigestAuthConfig>? = null,
+    val bearer: Set<BearerAuthConfig>? = null,
+    val form: Set<FormAuthConfig>? = null,
+    val session: Set<SessionAuthConfig>? = null,
+    val ldap: Set<LDAPAuthConfig>? = null,
+    val jwtHS256: Set<JWTHS256Config>? = null,
+    val jwtRS256: Set<JWTRS256Config>? = null,
+    val oauth: Set<OAuthConfig>? = null,
 ) : PluginConfig(enable)

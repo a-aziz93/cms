@@ -7,7 +7,7 @@ import core.expression.aggregate.AggregateExpression
 import core.expression.aggregate.AggregateExpressionType.*
 import core.expression.variable.BooleanVariable
 import digital.sadad.project.core.crud.repository.model.TableMetadata
-import digital.sadad.project.core.user.model.entity.UserTable
+import digital.sadad.project.core.security.user.model.entity.UserTable
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
@@ -105,7 +105,7 @@ abstract class KotysaCRUDRepository<T : Any, ID : Any>(
         limitOffset: LimitOffset?,
     ): Flow<List<Any?>> = withContext(Dispatchers.IO) {
         val selects = client.selects()
-        UserTable.email
+        digital.sadad.project.core.security.user.model.entity.UserTable.email
         projections.filterIsInstance<Projection>().forEach {
             if (it.distinct == true) {
                 selects.selectDistinct(it.value.column())
@@ -195,18 +195,18 @@ abstract class KotysaCRUDRepository<T : Any, ID : Any>(
     }
 
     private fun <R : Any> CoroutinesSqlClientSelect.Wheres<R>.predicate(predicate: BooleanVariable?): CoroutinesSqlClientSelect.Wheres<R> {
-        this.where(UserTable.email).eq("")
+        this.where(digital.sadad.project.core.security.user.model.entity.UserTable.email).eq("")
         return this
     }
 
     private fun CoroutinesSqlClientDeleteOrUpdate.FirstDeleteOrUpdate<T>.predicate(predicate: BooleanVariable?): CoroutinesSqlClientDeleteOrUpdate.Return {
-        this.where(UserTable.email).eq("")
+        this.where(digital.sadad.project.core.security.user.model.entity.UserTable.email).eq("")
 
         return this
     }
 
     private fun <R : Any> CoroutinesSqlClientSelect.FromTable<R, T>.predicate(predicate: BooleanVariable?): CoroutinesSqlClientSelect.Return<R> {
-        this.where(UserTable.email).eq("")
+        this.where(digital.sadad.project.core.security.user.model.entity.UserTable.email).eq("")
         return this
     }
 

@@ -6,6 +6,7 @@ import digital.sadad.project.core.config.model.plugin.security.session.SessionAu
 import kotlin.time.Duration
 
 open class JWTConfig(
+    name: String? = null,
     val issuer: String,
     val audience: String,
     val realm: String? = null,
@@ -13,4 +14,7 @@ open class JWTConfig(
     val authHeader: String? = null,
     val authSchemes: AuthSchemesConfig? = null,
     session: SessionAuthConfig? = null,
-) : AuthConfig(session)
+) : AuthConfig(
+    name,
+    session,
+)

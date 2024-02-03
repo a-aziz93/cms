@@ -7,8 +7,12 @@ import io.ktor.utils.io.charsets.*
 import kotlin.text.Charsets
 
 class BearerAuthConfig(
+    name: String? = null,
     val realm: String? = null,
     val authHeader: String? = null,
     val authSchemes: AuthSchemesConfig? = null,
     session: SessionAuthConfig? = null,
-): AuthConfig(session)
+) : AuthConfig(
+    name,
+    session,
+)

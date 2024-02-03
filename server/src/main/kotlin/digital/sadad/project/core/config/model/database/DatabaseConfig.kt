@@ -6,6 +6,7 @@ import kotlin.time.DurationUnit
 import kotlin.time.toDuration
 
 data class DatabaseConfig(
+    val name: String? = null,
     val type: DbType,
     val driver: String,
     val protocol: String? = null,

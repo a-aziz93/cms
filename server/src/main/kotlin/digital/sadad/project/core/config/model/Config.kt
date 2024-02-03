@@ -37,9 +37,9 @@ import digital.sadad.project.core.config.model.plugin.xhttpmethodoverride.XHttpM
 import digital.sadad.project.core.config.model.storage.StorageConfig
 
 data class Config(
-    val cache: Map<String, CacheConfig>? = null,
+    val cache: Set<CacheConfig>? = null,
     val storage: StorageConfig? = null,
-    val database: Map<String?, DatabaseConfig>? = null,
+    val database: Set<DatabaseConfig>? = null,
     val koin: KoinConfig? = null,
     val serialization: SerializationConfig? = null,
     val httpsRedirect: HTTPSRedirectConfig? = null,
@@ -52,7 +52,8 @@ data class Config(
     val cors: CORSConfig? = null,
     val compression: CompressionConfig? = null,
     val partialContent: PartialContentConfig? = null,
-    val dataConversion: DataConversionConfig? = null, val validation: ValidationConfig? = null,
+    val dataConversion: DataConversionConfig? = null,
+    val validation: ValidationConfig? = null,
     val resources: ResourcesConfig? = null,
     val locations: LocationsConfig? = null,
     val statusPages: StatusPagesConfig? = null,

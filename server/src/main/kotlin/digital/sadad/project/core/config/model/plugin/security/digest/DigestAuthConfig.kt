@@ -7,8 +7,13 @@ import io.ktor.utils.io.charsets.*
 import kotlin.text.Charsets
 
 class DigestAuthConfig(
+    name: String? = null,
     val realm: String? = null,
     val algorithmName: String? = null,
     databases: Set<String>? = null,
     session: SessionAuthConfig? = null,
-) : DatabaseAuthConfig(databases, session)
+) : DatabaseAuthConfig(
+    name,
+    databases,
+    session,
+)

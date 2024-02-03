@@ -1,5 +1,6 @@
 package map.marker.model.dto
 
+import core.serializers.LocalDateTimeJson
 import core.serializers.LocalDateTimeSerializer
 import kotlinx.serialization.Serializable
 import java.time.LocalDateTime
@@ -12,9 +13,7 @@ data class MarkerDto(
     val altitude: Double? = null,
     val description: String? = null,
     val createdBy: String? = null,
-    @Serializable(with = LocalDateTimeSerializer::class)
-    val createdAt: LocalDateTime? = null,
+    val createdAt: LocalDateTimeJson? = null,
     val updatedBy: String? = null,
-    @Serializable(with = LocalDateTimeSerializer::class)
-    val updatedAt: LocalDateTime? = null,
+    val updatedAt: LocalDateTimeJson? = null,
 )

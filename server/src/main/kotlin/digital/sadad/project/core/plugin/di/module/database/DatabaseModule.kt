@@ -3,26 +3,26 @@ package digital.sadad.project.core.plugin.di.module.database
 import digital.sadad.project.cms.di.cmsModule
 import digital.sadad.project.core.config.model.database.DatabaseConfig
 import digital.sadad.project.core.config.model.database.DatabaseInitConfig
-import digital.sadad.project.core.role.model.entity.RoleTable
-import digital.sadad.project.core.role.repository.RoleCRUDRepository
-import digital.sadad.project.core.role.service.RoleService
-import digital.sadad.project.core.role.service.RoleServiceImpl
-import digital.sadad.project.core.route.model.entity.RouteTable
-import digital.sadad.project.core.route.repository.RouteCRUDRepository
-import digital.sadad.project.core.route.service.RouteService
-import digital.sadad.project.core.route.service.RouteServiceImpl
-import digital.sadad.project.core.routerole.model.entity.RouteRoleTable
-import digital.sadad.project.core.routerole.repository.RouteRoleCRUDRepository
-import digital.sadad.project.core.routerole.service.RouteRoleService
-import digital.sadad.project.core.routerole.service.RouteRoleServiceImpl
-import digital.sadad.project.core.user.model.entity.UserTable
-import digital.sadad.project.core.user.repository.UserCRUDRepository
-import digital.sadad.project.core.user.service.UserService
-import digital.sadad.project.core.user.service.UserServiceImpl
-import digital.sadad.project.core.userrole.model.entity.UserRoleTable
-import digital.sadad.project.core.userrole.repository.UserRoleCRUDRepository
-import digital.sadad.project.core.userrole.service.UserRoleService
-import digital.sadad.project.core.userrole.service.UserRoleServiceImpl
+import digital.sadad.project.core.security.role.model.entity.RoleTable
+import digital.sadad.project.core.security.role.repository.RoleCRUDRepository
+import digital.sadad.project.core.security.role.service.RoleService
+import digital.sadad.project.core.security.role.service.RoleServiceImpl
+import digital.sadad.project.core.security.route.model.entity.RouteTable
+import digital.sadad.project.core.security.route.repository.RouteCRUDRepository
+import digital.sadad.project.core.security.route.service.RouteService
+import digital.sadad.project.core.security.route.service.RouteServiceImpl
+import digital.sadad.project.core.security.routerole.model.entity.RouteRoleTable
+import digital.sadad.project.core.security.routerole.repository.RouteRoleCRUDRepository
+import digital.sadad.project.core.security.routerole.service.RouteRoleService
+import digital.sadad.project.core.security.routerole.service.RouteRoleServiceImpl
+import digital.sadad.project.core.security.user.model.entity.UserTable
+import digital.sadad.project.core.security.user.repository.UserCRUDRepository
+import digital.sadad.project.core.security.user.service.UserService
+import digital.sadad.project.core.security.user.service.UserServiceImpl
+import digital.sadad.project.core.security.userrole.model.entity.UserRoleTable
+import digital.sadad.project.core.security.userrole.repository.UserRoleCRUDRepository
+import digital.sadad.project.core.security.userrole.service.UserRoleService
+import digital.sadad.project.core.security.userrole.service.UserRoleServiceImpl
 import digital.sadad.project.map.di.mapModule
 import io.r2dbc.spi.ConnectionFactories
 import io.r2dbc.spi.ConnectionFactory
@@ -102,24 +102,69 @@ fun databaseModule(config: Map<String?, DatabaseConfig>) = module {
         single<R2dbcSqlClient>(name?.let { named(it) }) { client }
 
         // USER
-        single<UserCRUDRepository>(name?.let { named(it) }) { UserCRUDRepository(client, UserTable) }
-        single<UserService>(name?.let { named(it) }) { UserServiceImpl(get(name?.let { named(it) })) }
+        single<digital.sadad.project.core.security.user.repository.UserCRUDRepository>(name?.let { named(it) }) {
+            digital.sadad.project.core.security.user.repository.UserCRUDRepository(
+                client,
+                digital.sadad.project.core.security.user.model.entity.UserTable
+            )
+        }
+        single<digital.sadad.project.core.security.user.service.UserService>(name?.let { named(it) }) {
+            digital.sadad.project.core.security.user.service.UserServiceImpl(
+                get(name?.let { named(it) })
+            )
+        }
 
         // ROLE
-        single<RoleCRUDRepository>(name?.let { named(it) }) { RoleCRUDRepository(client, RoleTable) }
-        single<RoleService>(name?.let { named(it) }) { RoleServiceImpl(get(name?.let { named(it) })) }
+        single<digital.sadad.project.core.security.role.repository.RoleCRUDRepository>(name?.let { named(it) }) {
+            digital.sadad.project.core.security.role.repository.RoleCRUDRepository(
+                client,
+                digital.sadad.project.core.security.role.model.entity.RoleTable
+            )
+        }
+        single<digital.sadad.project.core.security.role.service.RoleService>(name?.let { named(it) }) {
+            digital.sadad.project.core.security.role.service.RoleServiceImpl(
+                get(name?.let { named(it) })
+            )
+        }
 
         // USER<->ROLE
-        single<UserRoleCRUDRepository>(name?.let { named(it) }) { UserRoleCRUDRepository(client, UserRoleTable) }
-        single<UserRoleService>(name?.let { named(it) }) { UserRoleServiceImpl(get(name?.let { named(it) })) }
+        single<digital.sadad.project.core.security.userrole.repository.UserRoleCRUDRepository>(name?.let { named(it) }) {
+            digital.sadad.project.core.security.userrole.repository.UserRoleCRUDRepository(
+                client,
+                digital.sadad.project.core.security.userrole.model.entity.UserRoleTable
+            )
+        }
+        single<digital.sadad.project.core.security.userrole.service.UserRoleService>(name?.let { named(it) }) {
+            digital.sadad.project.core.security.userrole.service.UserRoleServiceImpl(
+                get(name?.let { named(it) })
+            )
+        }
 
         // ROUTE
-        single<RouteCRUDRepository>(name?.let { named(it) }) { RouteCRUDRepository(client, RouteTable) }
-        single<RouteService>(name?.let { named(it) }) { RouteServiceImpl(get(name?.let { named(it) })) }
+        single<digital.sadad.project.core.security.route.repository.RouteCRUDRepository>(name?.let { named(it) }) {
+            digital.sadad.project.core.security.route.repository.RouteCRUDRepository(
+                client,
+                digital.sadad.project.core.security.route.model.entity.RouteTable
+            )
+        }
+        single<digital.sadad.project.core.security.route.service.RouteService>(name?.let { named(it) }) {
+            digital.sadad.project.core.security.route.service.RouteServiceImpl(
+                get(name?.let { named(it) })
+            )
+        }
 
         // ROUTE<->ROLE
-        single<RouteRoleCRUDRepository>(name?.let { named(it) }) { RouteRoleCRUDRepository(client, RouteRoleTable) }
-        single<RouteRoleService>(name?.let { named(it) }) { RouteRoleServiceImpl(get(name?.let { named(it) })) }
+        single<digital.sadad.project.core.security.routerole.repository.RouteRoleCRUDRepository>(name?.let { named(it) }) {
+            digital.sadad.project.core.security.routerole.repository.RouteRoleCRUDRepository(
+                client,
+                digital.sadad.project.core.security.routerole.model.entity.RouteRoleTable
+            )
+        }
+        single<digital.sadad.project.core.security.routerole.service.RouteRoleService>(name?.let { named(it) }) {
+            digital.sadad.project.core.security.routerole.service.RouteRoleServiceImpl(
+                get(name?.let { named(it) })
+            )
+        }
 
         // FEATURE MODULES
 

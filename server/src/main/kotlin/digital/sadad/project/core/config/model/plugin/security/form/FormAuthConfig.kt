@@ -5,8 +5,13 @@ import digital.sadad.project.core.config.model.plugin.security.DatabaseAuthConfi
 import digital.sadad.project.core.config.model.plugin.security.session.SessionAuthConfig
 
 class FormAuthConfig(
+    name: String? = null,
     val userParamName: String? = null,
     val passwordParamName: String? = null,
     databases: Set<String>? = null,
     session: SessionAuthConfig? = null,
-) : DatabaseAuthConfig(databases, session)
+) : DatabaseAuthConfig(
+    name,
+    databases,
+    session,
+)

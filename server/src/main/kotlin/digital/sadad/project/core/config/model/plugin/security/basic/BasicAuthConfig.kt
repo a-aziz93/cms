@@ -5,8 +5,13 @@ import digital.sadad.project.core.config.model.plugin.security.DatabaseAuthConfi
 import digital.sadad.project.core.config.model.plugin.security.session.SessionAuthConfig
 
 open class BasicAuthConfig(
+    name: String? = null,
     val realm: String? = null,
     val charset: String? = null,
     databases: Set<String>? = null,
     session: SessionAuthConfig? = null,
-) : DatabaseAuthConfig(databases, session)
+) : DatabaseAuthConfig(
+    name,
+    databases,
+    session,
+)

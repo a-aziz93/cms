@@ -1,24 +1,24 @@
 database:
-  - h2-database:
-      type: H2
-      driver: h2
-      protocol: mem
-      database: r2dbc:h2:mem:///rackets;DB_CLOSE_DELAY=-1
-      user: sa
-      password:
-      packages: digital.sadad.project
-      init:
-        if-not-exists: true
-        clean-before: false
-#  - oracle-database:
-#      type: ORACLE
-#      driver: oracle
-#      host: localhost
-#      port: 1521
-#      database: database
-#      user: sa
-#      password:
-#      packages: digital.sadad.project
-#      init:
-#        if-not-exists: true
-#        clean-before: false
+  - name: h2-default
+    type: H2
+    driver: h2
+    protocol: mem
+    database: r2dbc:h2:mem:///rackets;DB_CLOSE_DELAY=-1
+    user: sa
+    password:
+    packages: digital.sadad.project
+    init:
+      if-not-exists: true
+      clean-before: false
+#  - name: oracle-default
+#    type: ORACLE
+#    driver: oracle
+#    host: localhost
+#    port: 1521
+#    database: database
+#    user: sa
+#    password:
+#    packages: digital.sadad.project
+#    init:
+#      if-not-exists: true
+#      clean-before: false

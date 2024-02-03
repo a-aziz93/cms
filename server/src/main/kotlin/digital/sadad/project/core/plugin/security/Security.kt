@@ -1,17 +1,17 @@
 package digital.sadad.project.core.plugin.security
 
-import core.user.model.dto.UserDto
+import core.security.user.model.dto.UserDto
 import core.di.getAll
 import digital.sadad.project.core.config.model.plugin.security.SecurityConfig
-import digital.sadad.project.core.security.service.basic.BasicAuthService
-import digital.sadad.project.core.security.service.bearer.BearerAuthService
-import digital.sadad.project.core.security.service.digest.DigestAuthService
-import digital.sadad.project.core.security.service.form.FormAuthService
-import digital.sadad.project.core.security.service.jwt.JWTHS256Service
-import digital.sadad.project.core.security.service.jwt.JWTRS256Service
-import digital.sadad.project.core.security.service.ldap.LDAPAuthService
-import digital.sadad.project.core.security.service.oauth.OAuthService
-import digital.sadad.project.core.security.service.session.SessionAuthService
+import digital.sadad.project.core.security.basic.service.BasicAuthService
+import digital.sadad.project.core.security.bearer.service.BearerAuthService
+import digital.sadad.project.core.security.digest.service.DigestAuthService
+import digital.sadad.project.core.security.form.service.FormAuthService
+import digital.sadad.project.core.security.jwt.service.JWTHS256Service
+import digital.sadad.project.core.security.jwt.service.JWTRS256Service
+import digital.sadad.project.core.security.ldap.service.LDAPAuthService
+import digital.sadad.project.core.security.oauth.service.OAuthService
+import digital.sadad.project.core.security.session.service.SessionAuthService
 import io.ktor.http.auth.*
 import io.ktor.http.parsing.*
 import io.ktor.server.application.*
