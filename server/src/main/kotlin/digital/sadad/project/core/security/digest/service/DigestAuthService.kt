@@ -10,7 +10,7 @@ import kotlin.text.Charsets.UTF_8
 
 class DigestAuthService(
     val config: DigestAuthConfig,
-    val userCRUDRepository: digital.sadad.project.core.security.user.repository.UserCRUDRepository,
+    val userCRUDRepository: UserCRUDRepository,
 ) : SkipableAuthService, RBACAuthService {
 
     fun getMd5Digest(str: String): ByteArray = MessageDigest.getInstance("MD5").digest(str.toByteArray(UTF_8))

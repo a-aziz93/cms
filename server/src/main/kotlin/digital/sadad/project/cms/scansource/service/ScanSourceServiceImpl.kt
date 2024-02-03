@@ -121,8 +121,8 @@ class ScanSourceServiceImpl(
                                         mapper.cameraVehicleLicensePlateImage,
                                         mapper.cameraTrailerLicensePlateImage,
                                     ),
-                                    dateTimeProperty = mapper.cameraDateTime,
-                                    dateTimeFormatter = DateTimeFormatter.ISO_DATE_TIME,
+                                    mapper.cameraDateTime,
+                                    mapper.cameraDateTimeFormat,
                                 )
 
                             }
@@ -171,8 +171,8 @@ class ScanSourceServiceImpl(
                                         mapper.xraySMRImage,
                                         mapper.xrayImage,
                                     ),
-                                    dateTimeProperty = mapper.xrayDateTime,
-                                    dateTimeFormatter = DateTimeFormatter.ISO_DATE_TIME,
+                                    mapper.xrayDateTime,
+                                    mapper.xrayDateTimeFormat,
                                 )
                             }
 
@@ -209,7 +209,7 @@ class ScanSourceServiceImpl(
                                         mapper.scalesTotalWeight to Double::class,
                                     ),
                                     dateTimeProperty = mapper.scalesDateTime,
-                                    dateTimeFormatter = DateTimeFormatter.ISO_DATE_TIME,
+                                    dateTimeFormat = mapper.scalesDateTimeFormat,
                                 )
                             }
 
@@ -293,9 +293,11 @@ class ScanSourceServiceImpl(
             properties: Map<String, KClass<*>>,
             imageProperties: Set<String> = emptySet(),
             dateTimeProperty: String,
-            dateTimeFormatter: DateTimeFormatter,
+            dateTimeFormat: String,
         ): List<Map<String, Any?>> {
             val fileNameRegex = fileNamePattern?.let { Regex(it) }
+
+            val dateTimeFormatter = DateTimeFormatter.ofPattern(dateTimeFormat)
 
             return if (inDirectories) {
                 ftpClient.listDirectories().map { dir ->

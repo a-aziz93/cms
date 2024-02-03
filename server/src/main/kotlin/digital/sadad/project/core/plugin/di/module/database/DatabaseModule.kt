@@ -44,135 +44,135 @@ import org.ufoss.kotysa.postgresql.PostgresqlTable
 import org.ufoss.kotysa.r2dbc.coSqlClient
 import kotlin.reflect.KClass
 
-fun databaseModule(config: Map<String?, DatabaseConfig>) = module {
-    config.forEach { (name, config) ->
+fun databaseModule(config: Set<DatabaseConfig>) = module {
+    config.forEach { cfg ->
         var createTables: Set<Table<*>>? = null
-        val client = when (config.type) {
+        val client = when (cfg.type) {
             DbType.H2 -> {
-                val tables = getH2TablesInPackage(config.packages)
+                val tables = getH2TablesInPackage(cfg.packages)
                 createTables = tables.allTables.keys
-                config.getConnectionFactory()
+                cfg.getConnectionFactory()
                     .coSqlClient(tables)
             }
 
             DbType.MARIADB -> {
-                val tables = getMariadbTablesInPackage(config.packages)
+                val tables = getMariadbTablesInPackage(cfg.packages)
                 createTables = tables.allTables.keys
-                config.getConnectionFactory()
+                cfg.getConnectionFactory()
                     .coSqlClient(tables)
             }
 
             DbType.MYSQL -> {
-                val tables = getMysqlTablesInPackage(config.packages)
+                val tables = getMysqlTablesInPackage(cfg.packages)
                 createTables = tables.allTables.keys
-                config.getConnectionFactory()
+                cfg.getConnectionFactory()
                     .coSqlClient(tables)
             }
 
             DbType.MSSQL -> {
-                val tables = getMssqlTablesInPackage(config.packages)
+                val tables = getMssqlTablesInPackage(cfg.packages)
                 createTables = tables.allTables.keys
-                config.getConnectionFactory()
+                cfg.getConnectionFactory()
                     .coSqlClient(tables)
             }
 
             DbType.POSTGRESQL -> {
-                val tables = getPostgresqlTablesInPackage(config.packages)
+                val tables = getPostgresqlTablesInPackage(cfg.packages)
                 createTables = tables.allTables.keys
-                config.getConnectionFactory()
+                cfg.getConnectionFactory()
                     .coSqlClient(tables)
             }
 
             DbType.ORACLE -> {
-                val tables = getOracleTablesInPackage(config.packages)
+                val tables = getOracleTablesInPackage(cfg.packages)
                 createTables = tables.allTables.keys
-                config.getConnectionFactory()
+                cfg.getConnectionFactory()
                     .coSqlClient(tables)
             }
 
             DbType.SQLITE -> throw UnsupportedOperationException("SQLite is not supported")
         }
 
-        if (config.init != null) {
+        if (cfg.init != null) {
             runBlocking {
-                initDatabase(client, createTables, config.init)
+                initDatabase(client, createTables, cfg.init)
             }
         }
 
-        single<R2dbcSqlClient>(name?.let { named(it) }) { client }
+        single<R2dbcSqlClient>(cfg.name?.let { named(it) }) { client }
 
         // USER
-        single<digital.sadad.project.core.security.user.repository.UserCRUDRepository>(name?.let { named(it) }) {
-            digital.sadad.project.core.security.user.repository.UserCRUDRepository(
+        single<UserCRUDRepository>(cfg.name?.let { named(it) }) {
+            UserCRUDRepository(
                 client,
-                digital.sadad.project.core.security.user.model.entity.UserTable
+                UserTable
             )
         }
-        single<digital.sadad.project.core.security.user.service.UserService>(name?.let { named(it) }) {
-            digital.sadad.project.core.security.user.service.UserServiceImpl(
-                get(name?.let { named(it) })
+        single<UserService>(cfg.name?.let { named(it) }) {
+            UserServiceImpl(
+                get(cfg.name?.let { named(it) })
             )
         }
 
         // ROLE
-        single<digital.sadad.project.core.security.role.repository.RoleCRUDRepository>(name?.let { named(it) }) {
-            digital.sadad.project.core.security.role.repository.RoleCRUDRepository(
+        single<RoleCRUDRepository>(cfg.name?.let { named(it) }) {
+            RoleCRUDRepository(
                 client,
-                digital.sadad.project.core.security.role.model.entity.RoleTable
+                RoleTable
             )
         }
-        single<digital.sadad.project.core.security.role.service.RoleService>(name?.let { named(it) }) {
-            digital.sadad.project.core.security.role.service.RoleServiceImpl(
-                get(name?.let { named(it) })
+        single<RoleService>(cfg.name?.let { named(it) }) {
+            RoleServiceImpl(
+                get(cfg.name?.let { named(it) })
             )
         }
 
         // USER<->ROLE
-        single<digital.sadad.project.core.security.userrole.repository.UserRoleCRUDRepository>(name?.let { named(it) }) {
-            digital.sadad.project.core.security.userrole.repository.UserRoleCRUDRepository(
+        single<UserRoleCRUDRepository>(cfg.name?.let { named(it) }) {
+            UserRoleCRUDRepository(
                 client,
-                digital.sadad.project.core.security.userrole.model.entity.UserRoleTable
+                UserRoleTable
             )
         }
-        single<digital.sadad.project.core.security.userrole.service.UserRoleService>(name?.let { named(it) }) {
-            digital.sadad.project.core.security.userrole.service.UserRoleServiceImpl(
-                get(name?.let { named(it) })
+        single<UserRoleService>(cfg.name?.let { named(it) }) {
+            UserRoleServiceImpl(
+                get(cfg.name?.let { named(it) })
             )
         }
 
         // ROUTE
-        single<digital.sadad.project.core.security.route.repository.RouteCRUDRepository>(name?.let { named(it) }) {
-            digital.sadad.project.core.security.route.repository.RouteCRUDRepository(
+        single<RouteCRUDRepository>(cfg.name?.let { named(it) }) {
+            RouteCRUDRepository(
                 client,
-                digital.sadad.project.core.security.route.model.entity.RouteTable
+                RouteTable
             )
         }
-        single<digital.sadad.project.core.security.route.service.RouteService>(name?.let { named(it) }) {
-            digital.sadad.project.core.security.route.service.RouteServiceImpl(
-                get(name?.let { named(it) })
+        single<RouteService>(cfg.name?.let { named(it) }) {
+            RouteServiceImpl(
+                get(cfg.name?.let { named(it) })
             )
         }
 
         // ROUTE<->ROLE
-        single<digital.sadad.project.core.security.routerole.repository.RouteRoleCRUDRepository>(name?.let { named(it) }) {
-            digital.sadad.project.core.security.routerole.repository.RouteRoleCRUDRepository(
+        single<RouteRoleCRUDRepository>(cfg.name?.let { named(it) }) {
+            RouteRoleCRUDRepository(
                 client,
-                digital.sadad.project.core.security.routerole.model.entity.RouteRoleTable
+                RouteRoleTable
             )
         }
-        single<digital.sadad.project.core.security.routerole.service.RouteRoleService>(name?.let { named(it) }) {
-            digital.sadad.project.core.security.routerole.service.RouteRoleServiceImpl(
-                get(name?.let { named(it) })
+        single<RouteRoleService>(cfg.name?.let { named(it) }) {
+            RouteRoleServiceImpl(
+                get(cfg.name?.let { named(it) })
             )
         }
 
         // FEATURE MODULES
 
         // map
-        mapModule(client, name)
+        mapModule(client, cfg.name)
 
         // cms
-        cmsModule(client, name)
+        cmsModule(client, cfg.name)
     }
 }
 

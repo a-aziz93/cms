@@ -18,6 +18,7 @@ object ScanMapperTable : GenericTable<ScanMapperEntity>("scan_mappers") {
     val cameraTrailerLicensePlate = varchar(ScanMapperEntity::cameraTrailerLicensePlate)
     val cameraTrailerLicensePlateImage = varchar(ScanMapperEntity::cameraTrailerLicensePlateImage)
     val cameraDateTime = varchar(ScanMapperEntity::cameraDateTime)
+    val cameraDateTimeFormat = varchar(ScanMapperEntity::cameraDateTimeFormat)
     val xrayVehicleLicensePlate = varchar(ScanMapperEntity::xrayVehicleLicensePlate)
     val xrayCustomsCode = varchar(ScanMapperEntity::xrayCustomsCode)
     val xrayOfficerName = varchar(ScanMapperEntity::xrayOfficerName)
@@ -32,11 +33,13 @@ object ScanMapperTable : GenericTable<ScanMapperEntity>("scan_mappers") {
     val xrayControlDescription = varchar(ScanMapperEntity::xrayControlDescription)
     val xrayImage = varchar(ScanMapperEntity::xrayImage)
     val xrayDateTime = varchar(ScanMapperEntity::xrayDateTime)
+    val xrayDateTimeFormat = varchar(ScanMapperEntity::xrayDateTimeFormat)
     val scalesVehicleLicensePlate = varchar(ScanMapperEntity::scalesVehicleLicensePlate)
     val scalesGoodWeight = varchar(ScanMapperEntity::scalesGoodWeight)
     val scalesTruckWeight = varchar(ScanMapperEntity::scalesTruckWeight)
     val scalesTotalWeight = varchar(ScanMapperEntity::scalesTotalWeight)
     val scalesDateTime = varchar(ScanMapperEntity::scalesDateTime)
+    val scalesDateTimeFormat = varchar(ScanMapperEntity::scalesDateTimeFormat)
 
     // metadata
     val createdBy = varchar(ScanMapperEntity::createdBy, "created_by")

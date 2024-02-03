@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.single
 
 class BasicAuthService(
     val config: digital.sadad.project.core.config.model.plugin.security.basic.BasicAuthConfig,
-    val userCRUDRepository: digital.sadad.project.core.security.user.repository.UserCRUDRepository,
+    val userCRUDRepository: UserCRUDRepository,
 ) : SkipableAuthService, RBACAuthService {
 
     val digestFunction = getDigestFunction("SHA-256") { "ktor${it.length}" }

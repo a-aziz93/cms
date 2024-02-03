@@ -39,7 +39,7 @@ internal class CMSStoreFactory(
         data object LastPageLoaded : Msg()
     }
 
-    private inner class ExecutorImpl : CoroutineExecutor<CMSStore.Intent, Unit, CMSStore.State, Msg, Nothing>(
+    private class ExecutorImpl : CoroutineExecutor<CMSStore.Intent, Unit, CMSStore.State, Msg, Nothing>(
         coroutineDispatchers.main) {
         
         override fun executeAction(action: Unit) {

@@ -9,11 +9,11 @@ import org.koin.dsl.module
 
 fun securityModule(config: SecurityConfig) = module {
     // BASIC
-    config.basic?.forEach { (name, config) ->
-        single<BasicAuthService>(name?.let { named(it) }) {
+    config.basic?.forEach { cfg->
+        single<BasicAuthService>(cfg.name?.let { named(it) }) {
             BasicAuthService(
-                config,
-                get(named(name))
+                cfg,
+                get(named(cfg.name))
             )
         }
     }
