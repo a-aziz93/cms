@@ -19,6 +19,5 @@ data class DatabaseConfig(
     val connectTimeout: Duration = 15.toDuration(DurationUnit.SECONDS),
     val lockWaitTimeout: Duration = 15.toDuration(DurationUnit.SECONDS),
     val statementTimeout: Duration = 15.toDuration(DurationUnit.SECONDS),
-    val packages: List<String>,
-    val init: DatabaseInitConfig? = null,
+    val init: List<DatabaseInitConfig>? = null,
 )

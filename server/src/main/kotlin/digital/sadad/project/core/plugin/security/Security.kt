@@ -50,6 +50,7 @@ fun Application.configureSecurity(
         val jwtRS256Services = getAll<JWTRS256Service>()
         //OAUTH
         val oauthServices = getAll<OAuthService>()
+        val oauthRedirects = mutableMapOf<String, String>()
 
         authentication {
             // BASIC
@@ -84,10 +85,6 @@ fun Application.configureSecurity(
 
                     validate {
                         service.validate(it)
-                    }
-
-                    digestProvider { userName, realm ->
-                        service.provider(userName, realm)
                     }
 
                     skipWhen { service.skip(it) }
@@ -290,10 +287,8 @@ fun Application.configureSecurity(
                 }
             }
 
-
             // OAUTH
             oauthServices.forEach { (name, service) ->
-                val redirects = mutableMapOf<String, String>()
                 oauth(name) {
                     // Configure oauth authentication
                     urlProvider = { "$oauthRedirectURL/callback" }
@@ -311,7 +306,7 @@ fun Application.configureSecurity(
                             onStateCreated = { call, state ->
                                 //saves new state with redirect url value
                                 call.request.queryParameters["redirectUrl"]?.let {
-                                    redirects[state] = it
+                                    oauthRedirects[state] = it
                                 }
                             }
                         )
@@ -370,7 +365,7 @@ fun Application.configureSecurity(
                         currentPrincipal?.let { principal ->
                             principal.state?.let { state ->
                                 call.sessions.set(UserTokenSession(principal.accessToken))
-                                redirects[state]?.let { redirect ->
+                                oauthRedirects[state]?.let { redirect ->
                                     call.respondRedirect(redirect)
                                     return@get
                                 }

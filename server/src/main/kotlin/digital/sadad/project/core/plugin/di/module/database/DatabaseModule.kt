@@ -46,13 +46,22 @@ import kotlin.reflect.KClass
 
 fun databaseModule(config: Set<DatabaseConfig>) = module {
     config.forEach { cfg ->
-        var createTables: Set<Table<*>>? = null
+        var createTables: Array<*>? = null
         val client = when (cfg.type) {
             DbType.H2 -> {
-                val tables = getH2TablesInPackage(cfg.packages)
-                createTables = tables.allTables.keys
+
+                createTables = (cfg.init?.flatMap { init ->
+                    if (init.tablesInclusive == true) {
+                        init.tables?.map { Class.forName(it).genericInterfaces[0] as IH2Table<*> } ?: emptyList()
+                    } else {
+                        val tables = getH2TablesInPackage(init.packages)
+                        init.tables?.let { exclusion -> tables.filter { !exclusion.contains(it::class.qualifiedName) } }
+                            ?: tables
+                    }
+                } ?: emptyList()).toTypedArray()
+
                 cfg.getConnectionFactory()
-                    .coSqlClient(tables)
+                    .coSqlClient(tables().h2(*createTables))
             }
 
             DbType.MARIADB -> {
@@ -136,7 +145,8 @@ fun databaseModule(config: Set<DatabaseConfig>) = module {
         }
         single<UserRoleService>(cfg.name?.let { named(it) }) {
             UserRoleServiceImpl(
-                get(cfg.name?.let { named(it) })
+                get(cfg.name?.let { named(it) }),
+                get(cfg.name?.let { named(it) }),
             )
         }
 
@@ -184,12 +194,8 @@ private suspend fun initDatabase(client: R2dbcSqlClient, tables: Set<Table<*>>, 
                     client createTableIfNotExists table
                 }
             } else {
-                if (config.clearBefore) {
-                    for (table in tables) {
-                        client deleteAllFrom table
-                    }
-                }
                 for (table in tables) {
+                    client deleteAllFrom table
                     client createTable table
                 }
             }
@@ -241,7 +247,7 @@ private fun DatabaseConfig.getConnectionFactory(): ConnectionFactory {
 }
 
 private fun <T : Table<*>> getTablesInPackage(
-    packages: List<String>,
+    packages: Set<String>,
     type: KClass<T>
 ): List<T> = packages.flatMap { it ->
     val reflections = Reflections(it)
@@ -250,21 +256,20 @@ private fun <T : Table<*>> getTablesInPackage(
     }
 }
 
-private fun getH2TablesInPackage(packages: List<String>): H2Tables =
-    tables().h2(
-        *(getTablesInPackage(packages, IH2Table::class) + getTablesInPackage(
-            packages,
-            GenericTable::class
-        )).toTypedArray()
+private fun getH2TablesInPackage(packages: Set<String>): List<IH2Table<*>> =
+    getTablesInPackage(packages, IH2Table::class) + getTablesInPackage(
+        packages,
+        GenericTable::class
     )
 
-private fun getMariadbTablesInPackage(packages: List<String>): MariadbTables =
+
+private fun getMariadbTablesInPackage(packages: Set<String>): MariadbTables =
     tables().mariadb(*getTablesInPackage(packages, MariadbTable::class).toTypedArray())
 
-private fun getMysqlTablesInPackage(packages: List<String>): MysqlTables =
+private fun getMysqlTablesInPackage(packages: Set<String>): MysqlTables =
     tables().mysql(*getTablesInPackage(packages, MysqlTable::class).toTypedArray())
 
-private fun getMssqlTablesInPackage(packages: List<String>): MssqlTables =
+private fun getMssqlTablesInPackage(packages: Set<String>): MssqlTables =
     tables().mssql(
         *(getTablesInPackage(packages, MssqlTable::class) + getTablesInPackage(
             packages,
@@ -272,7 +277,7 @@ private fun getMssqlTablesInPackage(packages: List<String>): MssqlTables =
         )).toTypedArray()
     )
 
-private fun getPostgresqlTablesInPackage(packages: List<String>): PostgresqlTables =
+private fun getPostgresqlTablesInPackage(packages: Set<String>): PostgresqlTables =
     tables().postgresql(
         *(getTablesInPackage(packages, PostgresqlTable::class) + getTablesInPackage(
             packages,
@@ -280,5 +285,5 @@ private fun getPostgresqlTablesInPackage(packages: List<String>): PostgresqlTabl
         )).toTypedArray()
     )
 
-private fun getOracleTablesInPackage(packages: List<String>): OracleTables =
+private fun getOracleTablesInPackage(packages: Set<String>): OracleTables =
     tables().oracle(*getTablesInPackage(packages, OracleTable::class).toTypedArray())
