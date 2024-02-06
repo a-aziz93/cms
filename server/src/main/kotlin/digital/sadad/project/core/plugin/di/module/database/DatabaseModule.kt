@@ -37,74 +37,61 @@ import org.reflections.Reflections
 import org.ufoss.kotysa.*
 import org.ufoss.kotysa.h2.IH2Table
 import org.ufoss.kotysa.mariadb.MariadbTable
+import org.ufoss.kotysa.mssql.IMssqlTable
 import org.ufoss.kotysa.mssql.MssqlTable
 import org.ufoss.kotysa.mysql.MysqlTable
 import org.ufoss.kotysa.oracle.OracleTable
+import org.ufoss.kotysa.postgresql.IPostgresqlTable
 import org.ufoss.kotysa.postgresql.PostgresqlTable
 import org.ufoss.kotysa.r2dbc.coSqlClient
 import kotlin.reflect.KClass
 
 fun databaseModule(config: Set<DatabaseConfig>) = module {
     config.forEach { cfg ->
-        var createTables: Array<*>? = null
+        var initTables: List<Pair<List<Table<*>>, Boolean>>? = null
         val client = when (cfg.type) {
             DbType.H2 -> {
-
-                createTables = (cfg.init?.flatMap { init ->
-                    if (init.tablesInclusive == true) {
-                        init.tables?.map { Class.forName(it).genericInterfaces[0] as IH2Table<*> } ?: emptyList()
-                    } else {
-                        val tables = getH2TablesInPackage(init.packages)
-                        init.tables?.let { exclusion -> tables.filter { !exclusion.contains(it::class.qualifiedName) } }
-                            ?: tables
-                    }
-                } ?: emptyList()).toTypedArray()
-
+                initTables = getInitTables(cfg.init) { getH2TablesInPackage(it) }
                 cfg.getConnectionFactory()
-                    .coSqlClient(tables().h2(*createTables))
+                    .coSqlClient(tables().h2(*initTables.flatMap { it.first }.toTypedArray()))
             }
 
             DbType.MARIADB -> {
-                val tables = getMariadbTablesInPackage(cfg.packages)
-                createTables = tables.allTables.keys
+                initTables = getInitTables(cfg.init) { getMariadbTablesInPackage(it) }
                 cfg.getConnectionFactory()
-                    .coSqlClient(tables)
+                    .coSqlClient(tables().mariadb(*initTables.flatMap { it.first }.toTypedArray()))
             }
 
             DbType.MYSQL -> {
-                val tables = getMysqlTablesInPackage(cfg.packages)
-                createTables = tables.allTables.keys
+                initTables = getInitTables(cfg.init) { getMysqlTablesInPackage(it) }
                 cfg.getConnectionFactory()
-                    .coSqlClient(tables)
+                    .coSqlClient(tables().mysql(*initTables.flatMap { it.first }.toTypedArray()))
             }
 
             DbType.MSSQL -> {
-                val tables = getMssqlTablesInPackage(cfg.packages)
-                createTables = tables.allTables.keys
+                initTables = getInitTables(cfg.init) { getMssqlTablesInPackage(it) }
                 cfg.getConnectionFactory()
-                    .coSqlClient(tables)
+                    .coSqlClient(tables().mssql(*initTables.flatMap { it.first }.toTypedArray()))
             }
 
             DbType.POSTGRESQL -> {
-                val tables = getPostgresqlTablesInPackage(cfg.packages)
-                createTables = tables.allTables.keys
+                initTables = getInitTables(cfg.init) { getPostgresqlTablesInPackage(it) }
                 cfg.getConnectionFactory()
-                    .coSqlClient(tables)
+                    .coSqlClient(tables().postgresql(*initTables.flatMap { it.first }.toTypedArray()))
             }
 
             DbType.ORACLE -> {
-                val tables = getOracleTablesInPackage(cfg.packages)
-                createTables = tables.allTables.keys
+                initTables = getInitTables(cfg.init) { getOracleTablesInPackage(it) }
                 cfg.getConnectionFactory()
-                    .coSqlClient(tables)
+                    .coSqlClient(tables().oracle(*initTables.flatMap { it.first }.toTypedArray()))
             }
 
             DbType.SQLITE -> throw UnsupportedOperationException("SQLite is not supported")
         }
 
-        if (cfg.init != null) {
+        cfg.init?.let {
             runBlocking {
-                initDatabase(client, createTables, cfg.init)
+                initDatabase(client, initTables)
             }
         }
 
@@ -186,17 +173,22 @@ fun databaseModule(config: Set<DatabaseConfig>) = module {
     }
 }
 
-private suspend fun initDatabase(client: R2dbcSqlClient, tables: Set<Table<*>>, config: DatabaseInitConfig) =
+private suspend fun initDatabase(
+    client: R2dbcSqlClient,
+    initTables: List<Pair<List<Table<*>>, Boolean>>,
+) =
     withContext(Dispatchers.IO) {
         launch {
-            if (config.ifNotExists) {
-                for (table in tables) {
-                    client createTableIfNotExists table
-                }
-            } else {
-                for (table in tables) {
-                    client deleteAllFrom table
-                    client createTable table
+            initTables.forEach {
+                if (it.second) {
+                    for (table in it.first) {
+                        client createTableIfNotExists table
+                    }
+                } else {
+                    for (table in it.first) {
+                        client deleteAllFrom table
+                        client createTable table
+                    }
                 }
             }
         }
@@ -263,27 +255,37 @@ private fun getH2TablesInPackage(packages: Set<String>): List<IH2Table<*>> =
     )
 
 
-private fun getMariadbTablesInPackage(packages: Set<String>): MariadbTables =
-    tables().mariadb(*getTablesInPackage(packages, MariadbTable::class).toTypedArray())
+private fun getMariadbTablesInPackage(packages: Set<String>): List<MariadbTable<*>> =
+    getTablesInPackage(packages, MariadbTable::class)
 
-private fun getMysqlTablesInPackage(packages: Set<String>): MysqlTables =
-    tables().mysql(*getTablesInPackage(packages, MysqlTable::class).toTypedArray())
+private fun getMysqlTablesInPackage(packages: Set<String>): List<MysqlTable<*>> =
+    getTablesInPackage(packages, MysqlTable::class)
 
-private fun getMssqlTablesInPackage(packages: Set<String>): MssqlTables =
-    tables().mssql(
-        *(getTablesInPackage(packages, MssqlTable::class) + getTablesInPackage(
-            packages,
-            GenericTable::class
-        )).toTypedArray()
+private fun getMssqlTablesInPackage(packages: Set<String>): List<IMssqlTable<*>> =
+    getTablesInPackage(packages, MssqlTable::class) + getTablesInPackage(
+        packages,
+        GenericTable::class
     )
 
-private fun getPostgresqlTablesInPackage(packages: Set<String>): PostgresqlTables =
-    tables().postgresql(
-        *(getTablesInPackage(packages, PostgresqlTable::class) + getTablesInPackage(
-            packages,
-            GenericTable::class
-        )).toTypedArray()
+private fun getPostgresqlTablesInPackage(packages: Set<String>): List<IPostgresqlTable<*>> =
+    getTablesInPackage(packages, PostgresqlTable::class) + getTablesInPackage(
+        packages,
+        GenericTable::class
     )
 
-private fun getOracleTablesInPackage(packages: Set<String>): OracleTables =
-    tables().oracle(*getTablesInPackage(packages, OracleTable::class).toTypedArray())
+private fun getOracleTablesInPackage(packages: Set<String>): List<OracleTable<*>> =
+    getTablesInPackage(packages, OracleTable::class)
+
+private fun <T : Table<*>> getInitTables(
+    init: List<DatabaseInitConfig>?,
+    getTables: (Set<String>) -> List<T>,
+): List<Pair<List<T>, Boolean>> =
+    init?.map {
+        val tables = getTables(it.packages)
+        if (it.tablesInclusive == true) {
+            it.tables?.let { ts -> tables.filter { ts.contains(it::class.qualifiedName) } } ?: tables
+        } else {
+            it.tables?.let { ts -> tables.filter { !ts.contains(it::class.qualifiedName) } } ?: tables
+        }
+        tables to it.ifNotExists
+    } ?: emptyList()
