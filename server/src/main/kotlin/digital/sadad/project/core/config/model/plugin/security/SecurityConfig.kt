@@ -10,6 +10,7 @@ import digital.sadad.project.core.config.model.plugin.security.jwt.JWTRS256Confi
 import digital.sadad.project.core.config.model.plugin.security.ldap.LDAPAuthConfig
 import digital.sadad.project.core.config.model.plugin.security.oauth.OAuthConfig
 import digital.sadad.project.core.config.model.plugin.security.session.SessionAuthConfig
+import digital.sadad.project.core.config.model.plugin.session.SessionCookieConfig
 
 class SecurityConfig(
     enable: Boolean? = null,

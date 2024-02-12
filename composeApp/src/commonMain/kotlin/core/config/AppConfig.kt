@@ -1,5 +1,6 @@
 package core.config
 
+import core.config.extension.config
 import core.config.handler.SettingsHandler
 import core.config.source.LocalSource
 import core.config.source.SettingsSource
@@ -18,5 +19,16 @@ class AppConfig() : Config(
     val uiSubConfig = UISubConfig(parent = this)
 
     val adminSubConfig = AdminSubConfig(parent = this)
+
+    var test: String by config(
+        key = "testString",
+        defaultValue = "This is a test config value",
+        title = "Test String",
+        description = "This is a test string"
+    )
+
+    fun test(){
+        this.test
+    }
 
 }

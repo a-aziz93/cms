@@ -1,6 +1,7 @@
 package digital.sadad.project.core.security.bearer.service
 
 import digital.sadad.project.core.config.model.plugin.security.bearer.BearerAuthConfig
+import digital.sadad.project.core.security.model.UserIdPrincipalMetadata
 import digital.sadad.project.core.security.service.RBACAuthService
 import digital.sadad.project.core.security.service.SkipableAuthService
 import io.ktor.server.auth.*

@@ -1,13 +1,13 @@
 package digital.sadad.project.core.config.model.plugin.security.oauth
 
 import digital.sadad.project.core.config.model.plugin.security.AuthConfig
-import digital.sadad.project.core.config.model.plugin.security.session.SessionAuthConfig
+import digital.sadad.project.core.config.model.plugin.session.SessionCookieConfig
 
 class OAuthConfig(
     name: String? = null,
     val server: OAuthServerConfig,
     val client: OAuthClientConfig? = null,
-    session: SessionAuthConfig? = null,
+    session: SessionCookieConfig? = null,
 ) : AuthConfig(
     name,
     session,

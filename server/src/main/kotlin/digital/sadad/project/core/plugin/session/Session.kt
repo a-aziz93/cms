@@ -1,9 +1,9 @@
 package digital.sadad.project.core.plugin.session
 
-import digital.sadad.project.auth.model.security.UserIdPrincipalMetadata
-import digital.sadad.project.core.config.AppConfig
 import digital.sadad.project.core.config.model.plugin.security.SecurityConfig
+import digital.sadad.project.core.config.model.plugin.session.CookieConfig
 import digital.sadad.project.core.config.model.plugin.session.SessionConfig
+import digital.sadad.project.core.security.session.model.UserSession
 import io.ktor.server.application.*
 import io.ktor.server.sessions.*
 import java.io.File
@@ -15,8 +15,51 @@ fun Application.configureSession(
     if (config.enable == true) {
         install(Sessions) {
             securityConfig?.let {
-                it.basic?.forEach { (name, config) ->
-                    config.session?.let { cookie<UserIdPrincipalMetadata>(name, it) }
+                it.basic?.forEach {
+                    it.session?.let {
+                        cookie<UserSession>(it.name,it.cookie)
+                    }
+                }
+                it.digest?.forEach {
+                    it.session?.let {
+                        cookie<UserSession>(it.name,it.cookie)
+                    }
+                }
+
+                it.digest?.forEach {
+                    it.session?.let {
+                        cookie<UserSession>(it.name,it.cookie)
+                    }
+                }
+
+                it.form?.forEach {
+                    it.session?.let {
+                        cookie<UserSession>(it.name,it.cookie)
+                    }
+                }
+
+                it.ldap?.forEach {
+                    it.session?.let {
+                        cookie<UserSession>(it.name,it.cookie)
+                    }
+                }
+
+                it.jwtHS256?.forEach {
+                    it.session?.let {
+                        cookie<UserSession>(it.name,it.cookie)
+                    }
+                }
+
+                it.jwtRS256?.forEach {
+                    it.session?.let {
+                        cookie<UserSession>(it.name,it.cookie)
+                    }
+                }
+
+                it.oauth?.forEach {
+                    it.session?.let {
+                        cookie<UserSession>(it.name,it.cookie)
+                    }
                 }
             }
         }
@@ -25,7 +68,7 @@ fun Application.configureSession(
 
 private inline fun <reified S : Any> SessionsConfig.cookie(
     name: String,
-    config: digital.sadad.project.core.config.model.plugin.session.CookieConfig,
+    config: CookieConfig,
 ) {
     val cookieBuilder: CookieSessionBuilder<S>.() -> Unit = {
         config.maxAgeInSeconds?.let { cookie.maxAgeInSeconds = it }

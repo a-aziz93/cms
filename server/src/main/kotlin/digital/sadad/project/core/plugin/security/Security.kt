@@ -2,6 +2,7 @@ package digital.sadad.project.core.plugin.security
 
 import core.security.user.model.dto.UserDto
 import core.di.getAll
+import core.security.user.model.dto.UserLoginDto
 import digital.sadad.project.core.config.model.plugin.security.SecurityConfig
 import digital.sadad.project.core.security.basic.service.BasicAuthService
 import digital.sadad.project.core.security.bearer.service.BearerAuthService
@@ -11,6 +12,7 @@ import digital.sadad.project.core.security.jwt.service.JWTHS256Service
 import digital.sadad.project.core.security.jwt.service.JWTRS256Service
 import digital.sadad.project.core.security.ldap.service.LDAPAuthService
 import digital.sadad.project.core.security.oauth.service.OAuthService
+import digital.sadad.project.core.security.session.model.UserSession
 import digital.sadad.project.core.security.session.service.SessionAuthService
 import io.ktor.http.auth.*
 import io.ktor.http.parsing.*
@@ -331,7 +333,7 @@ fun Application.configureSecurity(
             routing {
                 authenticate(name) {
                     post("/login") {
-                        val user = call.receive<UserDto>()
+                        val user = call.receive<UserLoginDto>()
                         // Check username and password
                         service.create(UserDto.toUserEntity())
                         call.respond(hashMapOf("token" to token))
@@ -344,7 +346,7 @@ fun Application.configureSecurity(
             routing {
                 authenticate(name) {
                     post("/login") {
-                        val user = call.receive<UserDto>()
+                        val user = call.receive<UserLoginDto>()
                         // Check username and password
                         service.create(UserDto.toUserEntity())
                         call.respond(hashMapOf("token" to token))
@@ -364,7 +366,7 @@ fun Application.configureSecurity(
                         // redirects home if the url is not found before authorization
                         currentPrincipal?.let { principal ->
                             principal.state?.let { state ->
-                                call.sessions.set(UserTokenSession(principal.accessToken))
+                                call.sessions.set(UserSession(principal, null, 1))
                                 oauthRedirects[state]?.let { redirect ->
                                     call.respondRedirect(redirect)
                                     return@get

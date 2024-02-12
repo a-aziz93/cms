@@ -1,5 +1,6 @@
 package digital.sadad.project.core.security.form.service
 
+import digital.sadad.project.core.security.model.UserIdPrincipalMetadata
 import digital.sadad.project.core.security.service.ChallengeableAuthService
 import digital.sadad.project.core.security.service.RBACAuthService
 import digital.sadad.project.core.security.service.SkipableAuthService

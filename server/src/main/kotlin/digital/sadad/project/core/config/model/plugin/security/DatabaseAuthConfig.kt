@@ -1,9 +1,9 @@
 package digital.sadad.project.core.config.model.plugin.security
 
-import digital.sadad.project.core.config.model.plugin.security.session.SessionAuthConfig
+import digital.sadad.project.core.config.model.plugin.session.SessionCookieConfig
 
 abstract class DatabaseAuthConfig(
     name: String? = null,
     val databases: Set<String>?,
-    session: SessionAuthConfig?,
+    session: SessionCookieConfig?,
 ) : AuthConfig(name, session)

@@ -26,7 +26,7 @@ abstract class JWTAuthService(private val config: JWTConfig) : ChallengeableAuth
         call.respond(HttpStatusCode.Unauthorized, "Token is not valid or has expired")
 
     protected fun create(
-        userEntity: UserEntity,
+        username: String,
         roles: List<String>?,
         algorithm: Algorithm
     ): String {
@@ -35,9 +35,7 @@ abstract class JWTAuthService(private val config: JWTConfig) : ChallengeableAuth
             .withIssuer(config.issuer)
             .withSubject(SUBJECT)
             // user claims and other data to store
-            .withClaim(USER_ID_CLAIM, userEntity.id.toString())
-            .withClaim(USERNAME_CLAIM, userEntity.username)
-            .withClaim(USER_EMAIL_CLAIM, userEntity.email)
+            .withClaim(USERNAME_CLAIM, username)
         if (roles != null) {
             jwt = jwt.withClaim(USER_ROLES_CLAIM, roles)
         }
@@ -63,9 +61,7 @@ abstract class JWTAuthService(private val config: JWTConfig) : ChallengeableAuth
 
     companion object {
         const val SUBJECT = "Authentication"
-        const val USER_ID_CLAIM = "userId"
         const val USERNAME_CLAIM = "username"
-        const val USER_EMAIL_CLAIM = "userEmail"
         const val USER_ROLES_CLAIM = "roles"
     }
 }
