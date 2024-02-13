@@ -1,5 +1,6 @@
 package core.config
 
 interface ConfigSource {
-    suspend fun get(key: String): String?
+    suspend fun hasKey(key: String): Boolean
+    suspend fun get(key: String): Any?
 }

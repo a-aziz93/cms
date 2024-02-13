@@ -84,7 +84,7 @@ class ScanSourceServiceImpl(
                             val xrayTemporalFormater = DateTimeFormatter.ofPattern(source.xrayDirTemporalFormat)
                             val scalesTemporalFormater = DateTimeFormatter.ofPattern(source.scalesDirTemporalFormat)
 
-                            val hasEntities = scanCRUDRepository.aggregate(AggregateExpression.count()) as Long == 0L
+                            val hasEntities = scanCRUDRepository.aggregate(AggregateExpression.count()) == 0L
 
 
                             val cameraLastDateTime: LocalDateTime =

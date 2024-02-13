@@ -125,8 +125,8 @@ abstract class KotysaCRUDRepository<T : Any, ID : Any>(
         (client deleteFrom table).predicate(predicate).execute()
     }
 
-    override suspend fun <T> aggregate(
-        aggregate: AggregateExpression,
+    override suspend fun <T:Any> aggregate(
+        aggregate: AggregateExpression<T>,
         predicate: BooleanVariable?,
     ): T =
         when (aggregate.type) {

@@ -3,17 +3,18 @@ package core.expression.aggregate
 import core.expression.aggregate.AggregateExpressionType.*
 import core.expression.projection.Projection
 import kotlinx.serialization.Serializable
+import java.math.BigDecimal
 
 @Serializable
-class AggregateExpression private constructor(
+class AggregateExpression<T : Any> private constructor(
     val type: AggregateExpressionType,
     val projection: Projection? = null,
 ) {
     companion object {
-        fun count(projection: Projection? = null) = AggregateExpression(COUNT, projection)
-        fun max(projection: Projection) = AggregateExpression(MAX, projection)
-        fun min(projection: Projection) = AggregateExpression(MIN, projection)
-        fun avg(projection: Projection) = AggregateExpression(AVG, projection)
-        fun sum(projection: Projection) = AggregateExpression(SUM, projection)
+        fun count(projection: Projection? = null) = AggregateExpression<Long>(COUNT, projection)
+        fun <T : Any> max(projection: Projection) = AggregateExpression<T>(MAX, projection)
+        fun <T : Any> min(projection: Projection) = AggregateExpression<T>(MIN, projection)
+        fun avg(projection: Projection) = AggregateExpression<Number>(AVG, projection)
+        fun sum(projection: Projection) = AggregateExpression<Number>(SUM, projection)
     }
 }

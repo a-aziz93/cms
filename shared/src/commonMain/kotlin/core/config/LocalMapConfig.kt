@@ -1,11 +1,11 @@
 package core.config
 
 object LocalMapConfig : ConfigSource, ConfigTarget {
-    private val backingMap: MutableMap<String, String> = mutableMapOf()
+    private val backingMap: MutableMap<String, Any> = mutableMapOf()
 
-    override suspend fun get(key: String): String? = backingMap[key]
+    override suspend fun get(key: String): Any? = backingMap[key]
 
-    override suspend fun set(key: String, value: String) {
+    override suspend fun set(key: String, value:Any) {
         backingMap[key] = value
     }
 
