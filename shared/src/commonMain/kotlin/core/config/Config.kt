@@ -3,9 +3,12 @@ package core.config
 import core.config.model.ConfigItem
 
 abstract class Config(
+    val key: String? = null,
     val sources: List<ConfigSource>,
     val targets: List<ConfigTarget>,
 ) : ConfigRegistry {
+
+    constructor(key: String? = null, config: Config) : this(key, config.sources, config.targets)
 
     val configMap = mutableMapOf<String, ConfigItem<Any?>>()
 
