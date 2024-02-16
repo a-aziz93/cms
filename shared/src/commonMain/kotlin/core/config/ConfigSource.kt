@@ -1,6 +1,6 @@
 package core.config
 
 interface ConfigSource {
-    suspend fun hasKey(key: String): Boolean
-    suspend fun get(key: String): Any?
+    suspend fun hasKey(vararg key: String): Boolean
+    suspend fun get(vararg key: String): Any?
 }

@@ -1,28 +1,32 @@
 package core.config.extension
 
-import core.config.Config
-import core.config.model.ConfigItem
+import core.config.ReadWriteConfigRegistrar
+import core.config.StateFlowConfigRegistrar
 import core.config.model.ConfigMetadata
-import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.runBlocking
+import kotlin.reflect.KProperty
 
-inline fun <reified T : Any> Config.config(
-    key: String,
+typealias MetadataProvider = (KProperty<*>) -> ConfigMetadata
+
+@Suppress("unused") // Unused suppression as it's used for extension function scoping
+inline fun <reified T : Any> config(
+    key: String? = null,
     defaultValue: T? = null,
     metadata: ConfigMetadata? = null,
-): StateFlow<T?> {
-
-    var value = defaultValue
-
-    runBlocking {
-        sources.firstOrNull { it.hasKey(key) }?.let { value = it.get(key) as T? }
-    }
-
-    configMap[key] = ConfigItem(
-        value,
-        defaultValue,
+): ReadWriteConfigRegistrar<T> =
+    ReadWriteConfigRegistrar(
+        key = key,
+        defaultValue = defaultValue,
         metadata,
     )
 
-    return configMap[key]!!.events as StateFlow<T?>
-}
+@Suppress("unused") // Unused suppression as it's used for extension function scoping
+inline fun <reified T : Any> configFlow(
+    key: String? = null,
+    defaultValue: T? = null,
+    metadata: ConfigMetadata? = null,
+): StateFlowConfigRegistrar<T> =
+    StateFlowConfigRegistrar(
+        key = key,
+        defaultValue = defaultValue,
+        metadata,
+    )

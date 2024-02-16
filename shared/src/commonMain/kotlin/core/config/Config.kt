@@ -3,42 +3,72 @@ package core.config
 import core.config.model.ConfigItem
 
 abstract class Config(
-    val key: String? = null,
-    val sources: List<ConfigSource>,
-    val targets: List<ConfigTarget>,
+    final override val parent: ConfigRegistry? = null,
+    final override val key: String? = null,
+    final override val sources: List<ConfigSource>,
+    final override val targets: List<ConfigTarget>,
 ) : ConfigRegistry {
 
-    constructor(key: String? = null, config: Config) : this(key, config.sources, config.targets)
+    private val configItemMap = mutableMapOf<String, ConfigItem<*>>()
 
-    val configMap = mutableMapOf<String, ConfigItem<Any?>>()
+    override fun <T : Any> addConfigItem(key: String, item: ConfigItem<T>) {
+        configItemMap[key] = item
+    }
+
+    override fun <T : Any> getConfigItem(key: String): ConfigItem<T> {
+        checkConfigItemExists(key)
+
+        return configItemMap[key] as ConfigItem<T>
+    }
+
+    override suspend fun <T : Any> get(key: String, defaultValue: T?): T? {
+        checkConfigItemExists(key)
+
+        val keys = listOfNotNull(this.key, key).toTypedArray()
+
+        return withParentSources().firstOrNull { it.hasKey(*keys) }.let {
+            if (it == null) defaultValue else it.get(key) as? T
+        }
+    }
 
     override suspend fun <T : Any> set(key: String, value: T?) {
+        checkConfigItemExists(key)
 
-        check(configMap.containsKey(key)) {
-            "The key \"${key}\" doesn't exists in configs - please choose another."
+        val keys = listOfNotNull(this.key, key)
+
+        withParentTargets().forEach {
+            it.set(keys, value)
         }
 
-        targets.forEach {
-            it.set(key, value)
-        }
-
-        configMap[key]!!.update(value)
-
+        (configItemMap[key]!! as ConfigItem<T>).update(value)
     }
 
     override suspend fun <T : Any> clear(key: String) {
-        check(configMap.containsKey(key)) {
-            "The key \"${key}\" doesn't exists in configs - please choose another."
-        }
+        checkConfigItemExists(key)
 
-        targets.forEach { it.clear(key) }
+        val keys = listOfNotNull(this.key, key).toTypedArray()
 
-        configMap[key]?.default()
+        withParentTargets().forEach { it.clear(*keys) }
+
+        configItemMap[key]!!.default()
     }
 
     override suspend fun <T : Any> clear() {
-        targets.forEach { it.clear() }
-        configMap.values.forEach { it.default() }
+        withParentTargets().forEach { it.clear() }
+
+        configItemMap.values.forEach { it.default() }
+    }
+
+    private fun checkConfigItemExists(key: String) = check(configItemMap.containsKey(key)) {
+        "ConfigItem with key \"${key}\" doesn't exists."
+    }
+
+    private fun withParentSources(): List<ConfigSource> {
+        return emptyList()
+    }
+
+    private fun withParentTargets(): List<ConfigTarget> {
+        return emptyList()
     }
 }
 

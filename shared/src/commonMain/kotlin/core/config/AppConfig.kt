@@ -1,15 +1,14 @@
 package core.config
 
-import core.config.extension.config
+import core.config.extension.configFlow
 import kotlinx.coroutines.flow.StateFlow
 
 class AppConfig : Config(
-    null,
-    emptyList(),
-    emptyList(),
+    sources = emptyList(),
+    targets = emptyList(),
 ) {
 
-    val test: StateFlow<String?> = config(
+    val test: StateFlow<String?> by configFlow(
         key = "testString",
         defaultValue = "This is a test config value",
     )
